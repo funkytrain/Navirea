@@ -536,6 +536,20 @@ body:not(.modal-open) {
     flex-direction: column;
     /* ✅ Permitir scroll natural */
     overflow: hidden;
+    transform: translateY(0);
+}
+
+/* Rebote al volver cuando NO se llega al umbral de cierre */
+@keyframes modalReturnBounce {
+    0% {
+        transform: translateY(var(--modal-swipe-distance, 0px));
+    }
+    60% {
+        transform: translateY(-10px); /* pequeño “golpecito” hacia arriba */
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .modal-header {
