@@ -1191,19 +1191,19 @@ const trainModels = {
 // Paradas
 const stops = [{
         full: "Zaragoza Miraflores",
-        abbr: "MIR"
+        abbr: "ZMI"
     },
     {
         full: "Zaragoza Goya",
-        abbr: "GOY"
+        abbr: "ZGO"
     },
     {
         full: "Zaragoza Portillo",
-        abbr: "POR"
+        abbr: "ZPO"
     },
     {
         full: "Zaragoza Delicias",
-        abbr: "DEL"
+        abbr: "ZDE"
     },
     {
         full: "Utebo",
@@ -3096,6 +3096,7 @@ function renderSeats() {
 }
 
 // Renderizar modal
+// Renderizar modal
 function renderModal() {
     if (!state.selectedSeat) return "";
 
@@ -3107,97 +3108,93 @@ function renderModal() {
         <div class="modal-overlay" 
              onclick="closeModal(event)"
              onmousedown="handleModalOverlayInteraction(event)"
-             ontouchstart="handleModalOverlayInteraction(event)">
+             ontouchstart="handleModalOverlayInteraction(event)"
+             ontouchend="closeModal(event)">
             <div class="modal" 
                  onclick="event.stopPropagation()"
                  onmousedown="event.stopPropagation()"
-                 ontouchstart="event.stopPropagation()">
+                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+                 ontouchmove="modalSwipeMove(event)"
+                 ontouchend="modalSwipeEnd(event)"
+                 ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Asiento ${
-                            state.selectedSeat.num
-                        } - ${state.selectedSeat.coach}</h3>
-</h3>
-${state.seatData[key]?.historial && state.seatData[key].historial.length > 0 ? `
-    <div class="seat-history">
-        Asiento liberado en: ${state.seatData[key].historial.join(' → ')}
-    </div>
-` : ''}
-                        <button class="close-btn" onclick="closeModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
+        state.selectedSeat.num
+    } - ${state.selectedSeat.coach}</h3>
                     </div>
                     ${
-                        currentStop
-                            ? `<div class="current-stop">Se baja en: ${currentStop.full}</div>`
-                            : ""
-                    }
-                </div>
-		<div class="checkbox-group">
-    <div class="checkbox-item">
-        <input
-            type="checkbox"
-            id="enlace-check"
-            ${state.seatData[key]?.enlace ? "checked" : ""}
-            onchange="toggleFlag('${state.selectedSeat.coach}', '${
-        state.selectedSeat.num
-    }', 'enlace')"
-        />
-        <label for="enlace-check">Enlace</label>
-    </div>
-    <div class="checkbox-item">
-        <input
-            type="checkbox"
-            id="comentario-check"
-            ${state.seatData[key]?.comentarioFlag ? "checked" : ""}
-            onchange="toggleFlag('${state.selectedSeat.coach}', '${
-        state.selectedSeat.num
-    }', 'comentarioFlag'); render();"
-        />
-        <label for="comentario-check">Comentario</label>
-    </div>
-    ${
-        state.seatData[key]?.comentarioFlag
+        state.seatData[key]?.historial && state.seatData[key].historial.length > 0
             ? `
-        <div class="comment-box">
-            <textarea
-    class="comment-input"
-    rows="3"
-    placeholder="Escribe un comentario..."
-    oninput="saveModalScrollPosition(); updateComment('${state.selectedSeat.coach}', '${
-                state.selectedSeat.num
-            }', this.value)"
-    onfocus="saveModalScrollPosition()"
->${state.seatData[key]?.comentario || ""}</textarea>
-            <button class="delete-comment-btn" onclick="deleteComment('${
-                state.selectedSeat.coach
-            }', '${state.selectedSeat.num}')">
-                Borrar comentario
-            </button>
-        </div>
-    `
+                        <div class="seat-history">
+                            Asiento liberado en: ${state.seatData[key].historial.join(' → ')}
+                        </div>`
             : ""
     }
-    <div class="checkbox-item">
-        <input
-            type="checkbox"
-            id="seguir-check"
-            ${state.seatData[key]?.seguir ? "checked" : ""}
-            onchange="toggleFlag('${state.selectedSeat.coach}', '${
-        state.selectedSeat.num
-    }', 'seguir')"
-        />
-        <label for="seguir-check">Seguir por aquí</label>
-    </div>
-</div>
+                    <button class="close-btn" onclick="closeModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                ${
+        currentStop
+            ? `<div class="current-stop">Se baja en: ${currentStop.full}</div>`
+            : ""
+    }
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input
+                            type="checkbox"
+                            id="enlace-check"
+                            ${state.seatData[key]?.enlace ? "checked" : ""}
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'enlace')"
+                        />
+                        <label for="enlace-check">Enlace</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input
+                            type="checkbox"
+                            id="comentario-check"
+                            ${state.seatData[key]?.comentarioFlag ? "checked" : ""}
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'comentarioFlag'); render();"
+                        />
+                        <label for="comentario-check">Comentario</label>
+                    </div>
+                    ${
+        state.seatData[key]?.comentarioFlag
+            ? `
+                        <div class="comment-box">
+                            <textarea
+                                class="comment-input"
+                                rows="3"
+                                placeholder="Escribe un comentario."
+                                oninput="saveModalScrollPosition(); updateComment('${state.selectedSeat.coach}', '${state.selectedSeat.num}', this.value)"
+                                onfocus="saveModalScrollPosition()"
+                            >${state.seatData[key]?.comentario || ""}</textarea>
+                            <button class="delete-comment-btn" onclick="deleteComment('${state.selectedSeat.coach}', '${state.selectedSeat.num}')">
+                                Borrar comentario
+                            </button>
+                        </div>
+                    `
+            : ""
+    }
+                    <div class="checkbox-item">
+                        <input
+                            type="checkbox"
+                            id="seguir-check"
+                            ${state.seatData[key]?.seguir ? "checked" : ""}
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'seguir')"
+                        />
+                        <label for="seguir-check">Seguir por aquí</label>
+                    </div>
+                </div>
                 <div class="modal-search">
                     <input
                         type="text"
                         class="search-input"
-                        placeholder="Buscar parada..."
+                        placeholder="Buscar parada."
                         value="${state.searchQuery}"
                         oninput="updateSearch(this.value)"
                         readonly onfocus="this.removeAttribute('readonly')"
@@ -3205,8 +3202,8 @@ ${state.seatData[key]?.historial && state.seatData[key].historial.length > 0 ? `
                 </div>
                 <div class="modal-list">
                     ${filteredStops
-                        .map(
-                            (stop) => `
+        .map(
+            (stop) => `
                         <button
                             class="stop-item"
                             onclick="updateSeatFromList('${stop.abbr}')"
@@ -3215,26 +3212,25 @@ ${state.seatData[key]?.historial && state.seatData[key].historial.length > 0 ? `
                             <span class="stop-abbr">${stop.abbr}</span>
                         </button>
                     `
-                        )
-                        .join("")}
+        )
+        .join("")}
                 </div>
                 ${
-                    currentStop
-                        ? `
-                    <div class="modal-footer">
-                        <button class="clear-btn" onclick="clearSeat('${state.selectedSeat.coach}', '${state.selectedSeat.num}')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                <line x1="10" y1="11" x2="10" y2="17"/>
-                                <line x1="14" y1="11" x2="14" y2="17"/>
-                            </svg>
-                            Borrar parada
-                        </button>
-                    </div>
+        currentStop
+            ? `
+                <div class="modal-footer">
+                    <button class="clear-btn" onclick="clearSeat('${state.selectedSeat.coach}', '${state.selectedSeat.num}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                        Liberar asiento
+                    </button>
+                </div>
                 `
-                        : ""
-                }
+            : ""
+    }
             </div>
         </div>
     `;
@@ -3529,8 +3525,10 @@ function handleSeatPress(coach, num, event) {
         if (!isScrolling) {
             seatHoldTriggered = true;
 
-            // Long press: borrar TODO si el asiento tiene CUALQUIER dato
-            // (parada, flags, comentarios)
+            const key = getSeatKey(coach, num);
+            const seatInfo = state.seatData[key];
+
+            // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
             if (seatInfo && Object.keys(seatInfo).length > 0) {
                 // Verificar si tiene historial para preservarlo
                 const hasHistory = seatInfo.historial && seatInfo.historial.length > 0;
@@ -3550,6 +3548,30 @@ function handleSeatPress(coach, num, event) {
                 if (navigator.vibrate) {
                     navigator.vibrate(50); // Vibración corta en móviles
                 }
+
+                // 🟢 Caso 2: asiento vacío → asignar última parada del tren
+            } else {
+                // Necesitamos saber la ruta del tren actual
+                const route = state.trainNumber && trainRoutes[state.trainNumber];
+
+                if (route && route.length > 0) {
+                    // Última parada de la ruta (por ejemplo, Zaragoza Miraflores o Castejón)
+                    const finalStopName = route[route.length - 1];
+
+                    // Buscar ese nombre en el array global de paradas "stops"
+                    const stopObj = stops.find(s => s.full === finalStopName);
+
+                    if (stopObj) {
+                        // Asignar parada al asiento SIN abrir modal
+                        updateSeat(coach, num, stopObj);
+
+                        // Vibración un pelín más corta para diferenciarlo si quieres
+                        if (navigator.vibrate) {
+                            navigator.vibrate(30);
+                        }
+                    }
+                }
+                // Si no hay trainNumber o ruta definida, simplemente no hace nada
             }
         }
     }, SEAT_LONG_PRESS_DURATION);
@@ -3615,6 +3637,97 @@ function closeModal(event) {
 
         render();
     }
+}
+
+// --- Swipe down para cerrar modal con rebote ---
+
+let modalSwipeStartY = 0;
+let modalSwipeDeltaY = 0;
+let modalSwipeActive = false;
+const MODAL_SWIPE_CLOSE_THRESHOLD = 80; // px necesarios para cerrar
+
+function modalSwipeStart(event) {
+    if (!event.touches || event.touches.length === 0) return;
+
+    // Solo activamos el swipe si el gesto empieza en el header del modal
+    const header = event.target.closest('.modal-header');
+    if (!header) {
+        modalSwipeActive = false;
+        return;
+    }
+
+    modalSwipeActive = true;
+    const touch = event.touches[0];
+    modalSwipeStartY = touch.clientY;
+    modalSwipeDeltaY = 0;
+
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.style.transition = 'none';
+        modal.style.animation = '';
+    }
+}
+
+function modalSwipeMove(event) {
+    if (!modalSwipeActive || !event.touches || event.touches.length === 0) return;
+
+    const touch = event.touches[0];
+    const deltaY = touch.clientY - modalSwipeStartY;
+
+    // Solo nos interesa si se mueve hacia abajo
+    if (deltaY <= 0) {
+        modalSwipeDeltaY = 0;
+        return;
+    }
+
+    modalSwipeDeltaY = deltaY;
+
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        const limited = Math.min(deltaY, 200); // límite para que no se vaya a Cuenca
+        modal.style.transform = `translateY(${limited}px)`;
+    }
+}
+
+function modalSwipeEnd(event) {
+    if (!modalSwipeActive) return;
+    modalSwipeActive = false;
+
+    const modal = document.querySelector('.modal');
+    if (!modal) {
+        modalSwipeDeltaY = 0;
+        return;
+    }
+
+    // Si hemos arrastrado suficiente, cerramos el modal deslizando hacia abajo
+    if (modalSwipeDeltaY > MODAL_SWIPE_CLOSE_THRESHOLD) {
+        modal.style.transition = 'transform 0.2s ease-out';
+        modal.style.transform = 'translateY(100%)';
+
+        // Una vez termina la animación, cerramos de verdad
+        setTimeout(() => {
+            modal.style.transition = '';
+            modal.style.transform = '';
+            closeModal(); // sin evento → pasa la condición de closeModal
+        }, 200);
+    } else {
+        // No llega al umbral → animación de rebote
+        modal.style.transition = '';
+        modal.style.setProperty('--modal-swipe-distance', `${modalSwipeDeltaY}px`);
+        modal.style.animation = 'modalReturnBounce 0.25s ease-out';
+
+        modal.addEventListener(
+            'animationend',
+            () => {
+                modal.style.animation = '';
+                modal.style.transform = '';
+                modal.style.removeProperty('--modal-swipe-distance');
+            },
+            { once: true }
+        );
+    }
+
+    modalSwipeDeltaY = 0;
 }
 
 function updateSearch(value) {
@@ -3911,6 +4024,9 @@ window.restoreModalScrollPosition = restoreModalScrollPosition;
 window.handleModalOverlayInteraction = handleModalOverlayInteraction;
 window.lockBodyScroll = lockBodyScroll;
 window.unlockBodyScroll = unlockBodyScroll;
+window.modalSwipeStart = modalSwipeStart;
+window.modalSwipeMove = modalSwipeMove;
+window.modalSwipeEnd = modalSwipeEnd;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
