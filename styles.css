@@ -386,8 +386,8 @@ body.dark-mode .stop-option:hover {
     padding: 1rem;
     max-width: 28rem;
     margin: 0 auto;
-    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-    touch-action: pan-y; /* Permitir scroll vertical */
+    -webkit-overflow-scrolling: touch;
+    /* ✅ ELIMINAR touch-action completamente */
 }
 
 .seats-layout {
@@ -420,6 +420,8 @@ body.dark-mode .stop-option:hover {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    touch-action: manipulation; /* ✅ VERIFICAR que esté */
+    -webkit-tap-highlight-color: transparent; /* ✅ VERIFICAR que esté */
 }
 
 .seat:hover {
@@ -498,6 +500,7 @@ body.dark-mode .stop-option:hover {
     border-color: #ca8a04;
 }
 
+/* Asegurar que el modal ocupe toda la pantalla */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -508,6 +511,18 @@ body.dark-mode .stop-option:hover {
     display: flex;
     align-items: flex-end;
     z-index: 30;
+    /* ✅ IMPORTANTE: NO usar touch-action aquí */
+}
+
+/* ✅ AÑADIR: Cuando NO hay modal, NO bloquear */
+body:not(.modal-open) .modal-overlay {
+    display: none; /* El overlay no debería existir si no hay modal */
+}
+
+body:not(.modal-open) {
+    overflow: auto !important;
+    position: static !important;
+    touch-action: auto !important;
 }
 
 .modal {
@@ -519,6 +534,8 @@ body.dark-mode .stop-option:hover {
     max-height: 80vh;
     display: flex;
     flex-direction: column;
+    /* ✅ Permitir scroll natural */
+    overflow: hidden;
 }
 
 .modal-header {
@@ -1667,22 +1684,7 @@ body.modal-open {
     overflow: hidden;
     position: fixed;
     width: 100%;
-}
-
-/* Asegurar que el modal ocupe toda la pantalla */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden; /* IMPORTANTE */
-}
-
-/* Permitir scroll solo en áreas específicas */
-.modal {
-    position: relative;
-    overflow: hidden; /* IMPORTANTE */
+    height: 100vh; /* ✅ AÑADIR */
 }
 
 /* Asegurar que solo la lista de paradas sea scrolleable */
@@ -1690,6 +1692,7 @@ body.modal-open {
 .comment-input {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
 }
 
 /* Evitar que inputs abran teclado automáticamente */
