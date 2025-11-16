@@ -1577,6 +1577,7 @@ function openStopFilter() {
 
     document.body.insertAdjacentHTML('beforeend', modal);
     document.getElementById('stop-filter-input').focus();
+    lockBodyScroll();
 }
 
 function updateStopFilterSuggestions(query) {
@@ -1674,6 +1675,7 @@ function openRouteFilter() {
 
     document.body.insertAdjacentHTML('beforeend', modal);
     document.getElementById('route-from-input').focus();
+    lockBodyScroll();
 }
 
 function updateRouteFromSuggestions(query) {
@@ -1738,6 +1740,7 @@ function selectRouteFromStop(fromStop) {
 
     document.body.insertAdjacentHTML('beforeend', modal);
     document.getElementById('route-to-input').focus();
+    lockBodyScroll();
 }
 
 function updateRouteToSuggestions(query, fromStop) {
@@ -1825,6 +1828,7 @@ function openSeatFilter() {
 
     document.body.insertAdjacentHTML('beforeend', modal);
     document.getElementById('seat-filter-input').focus();
+    lockBodyScroll();
 }
 
 function searchSeatFilter() {
@@ -1878,6 +1882,7 @@ function showConfirmModal(message, onConfirm, onCancel) {
 
     // Guardar callbacks
     window._confirmCallbacks = { onConfirm, onCancel };
+    lockBodyScroll();
 }
 
 function closeConfirmModal(accepted, event) {
@@ -1940,6 +1945,7 @@ function showStopFilterResults(stopName, seats) {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
 }
 
 function showRouteFilterResults(fromStop, toStop, seats) {
@@ -1983,6 +1989,7 @@ function showRouteFilterResults(fromStop, toStop, seats) {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
 }
 
 function showSeatFilterResults(seatInfo) {
@@ -2026,6 +2033,7 @@ function showSeatFilterResults(seatInfo) {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
 }
 
 function closeFilterModal(event) {
@@ -2175,6 +2183,7 @@ function updateSeatFromList(abbr) {
     const stop = stops.find((s) => s.abbr === abbr);
     if (stop && state.selectedSeat) {
         updateSeat(state.selectedSeat.coach, state.selectedSeat.num, stop);
+        closeModal(); // 👈 se asegura de desbloquear el scroll correctamente
     }
 }
 
@@ -2567,6 +2576,7 @@ function openAbout() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', aboutHTML);
+    lockBodyScroll();
 }
 
 function closeAbout(event) {
@@ -3094,8 +3104,14 @@ function renderModal() {
     const filteredStops = getFilteredStops();
 
     return `
-        <div class="modal-overlay" onclick="closeModal(event)">
-            <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-overlay" 
+             onclick="closeModal(event)"
+             onmousedown="handleModalOverlayInteraction(event)"
+             ontouchstart="handleModalOverlayInteraction(event)">
+            <div class="modal" 
+                 onclick="event.stopPropagation()"
+                 onmousedown="event.stopPropagation()"
+                 ontouchstart="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Asiento ${
@@ -3304,6 +3320,26 @@ function restoreModalScrollPosition() {
     });
 }
 
+// Referencias globales para poder remover los listeners
+let modalTouchMoveHandler = null;
+let modalTouchEndHandler = null;
+
+// ========== NUEVO SISTEMA DE SCROLL SIMPLIFICADO ==========
+
+// Prevenir scroll en overlay del modal (solo en el overlay, no globalmente)
+function handleModalOverlayInteraction(e) {
+    // Solo actuar si el click/touch es directamente en el overlay
+    if (e.target.classList.contains('modal-overlay')) {
+        e.preventDefault();
+    }
+}
+
+// No necesitamos más funciones de scroll complejas
+// El navegador manejará el scroll naturalmente
+
+// ========== FIN SISTEMA SIMPLIFICADO ==========
+
+
 // Funciones globales para eventos
 function selectCoach(coachId) {
     state.selectedCoach = coachId;
@@ -3316,23 +3352,151 @@ function selectSeat(coach, num) {
         num
     };
     state.searchQuery = "";
-    lockBodyScroll(); // Bloquear scroll del fondo
+    lockBodyScroll(); // Solo bloquear body
     render();
+    // ✅ NO llamar a setupModalScroll()
 }
 
 function lockBodyScroll() {
-    document.body.style.overflow = 'hidden';
+    const scrollY = window.scrollY;
+    document.body.classList.add('modal-open'); // ✅ AÑADIR
     document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
     document.body.style.width = '100%';
-    document.body.style.top = `-${window.scrollY}px`;
+}
+
+function setupModalListScrollGuards() {
+    // Remover listeners previos si existen
+    removeModalScrollGuards();
+
+    // wheel (ratón / trackpad)
+    modalWheelHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (!list) return;
+
+        const atTop = list.scrollTop === 0;
+        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
+
+        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+            e.preventDefault();
+        }
+
+        e.stopPropagation();
+    };
+
+    // touchmove (móvil)
+    modalTouchMoveHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (!list) return;
+
+        const touch = e.touches[0];
+        const lastY = list._lastTouchY ?? touch.clientY;
+        const deltaY = lastY - touch.clientY;
+        list._lastTouchY = touch.clientY;
+
+        const atTop = list.scrollTop === 0;
+        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
+
+        if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+            e.preventDefault();
+        }
+
+        e.stopPropagation();
+    };
+
+    // touchend/cancel
+    modalTouchEndHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (list) list._lastTouchY = null;
+    };
+
+    // Añadir listeners
+    document.addEventListener('wheel', modalWheelHandler, { passive: false, capture: true });
+    document.addEventListener('touchmove', modalTouchMoveHandler, { passive: false, capture: true });
+    document.addEventListener('touchend', modalTouchEndHandler, { capture: true });
+    document.addEventListener('touchcancel', modalTouchEndHandler, { capture: true });
+}
+
+// ✅ NUEVA FUNCIÓN: Remover listeners cuando se cierra el modal
+function removeModalScrollGuards() {
+    if (modalWheelHandler) {
+        document.removeEventListener('wheel', modalWheelHandler, { capture: true });
+        modalWheelHandler = null;
+    }
+    if (modalTouchMoveHandler) {
+        document.removeEventListener('touchmove', modalTouchMoveHandler, { capture: true });
+        modalTouchMoveHandler = null;
+    }
+    if (modalTouchEndHandler) {
+        document.removeEventListener('touchend', modalTouchEndHandler, { capture: true });
+        document.removeEventListener('touchcancel', modalTouchEndHandler, { capture: true });
+        modalTouchEndHandler = null;
+    }
+}
+
+// Referencias globales para overlay
+let overlayWheelHandler = null;
+let overlayTouchMoveHandler = null;
+
+function setupModalOverlayScrollBlock() {
+    // Remover listeners previos
+    removeModalOverlayScrollBlock();
+
+    const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
+
+    // Prevenir scroll en el modal excepto en áreas específicas
+    overlayTouchMoveHandler = (e) => {
+        const overlay = e.target.closest('.modal-overlay');
+        if (!overlay) return;
+
+        const isInScrollable = scrollableSelectors.some(selector =>
+            e.target.closest(selector)
+        );
+
+        if (!isInScrollable) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    overlayWheelHandler = (e) => {
+        const overlay = e.target.closest('.modal-overlay');
+        if (!overlay) return;
+
+        const isInScrollable = scrollableSelectors.some(selector =>
+            e.target.closest(selector)
+        );
+
+        if (!isInScrollable) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    document.addEventListener('touchmove', overlayTouchMoveHandler, { passive: false, capture: true });
+    document.addEventListener('wheel', overlayWheelHandler, { passive: false, capture: true });
+}
+
+// ✅ NUEVA FUNCIÓN: Remover listeners de overlay
+function removeModalOverlayScrollBlock() {
+    if (overlayTouchMoveHandler) {
+        document.removeEventListener('touchmove', overlayTouchMoveHandler, { capture: true });
+        overlayTouchMoveHandler = null;
+    }
+    if (overlayWheelHandler) {
+        document.removeEventListener('wheel', overlayWheelHandler, { capture: true });
+        overlayWheelHandler = null;
+    }
 }
 
 function unlockBodyScroll() {
     const scrollY = document.body.style.top;
-    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     document.body.style.position = '';
-    document.body.style.width = '';
     document.body.style.top = '';
+    document.body.style.width = '';
+
+    // Restaurar posición de scroll
     window.scrollTo(0, parseInt(scrollY || '0') * -1);
 }
 
@@ -3441,9 +3605,14 @@ function handleSeatCancel() {
 
 function closeModal(event) {
     if (!event || event.target === event.currentTarget) {
-        unlockBodyScroll(); // Desbloquear scroll del fondo
+        // Solo desbloquear body
+        unlockBodyScroll();
+
+        // Resetear estado
         state.selectedSeat = null;
         state.searchQuery = "";
+        modalScrollPosition = 0;
+
         render();
     }
 }
@@ -3738,6 +3907,8 @@ window.showConfirmModal = showConfirmModal;
 window.closeConfirmModal = closeConfirmModal;
 window.saveModalScrollPosition = saveModalScrollPosition;
 window.restoreModalScrollPosition = restoreModalScrollPosition;
+// Scroll management
+window.handleModalOverlayInteraction = handleModalOverlayInteraction;
 window.lockBodyScroll = lockBodyScroll;
 window.unlockBodyScroll = unlockBodyScroll;
 
