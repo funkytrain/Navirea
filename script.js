@@ -422,7 +422,8 @@ const trainModels = {
                 { type: "seats", positions: [[120, null, null, null, 121]] },
                 { type: "space", height: 50 },
                 { type: "seats", positions: [[122, 123, null, 124, 125]] },
-                { type: "seats", positions: [["PMR-126", null, null, null, "PMR-127"]] },
+                { type: "seats", positions: [["S1", "PMR-126", null, "PMR-127", "S3"]] },
+                { type: "seats", positions: [["S2", null, null, null, "S4"]] },
                 { type: "pmr-bathroom", height: 160 },
                 { type: "seats", positions: [[128, null, null, null, null]] },
                 { type: "seats", positions: [[129, null, null, 130, 131]] },
@@ -773,13 +774,19 @@ const trainModels = {
                     {
                         type: "seats",
                         positions: [
-                            [null, null, null, "S1", "S2"]
+                            [null, null, null, null, "S1"]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            ["S3", "S4", null, "S6", "S5"]
+                            [null, null, null, null, "S2"]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [null, null, null, null, "S3"]
                         ]
                     },
                     {
@@ -1028,13 +1035,13 @@ const trainModels = {
                     {
                         type: "seats",
                         positions: [
-                            [139, 140, null, 138, 137]
+                            ["WC", "WC", null, 138, 137]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [143, 144, null, 142, 141]
+                            ["WC", "WC", null, 140, 139]
                         ]
                     },
                 ],
@@ -1045,49 +1052,43 @@ const trainModels = {
                 layout: [{
                         type: "seats",
                         positions: [
-                            [143, 144, null, 142, 141]
+                            [141, 142, null, 144, 143]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [147, 148, null, 146, 145]
+                            [145, 146, null, 148, 147]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [151, 152, null, 150, 149]
+                            [149, 150, null, 152, 151]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [155, 156, null, 154, 153]
+                            [153, 154, null, 156, 155]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [159, 160, null, 158, 157]
+                            [157, 158, null, 160, 159]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [163, 164, null, 162, 161]
+                            [161, 162, null, 164, 163]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [167, 168, null, 166, 165]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [171, 172, null, 170, 169]
+                            [165, 166, null, 168, 167]
                         ]
                     },
                     {
@@ -1097,13 +1098,19 @@ const trainModels = {
                     {
                         type: "seats",
                         positions: [
-                            [173, 174, null, "EQ", "EQ"]
+                            [169, 170, null, "EQ", "EQ"]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [175, 176, null, "EQ", "EQ"]
+                            [171, 172, null, "EQ", "EQ"]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [175, 176, null, 174, 173]
                         ]
                     },
                     {
@@ -1143,14 +1150,14 @@ const trainModels = {
                         ]
                     },
                     {
+                        type: "space",
+                        height: 160
+                    },
+                    {
                         type: "seats",
                         positions: [
                             [203, 204, null, 202, 201]
                         ]
-                    },
-                    {
-                        type: "space",
-                        height: 160
                     },
                     {
                         type: "seats",
@@ -1174,12 +1181,6 @@ const trainModels = {
                         type: "seats",
                         positions: [
                             [219, 220, null, 218, 217]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [223, 224, null, 222, 221]
                         ]
                     },
                 ],
@@ -1347,6 +1348,7 @@ const trainNumbers = {
     '16070': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias'],
     '18039': ['Pamplona Iruña'],
     '18077': ['Pamplona Iruña'],
+    '18078': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias'],
     '18021': ['Vitoria Gasteiz'],
     '16011': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias'],
     '18071': ['Vitoria Gasteiz'],
@@ -1368,6 +1370,7 @@ const trainRoutes = {
     '16070': ['Logroño', 'Alcanadre', 'Calahorra', 'Rincón de Soto', 'Alfaro', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18039': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Villafranca', 'Marcilla', 'Olite Erriberri', 'Tafalla', 'Pamplona Iruña'],
     '18077': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Villafranca', 'Marcilla', 'Olite Erriberri', 'Tafalla', 'Pamplona Iruña'],
+    '18078': ['Logroño', 'Alcanadre', 'Calahorra', 'Rincón de Soto', 'Alfaro', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18021': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Villafranca', 'Marcilla', 'Olite Erriberri', 'Tafalla', 'Pamplona Iruña', 'Uharte Arakil', 'Etxarri Aranatz', 'Altsasu Pueblo', 'Araia', 'Agurain Salvatierra', 'Alegria Dulantzi', 'Vitoria Gasteiz', 'Nanclares Langraiz', 'La Puebla Arganzón', 'Manzanos', 'Miranda'],
     '16011': ['Vitoria Gasteiz', 'Alegria Dulantzi', 'Agurain Salvatierra', 'Araia', 'Altsasu Pueblo', 'Etxarri Aranatz', 'Uharte Arakil', 'Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón'],
     '18071': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Villafranca', 'Marcilla', 'Olite Erriberri', 'Tafalla', 'Pamplona Iruña', 'Uharte Arakil', 'Etxarri Aranatz', 'Altsasu Pueblo', 'Araia', 'Agurain Salvatierra', 'Alegria Dulantzi', 'Vitoria Gasteiz', 'Nanclares Langraiz', 'La Puebla Arganzón', 'Manzanos', 'Miranda'],
@@ -1854,6 +1857,11 @@ function closeFilterInputModal(event) {
         const modal = document.querySelector('.about-modal')?.closest('.modal-overlay');
         if (modal) modal.remove();
     }
+
+    // Si ya no queda ningún overlay, devolvemos el scroll del body
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
 }
 
 function showConfirmModal(message, onConfirm, onCancel) {
@@ -1901,6 +1909,11 @@ function closeConfirmModal(accepted, event) {
             }
             window._confirmCallbacks = null;
         }
+    }
+
+    // 👇 IMPORTANTE: si ya no queda ningún overlay, devolver el scroll del body
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
     }
 }
 
@@ -2026,6 +2039,7 @@ function showSeatFilterResults(seatInfo) {
                     <pre>${info}</pre>
                 </div>
                 <div class="modal-footer">
+                    <button class="clear-btn" style="background-color: #4f46e5;" onclick="navigateToSeat('${coach}', '${seat}')">Mostrar</button>
                     <button class="clear-btn" onclick="closeFilterModal()">Cerrar</button>
                 </div>
             </div>
@@ -2036,10 +2050,284 @@ function showSeatFilterResults(seatInfo) {
     lockBodyScroll();
 }
 
+/* -----------------------
+   NUEVOS FILTROS: Enlaces y Por comentario
+   + Modal tipo lista que se mantiene abierto mientras navegas.
+   + Botones Ir / Anterior / Siguiente para recorrer resultados.
+   ----------------------- */
+
+// Estado temporal para la lista actualmente mostrada en el overlay
+let _currentFilterList = [];      // array de seatKeys: ['C1-12', 'C2-3', ...]
+let _currentFilterIndex = -1;     // índice del asiento actualmente enfocado en la lista
+
+// Helper: obtener seatKey (ya existe en tu código, pero lo usamos así)
+function seatKeyToParts(key) {
+    const [coach, seat] = key.split('-');
+    return { coach, seat };
+}
+
+// Centrar y marcar visualmente un asiento (no cierra overlays)
+function scrollSeatIntoViewAndFlash(seatKey) {
+    const { coach, seat } = seatKeyToParts(seatKey);
+
+    // Cambiar al coche (si procede) y renderizar
+    state.selectedCoach = coach;
+    render();
+
+    // Esperar a que el DOM se actualice y buscar el asiento
+    setTimeout(() => {
+        // Buscar entre .seat del coche actual (igual lógica que navigateToSeat)
+        const seats = document.querySelectorAll('.seat');
+        let target = null;
+
+        seats.forEach(s => {
+            const txt = s.textContent.trim();
+            const cleanTxt = txt.replace(/[^\d]/g, '');
+            const cleanSeat = String(seat).replace(/[^\d]/g, '');
+            if (cleanTxt === cleanSeat || txt.includes(String(seat))) {
+                target = s;
+            }
+        });
+
+        if (!target) return;
+
+        // Scroll suave al centro
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Añadir clase temporal para destacar
+        target.classList.add('focus-seat');
+        // Quitar la clase después de 1400ms
+        setTimeout(() => {
+            target.classList.remove('focus-seat');
+        }, 1400);
+
+        // además aseguramos que el asiento también queda marcado por el filtro
+        if (filterState) {
+            filterState.active = true;
+            filterState.data = _currentFilterList.slice();
+            filterState.type = filterState.type || 'custom';
+        }
+    }, 120);
+}
+
+// Navegar a un índice concreto de la lista mostrada en el overlay
+function navigateToFilterIndex(index) {
+    if (!Array.isArray(_currentFilterList) || _currentFilterList.length === 0) return;
+
+    // Normalizar índice en rango circular
+    if (index < 0) index = _currentFilterList.length - 1;
+    if (index >= _currentFilterList.length) index = 0;
+
+    _currentFilterIndex = index;
+    const key = _currentFilterList[_currentFilterIndex];
+
+    // Mantener overlay abierto: NO llamamos a closeFilterModal()
+    // Solo centramos y pintamos el asiento y actualizamos estado de filtro
+    filterState.active = true;
+    filterState.data = _currentFilterList.slice();
+    filterState.type = filterState.type || 'custom';
+    filterState.highlightIndex = _currentFilterIndex; // opcional para uso visual
+    render(); // para que aplique clases 'filtered-seat'
+    scrollSeatIntoViewAndFlash(key);
+
+    // Actualizar contador dentro del modal (si existe)
+    const counter = document.getElementById('filter-list-counter');
+    if (counter) counter.textContent = `${_currentFilterIndex + 1} / ${_currentFilterList.length}`;
+}
+
+// Función llamada por los botones "Ir" del modal (no cierra modal)
+function onFilterListGo(index) {
+    navigateToFilterIndex(index);
+}
+
+// Función para abrir un modal tipo lista (genérico)
+// type: 'links' | 'comments' u otro identificador
+// items: array de objetos { key: 'C1-12', coach: 'C1', seat: '12', extra: 'texto comentario' }
+function showFilterListModal(type, items) {
+    // Normalizar lista de keys
+    _currentFilterList = items.map(i => i.key);
+    _currentFilterIndex = (_currentFilterList.length > 0) ? 0 : -1;
+    filterState.type = type;
+    filterState.active = true;
+    filterState.data = _currentFilterList.slice();
+
+    const modal = `
+<div class="modal-overlay filter-input-modal" onclick="closeFilterInputModal(event)">
+    <div class="modal about-modal" onclick="event.stopPropagation()">
+        
+        <div class="modal-header">
+            <div class="modal-header-top">
+                <h3 class="modal-title">
+                    ${type === 'links' ? 'Enlaces' : 'Con comentario'}
+                </h3>
+                <button class="close-btn" onclick="closeFilterInputModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="filter-input-content">
+            ${
+        items.length === 0
+            ? `<div style="color:#777; padding:1rem; text-align:center;">No hay asientos que mostrar.</div>`
+            : `<div class="filter-list-container">
+                        ${items.map((it, i) => `
+                            <div class="filter-list-row">
+                                <div class="filter-list-seat">
+                                    <strong>${it.coach}</strong> – ${it.seat}
+                                    ${it.extra ? `<div class="filter-extra">${escapeHtml(it.extra)}</div>` : ''}
+                                </div>
+                                <div class="filter-list-actions">
+                                    <button class="icon-btn small red" onclick="onFilterListGo(${i})" title="Ir">
+                                        <svg viewBox="0 0 24 24" width="16" height="16"
+                                             stroke="currentColor" fill="none" stroke-width="2">
+                                            <polyline points="9 6 15 12 9 18"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`
+    }
+        </div>
+
+        <div class="modal-footer">
+            <button class="clear-btn" onclick="closeFilterInputModal()">Cerrar</button>
+        </div>
+
+    </div>
+</div>
+`;
+
+    document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
+
+    // Inicial: si hay elementos, centrar el primero
+    if (_currentFilterList.length > 0) {
+        navigateToFilterIndex(0);
+    }
+}
+
+// Utilidades para escape de HTML (por seguridad al inyectar en modal)
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, function (m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+    });
+}
+
+/* ---------- Funciones específicas que llaman a showFilterListModal() ---------- */
+
+// Abrir filtro "Enlaces" (asientos con flag .enlace)
+function openLinksFilter() {
+    toggleFiltersMenu();
+    const items = [];
+
+    Object.keys(state.seatData).forEach(key => {
+        const info = state.seatData[key];
+        if (info && info.enlace) {
+            const [coachId, seatNum] = key.split('-');
+            let destino = '';
+            if (info.stop && info.stop.full) {
+                destino = `Destino: ${info.stop.full}`;
+            }
+
+            items.push({ key, coach: coachId, seat: seatNum, extra: info.stop ? `Destino: ${info.stop.full}` : '' });
+        }
+    });
+
+    if (items.length === 0) {
+        alert('No hay asientos marcados como enlace');
+        return;
+    }
+
+    showFilterListModal('links', items);
+}
+
+// Abrir filtro "Por comentario" (asientos con comentarioFlag o comentario)
+function openCommentsFilter() {
+    toggleFiltersMenu();
+    const items = [];
+
+    Object.keys(state.seatData).forEach(key => {
+        const info = state.seatData[key];
+        if (info && (info.comentarioFlag || info.comentario)) {
+            const [coachId, seatNum] = key.split('-');
+            items.push({ key, coach: coachId, seat: seatNum, extra: info.comentario || '' });
+        }
+    });
+
+    if (items.length === 0) {
+        alert('No hay asientos con comentario');
+        return;
+    }
+
+    showFilterListModal('comments', items);
+}
+
+/* ---------- Reexportar funciones al window para que el HTML pueda usarlas ---------- */
+window.openLinksFilter = openLinksFilter;
+window.openCommentsFilter = openCommentsFilter;
+window.onFilterListGo = onFilterListGo;
+window.navigateToFilterIndex = navigateToFilterIndex;
+
+function navigateToSeat(coachId, seatNum) {
+    // Cerrar modal de filtro
+    closeFilterModal();
+
+    // Cambiar al coche correcto
+    state.selectedCoach = coachId;
+
+    // Re-renderizar para mostrar el coche
+    render();
+
+    // Esperar a que se renderice el DOM
+    setTimeout(() => {
+        // Buscar el asiento en el DOM
+        const seats = document.querySelectorAll('.seat');
+        let targetSeat = null;
+
+        seats.forEach(seat => {
+            const seatText = seat.textContent.trim();
+            // Comparar solo números (eliminar PMR-, abreviaturas, etc.)
+            const cleanSeatText = seatText.replace(/[^\d]/g, '');
+            const cleanSeatNum = String(seatNum).replace(/[^\d]/g, '');
+
+            if (cleanSeatText === cleanSeatNum || seatText.includes(String(seatNum))) {
+                targetSeat = seat;
+            }
+        });
+
+        if (targetSeat) {
+            // Hacer scroll hasta el asiento
+            targetSeat.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+            // Añadir clase para parpadeo
+            targetSeat.classList.add('seat-highlight');
+
+            // Quitar la clase después de 3 segundos
+            setTimeout(() => {
+                targetSeat.classList.remove('seat-highlight');
+            }, 3000);
+        }
+    }, 300);
+}
+
 function closeFilterModal(event) {
     if (!event || event.target === event.currentTarget) {
         const modal = document.querySelector('.filter-modal')?.closest('.modal-overlay');
         if (modal) modal.remove();
+    }
+
+    // Si ya no queda ningún overlay, devolvemos el scroll del body
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
     }
 }
 
@@ -2049,6 +2337,23 @@ function toggleFiltersMenu() {
     if (menu) {
         menu.classList.toggle('hidden');
     }
+}
+
+function toggleCopyMode() {
+    state.copyMode = !state.copyMode;
+    showCopyBanner(state.copyMode ? "Copiado activado" : "Copiado desactivado");
+    render();
+}
+
+function showCopyBanner(text) {
+    const banner = document.createElement("div");
+    banner.className = "copy-banner";
+    banner.textContent = text;
+    document.body.appendChild(banner);
+
+    setTimeout(() => banner.classList.add("show"), 10);
+    setTimeout(() => banner.classList.remove("show"), 900);
+    setTimeout(() => banner.remove(), 1200);
 }
 
 // Estado de la aplicación
@@ -2065,8 +2370,13 @@ let state = {
     currentStop: null,
     currentStopSearch: '',
     headerCollapsed: false,
-    coachPositions: {}
+    coachPositions: {},
+    copyMode: false      // 👈 NUEVO
 };
+
+// Última parada copiada (para el modo copiar)
+let lastCopiedStop = null;
+
 
 // Estado para filtros
 let filterState = {
@@ -2173,6 +2483,9 @@ function updateSeat(coachId, seatNum, stop) {
         state.seatData[key] = {};
     }
     state.seatData[key].stop = stop;
+    // 🟢 Guardar última parada copiada
+    lastCopiedStop = stop;
+    state.lastCopiedStop = stop;
     saveData();
     state.selectedSeat = null;
     state.searchQuery = "";
@@ -2193,6 +2506,8 @@ function clearSeat(coachId, seatNum) {
     const key = getSeatKey(coachId, String(seatNum));
     delete state.seatData[key];
     saveData();
+    state.selectedSeat = null;
+    unlockBodyScroll();
     state.selectedSeat = null;
     render();
 }
@@ -2405,20 +2720,7 @@ function getTrainFinalStops() {
     return trainNumbers[state.trainNumber] || [];
 }
 
-function setCurrentStop(stopName) {
-    if (!state.trainNumber || !trainRoutes[state.trainNumber]) {
-        alert('Primero debes seleccionar un número de tren válido');
-        return;
-    }
-
-    const route = trainRoutes[state.trainNumber];
-    const stopIndex = route.indexOf(stopName);
-
-    if (stopIndex === -1) {
-        alert('Esta parada no está en la ruta del tren ' + state.trainNumber);
-        return;
-    }
-
+function applyCurrentStopChange(stopName, route, stopIndex) {
     // Guardar parada actual
     state.currentStop = stopName;
     localStorage.setItem('currentStop', stopName);
@@ -2446,9 +2748,6 @@ function setCurrentStop(stopName) {
                     delete seatInfo.comentario;
                     delete seatInfo.comentarioFlag;
 
-                    // Si no queda nada más que el historial, podemos dejarlo
-                    // El asiento vuelve a su estado inicial (solo con historial)
-
                     deletedCount++;
                 }
             }
@@ -2459,6 +2758,49 @@ function setCurrentStop(stopName) {
     render();
 
     alert(`Parada actual: ${stopName}\n${deletedCount} asiento(s) liberado(s)`);
+}
+
+function setCurrentStop(stopName) {
+    if (!state.trainNumber || !trainRoutes[state.trainNumber]) {
+        alert('Primero debes seleccionar un número de tren válido');
+        return;
+    }
+
+    const route = trainRoutes[state.trainNumber];
+    const stopIndex = route.indexOf(stopName);
+
+    if (stopIndex === -1) {
+        alert('Esta parada no está en la ruta del tren ' + state.trainNumber);
+        return;
+    }
+
+    // Comprobar si estamos yendo hacia una parada anterior a la ya seleccionada
+    const previousStop = state.currentStop || null;
+    if (previousStop) {
+        const prevIndex = route.indexOf(previousStop);
+        if (prevIndex !== -1 && stopIndex < prevIndex) {
+            // Mostrar ventana de confirmación tipo "Confirmar"
+            showConfirmModal(
+                `La parada "${stopName}" es anterior a la parada actual\n` +
+                `("${previousStop}").\n\n` +
+                `¿Quieres cambiar igualmente la parada actual y liberar los asientos ` +
+                `de las paradas anteriores?`,
+                () => {
+                    // ACEPTAR → aplicar el cambio
+                    applyCurrentStopChange(stopName, route, stopIndex);
+                },
+                () => {
+                    // CANCELAR → no hacer nada, mantener parada actual
+                    state.currentStopSearch = '';
+                    render();
+                }
+            );
+            return;
+        }
+    }
+
+    // Caso normal (no es anterior) → aplicar directamente
+    applyCurrentStopChange(stopName, route, stopIndex);
 }
 
 function getCurrentRoute() {
@@ -2585,6 +2927,10 @@ function closeAbout(event) {
             ?.closest('.modal-overlay');
         if (overlay) overlay.remove();
     }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
 }
 
 function exportTurn() {
@@ -2699,8 +3045,20 @@ function importTurn() {
 // Borrar todos los datos
 function clearAllData() {
     if (confirm("¿Seguro que quieres borrar todos los datos?")) {
+        // limpiar datos en memoria
         state.seatData = {};
-        localStorage.removeItem("train463Data");
+        state.coachPositions = {};
+        state.currentStop = null;   // limpiar la parada actual también
+
+        // guardar en localStorage usando la función correcta
+        saveData();
+
+        // eliminar entradas específicas por si hay restos
+        localStorage.removeItem('currentStop');
+        // (opcional) si quieres eliminar el trainData concreto también:
+        // localStorage.removeItem(`train${state.selectedTrain}Data`);
+
+        // refrescar UI
         render();
     }
 }
@@ -2716,13 +3074,20 @@ function getFilteredStops() {
         availableStops = stops.filter(stop => routeStops.includes(stop.full));
     }
 
-    return availableStops.filter(
+    const filtered = availableStops.filter(
         (stop) =>
-        stop.full.toLowerCase()
-        .includes(query) ||
-        stop.abbr.toLowerCase()
-        .includes(query)
+            stop.full.toLowerCase().includes(query) ||
+            stop.abbr.toLowerCase().includes(query)
     );
+
+// Ordenar SIEMPRE siguiendo el orden de trainRoutes
+    const route = trainRoutes[state.trainNumber] || [];
+    filtered.sort((a, b) => {
+        return route.indexOf(a.full) - route.indexOf(b.full);
+    });
+
+    return filtered;
+
 }
 
 // Renderizar header
@@ -2767,12 +3132,22 @@ function renderHeader() {
     </div>
 
 ${state.trainNumber ? `
-    <div style="position: relative;">
+    <div style="position: relative; display: flex; align-items: center; gap: 0.5rem;">
+
+        <!-- 🔘 Interruptor Copiado rápido -->
+        <button class="copy-toggle-btn" onclick="toggleCopyMode()" title="Copiado rápido">
+            <div class="copy-switch ${state.copyMode ? 'on' : ''}">
+                <div class="copy-switch-handle"></div>
+            </div>
+        </button>
+
+        <!-- Botón Filtros (tu botón original) -->
         <button class="filters-btn" onclick="toggleFiltersMenu()" title="Filtros">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
         </button>
+
         <div id="filters-menu" class="filters-dropdown hidden">
             <button class="filter-option" onclick="openStopFilter()">
                 Por parada de bajada
@@ -2783,6 +3158,12 @@ ${state.trainNumber ? `
             <button class="filter-option" onclick="openSeatFilter()">
                 Por asiento
             </button>
+                <button class="filter-option" onclick="openLinksFilter()">
+        Por Enlaces
+    </button>
+    <button class="filter-option" onclick="openCommentsFilter()">
+        Por comentario
+    </button>
         </div>
     </div>
 ` : ''}
@@ -2925,14 +3306,14 @@ ${state.trainNumber ? `
 
             // ------------- DEVUELVE EL BOTÓN -------------
             return `
-            <button
-                class="coach-btn ${occClass} ${
+    <button
+        class="coach-btn ${occClass} ${
                 state.selectedCoach === coach.id ? "active" : ""
             }"
-                onclick="selectCoach('${coach.id}')"
-            >
-                ${coach.id}
-            </button>`;
+        data-coach-id="${coach.id}"
+    >
+        ${coach.id}
+    </button>`;
         })
         .join("")}
                 </div>
@@ -3018,7 +3399,16 @@ function renderSeats() {
 
                             // Verificar si es parada final según el número de tren
                             const finalStopsForTrain = getTrainFinalStops();
-                            isFinalStop = seatInfo.stop && finalStopsForTrain.includes(seatInfo.stop.full);
+                            // Ajuste de paradas finales "efectivas" por número de tren
+                            const effectiveFinalStops = {
+                                "18021": "Vitoria Gasteiz",
+                                "18071": "Vitoria Gasteiz",
+                                "18079": "Castejón",
+                                "18073": "Castejón"
+                            };
+
+                            const effectiveFinalStop = effectiveFinalStops[state.trainNumber] || finalStopsForTrain[0];
+                            isFinalStop = seatInfo.stop && seatInfo.stop.full === effectiveFinalStop;
 
                             if (colors.length > 1) {
                                 // Crear degradado dividido
@@ -3095,7 +3485,20 @@ function renderSeats() {
     return html;
 }
 
-// Renderizar modal
+function scrollCoachToBottom() {
+    const layout = document.querySelector('.seats-layout');
+    if (!layout) return;
+
+    // Fondo del bloque de asientos
+    const bottom = layout.offsetTop + layout.offsetHeight;
+    const target = Math.max(0, bottom - window.innerHeight);
+
+    window.scrollTo({
+        top: target,
+        behavior: 'smooth'
+    });
+}
+
 // Renderizar modal
 function renderModal() {
     if (!state.selectedSeat) return "";
@@ -3103,6 +3506,11 @@ function renderModal() {
     const key = getSeatKey(state.selectedSeat.coach, state.selectedSeat.num);
     const currentStop = state.seatData[key]?.stop;
     const filteredStops = getFilteredStops();
+
+    // Ruta completa y parada actual del tren
+    const route = trainRoutes[state.trainNumber] || [];
+    const currentRouteStop = state.currentStop || null;
+    const currentRouteIndex = currentRouteStop ? route.indexOf(currentRouteStop) : -1;
 
     return `
         <div class="modal-overlay" 
@@ -3200,21 +3608,31 @@ function renderModal() {
                         readonly onfocus="this.removeAttribute('readonly')"
                     />
                 </div>
-                <div class="modal-list">
+                                <div class="modal-list">
                     ${filteredStops
-        .map(
-            (stop) => `
-                        <button
-                            class="stop-item"
-                            onclick="updateSeatFromList('${stop.abbr}')"
-                        >
-                            <span class="stop-name">${stop.full}</span>
-                            <span class="stop-abbr">${stop.abbr}</span>
-                        </button>
-                    `
-        )
+        .map((stop) => {
+            const stopIndex = route.indexOf(stop.full);
+            const isPassed =
+                currentRouteIndex !== -1 &&
+                stopIndex !== -1 &&
+                stopIndex < currentRouteIndex;
+            const isCurrent =
+                currentRouteIndex !== -1 &&
+                stopIndex === currentRouteIndex;
+
+            return `
+                                <button
+                                    class="stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''}"
+                                    onclick="updateSeatFromList('${stop.abbr}')"
+                                >
+                                    <span class="stop-name">${stop.full}</span>
+                                    <span class="stop-abbr">${stop.abbr}</span>
+                                </button>
+                            `;
+        })
         .join("")}
                 </div>
+
                 ${
         currentStop
             ? `
@@ -3340,6 +3758,11 @@ function handleModalOverlayInteraction(e) {
 function selectCoach(coachId) {
     state.selectedCoach = coachId;
     render();
+
+    // Después de pintar el nuevo coche, bajamos a su “continuación” (parte de abajo)
+    requestAnimationFrame(() => {
+        scrollCoachToBottom();
+    });
 }
 
 function selectSeat(coach, num) {
@@ -3347,6 +3770,22 @@ function selectSeat(coach, num) {
         coach,
         num
     };
+    // 🟢 MODO COPIADO ACTIVADO → Asignar última parada si existe
+    if (state.copyMode && state.lastCopiedStop) {
+        const key = getSeatKey(coach, num);
+        const seatInfo = state.seatData[key];
+
+        // Solo copiar si el asiento está libre
+        if (!seatInfo || !seatInfo.stop) {
+            updateSeat(coach, num, state.lastCopiedStop);
+            return;
+        }
+    }
+    // 🟢 Copiado rápido activado → asignar última parada sin abrir menú
+    if (state.copyMode && state.lastCopiedStop) {
+        updateSeat(coach, num, state.lastCopiedStop);
+        return;
+    }
     state.searchQuery = "";
     lockBodyScroll(); // Solo bloquear body
     render();
@@ -3524,39 +3963,63 @@ function handleSeatPress(coach, num, event) {
         // Solo activar long press si NO estamos haciendo scroll
         if (!isScrolling) {
             seatHoldTriggered = true;
+            if (navigator.vibrate) navigator.vibrate(40);
 
             const key = getSeatKey(coach, num);
             const seatInfo = state.seatData[key];
 
             // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
+// Long press: borrar pero con opción de deshacer
             if (seatInfo && Object.keys(seatInfo).length > 0) {
-                // Verificar si tiene historial para preservarlo
-                const hasHistory = seatInfo.historial && seatInfo.historial.length > 0;
+                const previousStop = seatInfo.stop ? seatInfo.stop.full : null;
 
-                // Si tiene parada, guardarla en el historial antes de borrar
-                if (seatInfo.stop && !hasHistory) {
-                    if (!seatInfo.historial) {
-                        seatInfo.historial = [];
-                    }
-                    seatInfo.historial.push(seatInfo.stop.full);
-                }
-
-                // Borrar el asiento completamente
+                // Borrar asiento
                 clearSeat(coach, num);
 
-                // Feedback visual/háptico opcional
+                // Vibración opcional
                 if (navigator.vibrate) {
-                    navigator.vibrate(50); // Vibración corta en móviles
+                    navigator.vibrate(50);
                 }
 
+                // Guardar datos para undo
+                state.undoData = {
+                    coach,
+                    num,
+                    stop: previousStop,
+                    undoData: null
+                };
+
+                if (previousStop) {
+                    showUndoBanner(
+                        `Parada eliminada: ${previousStop}`,
+                        () => {
+                            const undo = state.undoData;
+                            if (!undo) return;
+
+                            const stopObj = stops.find(s => s.full === undo.stop);
+                            if (stopObj) updateSeat(undo.coach, undo.num, stopObj);
+
+                            state.undoData = null;
+                        }
+                    );
+                }
                 // 🟢 Caso 2: asiento vacío → asignar última parada del tren
             } else {
                 // Necesitamos saber la ruta del tren actual
                 const route = state.trainNumber && trainRoutes[state.trainNumber];
 
                 if (route && route.length > 0) {
-                    // Última parada de la ruta (por ejemplo, Zaragoza Miraflores o Castejón)
-                    const finalStopName = route[route.length - 1];
+                    // Última parada REAL de la ruta
+                    let finalStopName = route[route.length - 1];
+
+                    // Ajustes de parada efectiva:
+                    // - Trenes que terminan en "Miranda" → usar "Vitoria Gasteiz"
+                    // - Trenes que terminan en "Logroño" → usar "Castejón"
+                    if (finalStopName === 'Miranda') {
+                        finalStopName = 'Vitoria Gasteiz';
+                    } else if (finalStopName === 'Logroño') {
+                        finalStopName = 'Castejón';
+                    }
 
                     // Buscar ese nombre en el array global de paradas "stops"
                     const stopObj = stops.find(s => s.full === finalStopName);
@@ -3596,7 +4059,7 @@ function handleSeatMove(coach, num, event) {
     const deltaY = Math.abs(currentY - touchStartY);
 
     // Si el movimiento supera el umbral, es scroll
-    if (deltaX > SCROLL_THRESHOLD || deltaY > SCROLL_THRESHOLD) {
+    if (deltaX > 18 || deltaY > 18) {
         isScrolling = true;
         clearTimeout(seatHoldTimer);
         seatHoldTriggered = false;
@@ -3637,6 +4100,29 @@ function closeModal(event) {
 
         render();
     }
+}
+
+function showUndoBanner(message, onUndo) {
+    const banner = document.createElement('div');
+    banner.className = 'undo-banner';
+    banner.innerHTML = `
+        <span>${message}</span>
+        <button class="undo-btn">Deshacer</button>
+    `;
+
+    document.body.appendChild(banner);
+
+    const timeout = setTimeout(() => {
+        banner.style.animation = 'undoBannerFadeOut 0.35s ease forwards';
+        setTimeout(() => banner.remove(), 350);
+    }, 5000);
+
+    banner.querySelector('.undo-btn').addEventListener('click', () => {
+        clearTimeout(timeout);
+        banner.style.animation = 'undoBannerFadeOut 0.35s ease forwards';
+        setTimeout(() => banner.remove(), 350);
+        onUndo();
+    });
 }
 
 // --- Swipe down para cerrar modal con rebote ---
@@ -3846,13 +4332,22 @@ function enableCoachLongPress() {
         btn.addEventListener("touchcancel", endPress);
 
         // IMPORTANTE: mouseleave solo debe cancelar el timer, NO ejecutar nada
-        btn.addEventListener("mouseleave", cancelPress);
+        btn.addEventListener("click", (e) => {
+            if (btn.dataset.longpressLock === "1") {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                return false;
+            }
+        });
 
         function startPress(e) {
             coachHoldTriggered = false;
+            btn.dataset.longpressLock = "0";
+
             clearTimeout(coachHoldTimer);
             coachHoldTimer = setTimeout(() => {
                 coachHoldTriggered = true;
+                btn.dataset.longpressLock = "1";  // 🔒 Bloquea el click normal
                 showCoachStats(coachId);
             }, 600);
         }
@@ -3860,12 +4355,11 @@ function enableCoachLongPress() {
         function endPress(e) {
             clearTimeout(coachHoldTimer);
 
-            // Si NO se activó el long press → comportamiento normal (click)
-            if (!coachHoldTriggered) {
+            // Si NO hubo longpress → comportamiento normal
+            if (!coachHoldTriggered && btn.dataset.longpressLock !== "1") {
                 selectCoach(coachId);
             }
 
-            // Reiniciar flag
             coachHoldTriggered = false;
         }
 
@@ -4027,6 +4521,7 @@ window.unlockBodyScroll = unlockBodyScroll;
 window.modalSwipeStart = modalSwipeStart;
 window.modalSwipeMove = modalSwipeMove;
 window.modalSwipeEnd = modalSwipeEnd;
+window.navigateToSeat = navigateToSeat;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
