@@ -1594,7 +1594,10 @@ function openStopFilter() {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
-    document.getElementById('stop-filter-input').focus();
+    setTimeout(() => {
+        const inp = document.getElementById('stop-filter-input');
+        if (inp) inp.focus();
+    }, 50);
     lockBodyScroll();
 }
 
@@ -1692,7 +1695,10 @@ function openRouteFilter() {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
-    document.getElementById('route-from-input').focus();
+    setTimeout(() => {
+        const inp = document.getElementById('route-from-input');
+        if (inp) inp.focus();
+    }, 50);
     lockBodyScroll();
 }
 
@@ -1757,7 +1763,10 @@ function selectRouteFromStop(fromStop) {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
-    document.getElementById('route-to-input').focus();
+    setTimeout(() => {
+        const inp = document.getElementById('route-to-input');
+        if (inp) inp.focus();
+    }, 50);
     lockBodyScroll();
 }
 
@@ -1845,7 +1854,10 @@ function openSeatFilter() {
     `;
 
     document.body.insertAdjacentHTML('beforeend', modal);
-    document.getElementById('seat-filter-input').focus();
+    setTimeout(() => {
+        const inp = document.getElementById('seat-filter-input');
+        if (inp) inp.focus();
+    }, 50);
     lockBodyScroll();
 }
 
@@ -2496,16 +2508,24 @@ function getSeatKey(coachId, seatNum) {
 // Actualizar asiento
 function updateSeat(coachId, seatNum, stop) {
     const key = getSeatKey(coachId, String(seatNum));
+
     if (!state.seatData[key]) {
         state.seatData[key] = {};
     }
+
+    // Guardar la parada en el asiento
     state.seatData[key].stop = stop;
-    // 🟢 Guardar última parada copiada
+
+    // 🟢 Guardar la última parada copiada (para el modo copia)
     lastCopiedStop = stop;
     state.lastCopiedStop = stop;
+
     saveData();
+
+    // Cerrar modal
     state.selectedSeat = null;
     state.searchQuery = "";
+    unlockBodyScroll();
     render();
 }
 
@@ -3792,11 +3812,8 @@ function selectCoach(coachId) {
 }
 
 function selectSeat(coach, num) {
-    state.selectedSeat = {
-        coach,
-        num
-    };
-    // 🟢 MODO COPIADO ACTIVADO → Asignar última parada si existe
+
+    // --- COPIADO RÁPIDO (tap normal) ---
     if (state.copyMode && state.lastCopiedStop) {
         const key = getSeatKey(coach, num);
         const seatInfo = state.seatData[key];
@@ -3807,15 +3824,12 @@ function selectSeat(coach, num) {
             return;
         }
     }
-    // 🟢 Copiado rápido activado → asignar última parada sin abrir menú
-    if (state.copyMode && state.lastCopiedStop) {
-        updateSeat(coach, num, state.lastCopiedStop);
-        return;
-    }
+
+    // --- SELECCIÓN NORMAL (abrir modal) ---
+    state.selectedSeat = { coach, num };
     state.searchQuery = "";
-    lockBodyScroll(); // Solo bloquear body
+    lockBodyScroll();
     render();
-    // ✅ NO llamar a setupModalScroll()
 }
 
 function lockBodyScroll() {
@@ -4031,6 +4045,11 @@ function handleSeatPress(coach, num, event) {
                 }
                 // 🟢 Caso 2: asiento vacío → asignar última parada del tren
             } else {
+                // 🚫 Si el modo copiado rápido está activo → usar última parada copiada
+                if (state.copyMode && state.lastCopiedStop) {
+                    updateSeat(coach, num, state.lastCopiedStop);
+                    return;
+                }
                 // Necesitamos saber la ruta del tren actual
                 const route = state.trainNumber && trainRoutes[state.trainNumber];
 
@@ -4651,7 +4670,11 @@ function openScreensModal() {
     `;
 
     document.body.insertAdjacentHTML("beforeend", modal);
-    document.getElementById("screen-search-input").focus();
+    setTimeout(() => {
+        const inp = document.getElementById("screen-search-input");
+        if (inp) inp.focus();
+    }, 50);
+
     lockBodyScroll();
 }
 
@@ -4709,15 +4732,10 @@ function openStationScreen(name) {
         <div class="modal-overlay" onclick="closeStationScreen(event)">
             <div class="modal" style="height: 100%; border-radius:0;" onclick="event.stopPropagation()">
 
-                <div class="iframe-wrapper">
-    <iframe id="screen-iframe" src="${arrivals}" style="width:100%; height:100%; border:none;"></iframe>
+                <iframe id="screen-iframe" src="${arrivals}" style="width:100%; height:100%; border:none;"></iframe>
 
-    <!-- Capa invisible para capturar taps -->
-    <div class="iframe-overlay" onclick="closeStationScreen(event)"></div>
-</div>
-
-<button class="swipe-btn-left" onclick="event.stopPropagation(); toggleScreen()">←</button>
-<button class="swipe-btn-right" onclick="event.stopPropagation(); toggleScreen()">→</button>
+<button class="swipe-btn-left" onclick="toggleScreen()">←</button>
+<button class="swipe-btn-right" onclick="toggleScreen()">→</button>
 
             </div>
         </div>

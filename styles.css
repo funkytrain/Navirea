@@ -2164,16 +2164,3 @@ body.dark-mode .filter-extra {
 .cancel-screens-btn:hover {
     background-color: #dc2626;
 }
-
-.iframe-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.iframe-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 50;
-    background: transparent;
-}
