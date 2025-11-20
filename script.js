@@ -2118,8 +2118,8 @@ function scrollSeatIntoViewAndFlash(seatKey) {
 
         if (!target) return;
 
-        // Scroll suave al centro
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+// ❌ Desactivamos scroll automático
+// target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         // Añadir clase temporal para destacar
         target.classList.add('focus-seat');
@@ -2401,11 +2401,13 @@ let state = {
     copyMode: false      // 👈 NUEVO
 };
 
+let savedScrollPosition = 0;
+let isModalOpen = false;
+
 let _currentScreen = "arrivals";
 
 // Última parada copiada (para el modo copiar)
 let lastCopiedStop = null;
-
 
 // Estado para filtros
 let filterState = {
@@ -2533,7 +2535,14 @@ function updateSeatFromList(abbr) {
     const stop = stops.find((s) => s.abbr === abbr);
     if (stop && state.selectedSeat) {
         updateSeat(state.selectedSeat.coach, state.selectedSeat.num, stop);
-        closeModal(); // 👈 se asegura de desbloquear el scroll correctamente
+
+        // ❌ NO usar closeModal() (provoca scroll)
+        // ✅ Cerrar modal sin mover pantalla
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) modal.remove();
+
+        // Quitar estado del seat seleccionado
+        state.selectedSeat = null;
     }
 }
 
@@ -3802,41 +3811,48 @@ function handleModalOverlayInteraction(e) {
 
 // Funciones globales para eventos
 function selectCoach(coachId) {
+    const previousCoach = state.selectedCoach;
     state.selectedCoach = coachId;
+
     render();
 
-    // Después de pintar el nuevo coche, bajamos a su “continuación” (parte de abajo)
-    requestAnimationFrame(() => {
-        scrollCoachToBottom();
-    });
+    // Solo hacer scroll al fondo SI hemos cambiado realmente de coche
+    if (previousCoach !== coachId) {
+        requestAnimationFrame(() => {
+            scrollCoachToBottom();
+        });
+    }
+    // Si es el mismo coche → no tocamos el scroll (conserva la posición actual)
 }
 
 function selectSeat(coach, num) {
+    // Guardar scroll actual antes de abrir modal
+    savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
 
-    // --- COPIADO RÁPIDO (tap normal) ---
     if (state.copyMode && state.lastCopiedStop) {
         const key = getSeatKey(coach, num);
         const seatInfo = state.seatData[key];
-
-        // Solo copiar si el asiento está libre
         if (!seatInfo || !seatInfo.stop) {
             updateSeat(coach, num, state.lastCopiedStop);
             return;
         }
     }
 
-    // --- SELECCIÓN NORMAL (abrir modal) ---
     state.selectedSeat = { coach, num };
     state.searchQuery = "";
+    isModalOpen = true;
     lockBodyScroll();
     render();
 }
 
 function lockBodyScroll() {
-    const scrollY = window.scrollY;
-    document.body.classList.add('modal-open'); // ✅ AÑADIR
+    // Guardar posición actual
+    savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
+    document.body.style.top = `-${savedScrollPosition}px`;
     document.body.style.width = '100%';
 }
 
@@ -3965,14 +3981,14 @@ function removeModalOverlayScrollBlock() {
 }
 
 function unlockBodyScroll() {
-    const scrollY = document.body.style.top;
     document.body.classList.remove('modal-open');
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.width = '';
+    document.body.style.overflow = '';
 
-    // Restaurar posición de scroll
-    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    // Restaurar scroll exacto
+    window.scrollTo(0, savedScrollPosition);
 }
 
 function handleSeatPress(coach, num, event) {
@@ -4135,15 +4151,19 @@ function handleSeatCancel() {
 
 function closeModal(event) {
     if (!event || event.target === event.currentTarget) {
-        // Solo desbloquear body
         unlockBodyScroll();
 
-        // Resetear estado
         state.selectedSeat = null;
         state.searchQuery = "";
         modalScrollPosition = 0;
+        isModalOpen = false;
 
         render();
+
+        // ←←← RESTAURAR SCROLL DESPUÉS DE CERRAR
+        requestAnimationFrame(() => {
+            window.scrollTo(0, savedScrollPosition);
+        });
     }
 }
 
