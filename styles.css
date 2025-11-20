@@ -1397,6 +1397,28 @@ body.dark-mode .seat:active {
     position: relative;
 }
 
+/* Botón Pantallas */
+.screens-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    position: relative;
+}
+
+.screens-btn svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.screens-btn:hover {
+    opacity: 0.8;
+}
+
 .filters-btn svg {
     width: 1.1rem;
     height: 1.1rem;
@@ -2100,4 +2122,58 @@ body.dark-mode .filter-extra {
 
 .filter-list-actions {
     flex-shrink: 0;
+}
+
+.swipe-btn-left,
+.swipe-btn-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.swipe-btn-left { left: 10px; }
+.swipe-btn-right { right: 10px; }
+
+.swipe-btn-left:hover,
+.swipe-btn-right:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+/* Botón Cancelar del modal de Pantallas */
+.cancel-screens-btn {
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.cancel-screens-btn:hover {
+    background-color: #dc2626;
+}
+
+.iframe-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.iframe-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background: transparent;
 }

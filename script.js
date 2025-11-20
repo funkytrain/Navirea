@@ -1384,6 +1384,21 @@ const trainRoutes = {
     '16020': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores']
 };
 
+const stationScreens = {
+    "Miranda": 11200,
+    "Manzanos": 11203,
+    "La Puebla Arganzón": 11204,
+    "Nanclares Langraiz": 11205,
+    "Vitoria Gasteiz": 11208,
+    "Alegria Dulantzi": 11210,
+    "Agurain Salvatierra": 11212,
+    "Araia": 11213,
+    "Altsasu Pueblo": 80001,
+    "Pamplona Iruña": 80100,
+    "Tudela": 81202,
+    "Logroño": 81100
+};
+
 // Función para determinar si un coche es el primero o último visualmente
 function getCoachPosition(coachId) {
     // Verificar si ya está en cache
@@ -2374,6 +2389,8 @@ let state = {
     copyMode: false      // 👈 NUEVO
 };
 
+let _currentScreen = "arrivals";
+
 // Última parada copiada (para el modo copiar)
 let lastCopiedStop = null;
 
@@ -2910,6 +2927,8 @@ function openAbout() {
                     <p>Creado por Adrián Fernández,</p>
 <p>y publicado bajo la licencia MIT.</p>
                     <p>Dudas o sugerencias a:<br><a href="mailto:plantillatren@gmail.com">plantillatren@gmail.com</a></p>
+                    <br>
+                    <p><b>Proyecto no oficial ni afiliado con ADIF o RENFE, con propósito educacional. Las pantallas de las estaciones muestran contenido servido directamente por ADIF. Marca, logotipos y datos mostrados en el panel son propiedad de ADIF.</b></p>
                 </div>
                 <div class="modal-footer">
                     <button class="clear-btn" onclick="closeAbout()">Cerrar</button>
@@ -3147,6 +3166,13 @@ ${state.trainNumber ? `
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
         </button>
+<!-- Botón Pantallas -->
+<button class="screens-btn" onclick="openScreensModal()" title="Pantallas de estación">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="12" rx="2" />
+        <rect x="7" y="18" width="10" height="2" rx="1" />
+    </svg>
+</button>
 
         <div id="filters-menu" class="filters-dropdown hidden">
             <button class="filter-option" onclick="openStopFilter()">
@@ -4582,6 +4608,148 @@ if (!state.trainNumber) {
     setTimeout(() => {
         showTrainNumberPrompt();
     }, 100);
+}
+
+function openScreensModal() {
+    removeAllScreenModals();
+    const modal = `
+        <div class="modal-overlay" onclick="closeScreensModal(event)">
+            <div class="modal" onclick="event.stopPropagation()">
+
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Pantallas de estación</h3>
+                        <button class="close-btn" onclick="closeScreensModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-search">
+    <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Introduce estación..." 
+        oninput="updateScreenSearch(this.value)"
+        autocomplete="off"
+        id="screen-search-input"
+    />
+
+    <!-- 🔴 Botón Cancelar -->
+    <button class="cancel-screens-btn" onclick="closeScreensModal()">
+        Cancelar
+    </button>
+</div>
+
+<div class="modal-list" id="screen-list"></div>
+
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modal);
+    document.getElementById("screen-search-input").focus();
+    lockBodyScroll();
+}
+
+function closeScreensModal(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.modal-overlay');
+        if (overlay) overlay.remove();
+        unlockBodyScroll();
+    }
+}
+
+function removeAllScreenModals() {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
+}
+
+function updateScreenSearch(query) {
+    const list = document.getElementById("screen-list");
+    query = query.toLowerCase().trim();
+
+    // 🔴 NUEVO: si está vacío → no mostrar nada
+    if (query === "") {
+        list.innerHTML = "";
+        return;
+    }
+
+    const stations = stops.map(s => s.full);
+
+    const filtered = stations.filter(s => s.toLowerCase().includes(query));
+
+    list.innerHTML = filtered.map(name => {
+        const hasScreen = stationScreens[name];
+        return `
+            <button class="stop-item" onclick="openStationScreen('${name}')">
+                <span class="stop-name" style="${hasScreen ? 'font-weight:700' : 'text-decoration:line-through; opacity:0.6;'}">
+                    ${name}
+                </span>
+            </button>
+        `;
+    }).join("");
+}
+
+function openStationScreen(name) {
+    removeAllScreenModals();
+    const code = stationScreens[name];
+
+    if (!code) {
+        alert("No existe pantalla disponible para esta estación.");
+        return;
+    }
+
+    const arrivals = `https://pantallas-estaciones.vercel.app/~/?station=${code}&interfaz=arrivals&showHeader=true&showAccess=false&showPlatform=true&showProduct=true&showNumber=true&countdown=true&maxShowStops=-1&showAllTrains=false&subtitle=station-name&fontSize=0`;
+    const departures = `https://pantallas-estaciones.vercel.app/~/?station=${code}&interfaz=departures&showHeader=true&showAccess=false&showPlatform=true&showProduct=true&showNumber=true&countdown=true&maxShowStops=-1&showAllTrains=false&subtitle=station-name&fontSize=0`;
+
+    const modal = `
+        <div class="modal-overlay" onclick="closeStationScreen(event)">
+            <div class="modal" style="height: 100%; border-radius:0;" onclick="event.stopPropagation()">
+
+                <div class="iframe-wrapper">
+    <iframe id="screen-iframe" src="${arrivals}" style="width:100%; height:100%; border:none;"></iframe>
+
+    <!-- Capa invisible para capturar taps -->
+    <div class="iframe-overlay" onclick="closeStationScreen(event)"></div>
+</div>
+
+<button class="swipe-btn-left" onclick="event.stopPropagation(); toggleScreen()">←</button>
+<button class="swipe-btn-right" onclick="event.stopPropagation(); toggleScreen()">→</button>
+
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modal);
+    lockBodyScroll();
+
+    _currentScreen = "arrivals";
+
+    window._arrivalsURL = arrivals;
+    window._departuresURL = departures;
+}
+
+function closeStationScreen(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.modal-overlay');
+        if (overlay) overlay.remove();
+        unlockBodyScroll();
+    }
+}
+
+function toggleScreen() {
+    const iframe = document.getElementById("screen-iframe");
+
+    if (_currentScreen === "arrivals") {
+        iframe.src = window._departuresURL;
+        _currentScreen = "departures";
+    } else {
+        iframe.src = window._arrivalsURL;
+        _currentScreen = "arrivals";
+    }
 }
 
 render();
