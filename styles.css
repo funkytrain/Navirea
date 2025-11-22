@@ -19,7 +19,7 @@ body {
     background-color: #4f46e5;
     color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    position: sticky;
+    position: relative;
     top: 0;
     z-index: 20;
     transition: all 0.3s ease;
@@ -1464,21 +1464,47 @@ body.dark-mode .seat:active {
 
 /* Pill para limpiar filtro */
 .filter-clear-pill {
-    background: rgba(239, 68, 68, 0.9);
-    border: none;
-    color: white;
-    padding: 0.3rem 0.7rem;
-    border-radius: 1rem;
+    position: absolute !important;
+    top: 35px;                   /* lo subimos un poquito para que quede justo encima del header */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+
+    /* === ESTÉTICA EXACTAMENTE COMO ANTES === */
+    background: rgba(239, 68, 68, 0.95) !important;   /* rojo semitransparente original */
+    border: none !important;
+    color: white !important;         /* ← X blanca otra vez */
+    padding: 0.4rem 0.9rem !important;   /* un pelín más ancho para que quede redondo bonito */
+    border-radius: 2rem !important;      /* totalmente redondo */
     cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-right: 0.5rem;
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .filter-clear-pill:hover {
-    background: rgba(220, 38, 38, 1);
-    transform: scale(1.05);
+    background: rgba(239, 68, 68, 1) !important;
+    transform: translateX(-50%) scale(1.05);
+}
+
+/* Animación suave de entrada */
+.filter-clear-pill {
+    animation: slideDown 0.4s ease;
+}
+@keyframes slideDown {
+    from { top: -50px; opacity: 0; }
+    to   { top: 12px; opacity: 1; }
+}
+
+/* Modo oscuro (rojo un poco más claro para que destaque) */
+.dark-mode .filter-clear-pill {
+    background: rgba(248, 113, 113, 0.95) !important;
 }
 
 /* Modal de resultados de filtro */

@@ -762,8 +762,8 @@ const trainModels = {
 }
     ]
 },
-    470: {
-        name: "Tren 470",
+    470.1: {
+        name: "Tren 470.1",
         coaches: [{
                 id: "C1",
                 name: "Coche 1",
@@ -774,21 +774,39 @@ const trainModels = {
                     {
                         type: "seats",
                         positions: [
-                            [null, null, null, null, "S1"]
+                            ["S4", null, null, null, "S1"]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [null, null, null, null, "S2"]
+                            ["S5", null, null, null, "S2"]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [null, null, null, null, "S3"]
+                            ["S6", null, null, null, "S3"]
                         ]
                     },
+                    {
+                                            type: "seats",
+                            positions: [
+                            ["S7", null, null, null, null]
+                        ]
+                        },
+                    {
+                        type: "seats",
+                            positions: [
+                            ["S8", null, null, null, null]
+                        ]
+                        },
+                    {
+                        type: "seats",
+                            positions: [
+                            ["S9", null, null, null, null]
+                        ]
+                        },
                     {
                         type: "space",
                         height: 80
@@ -1052,43 +1070,352 @@ const trainModels = {
                 layout: [{
                         type: "seats",
                         positions: [
-                            [141, 142, null, 144, 143]
+                            [143, 144, null, 142, 141]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [145, 146, null, 148, 147]
+                            [147, 148, null, 146, 145]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [149, 150, null, 152, 151]
+                            [151, 152, null, 150, 149]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [153, 154, null, 156, 155]
+                            [155, 156, null, 154, 153]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [157, 158, null, 160, 159]
+                            [159, 160, null, 158, 157]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [161, 162, null, 164, 163]
+                            [163, 164, null, 162, 161]
                         ]
                     },
                     {
                         type: "seats",
                         positions: [
-                            [165, 166, null, 168, 167]
+                            [167, 168, null, 166, 165]
+                        ]
+                    },
+                    {
+                        type: "space",
+                        height: 80
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [169, 170, null, "EQ", "EQ"]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [171, 172, null, "EQ", "EQ"]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [175, 176, null, 174, 173]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [179, 180, null, 178, 177]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [183, 184, null, 182, 181]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [187, 188, null, 186, 185]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [191, 192, null, 190, 189]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [195, 196, null, 194, 193]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [199, 200, null, 198, 197]
+                        ]
+                    },
+                    {
+                        type: "space",
+                        height: 160
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [201, 202, null, 204, 203]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [205, 206, null, 208, 207]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [209, 210, null, 212, 211]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [213, 214, null, 216, 215]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [217, 218, null, 220, 219]
+                        ]
+                    },
+                ],
+            },
+        ],
+    },
+    470.2: {
+        name: "Tren 470.2",
+        coaches: [{
+            id: "C1",
+            name: "Coche 1",
+            layout: [{
+                type: "space",
+                height: 60
+            },
+                {
+                    type: "seats",
+                    positions: [
+                        [null, null, null, null, "S1"]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [null, null, null, null, "S2"]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [null, null, null, null, "S3"]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [3, 4, null, 2, 1]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [7, 8, null, 6, 5]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [11, 12, null, 10, 9]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [15, 16, null, 14, 13]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [19, 20, null, 18, 17]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [23, 24, null, 22, 21]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [27, 28, null, 26, 25]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["EQ", "EQ", null, 30, 29]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["EQ", "EQ", null, 32, 31]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [35, 36, null, 34, 33]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [39, 40, null, 38, 37]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [43, 44, null, 42, 41]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [47, 48, null, 46, 45]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [51, 52, null, 50, 49]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [55, 56, null, 54, 53]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [59, 60, null, 58, 57]
+                    ]
+                },
+            ],
+        },
+            {
+                id: "C2",
+                name: "Coche 2",
+                layout: [{
+                    type: "seats",
+                    positions: [
+                        [null, null, null, "WC", "WC"]
+                    ]
+                },
+                    { "type": "seats", "positions": [ [61, 62, null, "WC", "WC"] ] },
+                    { "type": "seats", "positions": [ [65, 66, null, 64, 63] ] },
+                    { "type": "seats", "positions": [ [69, 70, null, 68, 67] ] },
+                    { "type": "seats", "positions": [ [73, 74, null, 72, 71] ] },
+                    { "type": "seats", "positions": [ [77, 78, null, 76, 75] ] },
+                    { "type": "seats", "positions": [ [81, 82, null, 80, 79] ] },
+                    { "type": "space", "height": 80 },
+                    { "type": "seats", "positions": [ [83, 84, null, "MIN", "MIN"] ] },
+                    { "type": "seats", "positions": [ [85, 86, null, "EQ", "EQ"] ] },
+                    { "type": "seats", "positions": [ [89, 90, null, 88, 87] ] },
+                    { "type": "seats", "positions": [ [93, 94, null, 92, 91] ] },
+                    { "type": "seats", "positions": [ [97, 98, null, 96, 95] ] },
+                    { "type": "seats", "positions": [ [101, 102, null, 100, 99] ] },
+                    { "type": "seats", "positions": [ [105, 106, null, 104, 103] ] },
+                    { "type": "seats", "positions": [ [109, 110, null, 108, 107] ] },
+                    { "type": "seats", "positions": [ [113, 114, null, 112, 111] ] },
+                    { "type": "space", "height": 80 },
+                    { "type": "seats", "positions": [ [117, 118, null, 116, 115] ] },
+                    { "type": "seats", "positions": [ [121, 122, null, 120, 119] ] },
+                    { "type": "seats", "positions": [ [125, 126, null, 124, 123] ] },
+                    { "type": "seats", "positions": [ [129, 130, null, 128, 127] ] },
+                    { "type": "seats", "positions": [ [133, 134, null, 132, 131] ] },
+                    { "type": "seats", "positions": [ [137, 138, null, 136, 135] ] },
+                    { "type": "seats", "positions": [ [141, 142, null, 140, 139] ] },
+                ],
+            },
+            {
+                id: "C3",
+                name: "Coche 3",
+                layout: [{
+                    type: "seats",
+                    positions: [
+                        [null, null, null, 144, 143]
+                    ]
+                },
+                    {
+                        type: "seats",
+                        positions: [
+                            [147, 148, null, 146, 145]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [151, 152, null, 150, 149]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [155, 156, null, 154, 153]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [159, 160, null, 158, 157]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [163, 164, null, 162, 161]
+                        ]
+                    },
+                    {
+                        type: "seats",
+                        positions: [
+                            [167, 168, null, 166, 165]
                         ]
                     },
                     {
@@ -1186,7 +1513,7 @@ const trainModels = {
                 ],
             },
         ],
-    },
+    }
 };
 
 // Paradas
@@ -1378,7 +1705,7 @@ const trainRoutes = {
     '18079': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '18022': ['Vitoria Gasteiz', 'Alegria Dulantzi', 'Agurain Salvatierra', 'Araia', 'Altsasu Pueblo', 'Etxarri Aranatz', 'Uharte Arakil', 'Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón'],
     '18068': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
-    '18074': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
+    '18074': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18046': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18073': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '16020': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores']
@@ -2401,6 +2728,9 @@ let state = {
     copyMode: false      // 👈 NUEVO
 };
 
+let lastKnownScrollPosition = 0;
+let shouldRestoreScroll = false;
+
 let savedScrollPosition = 0;
 let isModalOpen = false;
 
@@ -2552,7 +2882,6 @@ function clearSeat(coachId, seatNum) {
     const key = getSeatKey(coachId, String(seatNum));
     delete state.seatData[key];
     saveData();
-    state.selectedSeat = null;
     unlockBodyScroll();
     state.selectedSeat = null;
     render();
@@ -3711,6 +4040,10 @@ function renderModal() {
 
 // Renderizar todo
 function render() {
+    // Guardar scroll ANTES de repintar (solo si no estamos cambiando de coche)
+    if (!shouldRestoreScroll) {
+        lastKnownScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    }
     // --- evitar flash en modo oscuro durante el render inicial ---
     const body = document.body;
     body.style.transition = "none";
@@ -3763,6 +4096,21 @@ function render() {
         </div>
         ${renderModal()}
     `;
+    // NUEVO: Restaurar scroll después de renderizar, salvo que sea cambio de coche
+    requestAnimationFrame(() => {
+        if (shouldRestoreScroll) {
+            shouldRestoreScroll = false; // resetear bandera
+        } else {
+            window.scrollTo(0, lastKnownScrollPosition);
+        }
+
+        // Restaurar scroll del modal si existe
+        if (state.selectedSeat) {
+            restoreModalScrollPosition();
+        } else {
+            modalScrollPosition = 0;
+        }
+    });
     // Restaurar scroll del modal si existe
     if (state.selectedSeat) {
         restoreModalScrollPosition();
@@ -3814,15 +4162,18 @@ function selectCoach(coachId) {
     const previousCoach = state.selectedCoach;
     state.selectedCoach = coachId;
 
+    // Solo si cambiamos de coche → queremos scroll al fondo
+    if (previousCoach !== coachId) {
+        shouldRestoreScroll = true;  // ← decimos: "esta vez SÍ haz scroll al fondo"
+    }
+
     render();
 
-    // Solo hacer scroll al fondo SI hemos cambiado realmente de coche
     if (previousCoach !== coachId) {
         requestAnimationFrame(() => {
             scrollCoachToBottom();
         });
     }
-    // Si es el mismo coche → no tocamos el scroll (conserva la posición actual)
 }
 
 function selectSeat(coach, num) {
@@ -4024,78 +4375,70 @@ function handleSeatPress(coach, num, event) {
             const key = getSeatKey(coach, num);
             const seatInfo = state.seatData[key];
 
-            // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
-// Long press: borrar pero con opción de deshacer
+            // ==================================================================
+            // CASO 1: EL ASIENTO TIENE ALGÚN DATO → BORRAR CON DESHACER COMPLETO
+            // ==================================================================
             if (seatInfo && Object.keys(seatInfo).length > 0) {
-                const previousStop = seatInfo.stop ? seatInfo.stop.full : null;
+                // Guardar una copia COMPLETA de todo lo que tenía el asiento
+                const previousData = { ...seatInfo };
 
-                // Borrar asiento
+                // Borrar el asiento
                 clearSeat(coach, num);
 
-                // Vibración opcional
-                if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                }
+                if (navigator.vibrate) navigator.vibrate(50);
 
-                // Guardar datos para undo
+                // Guardar para poder deshacer
                 state.undoData = {
                     coach,
                     num,
-                    stop: previousStop,
-                    undoData: null
+                    previousData   // ← ¡¡AQUÍ ESTABA LA COMA QUE FALTABA!!
                 };
 
-                if (previousStop) {
-                    showUndoBanner(
-                        `Parada eliminada: ${previousStop}`,
-                        () => {
-                            const undo = state.undoData;
-                            if (!undo) return;
+                const hadStop   = !!previousData.stop;
+                const hadFlags  = previousData.enlace || previousData.comentarioFlag || previousData.comentario || previousData.seguir;
 
-                            const stopObj = stops.find(s => s.full === undo.stop);
-                            if (stopObj) updateSeat(undo.coach, undo.num, stopObj);
+                if (hadStop || hadFlags) {
+                    const message = hadStop
+                        ? `Parada eliminada: ${previousData.stop.full}`
+                        : `Datos eliminados del asiento ${num}`;
 
-                            state.undoData = null;
-                        }
-                    );
+                    showUndoBanner(message, () => {
+                        const undo = state.undoData;
+                        if (!undo || !undo.previousData) return;
+
+                        // Restaurar absolutamente TODO (parada + flags + comentario)
+                        const key = getSeatKey(undo.coach, undo.num);
+                        state.seatData[key] = { ...undo.previousData };
+
+                        state.undoData = null;
+                        render();
+                    });
                 }
-                // 🟢 Caso 2: asiento vacío → asignar última parada del tren
+
+                // ==================================================================
+                // CASO 2: ASIENTO VACÍO → ASIGNAR PARADA FINAL (sin abrir modal)
+                // ==================================================================
             } else {
-                // 🚫 Si el modo copiado rápido está activo → usar última parada copiada
+                state.silentLongPress = true;   // ← para que no mueva el scroll
+
                 if (state.copyMode && state.lastCopiedStop) {
                     updateSeat(coach, num, state.lastCopiedStop);
                     return;
                 }
-                // Necesitamos saber la ruta del tren actual
-                const route = state.trainNumber && trainRoutes[state.trainNumber];
 
+                const route = state.trainNumber && trainRoutes[state.trainNumber];
                 if (route && route.length > 0) {
-                    // Última parada REAL de la ruta
                     let finalStopName = route[route.length - 1];
 
-                    // Ajustes de parada efectiva:
-                    // - Trenes que terminan en "Miranda" → usar "Vitoria Gasteiz"
-                    // - Trenes que terminan en "Logroño" → usar "Castejón"
-                    if (finalStopName === 'Miranda') {
-                        finalStopName = 'Vitoria Gasteiz';
-                    } else if (finalStopName === 'Logroño') {
-                        finalStopName = 'Castejón';
-                    }
+                    if (finalStopName === 'Miranda') finalStopName = 'Vitoria Gasteiz';
+                    else if (finalStopName === 'Logroño') finalStopName = 'Castejón';
 
-                    // Buscar ese nombre en el array global de paradas "stops"
                     const stopObj = stops.find(s => s.full === finalStopName);
-
                     if (stopObj) {
-                        // Asignar parada al asiento SIN abrir modal
                         updateSeat(coach, num, stopObj);
-
-                        // Vibración un pelín más corta para diferenciarlo si quieres
-                        if (navigator.vibrate) {
-                            navigator.vibrate(30);
-                        }
+                        if (navigator.vibrate) navigator.vibrate(30);
                     }
                 }
-                // Si no hay trainNumber o ruta definida, simplemente no hace nada
             }
         }
     }, SEAT_LONG_PRESS_DURATION);
@@ -4791,6 +5134,3 @@ function toggleScreen() {
 }
 
 render();
-
-// Tras el primer render, engancha swipe
-enableSeatmapSwipe();
