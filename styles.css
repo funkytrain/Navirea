@@ -1464,6 +1464,9 @@ body.dark-mode .seat:active {
 
 /* Pill para limpiar filtro */
 .filter-clear-pill {
+    position: absolute;
+    left: 12rem;      /* mueve hacia la izquierda (menos = más izquierda) */
+    top: 2.6rem;
     background: rgba(239, 68, 68, 0.9);
     border: none;
     color: white;
