@@ -4354,40 +4354,60 @@ function handleSeatPress(coach, num, event) {
             // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
 // Long press: borrar pero con opción de deshacer
             if (seatInfo && Object.keys(seatInfo).length > 0) {
-                const previousStop = seatInfo.stop ? seatInfo.stop.full : null;
+
+                // Guardar TODO lo que tenía el asiento antes de borrarlo
+                const previousData = {
+                    stop: seatInfo.stop ? seatInfo.stop.full : null,
+                    enlace: seatInfo.enlace || false,
+                    seguir: seatInfo.seguir || false,
+                    comentarioFlag: seatInfo.comentarioFlag || false,
+                    comentario: seatInfo.comentario || "",
+                    historial: seatInfo.historial ? [...seatInfo.historial] : []
+                };
 
                 // Borrar asiento
                 clearSeat(coach, num);
+                saveData();
+                render();
 
-                // Vibración opcional
-                if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                }
-
-                // Guardar datos para undo
+                // Guardar datos completos para deshacer
                 state.undoData = {
                     coach,
                     num,
-                    stop: previousStop,
-                    undoData: null
+                    data: previousData
                 };
 
-                if (previousStop) {
-                    showUndoBanner(
-                        `Parada eliminada: ${previousStop}`,
-                        () => {
-                            const undo = state.undoData;
-                            if (!undo) return;
+                // Mostrar banner SIEMPRE aunque no hubiera parada
+                showUndoBanner(
+                    previousData.stop
+                        ? `Parada eliminada: ${previousData.stop}`
+                        : `Datos del asiento eliminados`,
+                    () => {
+                        const undo = state.undoData;
+                        if (!undo) return;
 
-                            const stopObj = stops.find(s => s.full === undo.stop);
-                            if (stopObj) updateSeat(undo.coach, undo.num, stopObj);
+                        const key = getSeatKey(undo.coach, undo.num);
 
-                            state.undoData = null;
-                        }
-                    );
-                }
-                // 🟢 Caso 2: asiento vacío → asignar última parada del tren
-            } else {
+                        // Restaurar COMPLETO
+                        state.seatData[key] = {
+                            stop: undo.data.stop
+                                ? stops.find(s => s.full === undo.data.stop)
+                                : null,
+                            enlace: undo.data.enlace,
+                            seguir: undo.data.seguir,
+                            comentarioFlag: undo.data.comentarioFlag,
+                            comentario: undo.data.comentario,
+                            historial: [...undo.data.historial]
+                        };
+
+                        saveData();
+                        render();
+
+                        state.undoData = null;
+                    }
+                );
+            }
+            else {
                 // 🚫 Si el modo copiado rápido está activo → usar última parada copiada
                 if (state.copyMode && state.lastCopiedStop) {
                     updateSeat(coach, num, state.lastCopiedStop);
