@@ -3,135 +3,135 @@ const trainModels = {
     463: {
         name: "Tren 463",
         coaches: [{
-                id: "C1",
-                name: "Coche 1",
-                layout: [{
-                        type: "seats",
-                        positions: [
-                            [1, 2, null, 3, 4]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [5, 6, null, 7, 8]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [9, 10, null, 11, 12]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [13, 14, null, 15, 16]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [17, 18, null, 19, 20]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [21, 22, null, 23, 24]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [25, 26, null, 27, 28]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [29, 30, null, 31, 32]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [33, 34, null, 35, 36]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [37, 38, null, 39, 40]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [41, 42, null, 43, 44]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [45, 46, null, 47, 48]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [49, 50, null, 51, 52]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [53, 54, null, 55, 56]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [57, 58, null, 59, 60]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [61, 62, null, 63, 64]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [65, 66, null, 67, 68]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [69, null, null, null, 70]
-                        ]
-                    },
-                ],
+            id: "C1",
+            name: "Coche 1",
+            layout: [{
+                type: "seats",
+                positions: [
+                    [1, 2, null, 3, 4]
+                ]
             },
+                {
+                    type: "seats",
+                    positions: [
+                        [5, 6, null, 7, 8]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [9, 10, null, 11, 12]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [13, 14, null, 15, 16]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [17, 18, null, 19, 20]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [21, 22, null, 23, 24]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [25, 26, null, 27, 28]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [29, 30, null, 31, 32]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [33, 34, null, 35, 36]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [37, 38, null, 39, 40]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [41, 42, null, 43, 44]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [45, 46, null, 47, 48]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [49, 50, null, 51, 52]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [53, 54, null, 55, 56]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [57, 58, null, 59, 60]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [61, 62, null, 63, 64]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [65, 66, null, 67, 68]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [69, null, null, null, 70]
+                    ]
+                },
+            ],
+        },
             {
                 id: "C2",
                 name: "Coche 2",
                 layout: [{
-                        type: "seats",
-                        positions: [
-                            [71, null, null, null, 72]
-                        ]
-                    },
+                    type: "seats",
+                    positions: [
+                        [71, null, null, null, 72]
+                    ]
+                },
                     {
                         type: "seats",
                         positions: [
@@ -226,11 +226,11 @@ const trainModels = {
                 id: "C3",
                 name: "Coche 3",
                 layout: [{
-                        type: "seats",
-                        positions: [
-                            [107, null, null, null, 108]
-                        ]
-                    },
+                    type: "seats",
+                    positions: [
+                        [107, null, null, null, 108]
+                    ]
+                },
                     {
                         type: "seats",
                         positions: [
@@ -345,583 +345,583 @@ const trainModels = {
             },
         ],
     },
-464: {
-    name: "Tren 464",
-    coaches: [
-        {
-            id: "C2",
-            name: "Coche 2",
-            layout: [
-                { type: "seats", positions: [[1, 2, null, 3, 4]] },
-                { type: "seats", positions: [[5, 6, null, 7, 8]] },
-                { type: "seats", positions: [[9, null, null, 10, 11]] },
-                { type: "seats", positions: [[12, null, null, null, null]] },
-                { type: "seats", positions: [[13, null, null, 14, 15]] },
-                { type: "seats", positions: [[16, 17, null, null, 18]] },
-                { type: "seats", positions: [[null, null, null, null, 19]] },
-                { type: "seats", positions: [[20, 21, null, null, 22]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[23, null, null, 24, 25]] },
-                { type: "seats", positions: [[26, null, null, null, null]] },
-                { type: "seats", positions: [[27, null, null, 28, 29]] },
-                { type: "seats", positions: [[30, 31, null, null, 32]] },
-                { type: "seats", positions: [[null, null, null, null, 33]] },
-                { type: "seats", positions: [[34, 35, null, null, 36]] },
-                { type: "seats", positions: [[37, 38, null, null, 39]] },
-                { type: "seats", positions: [[null, null, null, null, 40]] },
-                { type: "seats", positions: [[41, 42, null, null, 43]] },
-                { type: "seats", positions: [[44, null, null, 45, 46]] },
-                { type: "seats", positions: [[47, null, null, null, null]] },
-                { type: "seats", positions: [[48, null, null, 49, 50]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[51, 52, null, null, 53]] },
-                { type: "seats", positions: [[null, null, null, null, 54]] },
-                { type: "seats", positions: [[55, 56, null, null, 57]] },
-                { type: "seats", positions: [[58, null, null, 59, 60]] },
-                { type: "seats", positions: [[61, null, null, null, null]] },
-                { type: "seats", positions: [[62, null, null, null, 63]] }
-            ]
-        },
-        {
-            id: "C4",
-            name: "Coche 4",
-            layout: [
-                { type: "seats", positions: [[64, null, null, null, 65]] },
-                { type: "seats", positions: [[null, null, null, null, 66]] },
-                { type: "seats", positions: [[67, 68, null, null, 69]] },
-                { type: "seats", positions: [[70, null, null, 71, 72]] },
-                { type: "seats", positions: [[73, null, null, null, null]] },
-                { type: "seats", positions: [[74, null, null, 75, 76]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[77, 78, null, null, 79]] },
-                { type: "seats", positions: [[null, null, null, null, 80]] },
-                { type: "seats", positions: [[81, 82, null, null, 83]] },
-                { type: "seats", positions: [[84, null, null, 85, 86]] },
-                { type: "seats", positions: [[87, null, null, null, null]] },
-                { type: "seats", positions: [[88, null, null, 89, 90]] },
-                { type: "seats", positions: [[91, null, null, 92, 93]] },
-                { type: "seats", positions: [[94, null, null, null, null]] },
-                { type: "seats", positions: [[95, null, null, 96, 97]] },
-                { type: "seats", positions: [[98, 99, null, null, 100]] },
-                { type: "seats", positions: [[null, null, null, null, 101]] },
-                { type: "seats", positions: [[102, 103, null, null, 104]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[105, null, null, 106, 107]] },
-                { type: "seats", positions: [[108, null, null, null, null]] },
-                { type: "seats", positions: [[109, null, null, 110, 111]] },
-                { type: "seats", positions: [[112, 113, null, null, 114]] },
-                { type: "seats", positions: [[null, null, null, null, 115]] },
-                { type: "seats", positions: [[116, null, null, null, 117]] }
-            ]
-        },
-        {
-            id: "C3",
-            name: "Coche 3",
-            layout: [
-                { type: "seats", positions: [[118, null, null, null, 119]] },
-                { type: "seats", positions: [[120, null, null, null, 121]] },
-                { type: "space", height: 50 },
-                { type: "seats", positions: [[122, 123, null, 124, 125]] },
-                { type: "seats", positions: [["S1", "PMR-126", null, "PMR-127", "S3"]] },
-                { type: "seats", positions: [["S2", null, null, null, "S4"]] },
-                { type: "pmr-bathroom", height: 160 },
-                { type: "seats", positions: [[128, null, null, null, null]] },
-                { type: "seats", positions: [[129, null, null, 130, 131]] },
-                { type: "seats", positions: [[132, 133, null, null, 134]] },
-                { type: "seats", positions: [[null, null, null, null, 135]] },
-                { type: "seats", positions: [[136, 137, null, null, 138]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[139, 140, null, null, 141]] },
-                { type: "seats", positions: [[null, null, null, null, 142]] },
-                { type: "seats", positions: [[143, 144, null, null, 145]] },
-                { type: "seats", positions: [[146, null, null, 147, 148]] },
-                { type: "seats", positions: [[149, null, null, null, null]] },
-                { type: "seats", positions: [[150, null, null, null, 151]] }
-            ]
-        },
-        {
-            id: "C1",
-            name: "Coche 1",
-            layout: [
-                { type: "seats", positions: [[152, null, null, null, 153]] },
-                { type: "seats", positions: [[null, null, null, null, 154]] },
-                { type: "seats", positions: [[155, 156, null, null, 157]] },
-                { type: "seats", positions: [[158, null, null, 159, 160]] },
-                { type: "seats", positions: [[161, null, null, null, null]] },
-                { type: "seats", positions: [[162, null, null, 163, 164]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[165, 166, null, null, 167]] },
-                { type: "seats", positions: [[null, null, null, null, 168]] },
-                { type: "seats", positions: [[169, 170, null, null, 171]] },
-                { type: "seats", positions: [[172, null, null, 173, 174]] },
-                { type: "seats", positions: [[175, null, null, null, null]] },
-                { type: "seats", positions: [[176, null, null, 177, 178]] },
-                { type: "seats", positions: [[179, null, null, 180, 181]] },
-                { type: "seats", positions: [[182, null, null, null, null]] },
-                { type: "seats", positions: [[183, null, null, 184, 185]] },
-                { type: "seats", positions: [[186, 187, null, null, 188]] },
-                { type: "seats", positions: [[null, null, null, null, 189]] },
-                { type: "seats", positions: [[190, 191, null, null, 192]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[193, null, null, 194, 195]] },
-                { type: "seats", positions: [[196, null, null, null, null]] },
-                { type: "seats", positions: [[197, null, null, 198, 199]] },
-                { type: "seats", positions: [[200, 201, null, null, 202]] },
-                { type: "seats", positions: [[null, null, null, null, 203]] },
-                { type: "seats", positions: [[204, 205, null, null, 206]] },
-                { type: "seats", positions: [[207, 208, null, 209, 210]] },
-                { type: "seats", positions: [[211, 212, null, 213, 214]] }
-            ]
-        }
-    ]
-},
+    464: {
+        name: "Tren 464",
+        coaches: [
+            {
+                id: "C2",
+                name: "Coche 2",
+                layout: [
+                    { type: "seats", positions: [[1, 2, null, 3, 4]] },
+                    { type: "seats", positions: [[5, 6, null, 7, 8]] },
+                    { type: "seats", positions: [[9, null, null, 10, 11]] },
+                    { type: "seats", positions: [[12, null, null, null, null]] },
+                    { type: "seats", positions: [[13, null, null, 14, 15]] },
+                    { type: "seats", positions: [[16, 17, null, null, 18]] },
+                    { type: "seats", positions: [[null, null, null, null, 19]] },
+                    { type: "seats", positions: [[20, 21, null, null, 22]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[23, null, null, 24, 25]] },
+                    { type: "seats", positions: [[26, null, null, null, null]] },
+                    { type: "seats", positions: [[27, null, null, 28, 29]] },
+                    { type: "seats", positions: [[30, 31, null, null, 32]] },
+                    { type: "seats", positions: [[null, null, null, null, 33]] },
+                    { type: "seats", positions: [[34, 35, null, null, 36]] },
+                    { type: "seats", positions: [[37, 38, null, null, 39]] },
+                    { type: "seats", positions: [[null, null, null, null, 40]] },
+                    { type: "seats", positions: [[41, 42, null, null, 43]] },
+                    { type: "seats", positions: [[44, null, null, 45, 46]] },
+                    { type: "seats", positions: [[47, null, null, null, null]] },
+                    { type: "seats", positions: [[48, null, null, 49, 50]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[51, 52, null, null, 53]] },
+                    { type: "seats", positions: [[null, null, null, null, 54]] },
+                    { type: "seats", positions: [[55, 56, null, null, 57]] },
+                    { type: "seats", positions: [[58, null, null, 59, 60]] },
+                    { type: "seats", positions: [[61, null, null, null, null]] },
+                    { type: "seats", positions: [[62, null, null, null, 63]] }
+                ]
+            },
+            {
+                id: "C4",
+                name: "Coche 4",
+                layout: [
+                    { type: "seats", positions: [[64, null, null, null, 65]] },
+                    { type: "seats", positions: [[null, null, null, null, 66]] },
+                    { type: "seats", positions: [[67, 68, null, null, 69]] },
+                    { type: "seats", positions: [[70, null, null, 71, 72]] },
+                    { type: "seats", positions: [[73, null, null, null, null]] },
+                    { type: "seats", positions: [[74, null, null, 75, 76]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[77, 78, null, null, 79]] },
+                    { type: "seats", positions: [[null, null, null, null, 80]] },
+                    { type: "seats", positions: [[81, 82, null, null, 83]] },
+                    { type: "seats", positions: [[84, null, null, 85, 86]] },
+                    { type: "seats", positions: [[87, null, null, null, null]] },
+                    { type: "seats", positions: [[88, null, null, 89, 90]] },
+                    { type: "seats", positions: [[91, null, null, 92, 93]] },
+                    { type: "seats", positions: [[94, null, null, null, null]] },
+                    { type: "seats", positions: [[95, null, null, 96, 97]] },
+                    { type: "seats", positions: [[98, 99, null, null, 100]] },
+                    { type: "seats", positions: [[null, null, null, null, 101]] },
+                    { type: "seats", positions: [[102, 103, null, null, 104]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[105, null, null, 106, 107]] },
+                    { type: "seats", positions: [[108, null, null, null, null]] },
+                    { type: "seats", positions: [[109, null, null, 110, 111]] },
+                    { type: "seats", positions: [[112, 113, null, null, 114]] },
+                    { type: "seats", positions: [[null, null, null, null, 115]] },
+                    { type: "seats", positions: [[116, null, null, null, 117]] }
+                ]
+            },
+            {
+                id: "C3",
+                name: "Coche 3",
+                layout: [
+                    { type: "seats", positions: [[118, null, null, null, 119]] },
+                    { type: "seats", positions: [[120, null, null, null, 121]] },
+                    { type: "space", height: 50 },
+                    { type: "seats", positions: [[122, 123, null, 124, 125]] },
+                    { type: "seats", positions: [["S1", "PMR-126", null, "PMR-127", "S3"]] },
+                    { type: "seats", positions: [["S2", null, null, null, "S4"]] },
+                    { type: "pmr-bathroom", height: 160 },
+                    { type: "seats", positions: [[128, null, null, null, null]] },
+                    { type: "seats", positions: [[129, null, null, 130, 131]] },
+                    { type: "seats", positions: [[132, 133, null, null, 134]] },
+                    { type: "seats", positions: [[null, null, null, null, 135]] },
+                    { type: "seats", positions: [[136, 137, null, null, 138]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[139, 140, null, null, 141]] },
+                    { type: "seats", positions: [[null, null, null, null, 142]] },
+                    { type: "seats", positions: [[143, 144, null, null, 145]] },
+                    { type: "seats", positions: [[146, null, null, 147, 148]] },
+                    { type: "seats", positions: [[149, null, null, null, null]] },
+                    { type: "seats", positions: [[150, null, null, null, 151]] }
+                ]
+            },
+            {
+                id: "C1",
+                name: "Coche 1",
+                layout: [
+                    { type: "seats", positions: [[152, null, null, null, 153]] },
+                    { type: "seats", positions: [[null, null, null, null, 154]] },
+                    { type: "seats", positions: [[155, 156, null, null, 157]] },
+                    { type: "seats", positions: [[158, null, null, 159, 160]] },
+                    { type: "seats", positions: [[161, null, null, null, null]] },
+                    { type: "seats", positions: [[162, null, null, 163, 164]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[165, 166, null, null, 167]] },
+                    { type: "seats", positions: [[null, null, null, null, 168]] },
+                    { type: "seats", positions: [[169, 170, null, null, 171]] },
+                    { type: "seats", positions: [[172, null, null, 173, 174]] },
+                    { type: "seats", positions: [[175, null, null, null, null]] },
+                    { type: "seats", positions: [[176, null, null, 177, 178]] },
+                    { type: "seats", positions: [[179, null, null, 180, 181]] },
+                    { type: "seats", positions: [[182, null, null, null, null]] },
+                    { type: "seats", positions: [[183, null, null, 184, 185]] },
+                    { type: "seats", positions: [[186, 187, null, null, 188]] },
+                    { type: "seats", positions: [[null, null, null, null, 189]] },
+                    { type: "seats", positions: [[190, 191, null, null, 192]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[193, null, null, 194, 195]] },
+                    { type: "seats", positions: [[196, null, null, null, null]] },
+                    { type: "seats", positions: [[197, null, null, 198, 199]] },
+                    { type: "seats", positions: [[200, 201, null, null, 202]] },
+                    { type: "seats", positions: [[null, null, null, null, 203]] },
+                    { type: "seats", positions: [[204, 205, null, null, 206]] },
+                    { type: "seats", positions: [[207, 208, null, 209, 210]] },
+                    { type: "seats", positions: [[211, 212, null, 213, 214]] }
+                ]
+            }
+        ]
+    },
     465: {
-    name: "Tren 465",
-    coaches: [
-        {
-            id: "C2",
-            name: "Coche 2",
-            layout: [
-                { type: "seats", positions: [[1, 2, null, 3, 4]] },
-                { type: "seats", positions: [[5, 6, null, 7, 8]] },
-                { type: "seats", positions: [[9, null, null, 10, 11]] },
-                { type: "seats", positions: [[12, null, null, null, null]] },
-                { type: "seats", positions: [[13, null, null, 14, 15]] },
-                { type: "seats", positions: [[16, 17, null, null, 18]] },
-                { type: "seats", positions: [[null, null, null, null, 19]] },
-                { type: "seats", positions: [[20, 21, null, null, 22]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[23, null, null, 24, 25]] },
-                { type: "seats", positions: [[26, null, null, null, null]] },
-                { type: "seats", positions: [[27, null, null, 28, 29]] },
-                { type: "seats", positions: [[30, 31, null, null, 32]] },
-                { type: "seats", positions: [[null, null, null, null, 33]] },
-                { type: "seats", positions: [[34, 35, null, null, 36]] },
-                { type: "seats", positions: [[37, 38, null, null, 39]] },
-                { type: "seats", positions: [[null, null, null, null, 40]] },
-                { type: "seats", positions: [[41, 42, null, null, 43]] },
-                { type: "seats", positions: [[44, null, null, 45, 46]] },
-                { type: "seats", positions: [[47, null, null, null, null]] },
-                { type: "seats", positions: [[48, null, null, 49, 50]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[51, 52, null, null, 53]] },
-                { type: "seats", positions: [[null, null, null, null, 54]] },
-                { type: "seats", positions: [[55, 56, null, null, 57]] },
-                { type: "seats", positions: [[58, null, null, 59, 60]] },
-                { type: "seats", positions: [[61, null, null, null, null]] },
-                { type: "seats", positions: [[62, null, null, null, 63]] }
-            ]
-        },
-        {
-            id: "C4",
-            name: "Coche 4",
-            layout: [
-                { type: "seats", positions: [[64, null, null, null, 65]] },
-                { type: "seats", positions: [[null, null, null, null, 66]] },
-                { type: "seats", positions: [[67, 68, null, null, 69]] },
-                { type: "seats", positions: [[70, null, null, 71, 72]] },
-                { type: "seats", positions: [[73, null, null, null, null]] },
-                { type: "seats", positions: [[74, null, null, 75, 76]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[77, 78, null, null, 79]] },
-                { type: "seats", positions: [[null, null, null, null, 80]] },
-                { type: "seats", positions: [[81, 82, null, null, 83]] },
-                { type: "seats", positions: [[84, null, null, 85, 86]] },
-                { type: "seats", positions: [[87, null, null, null, null]] },
-                { type: "seats", positions: [[88, null, null, 89, 90]] },
-                { type: "seats", positions: [[91, null, null, 92, 93]] },
-                { type: "seats", positions: [[94, null, null, null, null]] },
-                { type: "seats", positions: [[95, null, null, 96, 97]] },
-                { type: "seats", positions: [[98, 99, null, null, 100]] },
-                { type: "seats", positions: [[null, null, null, null, 101]] },
-                { type: "seats", positions: [[102, 103, null, null, 104]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[105, null, null, 106, 107]] },
-                { type: "seats", positions: [[108, null, null, null, null]] },
-                { type: "seats", positions: [[109, null, null, 110, 111]] },
-                { type: "seats", positions: [[112, 113, null, null, 114]] },
-                { type: "seats", positions: [[null, null, null, null, 115]] },
-                { type: "seats", positions: [[116, null, null, null, 117]] }
-            ]
-        },
-        {
-            id: "C3",
-            name: "Coche 3",
-            layout: [
-                { type: "seats", positions: [[118, null, null, null, 119]] },
-                { type: "seats", positions: [[120, null, null, null, 121]] },
-                { type: "space", height: 50 },
-                { type: "seats", positions: [[122, 123, null, 124, 125]] },
-                { type: "seats", positions: [["PMR-126", null, null, null, "PMR-127"]] },
-                { type: "pmr-bathroom", height: 160 },
-                { type: "seats", positions: [[128, null, null, null, null]] },
-                { type: "seats", positions: [[129, null, null, 130, 131]] },
-                { type: "seats", positions: [[132, 133, null, null, 134]] },
-                { type: "seats", positions: [[null, null, null, null, 135]] },
-                { type: "seats", positions: [[136, 137, null, null, 138]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [[139, 140, null, null, 141]] },
-                { type: "seats", positions: [[null, null, null, null, 142]] },
-                { type: "seats", positions: [[143, 144, null, null, 145]] },
-                { type: "seats", positions: [[146, null, null, 147, 148]] },
-                { type: "seats", positions: [[149, null, null, null, null]] },
-                { type: "seats", positions: [[150, null, null, null, 151]] }
-            ]
-        },
-{
-            id: "C5",
-            name: "Coche 5",
-            layout: [
-    { type: "seats", positions: [[152, null, null, null, 153]] },
-    { type: "seats", positions: [[null, null, null, null, 154]] },
-    { type: "seats", positions: [[155, 156, null, null, 157]] },
-    { type: "seats", positions: [[158, null, null, 159, 160]] },
-    { type: "seats", positions: [[161, null, null, null, null]] },
-    { type: "seats", positions: [[162, null, null, 163, 164]] },
-    { type: "space", height: 80 },
-    { type: "seats", positions: [[165, 166, null, null, 167]] },
-    { type: "seats", positions: [[null, null, null, null, 168]] },
-    { type: "seats", positions: [[169, 170, null, null, 171]] },
-    { type: "seats", positions: [[172, null, null, 173, 174]] },
-    { type: "seats", positions: [[175, null, null, null, null]] },
-    { type: "seats", positions: [[176, null, null, 177, 178]] },
-    { type: "seats", positions: [[179, null, null, 180, 181]] },
-    { type: "seats", positions: [[182, null, null, null, null]] },
-    { type: "seats", positions: [[183, null, null, 184, 185]] },
-    { type: "seats", positions: [[186, 187, null, null, 188]] },
-    { type: "seats", positions: [[null, null, null, null, 189]] },
-    { type: "seats", positions: [[190, 191, null, null, 192]] },
-    { type: "space", height: 80 },
-    { type: "seats", positions: [[193, null, null, 194, 195]] },
-    { type: "seats", positions: [[196, null, null, null, null]] },
-    { type: "seats", positions: [[197, null, null, 198, 199]] },
-    { type: "seats", positions: [[200, 201, null, null, 202]] },
-    { type: "seats", positions: [[null, null, null, null, 203]] },
-    { type: "seats", positions: [[204, null, null, null, 205]] }
-]
+        name: "Tren 465",
+        coaches: [
+            {
+                id: "C2",
+                name: "Coche 2",
+                layout: [
+                    { type: "seats", positions: [[1, 2, null, 3, 4]] },
+                    { type: "seats", positions: [[5, 6, null, 7, 8]] },
+                    { type: "seats", positions: [[9, null, null, 10, 11]] },
+                    { type: "seats", positions: [[12, null, null, null, null]] },
+                    { type: "seats", positions: [[13, null, null, 14, 15]] },
+                    { type: "seats", positions: [[16, 17, null, null, 18]] },
+                    { type: "seats", positions: [[null, null, null, null, 19]] },
+                    { type: "seats", positions: [[20, 21, null, null, 22]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[23, null, null, 24, 25]] },
+                    { type: "seats", positions: [[26, null, null, null, null]] },
+                    { type: "seats", positions: [[27, null, null, 28, 29]] },
+                    { type: "seats", positions: [[30, 31, null, null, 32]] },
+                    { type: "seats", positions: [[null, null, null, null, 33]] },
+                    { type: "seats", positions: [[34, 35, null, null, 36]] },
+                    { type: "seats", positions: [[37, 38, null, null, 39]] },
+                    { type: "seats", positions: [[null, null, null, null, 40]] },
+                    { type: "seats", positions: [[41, 42, null, null, 43]] },
+                    { type: "seats", positions: [[44, null, null, 45, 46]] },
+                    { type: "seats", positions: [[47, null, null, null, null]] },
+                    { type: "seats", positions: [[48, null, null, 49, 50]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[51, 52, null, null, 53]] },
+                    { type: "seats", positions: [[null, null, null, null, 54]] },
+                    { type: "seats", positions: [[55, 56, null, null, 57]] },
+                    { type: "seats", positions: [[58, null, null, 59, 60]] },
+                    { type: "seats", positions: [[61, null, null, null, null]] },
+                    { type: "seats", positions: [[62, null, null, null, 63]] }
+                ]
+            },
+            {
+                id: "C4",
+                name: "Coche 4",
+                layout: [
+                    { type: "seats", positions: [[64, null, null, null, 65]] },
+                    { type: "seats", positions: [[null, null, null, null, 66]] },
+                    { type: "seats", positions: [[67, 68, null, null, 69]] },
+                    { type: "seats", positions: [[70, null, null, 71, 72]] },
+                    { type: "seats", positions: [[73, null, null, null, null]] },
+                    { type: "seats", positions: [[74, null, null, 75, 76]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[77, 78, null, null, 79]] },
+                    { type: "seats", positions: [[null, null, null, null, 80]] },
+                    { type: "seats", positions: [[81, 82, null, null, 83]] },
+                    { type: "seats", positions: [[84, null, null, 85, 86]] },
+                    { type: "seats", positions: [[87, null, null, null, null]] },
+                    { type: "seats", positions: [[88, null, null, 89, 90]] },
+                    { type: "seats", positions: [[91, null, null, 92, 93]] },
+                    { type: "seats", positions: [[94, null, null, null, null]] },
+                    { type: "seats", positions: [[95, null, null, 96, 97]] },
+                    { type: "seats", positions: [[98, 99, null, null, 100]] },
+                    { type: "seats", positions: [[null, null, null, null, 101]] },
+                    { type: "seats", positions: [[102, 103, null, null, 104]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[105, null, null, 106, 107]] },
+                    { type: "seats", positions: [[108, null, null, null, null]] },
+                    { type: "seats", positions: [[109, null, null, 110, 111]] },
+                    { type: "seats", positions: [[112, 113, null, null, 114]] },
+                    { type: "seats", positions: [[null, null, null, null, 115]] },
+                    { type: "seats", positions: [[116, null, null, null, 117]] }
+                ]
+            },
+            {
+                id: "C3",
+                name: "Coche 3",
+                layout: [
+                    { type: "seats", positions: [[118, null, null, null, 119]] },
+                    { type: "seats", positions: [[120, null, null, null, 121]] },
+                    { type: "space", height: 50 },
+                    { type: "seats", positions: [[122, 123, null, 124, 125]] },
+                    { type: "seats", positions: [["PMR-126", null, null, null, "PMR-127"]] },
+                    { type: "pmr-bathroom", height: 160 },
+                    { type: "seats", positions: [[128, null, null, null, null]] },
+                    { type: "seats", positions: [[129, null, null, 130, 131]] },
+                    { type: "seats", positions: [[132, 133, null, null, 134]] },
+                    { type: "seats", positions: [[null, null, null, null, 135]] },
+                    { type: "seats", positions: [[136, 137, null, null, 138]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[139, 140, null, null, 141]] },
+                    { type: "seats", positions: [[null, null, null, null, 142]] },
+                    { type: "seats", positions: [[143, 144, null, null, 145]] },
+                    { type: "seats", positions: [[146, null, null, 147, 148]] },
+                    { type: "seats", positions: [[149, null, null, null, null]] },
+                    { type: "seats", positions: [[150, null, null, null, 151]] }
+                ]
+            },
+            {
+                id: "C5",
+                name: "Coche 5",
+                layout: [
+                    { type: "seats", positions: [[152, null, null, null, 153]] },
+                    { type: "seats", positions: [[null, null, null, null, 154]] },
+                    { type: "seats", positions: [[155, 156, null, null, 157]] },
+                    { type: "seats", positions: [[158, null, null, 159, 160]] },
+                    { type: "seats", positions: [[161, null, null, null, null]] },
+                    { type: "seats", positions: [[162, null, null, 163, 164]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[165, 166, null, null, 167]] },
+                    { type: "seats", positions: [[null, null, null, null, 168]] },
+                    { type: "seats", positions: [[169, 170, null, null, 171]] },
+                    { type: "seats", positions: [[172, null, null, 173, 174]] },
+                    { type: "seats", positions: [[175, null, null, null, null]] },
+                    { type: "seats", positions: [[176, null, null, 177, 178]] },
+                    { type: "seats", positions: [[179, null, null, 180, 181]] },
+                    { type: "seats", positions: [[182, null, null, null, null]] },
+                    { type: "seats", positions: [[183, null, null, 184, 185]] },
+                    { type: "seats", positions: [[186, 187, null, null, 188]] },
+                    { type: "seats", positions: [[null, null, null, null, 189]] },
+                    { type: "seats", positions: [[190, 191, null, null, 192]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[193, null, null, 194, 195]] },
+                    { type: "seats", positions: [[196, null, null, null, null]] },
+                    { type: "seats", positions: [[197, null, null, 198, 199]] },
+                    { type: "seats", positions: [[200, 201, null, null, 202]] },
+                    { type: "seats", positions: [[null, null, null, null, 203]] },
+                    { type: "seats", positions: [[204, null, null, null, 205]] }
+                ]
 
-        },
-        {
-            id: "C1",
-            name: "Coche 1",
-            layout: [
-    { type: "seats", positions: [[206, null, null, null, 207]] },
-    { type: "seats", positions: [[null, null, null, null, 208]] },
-    { type: "seats", positions: [[209, 210, null, null, 211]] },
-    { type: "seats", positions: [[212, null, null, 213, 214]] },
-    { type: "seats", positions: [[215, null, null, null, null]] },
-    { type: "seats", positions: [[216, null, null, 217, 218]] },
-    { type: "space", height: 80 },
-    { type: "seats", positions: [[219, 220, null, null, 221]] },
-    { type: "seats", positions: [[null, null, null, null, 222]] },
-    { type: "seats", positions: [[223, 224, null, null, 225]] },
-    { type: "seats", positions: [[226, null, null, 227, 228]] },
-    { type: "seats", positions: [[229, null, null, null, null]] },
-    { type: "seats", positions: [[230, null, null, 231, 232]] },
-    { type: "seats", positions: [[233, null, null, 234, 235]] },
-    { type: "seats", positions: [[236, null, null, null, null]] },
-    { type: "seats", positions: [[237, null, null, 238, 239]] },
-    { type: "seats", positions: [[240, 241, null, null, 242]] },
-    { type: "seats", positions: [[null, null, null, null, 243]] },
-    { type: "seats", positions: [[244, 245, null, null, 246]] },
-    { type: "space", height: 80 },
-    { type: "seats", positions: [[247, null, null, 248, 249]] },
-    { type: "seats", positions: [[250, null, null, null, null]] },
-    { type: "seats", positions: [[251, null, null, 252, 253]] },
-    { type: "seats", positions: [[254, 255, null, null, 256]] },
-    { type: "seats", positions: [[null, null, null, null, 257]] },
-    { type: "seats", positions: [[258, 259, null, null, 260]] },
-    { type: "seats", positions: [[261, 262, null, 263, 264]] },
-    { type: "seats", positions: [[265, 266, null, 267, 268]] }
-]
-        }
-    ]
-},
-449: {
-    name: "Tren 449",
-    coaches: [
-        {
-            id: "C2",
-            name: "Coche 2",
-            layout: [
-                { type: "seats", positions: [[3, 4, null, 2, 1]] },
-                { type: "seats", positions: [[7, 8, null, 6, 5]] },
-                { type: "seats", positions: [[11, 12, null, 10, 9]] },
-                { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                { type: "seats", positions: [[15, 16, null, 14, 13]] },
-                { type: "seats", positions: [[19, 20, null, 18, 17]] },
-                { type: "seats", positions: [[23, 24, null, 22, 21]] },
-                { type: "seats", positions: [[27, 28, null, 26, 25]] },
-                { type: "seats", positions: [[29, 30, null, "EQ", "EQ"]] },
-                { type: "seats", positions: [[null, null, null, "WC", "WC"]] },
-                { type: "space", height: 120 },
-                { type: "seats", positions: [["EQ", "EQ", null, 32, 31]] },
-                { type: "seats", positions: [[35, 36, null, 34, 33]] },
-                { type: "seats", positions: [[39, 40, null, 38, 37]] },
-                { type: "seats", positions: [[43, 44, null, 42, 41]] },
-                { type: "seats", positions: [[47, 48, null, 46, 45]] },
-                { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                { type: "seats", positions: [[51, 52, null, 50, 49]] },
-                { type: "seats", positions: [[55, 56, null, 54, 53]] },
-                { type: "seats", positions: [[59, 60, null, 58, 57]] }
-            ]
-        },
-        {
-            id: "C4",
-            name: "Coche 4",
-            layout: [
-                { type: "seats", positions: [[63, 64, null, 62, 61]] },
-                { type: "seats", positions: [[67, 68, null, 66, 65]] },
-                { type: "seats", positions: [[71, 72, null, 70, 69]] },
-                { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                { type: "seats", positions: [[75, 76, null, 74, 73]] },
-                { type: "seats", positions: [[79, 80, null, 78, 77]] },
-                { type: "seats", positions: [[83, 84, null, 82, 81]] },
-                { type: "seats", positions: [[87, 88, null, 86, 85]] },
-                { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
-                { type: "space", height: 80 },
-                { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
-                { type: "seats", positions: [[91, 92, null, 90, 89]] },
-                { type: "seats", positions: [[95, 96, null, 94, 93]] },
-                { type: "seats", positions: [[99, 100, null, 98, 97]] },
-                { type: "seats", positions: [[103, 104, null, 102, 101]] },
-                { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                { type: "seats", positions: [[107, 108, null, 106, 105]] },
-                { type: "seats", positions: [[111, 112, null, 110, 109]] },
-                { type: "seats", positions: [[115, 116, null, 114, 113]] }
-            ]
-        },
-{
-    id: "C3",
-    name: "Coche 3",
-    layout: [
-        { type: "seats", positions: [[119, 120, null, 118, 117]] },
-        { type: "seats", positions: [[123, 124, null, 122, 121]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[127, 128, null, 126, 125]] },
-        { type: "pmr-bathroom", height: 160, label: "ESPACIO OCIO, BAÑO PMR, BICIS, VENDING..." },
-{ type: "space", height: 60 },
-        { type: "seats", positions: [["EQ", null, null, null, "PMR-0"]] },
-{ type: "space", height: 40 },
-        { type: "seats", positions: [["S3", "S4", null, "S2", "S1"]] },
-        { type: "seats", positions: [[133, 134, null, 132, 131]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[137, 138, null, 136, 135]] },
-        { type: "seats", positions: [[141, 142, null, 140, 139]] }
-    ]
-},
-{
-    id: "C5",
-    name: "Coche 5",
-    layout: [
-        { type: "seats", positions: [[145, 146, null, 144, 143]] },
-        { type: "seats", positions: [[149, 150, null, 148, 147]] },
-        { type: "seats", positions: [[153, 154, null, 152, 151]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[157, 158, null, 156, 155]] },
-        { type: "seats", positions: [[161, 162, null, 160, 159]] },
-        { type: "seats", positions: [[165, 166, null, 164, 163]] },
-        { type: "seats", positions: [[169, 170, null, 168, 167]] },
-        { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
-        { type: "space", height: 80 },
-        { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
-        { type: "seats", positions: [[173, 174, null, 172, 171]] },
-        { type: "seats", positions: [[177, 178, null, 176, 175]] },
-        { type: "seats", positions: [[181, 182, null, 180, 179]] },
-        { type: "seats", positions: [[185, 186, null, 184, 183]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[189, 190, null, 188, 187]] },
-        { type: "seats", positions: [[193, 194, null, 192, 191]] },
-        { type: "seats", positions: [[197, 198, null, 196, 195]] }
-    ]
-},
-{
-    id: "C1",
-    name: "Coche 1",
-    layout: [
-        { type: "seats", positions: [[201, 202, null, 200, 199]] },
-        { type: "seats", positions: [[205, 206, null, 204, 203]] },
-        { type: "seats", positions: [[209, 210, null, 208, 207]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[213, 214, null, 212, 211]] },
-        { type: "seats", positions: [[217, 218, null, 216, 215]] },
-        { type: "seats", positions: [[221, 222, null, 220, 219]] },
-        { type: "seats", positions: [[225, 226, null, 224, 223]] },
-        { type: "seats", positions: [[227, 228, null, "EQ", "EQ"]] },
-        { type: "space", height: 160 },
-        { type: "seats", positions: [["EQ", "EQ", null, 230, 229]] },
-        { type: "seats", positions: [[233, 234, null, 232, 231]] },
-        { type: "seats", positions: [[237, 238, null, 236, 235]] },
-        { type: "seats", positions: [[241, 242, null, 240, 239]] },
-        { type: "seats", positions: [[245, 246, null, 244, 243]] },
-        { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-        { type: "seats", positions: [[249, 250, null, 248, 247]] },
-        { type: "seats", positions: [[253, 254, null, 252, 251]] },
-        { type: "seats", positions: [[257, 258, null, 256, 255]] }
-    ]
-}
-    ]
-},
+            },
+            {
+                id: "C1",
+                name: "Coche 1",
+                layout: [
+                    { type: "seats", positions: [[206, null, null, null, 207]] },
+                    { type: "seats", positions: [[null, null, null, null, 208]] },
+                    { type: "seats", positions: [[209, 210, null, null, 211]] },
+                    { type: "seats", positions: [[212, null, null, 213, 214]] },
+                    { type: "seats", positions: [[215, null, null, null, null]] },
+                    { type: "seats", positions: [[216, null, null, 217, 218]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[219, 220, null, null, 221]] },
+                    { type: "seats", positions: [[null, null, null, null, 222]] },
+                    { type: "seats", positions: [[223, 224, null, null, 225]] },
+                    { type: "seats", positions: [[226, null, null, 227, 228]] },
+                    { type: "seats", positions: [[229, null, null, null, null]] },
+                    { type: "seats", positions: [[230, null, null, 231, 232]] },
+                    { type: "seats", positions: [[233, null, null, 234, 235]] },
+                    { type: "seats", positions: [[236, null, null, null, null]] },
+                    { type: "seats", positions: [[237, null, null, 238, 239]] },
+                    { type: "seats", positions: [[240, 241, null, null, 242]] },
+                    { type: "seats", positions: [[null, null, null, null, 243]] },
+                    { type: "seats", positions: [[244, 245, null, null, 246]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [[247, null, null, 248, 249]] },
+                    { type: "seats", positions: [[250, null, null, null, null]] },
+                    { type: "seats", positions: [[251, null, null, 252, 253]] },
+                    { type: "seats", positions: [[254, 255, null, null, 256]] },
+                    { type: "seats", positions: [[null, null, null, null, 257]] },
+                    { type: "seats", positions: [[258, 259, null, null, 260]] },
+                    { type: "seats", positions: [[261, 262, null, 263, 264]] },
+                    { type: "seats", positions: [[265, 266, null, 267, 268]] }
+                ]
+            }
+        ]
+    },
+    449: {
+        name: "Tren 449",
+        coaches: [
+            {
+                id: "C2",
+                name: "Coche 2",
+                layout: [
+                    { type: "seats", positions: [[3, 4, null, 2, 1]] },
+                    { type: "seats", positions: [[7, 8, null, 6, 5]] },
+                    { type: "seats", positions: [[11, 12, null, 10, 9]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[15, 16, null, 14, 13]] },
+                    { type: "seats", positions: [[19, 20, null, 18, 17]] },
+                    { type: "seats", positions: [[23, 24, null, 22, 21]] },
+                    { type: "seats", positions: [[27, 28, null, 26, 25]] },
+                    { type: "seats", positions: [[29, 30, null, "EQ", "EQ"]] },
+                    { type: "seats", positions: [[null, null, null, "WC", "WC"]] },
+                    { type: "space", height: 120 },
+                    { type: "seats", positions: [["EQ", "EQ", null, 32, 31]] },
+                    { type: "seats", positions: [[35, 36, null, 34, 33]] },
+                    { type: "seats", positions: [[39, 40, null, 38, 37]] },
+                    { type: "seats", positions: [[43, 44, null, 42, 41]] },
+                    { type: "seats", positions: [[47, 48, null, 46, 45]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[51, 52, null, 50, 49]] },
+                    { type: "seats", positions: [[55, 56, null, 54, 53]] },
+                    { type: "seats", positions: [[59, 60, null, 58, 57]] }
+                ]
+            },
+            {
+                id: "C4",
+                name: "Coche 4",
+                layout: [
+                    { type: "seats", positions: [[63, 64, null, 62, 61]] },
+                    { type: "seats", positions: [[67, 68, null, 66, 65]] },
+                    { type: "seats", positions: [[71, 72, null, 70, 69]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[75, 76, null, 74, 73]] },
+                    { type: "seats", positions: [[79, 80, null, 78, 77]] },
+                    { type: "seats", positions: [[83, 84, null, 82, 81]] },
+                    { type: "seats", positions: [[87, 88, null, 86, 85]] },
+                    { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
+                    { type: "seats", positions: [[91, 92, null, 90, 89]] },
+                    { type: "seats", positions: [[95, 96, null, 94, 93]] },
+                    { type: "seats", positions: [[99, 100, null, 98, 97]] },
+                    { type: "seats", positions: [[103, 104, null, 102, 101]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[107, 108, null, 106, 105]] },
+                    { type: "seats", positions: [[111, 112, null, 110, 109]] },
+                    { type: "seats", positions: [[115, 116, null, 114, 113]] }
+                ]
+            },
+            {
+                id: "C3",
+                name: "Coche 3",
+                layout: [
+                    { type: "seats", positions: [[119, 120, null, 118, 117]] },
+                    { type: "seats", positions: [[123, 124, null, 122, 121]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[127, 128, null, 126, 125]] },
+                    { type: "pmr-bathroom", height: 160, label: "ESPACIO OCIO, BAÑO PMR, BICIS, VENDING..." },
+                    { type: "space", height: 60 },
+                    { type: "seats", positions: [["EQ", null, null, null, "PMR-0"]] },
+                    { type: "space", height: 40 },
+                    { type: "seats", positions: [["S3", "S4", null, "S2", "S1"]] },
+                    { type: "seats", positions: [[133, 134, null, 132, 131]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[137, 138, null, 136, 135]] },
+                    { type: "seats", positions: [[141, 142, null, 140, 139]] }
+                ]
+            },
+            {
+                id: "C5",
+                name: "Coche 5",
+                layout: [
+                    { type: "seats", positions: [[145, 146, null, 144, 143]] },
+                    { type: "seats", positions: [[149, 150, null, 148, 147]] },
+                    { type: "seats", positions: [[153, 154, null, 152, 151]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[157, 158, null, 156, 155]] },
+                    { type: "seats", positions: [[161, 162, null, 160, 159]] },
+                    { type: "seats", positions: [[165, 166, null, 164, 163]] },
+                    { type: "seats", positions: [[169, 170, null, 168, 167]] },
+                    { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
+                    { type: "space", height: 80 },
+                    { type: "seats", positions: [["EQ", "EQ", null, "EQ", "EQ"]] },
+                    { type: "seats", positions: [[173, 174, null, 172, 171]] },
+                    { type: "seats", positions: [[177, 178, null, 176, 175]] },
+                    { type: "seats", positions: [[181, 182, null, 180, 179]] },
+                    { type: "seats", positions: [[185, 186, null, 184, 183]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[189, 190, null, 188, 187]] },
+                    { type: "seats", positions: [[193, 194, null, 192, 191]] },
+                    { type: "seats", positions: [[197, 198, null, 196, 195]] }
+                ]
+            },
+            {
+                id: "C1",
+                name: "Coche 1",
+                layout: [
+                    { type: "seats", positions: [[201, 202, null, 200, 199]] },
+                    { type: "seats", positions: [[205, 206, null, 204, 203]] },
+                    { type: "seats", positions: [[209, 210, null, 208, 207]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[213, 214, null, 212, 211]] },
+                    { type: "seats", positions: [[217, 218, null, 216, 215]] },
+                    { type: "seats", positions: [[221, 222, null, 220, 219]] },
+                    { type: "seats", positions: [[225, 226, null, 224, 223]] },
+                    { type: "seats", positions: [[227, 228, null, "EQ", "EQ"]] },
+                    { type: "space", height: 160 },
+                    { type: "seats", positions: [["EQ", "EQ", null, 230, 229]] },
+                    { type: "seats", positions: [[233, 234, null, 232, 231]] },
+                    { type: "seats", positions: [[237, 238, null, 236, 235]] },
+                    { type: "seats", positions: [[241, 242, null, 240, 239]] },
+                    { type: "seats", positions: [[245, 246, null, 244, 243]] },
+                    { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
+                    { type: "seats", positions: [[249, 250, null, 248, 247]] },
+                    { type: "seats", positions: [[253, 254, null, 252, 251]] },
+                    { type: "seats", positions: [[257, 258, null, 256, 255]] }
+                ]
+            }
+        ]
+    },
     470.1: {
         name: "Tren 470.1",
         coaches: [{
-                id: "C1",
-                name: "Coche 1",
-                layout: [{
-                    type: "space",
-                    height: 60
-                },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["S4", null, null, null, "S1"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["S5", null, null, null, "S2"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["S6", null, null, null, "S3"]
-                        ]
-                    },
-                    {
-                                            type: "seats",
-                            positions: [
-                            ["S7", null, null, null, null]
-                        ]
-                        },
-                    {
-                        type: "seats",
-                            positions: [
-                            ["S8", null, null, null, null]
-                        ]
-                        },
-                    {
-                        type: "seats",
-                            positions: [
-                            ["S9", null, null, null, null]
-                        ]
-                        },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [3, 4, null, 2, 1]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [7, 8, null, 6, 5]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [11, 12, null, 10, 9]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [15, 16, null, 14, 13]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [19, 20, null, 18, 17]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [23, 24, null, 22, 21]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [27, 28, null, 26, 25]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["EQ", "EQ", null, 30, 29]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["EQ", "EQ", null, 32, 31]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [35, 36, null, 34, 33]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [39, 40, null, 38, 37]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [43, 44, null, 42, 41]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [47, 48, null, 46, 45]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [51, 52, null, 50, 49]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [55, 56, null, 54, 53]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [59, 60, null, 58, 57]
-                        ]
-                    },
-                ],
+            id: "C1",
+            name: "Coche 1",
+            layout: [{
+                type: "space",
+                height: 60
             },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S4", null, null, null, "S1"]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S5", null, null, null, "S2"]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S6", null, null, null, "S3"]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S7", null, null, null, null]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S8", null, null, null, null]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["S9", null, null, null, null]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [3, 4, null, 2, 1]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [7, 8, null, 6, 5]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [11, 12, null, 10, 9]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [15, 16, null, 14, 13]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [19, 20, null, 18, 17]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [23, 24, null, 22, 21]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [27, 28, null, 26, 25]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["EQ", "EQ", null, 30, 29]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        ["EQ", "EQ", null, 32, 31]
+                    ]
+                },
+                {
+                    type: "space",
+                    height: 80
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [35, 36, null, 34, 33]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [39, 40, null, 38, 37]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [43, 44, null, 42, 41]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [47, 48, null, 46, 45]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [51, 52, null, 50, 49]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [55, 56, null, 54, 53]
+                    ]
+                },
+                {
+                    type: "seats",
+                    positions: [
+                        [59, 60, null, 58, 57]
+                    ]
+                },
+            ],
+        },
             {
                 id: "C2",
                 name: "Coche 2",
                 layout: [{
-                        type: "seats",
-                        positions: [
-                            [61, 62, null, "WC", "WC"]
-                        ]
-                    },
+                    type: "seats",
+                    positions: [
+                        [61, 62, null, "WC", "WC"]
+                    ]
+                },
                     {
                         type: "seats",
                         positions: [
@@ -1068,11 +1068,11 @@ const trainModels = {
                 id: "C3",
                 name: "Coche 3",
                 layout: [{
-                        type: "seats",
-                        positions: [
-                            [143, 144, null, 142, 141]
-                        ]
-                    },
+                    type: "seats",
+                    positions: [
+                        [143, 144, null, 142, 141]
+                    ]
+                },
                     {
                         type: "seats",
                         positions: [
@@ -1518,9 +1518,9 @@ const trainModels = {
 
 // Paradas
 const stops = [{
-        full: "Zaragoza Miraflores",
-        abbr: "ZMI"
-    },
+    full: "Zaragoza Miraflores",
+    abbr: "ZMI"
+},
     {
         full: "Zaragoza Goya",
         abbr: "ZGO"
@@ -1705,7 +1705,7 @@ const trainRoutes = {
     '18079': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '18022': ['Vitoria Gasteiz', 'Alegria Dulantzi', 'Agurain Salvatierra', 'Araia', 'Altsasu Pueblo', 'Etxarri Aranatz', 'Uharte Arakil', 'Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón'],
     '18068': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
-    '18074': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
+    '18074': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18046': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18073': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '16020': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores']
@@ -2728,9 +2728,6 @@ let state = {
     copyMode: false      // 👈 NUEVO
 };
 
-let lastKnownScrollPosition = 0;
-let shouldRestoreScroll = false;
-
 let savedScrollPosition = 0;
 let isModalOpen = false;
 
@@ -2882,6 +2879,7 @@ function clearSeat(coachId, seatNum) {
     const key = getSeatKey(coachId, String(seatNum));
     delete state.seatData[key];
     saveData();
+    state.selectedSeat = null;
     unlockBodyScroll();
     state.selectedSeat = null;
     render();
@@ -3368,7 +3366,7 @@ function importTurn() {
                 const trainName = turnData.trainName || turnData.trainModel;
                 const exportDate = turnData.exportDate ?
                     new Date(turnData.exportDate)
-                    .toLocaleString("es-ES") :
+                        .toLocaleString("es-ES") :
                     "desconocida";
 
                 if (
@@ -3654,9 +3652,9 @@ ${state.trainNumber ? `
                 <button class="header-collapse-btn" onclick="toggleHeaderCollapse()" title="${state.headerCollapsed ? 'Expandir' : 'Colapsar'} header">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         ${state.headerCollapsed ?
-                            '<polyline points="6 9 12 15 18 9"/>' :
-                            '<polyline points="18 15 12 9 6 15"/>'
-                        }
+        '<polyline points="6 9 12 15 18 9"/>' :
+        '<polyline points="18 15 12 9 6 15"/>'
+    }
                     </svg>
                 </button>
                 <div class="coach-selector">
@@ -4040,10 +4038,6 @@ function renderModal() {
 
 // Renderizar todo
 function render() {
-    // Guardar scroll ANTES de repintar (solo si no estamos cambiando de coche)
-    if (!shouldRestoreScroll) {
-        lastKnownScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-    }
     // --- evitar flash en modo oscuro durante el render inicial ---
     const body = document.body;
     body.style.transition = "none";
@@ -4096,21 +4090,6 @@ function render() {
         </div>
         ${renderModal()}
     `;
-    // NUEVO: Restaurar scroll después de renderizar, salvo que sea cambio de coche
-    requestAnimationFrame(() => {
-        if (shouldRestoreScroll) {
-            shouldRestoreScroll = false; // resetear bandera
-        } else {
-            window.scrollTo(0, lastKnownScrollPosition);
-        }
-
-        // Restaurar scroll del modal si existe
-        if (state.selectedSeat) {
-            restoreModalScrollPosition();
-        } else {
-            modalScrollPosition = 0;
-        }
-    });
     // Restaurar scroll del modal si existe
     if (state.selectedSeat) {
         restoreModalScrollPosition();
@@ -4162,18 +4141,15 @@ function selectCoach(coachId) {
     const previousCoach = state.selectedCoach;
     state.selectedCoach = coachId;
 
-    // Solo si cambiamos de coche → queremos scroll al fondo
-    if (previousCoach !== coachId) {
-        shouldRestoreScroll = true;  // ← decimos: "esta vez SÍ haz scroll al fondo"
-    }
-
     render();
 
+    // Solo hacer scroll al fondo SI hemos cambiado realmente de coche
     if (previousCoach !== coachId) {
         requestAnimationFrame(() => {
             scrollCoachToBottom();
         });
     }
+    // Si es el mismo coche → no tocamos el scroll (conserva la posición actual)
 }
 
 function selectSeat(coach, num) {
@@ -4375,70 +4351,78 @@ function handleSeatPress(coach, num, event) {
             const key = getSeatKey(coach, num);
             const seatInfo = state.seatData[key];
 
-            // ==================================================================
-            // CASO 1: EL ASIENTO TIENE ALGÚN DATO → BORRAR CON DESHACER COMPLETO
-            // ==================================================================
+            // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
+// Long press: borrar pero con opción de deshacer
             if (seatInfo && Object.keys(seatInfo).length > 0) {
-                // Guardar una copia COMPLETA de todo lo que tenía el asiento
-                const previousData = { ...seatInfo };
+                const previousStop = seatInfo.stop ? seatInfo.stop.full : null;
 
-                // Borrar el asiento
+                // Borrar asiento
                 clearSeat(coach, num);
 
-                if (navigator.vibrate) navigator.vibrate(50);
+                // Vibración opcional
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
 
-                // Guardar para poder deshacer
+                // Guardar datos para undo
                 state.undoData = {
                     coach,
                     num,
-                    previousData   // ← ¡¡AQUÍ ESTABA LA COMA QUE FALTABA!!
+                    stop: previousStop,
+                    undoData: null
                 };
 
-                const hadStop   = !!previousData.stop;
-                const hadFlags  = previousData.enlace || previousData.comentarioFlag || previousData.comentario || previousData.seguir;
+                if (previousStop) {
+                    showUndoBanner(
+                        `Parada eliminada: ${previousStop}`,
+                        () => {
+                            const undo = state.undoData;
+                            if (!undo) return;
 
-                if (hadStop || hadFlags) {
-                    const message = hadStop
-                        ? `Parada eliminada: ${previousData.stop.full}`
-                        : `Datos eliminados del asiento ${num}`;
+                            const stopObj = stops.find(s => s.full === undo.stop);
+                            if (stopObj) updateSeat(undo.coach, undo.num, stopObj);
 
-                    showUndoBanner(message, () => {
-                        const undo = state.undoData;
-                        if (!undo || !undo.previousData) return;
-
-                        // Restaurar absolutamente TODO (parada + flags + comentario)
-                        const key = getSeatKey(undo.coach, undo.num);
-                        state.seatData[key] = { ...undo.previousData };
-
-                        state.undoData = null;
-                        render();
-                    });
+                            state.undoData = null;
+                        }
+                    );
                 }
-
-                // ==================================================================
-                // CASO 2: ASIENTO VACÍO → ASIGNAR PARADA FINAL (sin abrir modal)
-                // ==================================================================
+                // 🟢 Caso 2: asiento vacío → asignar última parada del tren
             } else {
-                state.silentLongPress = true;   // ← para que no mueva el scroll
-
+                // 🚫 Si el modo copiado rápido está activo → usar última parada copiada
                 if (state.copyMode && state.lastCopiedStop) {
                     updateSeat(coach, num, state.lastCopiedStop);
                     return;
                 }
-
+                // Necesitamos saber la ruta del tren actual
                 const route = state.trainNumber && trainRoutes[state.trainNumber];
+
                 if (route && route.length > 0) {
+                    // Última parada REAL de la ruta
                     let finalStopName = route[route.length - 1];
 
-                    if (finalStopName === 'Miranda') finalStopName = 'Vitoria Gasteiz';
-                    else if (finalStopName === 'Logroño') finalStopName = 'Castejón';
+                    // Ajustes de parada efectiva:
+                    // - Trenes que terminan en "Miranda" → usar "Vitoria Gasteiz"
+                    // - Trenes que terminan en "Logroño" → usar "Castejón"
+                    if (finalStopName === 'Miranda') {
+                        finalStopName = 'Vitoria Gasteiz';
+                    } else if (finalStopName === 'Logroño') {
+                        finalStopName = 'Castejón';
+                    }
 
+                    // Buscar ese nombre en el array global de paradas "stops"
                     const stopObj = stops.find(s => s.full === finalStopName);
+
                     if (stopObj) {
+                        // Asignar parada al asiento SIN abrir modal
                         updateSeat(coach, num, stopObj);
-                        if (navigator.vibrate) navigator.vibrate(30);
+
+                        // Vibración un pelín más corta para diferenciarlo si quieres
+                        if (navigator.vibrate) {
+                            navigator.vibrate(30);
+                        }
                     }
                 }
+                // Si no hay trainNumber o ruta definida, simplemente no hace nada
             }
         }
     }, SEAT_LONG_PRESS_DURATION);
@@ -5134,3 +5118,6 @@ function toggleScreen() {
 }
 
 render();
+
+// Tras el primer render, engancha swipe
+enableSeatmapSwipe();
