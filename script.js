@@ -762,757 +762,944 @@ const trainModels = {
             }
         ]
     },
-    470.1: {
-        name: "Tren 470.1",
-        coaches: [{
-            id: "C1",
-            name: "Coche 1",
-            layout: [{
-                type: "space",
-                height: 60
+    470: {
+        name: "Tren 470",
+        coaches: [
+            {
+                id: "C1",
+                name: "Coche 1",
+                variants: {
+                    "A": {
+                        layout: [{
+                            type: "space",
+                            height: 60
+                        },
+                            {
+                                type: "seats",
+                                positions: [["1D", null, null, null, "1A"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["1E", null, null, null, "1B"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["1F", null, null, null, "1C"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["1G", null, null, null, null]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["1H", null, null, null, null]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["1I", null, null, null, null]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[3, 4, null, 2, 1]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[7, 8, null, 6, 5]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[11, 12, null, 10, 9]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[15, 16, null, 14, 13]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[19, 20, null, 18, 17]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[23, 24, null, 22, 21]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[27, 28, null, 26, 25]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["EQ", "EQ", null, 30, 29]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["EQ", "EQ", null, 32, 31]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[35, 36, null, 34, 33]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[39, 40, null, 38, 37]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[43, 44, null, 42, 41]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[47, 48, null, 46, 45]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[51, 52, null, 50, 49]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[55, 56, null, 54, 53]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[59, 60, null, 58, 57]]
+                            }]
+                    },
+                    "B": {
+                        layout: [{
+                            type: "space",
+                            height: 60
+                        },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, null, "1A"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, null, "1B"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, null, "1C"]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[3, 4, null, 2, 1]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[7, 8, null, 6, 5]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[11, 12, null, 10, 9]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[15, 16, null, 14, 13]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[19, 20, null, 18, 17]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[23, 24, null, 22, 21]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[27, 28, null, 26, 25]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["EQ", "EQ", null, 30, 29]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["EQ", "EQ", null, 32, 31]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[35, 36, null, 34, 33]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[39, 40, null, 38, 37]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[43, 44, null, 42, 41]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[47, 48, null, 46, 45]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[51, 52, null, 50, 49]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[55, 56, null, 54, 53]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[59, 60, null, 58, 57]]
+                            }]
+                    },
+                    "C": {
+                        layout: [
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, 2, 1]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[3, 4, null, 6, 5]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[7, 8, null, 10, 9]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[11, 12, null, 14, 13]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, null, "S1"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[15, 16, null, 18, 17]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[19, 20, null, 22, 21]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[23, 24, null, 26, 25]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[27, 28, null, 30, 29]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[31, 32, null, 34, 33]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[35, 36, null, 38, 37]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[39, 40, null, 42, 41]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[43, 44, null, 46, 45]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[47, 48, null, 50, 49]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[51, 52, null, 54, 53]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[null, null, null, null, "2A"]]
+                            },
+                            {
+                                type: "space",
+                                height: 100
+                            },
+                            {
+                                type: "seats",
+                                positions: [["2C", null, null, null, "2B"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[55, 56, null, 58, 57]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[59, 60, null, 62, 61]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[63, 64, null, 66, 65]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[67, 68, null, 70, 69]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[71, 72, null, 74, 73]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[75, 76, null, 78, 77]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[79, 80, null, 82, 81]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[83, 84, null, 86, 85]]
+                            }]
+                    }
+                }
             },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S4", null, null, null, "S1"]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S5", null, null, null, "S2"]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S6", null, null, null, "S3"]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S7", null, null, null, null]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S8", null, null, null, null]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["S9", null, null, null, null]
-                    ]
-                },
-                {
-                    type: "space",
-                    height: 80
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [3, 4, null, 2, 1]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [7, 8, null, 6, 5]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [11, 12, null, 10, 9]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [15, 16, null, 14, 13]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [19, 20, null, 18, 17]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [23, 24, null, 22, 21]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [27, 28, null, 26, 25]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["EQ", "EQ", null, 30, 29]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["EQ", "EQ", null, 32, 31]
-                    ]
-                },
-                {
-                    type: "space",
-                    height: 80
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [35, 36, null, 34, 33]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [39, 40, null, 38, 37]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [43, 44, null, 42, 41]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [47, 48, null, 46, 45]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [51, 52, null, 50, 49]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [55, 56, null, 54, 53]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [59, 60, null, 58, 57]
-                    ]
-                },
-            ],
-        },
             {
                 id: "C2",
                 name: "Coche 2",
-                layout: [{
-                    type: "seats",
-                    positions: [
-                        [61, 62, null, "WC", "WC"]
-                    ]
-                },
-                    {
-                        type: "seats",
-                        positions: [
-                            [63, 64, null, "WC", "WC"]
-                        ]
+                variants: {
+                    "A": {
+                        layout: [{
+                            type: "seats",
+                            positions: [[61, 62, null, "WC", "WC"]]
+                        },
+                            {
+                                type: "seats",
+                                positions: [[63, 64, null, "WC", "WC"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[67, 68, null, 66, 65]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[71, 72, null, 70, 69]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[75, 76, null, 74, 73]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[79, 80, null, 78, 77]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[83, 84, null, 82, 81]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[85, 86, null, "MIN", "MIN"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[87, 88, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[91, 92, null, 90, 89]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[95, 96, null, 94, 93]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[99, 100, null, 98, 97]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[103, 104, null, 102, 101]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[107, 108, null, 106, 105]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[111, 112, null, 110, 109]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[115, 116, null, 114, 113]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[119, 120, null, 118, 117]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[123, 124, null, 122, 121]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[127, 128, null, 126, 125]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[131, 132, null, 130, 129]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[135, 136, null, 134, 133]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["WC", "WC", null, 138, 137]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["WC", "WC", null, 140, 139]]
+                            }]
                     },
-                    {
-                        type: "seats",
-                        positions: [
-                            [67, 68, null, 66, 65]
-                        ]
+                    "B": {
+                        layout: [{
+                            type: "seats",
+                            positions: [[null, null, null, "WC", "WC"]]
+                        },
+                            {
+                                type: "seats",
+                                positions: [[61, 62, null, "WC", "WC"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[65, 66, null, 64, 63]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[69, 70, null, 68, 67]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[73, 74, null, 72, 71]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[77, 78, null, 76, 75]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[81, 82, null, 80, 79]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[83, 84, null, "MIN", "MIN"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[85, 86, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[89, 90, null, 88, 87]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[93, 94, null, 92, 91]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[97, 98, null, 96, 95]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[101, 102, null, 100, 99]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[105, 106, null, 104, 103]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[109, 110, null, 108, 107]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[113, 114, null, 112, 111]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[117, 118, null, 116, 115]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[121, 122, null, 120, 119]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[125, 126, null, 124, 123]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[129, 130, null, 128, 127]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[133, 134, null, 132, 131]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[137, 138, null, 136, 135]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[141, 142, null, 140, 139]]
+                            }]
                     },
-                    {
-                        type: "seats",
-                        positions: [
-                            [71, 72, null, 70, 69]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [75, 76, null, 74, 73]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [79, 80, null, 78, 77]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [83, 84, null, 82, 81]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [85, 86, null, "MIN", "MIN"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [87, 88, null, "EQ", "EQ"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [91, 92, null, 90, 89]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [95, 96, null, 94, 93]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [99, 100, null, 98, 97]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [103, 104, null, 102, 101]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [107, 108, null, 106, 105]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [111, 112, null, 110, 109]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [115, 116, null, 114, 113]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [119, 120, null, 118, 117]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [123, 124, null, 122, 121]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [127, 128, null, 126, 125]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [131, 132, null, 130, 129]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [135, 136, null, 134, 133]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["WC", "WC", null, 138, 137]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            ["WC", "WC", null, 140, 139]
-                        ]
-                    },
-                ],
+                    "C": {
+                        layout: [
+                            {
+                                type: "seats",
+                                positions: [[87, 88, null, "WC", "WC"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[89, 90, null, "WC", "WC"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[93, 94, null, 92, 91]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[97, 98, null, 96, 95]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[101, 102, null, 100, 99]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[105, 106, null, 104, 103]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[109, 110, null, 108, 107]]
+                            },
+                            {
+                                type: "space",
+                                height: 100
+                            },
+                            {
+                                type: "seats",
+                                positions: [["2A", null, null, null, null]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[111, 112, null, null, null]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[113, 114, null, "MIN", "MIN"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[115, 116, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[119, 120, null, 118, 117]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[123, 124, null, 122, 121]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[127, 128, null, 126, 125]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[131, 132, null, 130, 129]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[135, 136, null, 134, 133]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[139, 140, null, 138, 137]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[143, 144, null, 142, 141]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[147, 148, null, 146, 145]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[151, 152, null, 150, 149]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[155, 156, null, 154, 153]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[159, 160, null, 158, 157]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[163, 164, null, 162, 161]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[167, 168, null, 166, 165]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["WC", "WC", null, 170, 169]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [["WC", "WC", null, 172, 171]]
+                            }]
+                    }
+                }
             },
             {
                 id: "C3",
                 name: "Coche 3",
-                layout: [{
-                    type: "seats",
-                    positions: [
-                        [143, 144, null, 142, 141]
-                    ]
-                },
-                    {
-                        type: "seats",
-                        positions: [
-                            [147, 148, null, 146, 145]
-                        ]
+                variants: {
+                    "A": {
+                        layout: [{
+                            type: "seats",
+                            positions: [[143, 144, null, 142, 141]]
+                        },
+                            {
+                                type: "seats",
+                                positions: [[147, 148, null, 146, 145]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[151, 152, null, 150, 149]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[155, 156, null, 154, 153]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[159, 160, null, 158, 157]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[163, 164, null, 162, 161]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[167, 168, null, 166, 165]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[169, 170, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[171, 172, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[175, 176, null, 174, 173]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[179, 180, null, 178, 177]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[183, 184, null, 182, 181]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[187, 188, null, 186, 185]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[191, 192, null, 190, 189]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[195, 196, null, 194, 193]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[199, 200, null, 198, 197]]
+                            },
+                            {
+                                type: "space",
+                                height: 160
+                            },
+                            {
+                                type: "seats",
+                                positions: [[201, 202, null, 204, 203]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[205, 206, null, 208, 207]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[209, 210, null, 212, 211]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[213, 214, null, 216, 215]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[217, 218, null, 220, 219]]
+                            }]
                     },
-                    {
-                        type: "seats",
-                        positions: [
-                            [151, 152, null, 150, 149]
-                        ]
+                    "B": {
+                        layout: [{
+                            type: "seats",
+                            positions: [[null, null, null, 144, 143]]
+                        },
+                            {
+                                type: "seats",
+                                positions: [[147, 148, null, 146, 145]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[151, 152, null, 150, 149]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[155, 156, null, 154, 153]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[159, 160, null, 158, 157]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[163, 164, null, 162, 161]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[167, 168, null, 166, 165]]
+                            },
+                            {
+                                type: "space",
+                                height: 80
+                            },
+                            {
+                                type: "seats",
+                                positions: [[169, 170, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[171, 172, null, "EQ", "EQ"]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[175, 176, null, 174, 173]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[179, 180, null, 178, 177]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[183, 184, null, 182, 181]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[187, 188, null, 186, 185]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[191, 192, null, 190, 189]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[195, 196, null, 194, 193]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[199, 200, null, 198, 197]]
+                            },
+                            {
+                                type: "space",
+                                height: 160
+                            },
+                            {
+                                type: "seats",
+                                positions: [[203, 204, null, 202, 201]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[207, 208, null, 206, 205]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[211, 212, null, 210, 209]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[215, 216, null, 214, 213]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[219, 220, null, 218, 217]]
+                            }]
                     },
-                    {
-                        type: "seats",
-                        positions: [
-                            [155, 156, null, 154, 153]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [159, 160, null, 158, 157]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [163, 164, null, 162, 161]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [167, 168, null, 166, 165]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [169, 170, null, "EQ", "EQ"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [171, 172, null, "EQ", "EQ"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [175, 176, null, 174, 173]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [179, 180, null, 178, 177]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [183, 184, null, 182, 181]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [187, 188, null, 186, 185]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [191, 192, null, 190, 189]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [195, 196, null, 194, 193]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [199, 200, null, 198, 197]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 160
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [201, 202, null, 204, 203]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [205, 206, null, 208, 207]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [209, 210, null, 212, 211]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [213, 214, null, 216, 215]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [217, 218, null, 220, 219]
-                        ]
-                    },
-                ],
-            },
-        ],
-    },
-    470.2: {
-        name: "Tren 470.2",
-        coaches: [{
-            id: "C1",
-            name: "Coche 1",
-            layout: [{
-                type: "space",
-                height: 60
-            },
-                {
-                    type: "seats",
-                    positions: [
-                        [null, null, null, null, "S1"]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [null, null, null, null, "S2"]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [null, null, null, null, "S3"]
-                    ]
-                },
-                {
-                    type: "space",
-                    height: 80
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [3, 4, null, 2, 1]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [7, 8, null, 6, 5]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [11, 12, null, 10, 9]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [15, 16, null, 14, 13]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [19, 20, null, 18, 17]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [23, 24, null, 22, 21]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [27, 28, null, 26, 25]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["EQ", "EQ", null, 30, 29]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        ["EQ", "EQ", null, 32, 31]
-                    ]
-                },
-                {
-                    type: "space",
-                    height: 80
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [35, 36, null, 34, 33]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [39, 40, null, 38, 37]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [43, 44, null, 42, 41]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [47, 48, null, 46, 45]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [51, 52, null, 50, 49]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [55, 56, null, 54, 53]
-                    ]
-                },
-                {
-                    type: "seats",
-                    positions: [
-                        [59, 60, null, 58, 57]
-                    ]
-                },
-            ],
-        },
-            {
-                id: "C2",
-                name: "Coche 2",
-                layout: [{
-                    type: "seats",
-                    positions: [
-                        [null, null, null, "WC", "WC"]
-                    ]
-                },
-                    { "type": "seats", "positions": [ [61, 62, null, "WC", "WC"] ] },
-                    { "type": "seats", "positions": [ [65, 66, null, 64, 63] ] },
-                    { "type": "seats", "positions": [ [69, 70, null, 68, 67] ] },
-                    { "type": "seats", "positions": [ [73, 74, null, 72, 71] ] },
-                    { "type": "seats", "positions": [ [77, 78, null, 76, 75] ] },
-                    { "type": "seats", "positions": [ [81, 82, null, 80, 79] ] },
-                    { "type": "space", "height": 80 },
-                    { "type": "seats", "positions": [ [83, 84, null, "MIN", "MIN"] ] },
-                    { "type": "seats", "positions": [ [85, 86, null, "EQ", "EQ"] ] },
-                    { "type": "seats", "positions": [ [89, 90, null, 88, 87] ] },
-                    { "type": "seats", "positions": [ [93, 94, null, 92, 91] ] },
-                    { "type": "seats", "positions": [ [97, 98, null, 96, 95] ] },
-                    { "type": "seats", "positions": [ [101, 102, null, 100, 99] ] },
-                    { "type": "seats", "positions": [ [105, 106, null, 104, 103] ] },
-                    { "type": "seats", "positions": [ [109, 110, null, 108, 107] ] },
-                    { "type": "seats", "positions": [ [113, 114, null, 112, 111] ] },
-                    { "type": "space", "height": 80 },
-                    { "type": "seats", "positions": [ [117, 118, null, 116, 115] ] },
-                    { "type": "seats", "positions": [ [121, 122, null, 120, 119] ] },
-                    { "type": "seats", "positions": [ [125, 126, null, 124, 123] ] },
-                    { "type": "seats", "positions": [ [129, 130, null, 128, 127] ] },
-                    { "type": "seats", "positions": [ [133, 134, null, 132, 131] ] },
-                    { "type": "seats", "positions": [ [137, 138, null, 136, 135] ] },
-                    { "type": "seats", "positions": [ [141, 142, null, 140, 139] ] },
-                ],
-            },
-            {
-                id: "C3",
-                name: "Coche 3",
-                layout: [{
-                    type: "seats",
-                    positions: [
-                        [null, null, null, 144, 143]
-                    ]
-                },
-                    {
-                        type: "seats",
-                        positions: [
-                            [147, 148, null, 146, 145]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [151, 152, null, 150, 149]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [155, 156, null, 154, 153]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [159, 160, null, 158, 157]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [163, 164, null, 162, 161]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [167, 168, null, 166, 165]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 80
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [169, 170, null, "EQ", "EQ"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [171, 172, null, "EQ", "EQ"]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [175, 176, null, 174, 173]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [179, 180, null, 178, 177]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [183, 184, null, 182, 181]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [187, 188, null, 186, 185]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [191, 192, null, 190, 189]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [195, 196, null, 194, 193]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [199, 200, null, 198, 197]
-                        ]
-                    },
-                    {
-                        type: "space",
-                        height: 160
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [203, 204, null, 202, 201]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [207, 208, null, 206, 205]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [211, 212, null, 210, 209]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [215, 216, null, 214, 213]
-                        ]
-                    },
-                    {
-                        type: "seats",
-                        positions: [
-                            [219, 220, null, 218, 217]
-                        ]
-                    },
-                ],
-            },
-        ],
+                    "C": {
+                        layout: [{
+                            type: "seats",
+                            positions: [[173, 174, null, 176, 175]]
+                        },
+                            {
+                                type: "seats",
+                                positions: [[177, 178, null, 180, 179]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[181, 182, null, 184, 183]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[185, 186, null, 188, 187]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[189, 190, null, 192, 191]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[193, 194, null, 196, 195]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[197, 198, null, 200, 199]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[201, 202, null, 204, 203]]
+                            },
+                            {
+                                type: "space",
+                                height: 120
+                            },
+                            {
+                                type: "seats",
+                                positions: [[205, 206, null, 208, 207]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[209, 210, null, 212, 211]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[213, 214, null, 216, 215]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[217, 218, null, 220, 219]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[221, 222, null, 224, 223]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[225, 226, null, 228, 227]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[229, 230, null, 232, 231]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[233, 234, null, 236, 235]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[237, 238, null, null, null]]
+                            },
+                            {
+                                type: "space",
+                                height: 120
+                            },
+                            {
+                                type: "seats",
+                                positions: [[241, 242, null, 240, 239]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[245, 246, null, 244, 243]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[249, 250, null, 248, 247]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[253, 254, null, 252, 251]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[257, 258, null, 256, 255]]
+                            },
+                            {
+                                type: "seats",
+                                positions: [[261, 262, null, 260, 259]]
+                            }]
+                    }
+                }
+            }
+        ]
     }
 };
 
@@ -2725,14 +2912,23 @@ let state = {
     currentStopSearch: '',
     headerCollapsed: false,
     coachPositions: {},
-    copyMode: false      // 👈 NUEVO
+    copyMode: false,
+    coach470Variants: {    // 👈 AÑADIR ESTO
+        "C1": "A",
+        "C2": "A",
+        "C3": "A"
+    }
 };
 
 let savedScrollPosition = 0;
 let isModalOpen = false;
 
 let _currentScreen = "arrivals";
-
+// Variables para doble tap en botones de coche 470
+let coachTapTimer = null;
+let coachLastTapTime = 0;
+let coachLastTappedId = null;
+const COACH_DOUBLE_TAP_DELAY = 300; // ms
 // Última parada copiada (para el modo copiar)
 let lastCopiedStop = null;
 
@@ -2819,6 +3015,15 @@ function loadData() {
     if (savedHeaderState) {
         state.headerCollapsed = savedHeaderState === 'true';
     }
+    // Cargar variantes del tren 470
+    const saved470Variants = localStorage.getItem('coach470Variants');
+    if (saved470Variants) {
+        try {
+            state.coach470Variants = JSON.parse(saved470Variants);
+        } catch (e) {
+            console.error("Error loading 470 variants");
+        }
+    }
 }
 
 // Guardar datos
@@ -2827,11 +3032,29 @@ function saveData() {
         `train${state.selectedTrain}Data`,
         JSON.stringify(state.seatData)
     );
+    // Guardar variantes del tren 470
+    if (state.selectedTrain === "470") {
+        localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
+    }
 }
 
 // Obtener clave del asiento
 function getSeatKey(coachId, seatNum) {
+    // 🔴 NUEVO: Para el 470, incluir la variante en la key
+    if (state.selectedTrain === "470") {
+        const variant = state.coach470Variants[coachId] || "A";
+        return `${coachId}-${variant}-${String(seatNum)}`;
+    }
     return `${coachId}-${String(seatNum)}`;
+}
+
+// Obtener layout del coche actual (con soporte para variantes del 470)
+function getCurrentCoachLayout(coach) {
+    if (state.selectedTrain === "470" && coach.variants) {
+        const variant = state.coach470Variants[coach.id] || "A";
+        return coach.variants[variant].layout;
+    }
+    return coach.layout;
 }
 
 // Actualizar asiento
@@ -2951,7 +3174,11 @@ function toggleDirection(coachId) {
 function selectTrain(trainId) {
     if (trainModels[trainId]) {
         state.selectedTrain = trainId;
-        state.selectedCoach = trainModels[trainId].coaches[0].id;
+
+        // 🔴 NUEVO: Manejar correctamente el primer coche
+        const firstCoach = trainModels[trainId].coaches[0];
+        state.selectedCoach = firstCoach.id;
+
         state.seatData = {};
         state.trainDirection = {};
         state.selectedSeat = null;
@@ -2979,8 +3206,57 @@ function selectTrain(trainId) {
             }
         }
 
+// 🔴 NUEVO: Cargar variantes del 470 si es ese tren
+        if (trainId === "470") {
+            const saved470Variants = localStorage.getItem('coach470Variants');
+            if (saved470Variants) {
+                try {
+                    state.coach470Variants = JSON.parse(saved470Variants);
+                } catch (e) {
+                    console.error("Error loading 470 variants");
+                    // Valores por defecto si hay error
+                    state.coach470Variants = {
+                        "C1": "A",
+                        "C2": "A",
+                        "C3": "A"
+                    };
+                }
+            } else {
+                // Inicializar con valores por defecto
+                state.coach470Variants = {
+                    "C1": "A",
+                    "C2": "A",
+                    "C3": "A"
+                };
+            }
+
+            // 🔴 NUEVO: Migrar datos antiguos sin variante a formato con variante
+            const newSeatData = {};
+            Object.keys(state.seatData).forEach(key => {
+                // Si la key no tiene variante (formato antiguo: C1-12)
+                if (key.match(/^C\d+-\d+/) || key.match(/^C\d+-[A-Z0-9]+$/)) {
+                    const parts = key.split('-');
+                    if (parts.length === 2) {
+                        const [coach, seat] = parts;
+                        // Migrar a variante A por defecto
+                        const newKey = `${coach}-A-${seat}`;
+                        newSeatData[newKey] = state.seatData[key];
+                    } else {
+                        // Ya tiene formato con variante
+                        newSeatData[key] = state.seatData[key];
+                    }
+                } else {
+                    // Mantener otras keys sin cambios
+                    newSeatData[key] = state.seatData[key];
+                }
+            });
+            state.seatData = newSeatData;
+            saveData(); // Guardar la migración
+        }
+
         render();
     }
+
     // Cerrar el menú después de cambiar de tren
     setTimeout(() => {
         const selector = document.getElementById('train-selector');
@@ -3658,7 +3934,7 @@ ${state.trainNumber ? `
                     </svg>
                 </button>
                 <div class="coach-selector">
-                    ${currentTrain.coaches
+                 ${currentTrain.coaches
         .map((coach) => {
             // ------------- CALCULAR OCUPACIÓN -------------
             const coachId = coach.id;
@@ -3667,8 +3943,11 @@ ${state.trainNumber ? `
             const seatKeys = Object.keys(state.seatData || {})
                 .filter(k => k.startsWith(`${coachId}-`));
 
+            // 🔴 NUEVO: Obtener layout correcto (con soporte para variantes)
+            const coachLayout = getCurrentCoachLayout(coach);
+
             // total de asientos reales en este coche
-            const totalSeats = coach.layout
+            const totalSeats = coachLayout
                 .flatMap(block => block.type === "seats" ? block.positions : [])
                 .flat()
                 .filter(n => typeof n === "number").length;
@@ -3724,7 +4003,8 @@ function renderSeats() {
         html += `<div class="cabina-label">${label}</div>`;
     }
 
-    currentCoach.layout.forEach((section) => {
+    const coachLayout = getCurrentCoachLayout(currentCoach);
+    coachLayout.forEach((section) => {
         if (section.type === "pmr-bathroom") {
             const label = section.label || "BAÑO PMR";
             html += `<div class="pmr-bathroom" style="height: ${section.height}px">${label}</div>`;
@@ -4734,23 +5014,43 @@ function enableCoachLongPress() {
     buttons.forEach(btn => {
         const coachId = btn.textContent.trim();
 
-        // Cuando se inicia la pulsación
+        // 🔴 DOBLE TAP para 470
+        if (state.selectedTrain === "470") {
+            btn.addEventListener("click", (e) => {
+                const now = Date.now();
+
+                // Si es doble tap (mismo botón, menos de 300ms)
+                if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+
+                    // Mostrar selector de variantes
+                    show470VariantSelector(coachId, btn);
+
+                    // Resetear
+                    coachLastTapTime = 0;
+                    coachLastTappedId = null;
+                    return false;
+                }
+
+                // Registrar tap
+                coachLastTapTime = now;
+                coachLastTappedId = coachId;
+
+                // Permitir tap normal (cambio de coche)
+                selectCoach(coachId);
+            });
+        } else {
+            // Comportamiento normal para otros trenes
+            btn.addEventListener("click", () => selectCoach(coachId));
+        }
+
+        // LONG PRESS (estadísticas) - funciona en todos los trenes
         btn.addEventListener("mousedown", startPress);
         btn.addEventListener("touchstart", startPress, { passive: true });
-
-        // Cuando se suelta o cancela
         btn.addEventListener("mouseup", endPress);
         btn.addEventListener("touchend", endPress);
         btn.addEventListener("touchcancel", endPress);
-
-        // IMPORTANTE: mouseleave solo debe cancelar el timer, NO ejecutar nada
-        btn.addEventListener("click", (e) => {
-            if (btn.dataset.longpressLock === "1") {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                return false;
-            }
-        });
 
         function startPress(e) {
             coachHoldTriggered = false;
@@ -4759,24 +5059,12 @@ function enableCoachLongPress() {
             clearTimeout(coachHoldTimer);
             coachHoldTimer = setTimeout(() => {
                 coachHoldTriggered = true;
-                btn.dataset.longpressLock = "1";  // 🔒 Bloquea el click normal
+                btn.dataset.longpressLock = "1";
                 showCoachStats(coachId);
             }, 600);
         }
 
         function endPress(e) {
-            clearTimeout(coachHoldTimer);
-
-            // Si NO hubo longpress → comportamiento normal
-            if (!coachHoldTriggered && btn.dataset.longpressLock !== "1") {
-                selectCoach(coachId);
-            }
-
-            coachHoldTriggered = false;
-        }
-
-        function cancelPress(e) {
-            // Solo cancelar el timer, NO ejecutar selectCoach
             clearTimeout(coachHoldTimer);
             coachHoldTriggered = false;
         }
@@ -4792,25 +5080,34 @@ function showCoachStats(coachId) {
         coachDef = train.coaches.find(c => String(c.id) === String(coachId));
     }
 
-    // 2) Obtén lista de IDs de asiento del layout (si existe), si no, fallback a keys en state
+    // 2) Obtén lista de IDs de asiento del layout
     let seatIds = [];
 
-    if (coachDef && Array.isArray(coachDef.layout)) {
-        coachDef.layout.forEach(block => {
-            if (block.type === 'seats' && Array.isArray(block.positions)) {
-                block.positions.forEach(row => {
-                    row.forEach(cell => {
-                        if (cell === null) return;
-                        // Normalizamos a string
-                        const sid = String(cell);
-                        // Excluir marcadores no-asiento (WC, EQ, MESA, etc.) — amplia si tienes más
-                        const nonSeatMarkers = ['WC', 'EQ', 'MESA', 'PMR', 'ESPACIO', 'BANO', 'BAÑO'];
-                        if (nonSeatMarkers.includes(sid.toUpperCase())) return;
-                        seatIds.push(sid);
+    if (coachDef) {
+        // 🔴 NUEVO: Usar getCurrentCoachLayout para obtener el layout correcto
+        const layout = getCurrentCoachLayout(coachDef);
+
+        if (Array.isArray(layout)) {
+            layout.forEach(block => {
+                if (block.type === 'seats' && Array.isArray(block.positions)) {
+                    block.positions.forEach(row => {
+                        row.forEach(cell => {
+                            if (cell === null) return;
+                            // Normalizamos a string
+                            const sid = String(cell);
+                            // Excluir marcadores no-asiento
+                            const nonSeatMarkers = ['WC', 'EQ', 'MESA', 'PMR', 'ESPACIO', 'BANO', 'BAÑO', 'MIN', 'S1', 'S2', 'S3', 'S4'];
+                            // Verificar si el asiento contiene algún marcador (case insensitive)
+                            const isNonSeat = nonSeatMarkers.some(marker =>
+                                sid.toUpperCase().includes(marker)
+                            );
+                            if (isNonSeat) return;
+                            seatIds.push(sid);
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
     }
 
     // Fallback: si no hemos obtenido asientos desde layout, construir lista desde state.seatData keys
@@ -4824,7 +5121,6 @@ function showCoachStats(coachId) {
                 seatIds.push(String(idPart));
             }
         });
-        // Si aún así no hay nada, como último recurso usamos los botones de DOM (si existen)
     }
 
     // Evitar duplicados
@@ -4841,24 +5137,23 @@ function showCoachStats(coachId) {
                 occupied += 1;
             }
         } catch (e) {
-            // no romper si getSeatKey no está disponible (debería estar)
             console.warn('showCoachStats: error comprobando asiento', e);
         }
     });
 
     const free = Math.max(0, total - occupied);
 
-    // 4) Mostrar popup (igual que antes, centrado)
+    // 4) Mostrar popup
     const popup = document.createElement("div");
     popup.className = "coach-popup";
     popup.innerHTML = `
-  <div class="coach-popup-content">
-    <strong>${coachId}</strong><br>
-    Ocupados: ${occupied}<br>
-    Libres: ${free}<br>
-    Porcentaje: ${total > 0 ? Math.round((occupied / total) * 100) : 0}%
-  </div>
-`;
+        <div class="coach-popup-content">
+            <strong>${coachId}</strong><br>
+            Ocupados: ${occupied}<br>
+            Libres: ${free}<br>
+            Porcentaje: ${total > 0 ? Math.round((occupied / total) * 100) : 0}%
+        </div>
+    `;
 
     document.body.appendChild(popup);
 
@@ -4869,6 +5164,100 @@ function showCoachStats(coachId) {
     popup.style.zIndex = "9999";
 
     setTimeout(() => popup.remove(), 2500);
+}
+
+// Mostrar selector de variantes del 470
+// Mostrar selector de variantes del 470
+function show470VariantSelector(coachId, buttonElement) {
+    // Eliminar selector previo si existe
+    const existingSelector = document.querySelector('.variant-selector-popup');
+    if (existingSelector) existingSelector.remove();
+
+    const currentVariant = state.coach470Variants[coachId] || "A";
+
+    const popup = document.createElement("div");
+    popup.className = "variant-selector-popup";
+    popup.innerHTML = `
+        <div class="variant-selector-content">
+            <div class="variant-selector-title">${coachId} - Seleccionar variante</div>
+            <button class="variant-option ${currentVariant === 'A' ? 'active' : ''}" 
+                    onclick="select470Variant('${coachId}', 'A')">
+                Variante A
+            </button>
+            <button class="variant-option ${currentVariant === 'B' ? 'active' : ''}" 
+                    onclick="select470Variant('${coachId}', 'B')">
+                Variante B
+            </button>
+            <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}" 
+                    onclick="select470Variant('${coachId}', 'C')">
+                Variante C
+            </button>
+            <button class="variant-cancel" onclick="closeVariantSelector()">
+                Cancelar
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    // 🔴 MEJORADO: Posicionamiento más robusto
+    const rect = buttonElement.getBoundingClientRect();
+    const popupHeight = 240; // altura aproximada del popup
+    const popupWidth = 200;
+
+    // Calcular posición centrada debajo del botón
+    let top = rect.bottom + 10;
+    let left = rect.left + (rect.width / 2);
+
+    // Ajustar si se sale de la pantalla por abajo
+    if (top + popupHeight > window.innerHeight) {
+        top = rect.top - popupHeight - 10; // Mostrar arriba del botón
+    }
+
+    // Ajustar si se sale por la derecha
+    if (left + (popupWidth / 2) > window.innerWidth) {
+        left = window.innerWidth - (popupWidth / 2) - 20;
+    }
+
+    // Ajustar si se sale por la izquierda
+    if (left - (popupWidth / 2) < 0) {
+        left = (popupWidth / 2) + 20;
+    }
+
+    popup.style.position = "fixed";
+    popup.style.top = `${top}px`;
+    popup.style.left = `${left}px`;
+    popup.style.transform = "translateX(-50%)";
+    popup.style.zIndex = "10000";
+
+    // Cerrar al hacer clic fuera
+    setTimeout(() => {
+        document.addEventListener('click', function closeOnClickOutside(e) {
+            if (!popup.contains(e.target) && !buttonElement.contains(e.target)) {
+                popup.remove();
+                document.removeEventListener('click', closeOnClickOutside);
+            }
+        });
+    }, 100);
+}
+
+// Seleccionar variante del 470
+function select470Variant(coachId, variant) {
+    state.coach470Variants[coachId] = variant;
+    localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
+
+    closeVariantSelector();
+
+    // Re-renderizar si estamos viendo ese coche
+    if (state.selectedCoach === coachId) {
+        render();
+    }
+}
+
+// Cerrar selector de variantes
+function closeVariantSelector() {
+    const popup = document.querySelector('.variant-selector-popup');
+    if (popup) popup.remove();
 }
 
 // Reaplicar después de render (los botones se regeneran)
@@ -4934,6 +5323,9 @@ window.modalSwipeStart = modalSwipeStart;
 window.modalSwipeMove = modalSwipeMove;
 window.modalSwipeEnd = modalSwipeEnd;
 window.navigateToSeat = navigateToSeat;
+window.show470VariantSelector = show470VariantSelector;
+window.select470Variant = select470Variant;
+window.closeVariantSelector = closeVariantSelector;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
