@@ -420,7 +420,7 @@ const trainModels = {
                 layout: [
                     { type: "seats", positions: [[118, null, null, null, 119]] },
                     { type: "seats", positions: [[120, null, null, null, 121]] },
-                    { type: "space", height: 50 },
+                    { type: "space", height: 80 },
                     { type: "seats", positions: [[122, 123, null, 124, 125]] },
                     { type: "seats", positions: [["S1", "PMR-126", null, "PMR-127", "S3"]] },
                     { type: "seats", positions: [["S2", null, null, null, "S4"]] },
@@ -550,7 +550,7 @@ const trainModels = {
                 layout: [
                     { type: "seats", positions: [[118, null, null, null, 119]] },
                     { type: "seats", positions: [[120, null, null, null, 121]] },
-                    { type: "space", height: 50 },
+                    { type: "space", height: 80 },
                     { type: "seats", positions: [[122, 123, null, 124, 125]] },
                     { type: "seats", positions: [["PMR-126", null, null, null, "PMR-127"]] },
                     { type: "pmr-bathroom", height: 160 },
@@ -653,7 +653,7 @@ const trainModels = {
                     { type: "seats", positions: [[23, 24, null, 22, 21]] },
                     { type: "seats", positions: [[27, 28, null, 26, 25]] },
                     { type: "seats", positions: [[29, 30, null, "EQ", "EQ"]] },
-                    { type: "seats", positions: [[null, null, null, "WC", "WC"]] },
+                    { type: "seats", positions: [[null, null, null, "WC-A", "WC-A"]] },
                     { type: "space", height: 120 },
                     { type: "seats", positions: [["EQ", "EQ", null, 32, 31]] },
                     { type: "seats", positions: [[35, 36, null, 34, 33]] },
@@ -700,7 +700,7 @@ const trainModels = {
                     { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
                     { type: "seats", positions: [[127, 128, null, 126, 125]] },
                     { type: "pmr-bathroom", height: 160, label: "ESPACIO OCIO, BAÑO PMR, BICIS, VENDING..." },
-                    { type: "space", height: 60 },
+                    { type: "space", height: 80 },
                     { type: "seats", positions: [["EQ", null, null, null, "PMR-0"]] },
                     { type: "space", height: 40 },
                     { type: "seats", positions: [["S3", "S4", null, "S2", "S1"]] },
@@ -748,7 +748,7 @@ const trainModels = {
                     { type: "seats", positions: [[221, 222, null, 220, 219]] },
                     { type: "seats", positions: [[225, 226, null, 224, 223]] },
                     { type: "seats", positions: [[227, 228, null, "EQ", "EQ"]] },
-                    { type: "space", height: 160 },
+                    { type: "space", height: 100 },
                     { type: "seats", positions: [["EQ", "EQ", null, 230, 229]] },
                     { type: "seats", positions: [[233, 234, null, 232, 231]] },
                     { type: "seats", positions: [[237, 238, null, 236, 235]] },
@@ -965,7 +965,7 @@ const trainModels = {
                         layout: [
                             {
                                 type: "space",
-                                height: 80
+                                height: 60
                             },
                             {
                                 type: "seats",
@@ -1037,7 +1037,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 100
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1085,11 +1085,11 @@ const trainModels = {
                     "A": {
                         layout: [{
                             type: "seats",
-                            positions: [[61, 62, null, "WC", "WC"]]
+                            positions: [[61, 62, null, "WC-A", "WC-A"]]
                         },
                             {
                                 type: "seats",
-                                positions: [[63, 64, null, "WC", "WC"]]
+                                positions: [[63, 64, null, "WC-A", "WC-A"]]
                             },
                             {
                                 type: "seats",
@@ -1177,21 +1177,21 @@ const trainModels = {
                             },
                             {
                                 type: "seats",
-                                positions: [["WC", "WC", null, 138, 137]]
+                                positions: [["WC-B", "WC-B", null, 138, 137]]
                             },
                             {
                                 type: "seats",
-                                positions: [["WC", "WC", null, 140, 139]]
+                                positions: [["WC-B", "WC-B", null, 140, 139]]
                             }]
                     },
                     "B": {
                         layout: [{
                             type: "seats",
-                            positions: [[null, null, null, "WC", "WC"]]
+                            positions: [[null, null, null, "WC-A", "WC-A"]]
                         },
                             {
                                 type: "seats",
-                                positions: [[61, 62, null, "WC", "WC"]]
+                                positions: [[61, 62, null, "WC-A", "WC-A"]]
                             },
                             {
                                 type: "seats",
@@ -1290,11 +1290,11 @@ const trainModels = {
                         layout: [
                             {
                                 type: "seats",
-                                positions: [[87, 88, null, "WC", "WC"]]
+                                positions: [[87, 88, null, "WC-A", "WC-A"]]
                             },
                             {
                                 type: "seats",
-                                positions: [[89, 90, null, "WC", "WC"]]
+                                positions: [[89, 90, null, "WC-A", "WC-A"]]
                             },
                             {
                                 type: "seats",
@@ -1318,7 +1318,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 100
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1394,11 +1394,11 @@ const trainModels = {
                             },
                             {
                                 type: "seats",
-                                positions: [["WC", "WC", null, 170, 169]]
+                                positions: [["WC-B", "WC-B", null, 170, 169]]
                             },
                             {
                                 type: "seats",
-                                positions: [["WC", "WC", null, 172, 171]]
+                                positions: [["WC-B", "WC-B", null, 172, 171]]
                             }]
                     }
                 }
@@ -1478,7 +1478,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 160
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1572,7 +1572,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 160
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1630,7 +1630,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 120
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1670,7 +1670,7 @@ const trainModels = {
                             },
                             {
                                 type: "space",
-                                height: 120
+                                height: 80
                             },
                             {
                                 type: "seats",
@@ -1892,7 +1892,7 @@ const trainRoutes = {
     '18079': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '18022': ['Vitoria Gasteiz', 'Alegria Dulantzi', 'Agurain Salvatierra', 'Araia', 'Altsasu Pueblo', 'Etxarri Aranatz', 'Uharte Arakil', 'Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón'],
     '18068': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
-    '18074': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
+    '18074': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18046': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18073': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '16020': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores']
@@ -2882,7 +2882,22 @@ function toggleFiltersMenu() {
 
 function toggleCopyMode() {
     state.copyMode = !state.copyMode;
-    showCopyBanner(state.copyMode ? "Copiado activado" : "Copiado desactivado");
+
+    let bannerText = state.copyMode ? "Copiado activado" : "Copiado desactivado";
+
+    // Si está activando y hay datos copiados, mostrar resumen
+    if (state.copyMode && lastCopiedSeatData) {
+        const stopName = lastCopiedSeatData.stop ? lastCopiedSeatData.stop.abbr : "?";
+        const flags = [];
+        if (lastCopiedSeatData.enlace) flags.push("Enlace");
+        if (lastCopiedSeatData.seguir) flags.push("Seguir");
+        if (lastCopiedSeatData.comentarioFlag) flags.push("Comentario");
+
+        const flagsText = flags.length > 0 ? ` (${flags.join(", ")})` : "";
+        bannerText = `Copiado: ${stopName}${flagsText}`;
+    }
+
+    showCopyBanner(bannerText);
     render();
 }
 
@@ -2913,7 +2928,9 @@ let state = {
     headerCollapsed: false,
     coachPositions: {},
     copyMode: false,
-    coach470Variants: {    // 👈 AÑADIR ESTO
+    serviceNotes: "",
+    incidents: {},
+    coach470Variants: {
         "C1": "A",
         "C2": "A",
         "C3": "A"
@@ -2929,8 +2946,8 @@ let coachTapTimer = null;
 let coachLastTapTime = 0;
 let coachLastTappedId = null;
 const COACH_DOUBLE_TAP_DELAY = 300; // ms
-// Última parada copiada (para el modo copiar)
-let lastCopiedStop = null;
+// Última información copiada (para el modo copiar) - ahora copia TODO
+let lastCopiedSeatData = null;
 
 // Estado para filtros
 let filterState = {
@@ -3024,6 +3041,31 @@ function loadData() {
             console.error("Error loading 470 variants");
         }
     }
+    // Cargar notas del servicio
+    const savedNotes = localStorage.getItem(`train${state.selectedTrain}Notes`);
+    if (savedNotes) {
+        state.serviceNotes = savedNotes;
+    }
+    // Cargar incidencias
+    const savedIncidents = localStorage.getItem(`train${state.selectedTrain}Incidents`);
+    if (savedIncidents) {
+        try {
+            state.incidents = JSON.parse(savedIncidents);
+        } catch (e) {
+            console.error("Error loading incidents");
+            state.incidents = {};
+        }
+    }
+    // Cargar datos copiados del modo copia
+    const savedCopiedData = localStorage.getItem(`train${state.selectedTrain}CopiedData`);
+    if (savedCopiedData) {
+        try {
+            lastCopiedSeatData = JSON.parse(savedCopiedData);
+            state.lastCopiedSeatData = { ...lastCopiedSeatData };
+        } catch (e) {
+            console.error("Error loading copied data");
+        }
+    }
 }
 
 // Guardar datos
@@ -3035,6 +3077,14 @@ function saveData() {
     // Guardar variantes del tren 470
     if (state.selectedTrain === "470") {
         localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
+    }
+    // Guardar notas del servicio
+    localStorage.setItem(`train${state.selectedTrain}Notes`, state.serviceNotes || "");
+    // Guardar incidencias
+    localStorage.setItem(`train${state.selectedTrain}Incidents`, JSON.stringify(state.incidents));
+    // Guardar datos copiados del modo copia
+    if (lastCopiedSeatData) {
+        localStorage.setItem(`train${state.selectedTrain}CopiedData`, JSON.stringify(lastCopiedSeatData));
     }
 }
 
@@ -3065,12 +3115,18 @@ function updateSeat(coachId, seatNum, stop) {
         state.seatData[key] = {};
     }
 
-    // Guardar la parada en el asiento
+// Guardar la parada en el asiento
     state.seatData[key].stop = stop;
 
-    // 🟢 Guardar la última parada copiada (para el modo copia)
-    lastCopiedStop = stop;
-    state.lastCopiedStop = stop;
+    // 🔴 NUEVO: Guardar TODA la información del asiento (no solo la parada)
+    lastCopiedSeatData = {
+        stop: stop,
+        enlace: state.seatData[key].enlace || false,
+        seguir: state.seatData[key].seguir || false,
+        comentarioFlag: state.seatData[key].comentarioFlag || false,
+        comentario: state.seatData[key].comentario || ""
+    };
+    state.lastCopiedSeatData = { ...lastCopiedSeatData };
 
     saveData();
 
@@ -3098,13 +3154,37 @@ function updateSeatFromList(abbr) {
 
 // Borrar asiento
 function clearSeat(coachId, seatNum) {
-    // Convertir a string para manejar tanto números como strings tipo 'PMR-97'
     const key = getSeatKey(coachId, String(seatNum));
-    delete state.seatData[key];
+    const seatInfo = state.seatData[key];
+
+    if (seatInfo) {
+        // 🔴 NUEVO: Añadir parada actual al historial antes de borrar
+        if (seatInfo.stop && seatInfo.stop.full) {
+            if (!seatInfo.historial) {
+                seatInfo.historial = [];
+            }
+            // Evitar duplicados
+            if (!seatInfo.historial.includes(seatInfo.stop.full)) {
+                seatInfo.historial.push(seatInfo.stop.full);
+            }
+        }
+
+        // Borrar parada, flags y comentarios
+        delete seatInfo.stop;
+        delete seatInfo.enlace;
+        delete seatInfo.seguir;
+        delete seatInfo.comentarioFlag;
+        delete seatInfo.comentario;
+
+        // Si no queda historial, eliminar la key completamente
+        if (!seatInfo.historial || seatInfo.historial.length === 0) {
+            delete state.seatData[key];
+        }
+    }
+
     saveData();
     state.selectedSeat = null;
     unlockBodyScroll();
-    state.selectedSeat = null;
     render();
 }
 
@@ -3122,6 +3202,12 @@ function toggleFlag(coachId, seatNum, flagName) {
 
     saveData();
 
+    // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
+    if (state.copyMode && lastCopiedSeatData) {
+        lastCopiedSeatData[flagName] = state.seatData[key][flagName];
+        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+    }
+
     // Guardar posición del scroll antes de renderizar
     saveModalScrollPosition();
     render();
@@ -3135,6 +3221,13 @@ function updateComment(coachId, seatNum, comment) {
         state.seatData[key] = {};
     }
     state.seatData[key].comentario = comment;
+
+    // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
+    if (state.copyMode && lastCopiedSeatData) {
+        lastCopiedSeatData.comentario = comment;
+        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+    }
+
     saveData();
 }
 
@@ -3171,6 +3264,17 @@ function toggleDirection(coachId) {
     render();
 }
 
+// Obtener texto del lado de la puerta según rotación
+function getDoorSideText(side) {
+    // side puede ser "L" (Left) o "R" (Right)
+    // Si los asientos están rotados, invertimos los nombres
+    if (state.rotateSeats) {
+        return side === 'L' ? 'Derecha' : 'Izquierda';
+    } else {
+        return side === 'L' ? 'Izquierda' : 'Derecha';
+    }
+}
+
 function selectTrain(trainId) {
     if (trainModels[trainId]) {
         state.selectedTrain = trainId;
@@ -3184,6 +3288,7 @@ function selectTrain(trainId) {
         state.selectedSeat = null;
         state.searchQuery = "";
         state.coachPositions = {};
+        state.incidents = {};
 
         localStorage.setItem("selectedTrain", trainId);
 
@@ -3325,6 +3430,11 @@ function showTrainNumberPrompt() {
         state.seatData = {};
         // 2) Eliminar direcciones guardadas del tren (opcional/seguro)
         state.trainDirection = {};
+        // 3) Eliminar notas del servicio anterior
+        state.serviceNotes = "";
+        state.incidents = {};
+        lastCopiedSeatData = null;  // 👈 AÑADIR ESTO
+        state.lastCopiedSeatData = null;  // 👈 AÑADIR ESTO
 
         // 3) Eliminar las claves de localStorage relativas al tren que estaba en uso
         //    Usamos state.selectedTrain (modelo: 463, 464...) porque el guardado por asiento
@@ -3332,6 +3442,8 @@ function showTrainNumberPrompt() {
         try {
             localStorage.removeItem(`train${state.selectedTrain}Data`);
             localStorage.removeItem(`train${state.selectedTrain}Direction`);
+            localStorage.removeItem(`train${state.selectedTrain}Notes`);
+            localStorage.removeItem(`train${state.selectedTrain}Incidents`);
         } catch (e) {
             console.warn('No se pudo eliminar las claves antiguas de localStorage', e);
         }
@@ -3388,14 +3500,16 @@ function applyCurrentStopChange(stopName, route, stopIndex) {
                     if (!seatInfo.historial) {
                         seatInfo.historial = [];
                     }
-                    seatInfo.historial.push(seatInfo.stop.full);
+                    // 🔴 NUEVO: Evitar duplicados en el historial
+                    if (!seatInfo.historial.includes(seatInfo.stop.full)) {
+                        seatInfo.historial.push(seatInfo.stop.full);
+                    }
 
-                    // Borrar TODO: parada, flags, comentarios
+                    // Borrar parada y flags (mantener comentarios por ahora)
                     delete seatInfo.stop;
                     delete seatInfo.enlace;
                     delete seatInfo.seguir;
-                    delete seatInfo.comentario;
-                    delete seatInfo.comentarioFlag;
+                    // Mantener: comentario, comentarioFlag, historial
 
                     deletedCount++;
                 }
@@ -3584,14 +3698,435 @@ function closeAbout(event) {
     }
 }
 
+function openServiceNotes() {
+    const notesHTML = `
+        <div class="modal-overlay" onclick="closeServiceNotes(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Notas del servicio</h3>
+                        <button class="close-btn" onclick="closeServiceNotes()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <textarea 
+                        id="service-notes-textarea"
+                        class="service-notes-textarea"
+                        placeholder="Escribe aquí tus notas sobre el servicio..."
+                        oninput="updateServiceNotes(this.value)"
+                    >${state.serviceNotes || ""}</textarea>
+                </div>
+                <div class="modal-footer">
+                    ${state.serviceNotes ? `
+                        <button class="clear-btn delete-btn" onclick="clearServiceNotes()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 4px;">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Borrar notas
+                        </button>
+                    ` : ''}
+                    <button class="clear-btn" onclick="closeServiceNotes()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', notesHTML);
+    lockBodyScroll();
+
+    // Enfocar el textarea
+    setTimeout(() => {
+        const textarea = document.getElementById('service-notes-textarea');
+        if (textarea) textarea.focus();
+    }, 100);
+}
+
+function updateServiceNotes(value) {
+    state.serviceNotes = value;
+    saveData();
+}
+
+function clearServiceNotes() {
+    if (confirm('¿Seguro que quieres borrar todas las notas del servicio?')) {
+        state.serviceNotes = "";
+        saveData();
+        closeServiceNotes();
+    }
+}
+
+function closeServiceNotes(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+// Constante para umbral de puertas
+const DOOR_HEIGHT_THRESHOLD = 80; // 👈 Cambiar aquí para ajustar globalmente
+
+// Obtener clave de incidencia
+function getIncidentKey(coachId, elementId) {
+    return `${coachId}-${elementId}`;
+}
+
+// Toggle incidencia (marcar/desmarcar)
+function toggleIncident(coachId, elementId, elementType) {
+    const key = getIncidentKey(coachId, elementId);
+
+    if (state.incidents[key]) {
+        // Ya existe, borrar
+        delete state.incidents[key];
+    } else {
+        // Crear nueva incidencia
+        state.incidents[key] = {
+            type: elementType,
+            broken: true,
+            note: ""
+        };
+    }
+
+    saveData();
+    render();
+}
+
+// Abrir modal para añadir nota a incidencia
+function openIncidentNote(coachId, elementId, elementType, elementLabel) {
+    const key = getIncidentKey(coachId, elementId);
+    const incident = state.incidents[key] || { type: elementType, broken: true, note: "" };
+
+    const modalHTML = `
+        <div class="modal-overlay" onclick="closeIncidentNote(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Incidencia: ${elementLabel}</h3>
+                        <button class="close-btn" onclick="closeIncidentNote()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <textarea 
+                        id="incident-note-textarea"
+                        class="service-notes-textarea"
+                        placeholder="Describe la incidencia..."
+                        style="min-height: 150px;"
+                    >${incident.note || ""}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="clear-btn" style="background-color: #4f46e5;" 
+                            onclick="saveIncidentNote('${coachId}', '${elementId}', '${elementType}')">
+                        Guardar
+                    </button>
+                    <button class="clear-btn" onclick="closeIncidentNote()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    lockBodyScroll();
+
+    setTimeout(() => {
+        const textarea = document.getElementById('incident-note-textarea');
+        if (textarea) textarea.focus();
+    }, 100);
+}
+
+// Guardar nota de incidencia
+function saveIncidentNote(coachId, elementId, elementType) {
+    const textarea = document.getElementById('incident-note-textarea');
+    const note = textarea ? textarea.value : "";
+
+    const key = getIncidentKey(coachId, elementId);
+
+    if (!state.incidents[key]) {
+        state.incidents[key] = {
+            type: elementType,
+            broken: true,
+            note: note
+        };
+    } else {
+        state.incidents[key].note = note;
+    }
+
+    saveData();
+    closeIncidentNote();
+    render();
+}
+
+// Cerrar modal de nota de incidencia
+function closeIncidentNote(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+// Abrir panel de incidencias (resumen)
+function openIncidentsPanel() {
+    const incidentCount = Object.keys(state.incidents).length;
+
+    if (incidentCount === 0) {
+        alert('No hay incidencias registradas actualmente.');
+        return;
+    }
+
+    // Agrupar por coche
+    const byCoach = {};
+    Object.keys(state.incidents).forEach(key => {
+        const [coachId] = key.split('-');
+        if (!byCoach[coachId]) byCoach[coachId] = [];
+        byCoach[coachId].push({ key, data: state.incidents[key] });
+    });
+
+    let incidentsHTML = '';
+    Object.keys(byCoach).sort().forEach(coachId => {
+        incidentsHTML += `
+            <div class="incidents-group">
+                <h4 style="margin: 0.5rem 0; font-weight: 600;">${coachId}</h4>
+        `;
+        byCoach[coachId].forEach(({ key, data }) => {
+            const parts = key.split('-');
+            let label = parts.slice(1).join('-');
+
+// Mejorar formato del label
+            if (label.includes('D') && (label.includes('-L') || label.includes('-R'))) {
+                // Es una puerta (ej: "D1-L" o "D2-R")
+                const doorMatch = label.match(/D(\d+)-(L|R)/);
+                if (doorMatch) {
+                    const doorNum = doorMatch[1];
+                    const side = getDoorSideText(doorMatch[2]); // 👈 USA LA FUNCIÓN
+                    label = `Puerta ${doorNum} - ${side}`;
+                }
+            } else if (label === 'PMR-WC') {
+                label = 'Baño PMR';
+            } else if (label.startsWith('WC')) {
+                // WC individual
+                label = `WC ${label.replace('WC', '')}`;
+            }
+            const typeLabel = data.type === 'door' ? '🚪' : '🚽';
+            incidentsHTML += `
+                <div class="incident-item">
+                    <span>${typeLabel} ${label}</span>
+                    ${data.note ? `<small style="color: #6b7280;">${data.note}</small>` : ''}
+                    <button class="incident-remove-btn" onclick="removeIncident('${key}')">×</button>
+                </div>
+            `;
+        });
+        incidentsHTML += `</div>`;
+    });
+
+    const modalHTML = `
+        <div class="modal-overlay" onclick="closeIncidentsPanel(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Incidencias registradas (${incidentCount})</h3>
+                        <button class="close-btn" onclick="closeIncidentsPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="about-content" style="max-height: 400px; overflow-y: auto;">
+                    ${incidentsHTML}
+                </div>
+                <div class="modal-footer">
+                    <button class="clear-btn delete-btn" onclick="clearAllIncidents()">
+                        Borrar todas las incidencias
+                    </button>
+                    <button class="clear-btn" onclick="closeIncidentsPanel()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    lockBodyScroll();
+}
+
+// Cerrar panel de incidencias
+function closeIncidentsPanel(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+// Eliminar una incidencia específica
+function removeIncident(key) {
+    delete state.incidents[key];
+    saveData();
+
+    // 🔴 NO cerrar el panel, solo refrescar su contenido
+    const incidentCount = Object.keys(state.incidents).length;
+
+    if (incidentCount === 0) {
+        // Si no quedan incidencias, cerrar el panel
+        closeIncidentsPanel();
+        render();
+        return;
+    }
+
+    // Reagrupar por coche
+    const byCoach = {};
+    Object.keys(state.incidents).forEach(k => {
+        const [coachId] = k.split('-');
+        if (!byCoach[coachId]) byCoach[coachId] = [];
+        byCoach[coachId].push({ key: k, data: state.incidents[k] });
+    });
+
+    // Actualizar solo el contenido del panel
+    let incidentsHTML = '';
+    Object.keys(byCoach).sort().forEach(coachId => {
+        incidentsHTML += `
+            <div class="incidents-group">
+                <h4 style="margin: 0.5rem 0; font-weight: 600;">${coachId}</h4>
+        `;
+        byCoach[coachId].forEach(({ key: k, data }) => {
+            const parts = k.split('-');
+            let label = parts.slice(1).join('-');
+
+            // Mejorar formato del label
+            if (label.includes('D') && (label.includes('-L') || label.includes('-R'))) {
+                const doorMatch = label.match(/D(\d+)-(L|R)/);
+                if (doorMatch) {
+                    const doorNum = doorMatch[1];
+                    const side = getDoorSideText(doorMatch[2]); // 👈 USA LA FUNCIÓN
+                    label = `Puerta ${doorNum} - ${side}`;
+                }
+            } else if (label.startsWith('WC-')) {
+                // Es un grupo de WC (ej: "WC-A")
+                label = `Grupo de WC ${label.replace('WC-', '')}`;
+            } else if (label === 'PMR-WC') {
+                label = 'Baño PMR';
+            } else if (label.startsWith('WC')) {
+                // WC individual
+                label = `WC ${label.replace('WC', '')}`;
+            }
+
+            const typeLabel = data.type === 'door' ? '🚪' : '🚽';
+            incidentsHTML += `
+                <div class="incident-item">
+                    <span>${typeLabel} ${label}</span>
+                    ${data.note ? `<small style="color: #6b7280;">${data.note}</small>` : ''}
+                    <button class="incident-remove-btn" onclick="removeIncident('${k}')">×</button>
+                </div>
+            `;
+        });
+        incidentsHTML += `</div>`;
+    });
+
+    // Actualizar el contenido del modal
+    const contentDiv = document.querySelector('.about-content');
+    if (contentDiv) {
+        contentDiv.innerHTML = incidentsHTML;
+    }
+
+    // Actualizar el título con el nuevo contador
+    const titleElement = document.querySelector('.modal-title');
+    if (titleElement) {
+        titleElement.textContent = `Incidencias registradas (${incidentCount})`;
+    }
+
+    // Re-renderizar la plantilla para actualizar visual
+    render();
+}
+
+// Borrar todas las incidencias
+function clearAllIncidents() {
+    if (confirm('¿Seguro que quieres borrar todas las incidencias?')) {
+        state.incidents = {};
+        saveData();
+        closeIncidentsPanel();
+        render();
+    }
+}
+
+// Variables para long press en puertas/WC
+let doorHoldTimer = null;
+let doorHoldTriggered = false;
+const DOOR_LONG_PRESS_DURATION = 500;
+
+function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    doorHoldTriggered = false;
+    clearTimeout(doorHoldTimer);
+
+    doorHoldTimer = setTimeout(() => {
+        doorHoldTriggered = true;
+        if (navigator.vibrate) navigator.vibrate(40);
+
+        // Long press: abrir modal para nota
+        openIncidentNote(coachId, elementId, elementType, elementLabel);
+    }, DOOR_LONG_PRESS_DURATION);
+}
+
+function handleDoorRelease(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    clearTimeout(doorHoldTimer);
+
+    if (!doorHoldTriggered) {
+        // Tap simple: toggle incidencia
+        const button = event.currentTarget;
+        const elementId = button.dataset.doorId || button.dataset.wcId;
+        const elementType = button.dataset.doorId ? 'door' : 'wc';
+
+        if (elementId) {
+            toggleIncident(state.selectedCoach, elementId, elementType);
+        }
+    }
+
+    doorHoldTriggered = false;
+}
+
+function handleDoorCancel() {
+    clearTimeout(doorHoldTimer);
+    doorHoldTriggered = false;
+}
+
 function exportTurn() {
     const turnData = {
         trainModel: state.selectedTrain,
         seatData: state.seatData,
         trainDirection: state.trainDirection,
-        exportDate: new Date()
-            .toISOString(),
+        serviceNotes: state.serviceNotes || "",  // 👈 AÑADIR
+        incidents: state.incidents || {},        // 👈 AÑADIR
+        trainNumber: state.trainNumber || null,  // 👈 AÑADIR (útil para contexto)
+        currentStop: state.currentStop || null,  // 👈 AÑADIR (útil para contexto)
+        exportDate: new Date().toISOString(),
         trainName: trainModels[state.selectedTrain].name,
+        // 🔴 NUEVO: Si es tren 470, incluir variantes
+        ...(state.selectedTrain === "470" && {
+            coach470Variants: state.coach470Variants
+        })
     };
 
     const dataStr = JSON.stringify(turnData, null, 2);
@@ -3610,7 +4145,10 @@ function exportTurn() {
         date.getMinutes()
     ).padStart(2, "0")}`;
 
-    link.download = `turno-${state.selectedTrain}-${dateStr}-${timeStr}.json`;
+    // 🔴 MEJORAR: Incluir número de tren en el nombre si existe
+    const trainNumPart = state.trainNumber ? `-${state.trainNumber}` : '';
+    link.download = `turno-${state.selectedTrain}${trainNumPart}-${dateStr}-${timeStr}.json`;
+
     link.click();
 
     URL.revokeObjectURL(link.href);
@@ -3638,16 +4176,27 @@ function importTurn() {
                     return;
                 }
 
-                // Confirmar importación
+                // Preparar mensaje de confirmación con detalles
                 const trainName = turnData.trainName || turnData.trainModel;
                 const exportDate = turnData.exportDate ?
-                    new Date(turnData.exportDate)
-                        .toLocaleString("es-ES") :
+                    new Date(turnData.exportDate).toLocaleString("es-ES") :
                     "desconocida";
+
+                const trainNum = turnData.trainNumber ? `\nNúmero de tren: ${turnData.trainNumber}` : '';
+                const currentStop = turnData.currentStop ? `\nParada actual: ${turnData.currentStop}` : '';
+                const notesPreview = turnData.serviceNotes ? '\n✓ Incluye notas del servicio' : '';
+                const incidentsCount = turnData.incidents ? Object.keys(turnData.incidents).length : 0;
+                const incidentsPreview = incidentsCount > 0 ? `\n✓ Incluye ${incidentsCount} incidencia(s)` : '';
 
                 if (
                     confirm(
-                        `¿Importar turno del ${trainName}?\nFecha de exportación: ${exportDate}\n\nEsto reemplazará los datos actuales de este tren.`
+                        `¿Importar turno del ${trainName}?` +
+                        `\nFecha de exportación: ${exportDate}` +
+                        trainNum +
+                        currentStop +
+                        notesPreview +
+                        incidentsPreview +
+                        `\n\nEsto reemplazará los datos actuales de este tren.`
                     )
                 ) {
                     // Cambiar al tren correcto si es necesario
@@ -3661,11 +4210,37 @@ function importTurn() {
                         );
                     }
 
-                    // Importar datos
+                    // Importar datos de asientos
                     state.seatData = turnData.seatData || {};
+
+                    // Importar direcciones del tren
                     state.trainDirection = turnData.trainDirection || {};
 
-                    // Guardar
+                    // 🔴 NUEVO: Importar notas del servicio
+                    state.serviceNotes = turnData.serviceNotes || "";
+
+                    // 🔴 NUEVO: Importar incidencias
+                    state.incidents = turnData.incidents || {};
+
+                    // 🔴 NUEVO: Importar número de tren si existe
+                    if (turnData.trainNumber) {
+                        state.trainNumber = turnData.trainNumber;
+                        localStorage.setItem('trainNumber', turnData.trainNumber);
+                    }
+
+                    // 🔴 NUEVO: Importar parada actual si existe
+                    if (turnData.currentStop) {
+                        state.currentStop = turnData.currentStop;
+                        localStorage.setItem('currentStop', turnData.currentStop);
+                    }
+
+                    // 🔴 NUEVO: Si es tren 470, importar variantes
+                    if (turnData.trainModel === "470" && turnData.coach470Variants) {
+                        state.coach470Variants = turnData.coach470Variants;
+                        localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+                    }
+
+                    // Guardar todo en localStorage
                     localStorage.setItem(
                         `train${state.selectedTrain}Data`,
                         JSON.stringify(state.seatData)
@@ -3673,6 +4248,14 @@ function importTurn() {
                     localStorage.setItem(
                         `train${state.selectedTrain}Direction`,
                         JSON.stringify(state.trainDirection)
+                    );
+                    localStorage.setItem(
+                        `train${state.selectedTrain}Notes`,
+                        state.serviceNotes
+                    );
+                    localStorage.setItem(
+                        `train${state.selectedTrain}Incidents`,
+                        JSON.stringify(state.incidents)
                     );
 
                     // Recargar vista
@@ -3699,18 +4282,22 @@ function clearAllData() {
         // limpiar datos en memoria
         state.seatData = {};
         state.coachPositions = {};
-        state.currentStop = null;   // limpiar la parada actual también
+        state.currentStop = null;
+        state.serviceNotes = "";
+        state.incidents = {};
 
-        // guardar en localStorage usando la función correcta
+        // guardar en localStorage
         saveData();
 
-        // eliminar entradas específicas por si hay restos
+        // eliminar entradas específicas
         localStorage.removeItem('currentStop');
-        // (opcional) si quieres eliminar el trainData concreto también:
-        // localStorage.removeItem(`train${state.selectedTrain}Data`);
+        localStorage.removeItem(`train${state.selectedTrain}Notes`);
+        localStorage.removeItem(`train${state.selectedTrain}Incidents`);
 
         // refrescar UI
         render();
+
+        alert('Todos los datos han sido borrados, incluyendo las notas del servicio y las incidencias.');
     }
 }
 
@@ -3760,10 +4347,18 @@ function renderHeader() {
         <circle cx="9" cy="16" r="1"/>
         <circle cx="15" cy="16" r="1"/>
     </svg>
-    <div class="header-title-group">
-        <button class="title train-selector-btn" onclick="toggleTrainSelector()">
-            ${currentTrain.name} ▼
-        </button>
+<div class="header-title-group">
+    <button class="title train-selector-btn" onclick="toggleTrainSelector()">
+        <span class="train-name">${currentTrain.name}</span>
+        ${(() => {
+        const { percentage } = getTotalTrainOccupancy();
+        let occClass = 'occ-low';
+        if (percentage > 80) occClass = 'occ-high';
+        else if (percentage > 50) occClass = 'occ-mid';
+        return `<span class="train-occupancy-badge ${occClass}">${percentage}%</span>`;
+    })()}
+        <span class="train-selector-arrow">▼</span>
+    </button>
         <div id="train-selector" class="train-selector-dropdown hidden">
             ${Object.entries(trainModels)
         .map(
@@ -3867,7 +4462,25 @@ ${state.trainNumber ? `
                     ` : ''}
 
                     <div class="header-actions">
-                        <button class="action-btn" onclick="toggleDarkMode()" title="Modo nocturno">
+    <button class="action-btn" onclick="openServiceNotes()" title="Notas del servicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="18" x2="12" y2="12"/>
+        <line x1="9" y1="15" x2="15" y2="15"/>
+    </svg>
+</button>
+<button class="action-btn ${Object.keys(state.incidents).length > 0 ? 'has-incidents' : ''}" 
+        onclick="openIncidentsPanel()" 
+        title="Incidencias">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    ${Object.keys(state.incidents).length > 0 ? `<span class="incident-badge">${Object.keys(state.incidents).length}</span>` : ''}
+</button>
+    <button class="action-btn" onclick="toggleDarkMode()" title="Modo nocturno">
                             ${state.darkMode ? `
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="5"/>
@@ -3893,11 +4506,13 @@ ${state.trainNumber ? `
                                 <line x1="12" y1="8" x2="12" y2="8"/>
                             </svg>
                         </button>
-                        <button class="action-btn" onclick="toggleSeatRotation()" title="Invertir disposición de asientos">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2v20M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
+                        <button class="action-btn rotation-btn ${state.rotateSeats ? 'rotated' : ''}" 
+        onclick="toggleSeatRotation()" 
+        title="Invertir disposición de asientos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2v20M19 9l-7 7-7-7" />
+    </svg>
+</button>
                         <button class="action-btn" onclick="exportTurn()" title="Exportar turno">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -4004,14 +4619,81 @@ function renderSeats() {
     }
 
     const coachLayout = getCurrentCoachLayout(currentCoach);
+    let doorCounter = 1;
     coachLayout.forEach((section) => {
         if (section.type === "pmr-bathroom") {
             const label = section.label || "BAÑO PMR";
-            html += `<div class="pmr-bathroom" style="height: ${section.height}px">${label}</div>`;
+            const pmrId = "PMR-WC";
+            const pmrKey = getIncidentKey(state.selectedCoach, pmrId);
+            const pmrActive = state.incidents[pmrKey] ? 'incident-active' : '';
+
+            html += `
+        <button class="pmr-bathroom ${pmrActive}" 
+                style="height: ${section.height}px"
+                data-wc-id="${pmrId}"
+                onmousedown="handleDoorPress('${state.selectedCoach}', '${pmrId}', 'wc', 'Baño PMR', event)"
+                onmouseup="handleDoorRelease(event)"
+                onmouseleave="handleDoorCancel()"
+                ontouchstart="handleDoorPress('${state.selectedCoach}', '${pmrId}', 'wc', 'Baño PMR', event)"
+                ontouchend="handleDoorRelease(event)"
+                ontouchcancel="handleDoorCancel()">
+            ${label}
+        </button>
+    `;
             return;
         }
         if (section.type === "space") {
-            html += `<div class="space" style="height: ${section.height}px"></div>`;
+            // Determinar si es puerta
+            const isDoor = section.isDoor !== undefined
+                ? section.isDoor
+                : (section.height >= DOOR_HEIGHT_THRESHOLD);
+
+            // Verificar si el coche tiene puertas deshabilitadas
+            const coachHasDoors = !currentCoach.noDoors;
+
+            if (isDoor && coachHasDoors) {
+                // Renderizar como puerta con lados clickables
+                const doorNum = doorCounter++;
+                const leftId = `D${doorNum}-L`;
+                const rightId = `D${doorNum}-R`;
+                const leftKey = getIncidentKey(state.selectedCoach, leftId);
+                const rightKey = getIncidentKey(state.selectedCoach, rightId);
+                const leftActive = state.incidents[leftKey] ? 'incident-active' : '';
+                const rightActive = state.incidents[rightKey] ? 'incident-active' : '';
+
+// 🔴 NUEVO: Calcular labels según rotación
+                const leftLabel = `Puerta ${doorNum} - ${getDoorSideText('L')}`;
+                const rightLabel = `Puerta ${doorNum} - ${getDoorSideText('R')}`;
+
+                html += `
+        <div class="door-space" style="height: ${section.height}px">
+            <button class="door-side door-left ${leftActive}" 
+                    data-door-id="${leftId}"
+                    onmousedown="handleDoorPress('${state.selectedCoach}', '${leftId}', 'door', '${leftLabel}', event)"
+                    onmouseup="handleDoorRelease(event)"
+                    onmouseleave="handleDoorCancel()"
+                    ontouchstart="handleDoorPress('${state.selectedCoach}', '${leftId}', 'door', '${leftLabel}', event)"
+                    ontouchend="handleDoorRelease(event)"
+                    ontouchcancel="handleDoorCancel()">
+                <span class="door-label">P${doorNum}</span>
+            </button>
+            <div class="door-center"></div>
+            <button class="door-side door-right ${rightActive}" 
+                    data-door-id="${rightId}"
+                    onmousedown="handleDoorPress('${state.selectedCoach}', '${rightId}', 'door', '${rightLabel}', event)"
+                    onmouseup="handleDoorRelease(event)"
+                    onmouseleave="handleDoorCancel()"
+                    ontouchstart="handleDoorPress('${state.selectedCoach}', '${rightId}', 'door', '${rightLabel}', event)"
+                    ontouchend="handleDoorRelease(event)"
+                    ontouchcancel="handleDoorCancel()">
+                <span class="door-label">P${doorNum}</span>
+            </button>
+        </div>
+    `;
+            } else {
+                // Renderizar como espacio normal
+                html += `<div class="space" style="height: ${section.height}px"></div>`;
+            }
         } else {
             html += '<div class="seat-group">';
             section.positions.forEach((row) => {
@@ -4027,8 +4709,30 @@ function renderSeats() {
                             // Espacio vacío normal sin flecha
                             html += '<div class="seat empty-space"></div>';
                         }
-                    } else if (seatNum === "EQ" || seatNum === "WC" || seatNum === "MIN" || seatNum === "MESA") {
-                        // Asientos especiales no clickeables
+                    } else if (String(seatNum).includes("WC")) {
+                        // WC ahora soporta IDs personalizados (ej: "WC-A", "WC-B") para agrupar
+                        // Si es solo "WC" sin ID, se trata individualmente
+                        const wcId = String(seatNum).includes("-") ? String(seatNum) : `WC${index + 1}`;
+                        const wcKey = getIncidentKey(state.selectedCoach, wcId);
+                        const wcActive = state.incidents[wcKey] ? 'incident-active' : '';
+
+                        // Label para mostrar
+                        const wcLabel = String(seatNum).includes("-") ? "WC" : String(seatNum);
+
+                        html += `
+        <button class="seat special-wc ${wcActive}" 
+                data-wc-id="${wcId}"
+                onmousedown="handleDoorPress('${state.selectedCoach}', '${wcId}', 'wc', 'WC', event)"
+                onmouseup="handleDoorRelease(event)"
+                onmouseleave="handleDoorCancel()"
+                ontouchstart="handleDoorPress('${state.selectedCoach}', '${wcId}', 'wc', 'WC', event)"
+                ontouchend="handleDoorRelease(event)"
+                ontouchcancel="handleDoorCancel()">
+            ${wcLabel}
+        </button>
+    `;
+                    } else if (seatNum === "EQ" || seatNum === "MIN" || seatNum === "MESA") {
+                        // Otros elementos especiales no clickeables
                         html += `<div class="seat special-non-clickable">${seatNum}</div>`;
                     } else {
                         const key = getSeatKey(state.selectedCoach, seatNum);
@@ -4436,11 +5140,27 @@ function selectSeat(coach, num) {
     // Guardar scroll actual antes de abrir modal
     savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
 
-    if (state.copyMode && state.lastCopiedStop) {
+    // 🔴 NUEVO: Copiar TODA la información del asiento
+    if (state.copyMode && lastCopiedSeatData) {
         const key = getSeatKey(coach, num);
         const seatInfo = state.seatData[key];
+
+        // Solo aplicar si el asiento está vacío (sin parada activa)
         if (!seatInfo || !seatInfo.stop) {
-            updateSeat(coach, num, state.lastCopiedStop);
+            // Crear o actualizar con toda la información copiada
+            if (!state.seatData[key]) {
+                state.seatData[key] = {};
+            }
+
+            // Copiar toda la información
+            state.seatData[key].stop = lastCopiedSeatData.stop;
+            state.seatData[key].enlace = lastCopiedSeatData.enlace;
+            state.seatData[key].seguir = lastCopiedSeatData.seguir;
+            state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
+            state.seatData[key].comentario = lastCopiedSeatData.comentario;
+
+            saveData();
+            render();
             return;
         }
     }
@@ -4623,7 +5343,6 @@ function handleSeatPress(coach, num, event) {
 
     // Iniciar timer para long press
     seatHoldTimer = setTimeout(() => {
-        // Solo activar long press si NO estamos haciendo scroll
         if (!isScrolling) {
             seatHoldTriggered = true;
             if (navigator.vibrate) navigator.vibrate(40);
@@ -4631,10 +5350,11 @@ function handleSeatPress(coach, num, event) {
             const key = getSeatKey(coach, num);
             const seatInfo = state.seatData[key];
 
-            // 🔴 Caso 1: el asiento tiene datos → BORRAR (como antes)
-// Long press: borrar pero con opción de deshacer
-            if (seatInfo && Object.keys(seatInfo).length > 0) {
+            // 🔴 NUEVO: Verificar si tiene PARADA ACTIVA (no solo datos en general)
+            const hasActiveStop = seatInfo && seatInfo.stop;
 
+            // 🔴 Long press: solo borrar si tiene parada ACTIVA
+            if (hasActiveStop) {
                 // Guardar TODO lo que tenía el asiento antes de borrarlo
                 const previousData = {
                     stop: seatInfo.stop ? seatInfo.stop.full : null,
@@ -4645,8 +5365,30 @@ function handleSeatPress(coach, num, event) {
                     historial: seatInfo.historial ? [...seatInfo.historial] : []
                 };
 
-                // Borrar asiento
-                clearSeat(coach, num);
+                // 🔴 NUEVO: Añadir parada actual al historial antes de borrar
+                if (seatInfo.stop && seatInfo.stop.full) {
+                    if (!seatInfo.historial) {
+                        seatInfo.historial = [];
+                    }
+                    // Evitar duplicados en el historial
+                    if (!seatInfo.historial.includes(seatInfo.stop.full)) {
+                        seatInfo.historial.push(seatInfo.stop.full);
+                    }
+                }
+
+                // 🔴 NUEVO: Borrar parada, flags Y comentarios (mantener solo historial)
+                delete seatInfo.stop;
+                delete seatInfo.enlace;
+                delete seatInfo.seguir;
+                delete seatInfo.comentarioFlag;
+                delete seatInfo.comentario;
+                // Mantener SOLO: historial
+
+                // 🔴 NUEVO: Si después de borrar no queda nada útil, eliminar la key
+                if (!seatInfo.historial || seatInfo.historial.length === 0) {
+                    delete state.seatData[key];
+                }
+
                 saveData();
                 render();
 
@@ -4657,11 +5399,8 @@ function handleSeatPress(coach, num, event) {
                     data: previousData
                 };
 
-                // Mostrar banner SIEMPRE aunque no hubiera parada
                 showUndoBanner(
-                    previousData.stop
-                        ? `Parada eliminada: ${previousData.stop}`
-                        : `Datos del asiento eliminados`,
+                    `Parada eliminada: ${previousData.stop}`,
                     () => {
                         const undo = state.undoData;
                         if (!undo) return;
@@ -4688,41 +5427,52 @@ function handleSeatPress(coach, num, event) {
                 );
             }
             else {
-                // 🚫 Si el modo copiado rápido está activo → usar última parada copiada
-                if (state.copyMode && state.lastCopiedStop) {
-                    updateSeat(coach, num, state.lastCopiedStop);
+                // 🔴 NO tiene parada activa → Asignar parada final del tren
+
+                // 🚫 Si el modo copiado rápido está activo → copiar toda la información
+                if (state.copyMode && lastCopiedSeatData) {
+                    const key = getSeatKey(coach, num);
+
+                    if (!state.seatData[key]) {
+                        state.seatData[key] = {};
+                    }
+
+                    // Copiar toda la información
+                    state.seatData[key].stop = lastCopiedSeatData.stop;
+                    state.seatData[key].enlace = lastCopiedSeatData.enlace;
+                    state.seatData[key].seguir = lastCopiedSeatData.seguir;
+                    state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
+                    state.seatData[key].comentario = lastCopiedSeatData.comentario;
+
+                    saveData();
+                    render();
                     return;
                 }
-                // Necesitamos saber la ruta del tren actual
+
+                // Obtener parada final del tren
                 const route = state.trainNumber && trainRoutes[state.trainNumber];
 
                 if (route && route.length > 0) {
-                    // Última parada REAL de la ruta
                     let finalStopName = route[route.length - 1];
 
-                    // Ajustes de parada efectiva:
-                    // - Trenes que terminan en "Miranda" → usar "Vitoria Gasteiz"
-                    // - Trenes que terminan en "Logroño" → usar "Castejón"
+                    // Ajustes de parada efectiva
                     if (finalStopName === 'Miranda') {
                         finalStopName = 'Vitoria Gasteiz';
                     } else if (finalStopName === 'Logroño') {
                         finalStopName = 'Castejón';
                     }
 
-                    // Buscar ese nombre en el array global de paradas "stops"
                     const stopObj = stops.find(s => s.full === finalStopName);
 
                     if (stopObj) {
-                        // Asignar parada al asiento SIN abrir modal
+                        // Asignar parada sin abrir modal
                         updateSeat(coach, num, stopObj);
 
-                        // Vibración un pelín más corta para diferenciarlo si quieres
                         if (navigator.vibrate) {
                             navigator.vibrate(30);
                         }
                     }
                 }
-                // Si no hay trainNumber o ruta definida, simplemente no hace nada
             }
         }
     }, SEAT_LONG_PRESS_DURATION);
@@ -5012,12 +5762,18 @@ function enableCoachLongPress() {
     const buttons = document.querySelectorAll(".coach-btn");
 
     buttons.forEach(btn => {
-        const coachId = btn.textContent.trim();
+        const coachId = btn.dataset.coachId || btn.textContent.trim().replace(/[ABC]$/, ''); // Extraer ID sin variante
 
         // 🔴 DOBLE TAP para 470
         if (state.selectedTrain === "470") {
             btn.addEventListener("click", (e) => {
                 const now = Date.now();
+
+                // Cerrar selector existente antes de procesar
+                const existingSelector = document.querySelector('.variant-selector-popup');
+                if (existingSelector) {
+                    existingSelector.remove();
+                }
 
                 // Si es doble tap (mismo botón, menos de 300ms)
                 if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
@@ -5037,8 +5793,15 @@ function enableCoachLongPress() {
                 coachLastTapTime = now;
                 coachLastTappedId = coachId;
 
-                // Permitir tap normal (cambio de coche)
-                selectCoach(coachId);
+                // Permitir tap normal después de un pequeño delay para detectar doble tap
+                setTimeout(() => {
+                    // Solo ejecutar si no hubo doble tap
+                    if (coachLastTappedId === coachId) {
+                        selectCoach(coachId);
+                        coachLastTapTime = 0;
+                        coachLastTappedId = null;
+                    }
+                }, COACH_DOUBLE_TAP_DELAY + 10);
             });
         } else {
             // Comportamiento normal para otros trenes
@@ -5060,6 +5823,13 @@ function enableCoachLongPress() {
             coachHoldTimer = setTimeout(() => {
                 coachHoldTriggered = true;
                 btn.dataset.longpressLock = "1";
+
+                // Cerrar selector de variantes si está abierto
+                const existingSelector = document.querySelector('.variant-selector-popup');
+                if (existingSelector) {
+                    existingSelector.remove();
+                }
+
                 showCoachStats(coachId);
             }, 600);
         }
@@ -5230,14 +6000,23 @@ function show470VariantSelector(coachId, buttonElement) {
     popup.style.transform = "translateX(-50%)";
     popup.style.zIndex = "10000";
 
-    // Cerrar al hacer clic fuera
+// Cerrar al hacer clic fuera
     setTimeout(() => {
-        document.addEventListener('click', function closeOnClickOutside(e) {
-            if (!popup.contains(e.target) && !buttonElement.contains(e.target)) {
+        function closeOnClickOutside(e) {
+            const popup = document.querySelector('.variant-selector-popup');
+            if (popup && !popup.contains(e.target) && !buttonElement.contains(e.target)) {
                 popup.remove();
                 document.removeEventListener('click', closeOnClickOutside);
+                document.removeEventListener('touchstart', closeOnClickOutside);
+
+                // 🔴 NUEVO: Resetear variables de doble tap
+                coachLastTapTime = 0;
+                coachLastTappedId = null;
             }
-        });
+        }
+
+        document.addEventListener('click', closeOnClickOutside);
+        document.addEventListener('touchstart', closeOnClickOutside);
     }, 100);
 }
 
@@ -5246,10 +6025,32 @@ function select470Variant(coachId, variant) {
     state.coach470Variants[coachId] = variant;
     localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
 
+    const keysToDelete = Object.keys(state.incidents).filter(key => key.startsWith(coachId + '-'));
+    keysToDelete.forEach(key => delete state.incidents[key]);
+    saveData();
+
+    // Cerrar selector
+    const popup = document.querySelector('.variant-selector-popup');
+    if (popup) popup.remove();
+
+    // Re-renderizar
+    if (state.selectedCoach === coachId) {
+        render();
+    } else {
+        render();
+    }
+
     closeVariantSelector();
+
+    // 🔴 NUEVO: Resetear variables de doble tap
+    coachLastTapTime = 0;
+    coachLastTappedId = null;
 
     // Re-renderizar si estamos viendo ese coche
     if (state.selectedCoach === coachId) {
+        render();
+    } else {
+        // Si no estamos en ese coche, solo actualizar el header
         render();
     }
 }
@@ -5258,6 +6059,49 @@ function select470Variant(coachId, variant) {
 function closeVariantSelector() {
     const popup = document.querySelector('.variant-selector-popup');
     if (popup) popup.remove();
+
+    // 🔴 NUEVO: Resetear variables de doble tap al cerrar
+    coachLastTapTime = 0;
+    coachLastTappedId = null;
+}
+
+// Calcular ocupación total del tren
+function getTotalTrainOccupancy() {
+    const train = trainModels[state.selectedTrain];
+    if (!train || !train.coaches) return { occupied: 0, total: 0, percentage: 0 };
+
+    let totalSeats = 0;
+    let occupiedSeats = 0;
+
+    train.coaches.forEach(coach => {
+        const coachLayout = getCurrentCoachLayout(coach);
+
+        // Contar asientos totales del coche
+        const coachSeats = coachLayout
+            .flatMap(block => block.type === "seats" ? block.positions : [])
+            .flat()
+            .filter(n => {
+                if (n === null) return false;
+                const str = String(n);
+                // Excluir asientos especiales
+                const nonSeatMarkers = ['WC', 'EQ', 'MESA', 'MIN', 'S1', 'S2', 'S3', 'S4'];
+                return !nonSeatMarkers.some(marker => str.toUpperCase().includes(marker));
+            }).length;
+
+        totalSeats += coachSeats;
+
+        // Contar ocupados en este coche
+        const prefix = `${coach.id}-`;
+        Object.keys(state.seatData || {}).forEach(key => {
+            if (key.startsWith(prefix) && state.seatData[key]?.stop) {
+                occupiedSeats++;
+            }
+        });
+    });
+
+    const percentage = totalSeats > 0 ? Math.round((occupiedSeats / totalSeats) * 100) : 0;
+
+    return { occupied: occupiedSeats, total: totalSeats, percentage };
 }
 
 // Reaplicar después de render (los botones se regeneran)
@@ -5326,6 +6170,23 @@ window.navigateToSeat = navigateToSeat;
 window.show470VariantSelector = show470VariantSelector;
 window.select470Variant = select470Variant;
 window.closeVariantSelector = closeVariantSelector;
+window.openServiceNotes = openServiceNotes;
+window.updateServiceNotes = updateServiceNotes;
+window.clearServiceNotes = clearServiceNotes;
+window.closeServiceNotes = closeServiceNotes;
+window.toggleIncident = toggleIncident;
+window.openIncidentNote = openIncidentNote;
+window.saveIncidentNote = saveIncidentNote;
+window.closeIncidentNote = closeIncidentNote;
+window.openIncidentsPanel = openIncidentsPanel;
+window.closeIncidentsPanel = closeIncidentsPanel;
+window.removeIncident = removeIncident;
+window.clearAllIncidents = clearAllIncidents;
+window.handleDoorPress = handleDoorPress;
+window.handleDoorRelease = handleDoorRelease;
+window.handleDoorCancel = handleDoorCancel;
+window.getDoorSideText = getDoorSideText;
+window.getTotalTrainOccupancy = getTotalTrainOccupancy;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
