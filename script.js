@@ -3550,22 +3550,16 @@ function applyCurrentStopChange(stopName, route, stopIndex) {
                     if (!seatInfo.historial) {
                         seatInfo.historial = [];
                     }
-// 🔴 Evitar duplicados en el historial
+                    // 🔴 NUEVO: Evitar duplicados en el historial
                     if (!seatInfo.historial.includes(seatInfo.stop.full)) {
                         seatInfo.historial.push(seatInfo.stop.full);
                     }
 
-// 🔴 CRÍTICO: Borrar TODO (parada, flags Y comentarios)
+                    // Borrar parada y flags (mantener comentarios por ahora)
                     delete seatInfo.stop;
                     delete seatInfo.enlace;
                     delete seatInfo.seguir;
-                    delete seatInfo.comentarioFlag;
-                    delete seatInfo.comentario;
-
-// 🔴 Si no queda historial, eliminar key completa
-                    if (!seatInfo.historial || seatInfo.historial.length === 0) {
-                        delete state.seatData[key];
-                    }
+                    // Mantener: comentario, comentarioFlag, historial
 
                     deletedCount++;
                 }
@@ -5491,66 +5485,8 @@ function handleSeatPress(coach, num, event) {
                     }
                 );
             }
-
             else {
-                // 🔴 Verificar si tiene SOLO comentario/flags sin parada
-                const hasOnlyMetadata = !seatInfo.stop && (
-                    seatInfo.enlace ||
-                    seatInfo.seguir ||
-                    seatInfo.comentarioFlag ||
-                    seatInfo.comentario
-                );
-
-                if (hasOnlyMetadata) {
-                    // Borrar solo los flags y comentarios (como si fuera un clear)
-                    const previousData = {
-                        enlace: seatInfo.enlace || false,
-                        seguir: seatInfo.seguir || false,
-                        comentarioFlag: seatInfo.comentarioFlag || false,
-                        comentario: seatInfo.comentario || "",
-                        historial: seatInfo.historial ? [...seatInfo.historial] : []
-                    };
-
-                    delete seatInfo.enlace;
-                    delete seatInfo.seguir;
-                    delete seatInfo.comentarioFlag;
-                    delete seatInfo.comentario;
-
-                    // Si no queda historial, eliminar key
-                    if (!seatInfo.historial || seatInfo.historial.length === 0) {
-                        delete state.seatData[key];
-                    }
-
-                    saveData();
-                    render();
-
-                    // Capturar scroll
-                    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-                    requestAnimationFrame(() => {
-                        window.scrollTo(0, scrollPosition);
-                    });
-
-                    showUndoBanner(
-                        `Información borrada del asiento ${num}`,
-                        () => {
-                            const key = getSeatKey(coach, num);
-                            if (!state.seatData[key]) {
-                                state.seatData[key] = {};
-                            }
-                            state.seatData[key].enlace = previousData.enlace;
-                            state.seatData[key].seguir = previousData.seguir;
-                            state.seatData[key].comentarioFlag = previousData.comentarioFlag;
-                            state.seatData[key].comentario = previousData.comentario;
-                            state.seatData[key].historial = previousData.historial;
-                            saveData();
-                            render();
-                        }
-                    );
-
-                    return; // Salir sin asignar parada
-                }
-
-                // 🔴 NO tiene parada activa NI metadata → Asignar parada final del tren
+                // 🔴 NO tiene parada activa → Asignar parada final del tren
 
                 // 🚫 Si el modo copiado rápido está activo → copiar toda la información
                 if (state.copyMode && lastCopiedSeatData) {
