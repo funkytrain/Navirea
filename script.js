@@ -1992,14 +1992,15 @@ function getSeatsForStop(stopName) {
     Object.keys(state.seatData).forEach(key => {
         const seatInfo = state.seatData[key];
         if (seatInfo && seatInfo.stop && seatInfo.stop.full === stopName) {
-            const [coachId, seatNum] = key.split('-');
+            const parts = key.split('-');
+            const coachId = parts[0];
+            const seatNum = parts.length === 3 ? parts[2] : parts[1];
             seats.push({ coach: coachId, seat: seatNum, info: seatInfo });
         }
     });
     return seats;
 }
 
-// Obtener asientos en un tramo
 // Obtener asientos en un tramo
 function getSeatsInRoute(fromStop, toStop) {
     if (!state.trainNumber || !trainRoutes[state.trainNumber]) return [];
@@ -2017,9 +2018,11 @@ function getSeatsInRoute(fromStop, toStop) {
         const seatInfo = state.seatData[key];
         if (seatInfo && seatInfo.stop) {
             const stopIndex = route.indexOf(seatInfo.stop.full);
-            // Incluir asientos cuya parada está dentro del tramo (exclusivo en origen, inclusivo en destino)
+            // Incluir asientos cuya parada está dentro del tramo
             if (stopIndex >= fromIndex && stopIndex <= toIndex) {
-                const [coachId, seatNum] = key.split('-');
+                const parts = key.split('-');
+                const coachId = parts[0];
+                const seatNum = parts.length === 3 ? parts[2] : parts[1];
                 seats.push({ coach: coachId, seat: seatNum, info: seatInfo });
             }
         }
@@ -2033,13 +2036,19 @@ function getSeatInfo(seatNumber) {
     // Buscar en todos los coches
     const keys = Object.keys(state.seatData);
     const foundKey = keys.find(key => {
-        const [, num] = key.split('-');
+        const parts = key.split('-');
+        // Para 470: C1-A-12 → partes[2] es el número
+        // Para otros: C1-12 → partes[1] es el número
+        const num = parts.length === 3 ? parts[2] : parts[1];
         return num === String(seatNumber);
     });
 
     if (!foundKey) return null;
 
-    const [coachId, seatNum] = foundKey.split('-');
+    const parts = foundKey.split('-');
+    const coachId = parts[0];
+    const seatNum = parts.length === 3 ? parts[2] : parts[1];
+
     return {
         coach: coachId,
         seat: seatNum,
@@ -2770,11 +2779,9 @@ function openLinksFilter() {
     Object.keys(state.seatData).forEach(key => {
         const info = state.seatData[key];
         if (info && info.enlace) {
-            const [coachId, seatNum] = key.split('-');
-            let destino = '';
-            if (info.stop && info.stop.full) {
-                destino = `Destino: ${info.stop.full}`;
-            }
+            const parts = key.split('-');
+            const coachId = parts[0];
+            const seatNum = parts.length === 3 ? parts[2] : parts[1];
 
             items.push({ key, coach: coachId, seat: seatNum, extra: info.stop ? `Destino: ${info.stop.full}` : '' });
         }
@@ -2796,7 +2803,9 @@ function openCommentsFilter() {
     Object.keys(state.seatData).forEach(key => {
         const info = state.seatData[key];
         if (info && (info.comentarioFlag || info.comentario)) {
-            const [coachId, seatNum] = key.split('-');
+            const parts = key.split('-');
+            const coachId = parts[0];
+            const seatNum = parts.length === 3 ? parts[2] : parts[1];
             items.push({ key, coach: coachId, seat: seatNum, extra: info.comentario || '' });
         }
     });
@@ -3541,16 +3550,22 @@ function applyCurrentStopChange(stopName, route, stopIndex) {
                     if (!seatInfo.historial) {
                         seatInfo.historial = [];
                     }
-                    // 🔴 NUEVO: Evitar duplicados en el historial
+// 🔴 Evitar duplicados en el historial
                     if (!seatInfo.historial.includes(seatInfo.stop.full)) {
                         seatInfo.historial.push(seatInfo.stop.full);
                     }
 
-                    // Borrar parada y flags (mantener comentarios por ahora)
+// 🔴 CRÍTICO: Borrar TODO (parada, flags Y comentarios)
                     delete seatInfo.stop;
                     delete seatInfo.enlace;
                     delete seatInfo.seguir;
-                    // Mantener: comentario, comentarioFlag, historial
+                    delete seatInfo.comentarioFlag;
+                    delete seatInfo.comentario;
+
+// 🔴 Si no queda historial, eliminar key completa
+                    if (!seatInfo.historial || seatInfo.historial.length === 0) {
+                        delete state.seatData[key];
+                    }
 
                     deletedCount++;
                 }
@@ -5476,8 +5491,66 @@ function handleSeatPress(coach, num, event) {
                     }
                 );
             }
+
             else {
-                // 🔴 NO tiene parada activa → Asignar parada final del tren
+                // 🔴 Verificar si tiene SOLO comentario/flags sin parada
+                const hasOnlyMetadata = !seatInfo.stop && (
+                    seatInfo.enlace ||
+                    seatInfo.seguir ||
+                    seatInfo.comentarioFlag ||
+                    seatInfo.comentario
+                );
+
+                if (hasOnlyMetadata) {
+                    // Borrar solo los flags y comentarios (como si fuera un clear)
+                    const previousData = {
+                        enlace: seatInfo.enlace || false,
+                        seguir: seatInfo.seguir || false,
+                        comentarioFlag: seatInfo.comentarioFlag || false,
+                        comentario: seatInfo.comentario || "",
+                        historial: seatInfo.historial ? [...seatInfo.historial] : []
+                    };
+
+                    delete seatInfo.enlace;
+                    delete seatInfo.seguir;
+                    delete seatInfo.comentarioFlag;
+                    delete seatInfo.comentario;
+
+                    // Si no queda historial, eliminar key
+                    if (!seatInfo.historial || seatInfo.historial.length === 0) {
+                        delete state.seatData[key];
+                    }
+
+                    saveData();
+                    render();
+
+                    // Capturar scroll
+                    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+                    requestAnimationFrame(() => {
+                        window.scrollTo(0, scrollPosition);
+                    });
+
+                    showUndoBanner(
+                        `Información borrada del asiento ${num}`,
+                        () => {
+                            const key = getSeatKey(coach, num);
+                            if (!state.seatData[key]) {
+                                state.seatData[key] = {};
+                            }
+                            state.seatData[key].enlace = previousData.enlace;
+                            state.seatData[key].seguir = previousData.seguir;
+                            state.seatData[key].comentarioFlag = previousData.comentarioFlag;
+                            state.seatData[key].comentario = previousData.comentario;
+                            state.seatData[key].historial = previousData.historial;
+                            saveData();
+                            render();
+                        }
+                    );
+
+                    return; // Salir sin asignar parada
+                }
+
+                // 🔴 NO tiene parada activa NI metadata → Asignar parada final del tren
 
                 // 🚫 Si el modo copiado rápido está activo → copiar toda la información
                 if (state.copyMode && lastCopiedSeatData) {
