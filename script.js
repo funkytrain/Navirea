@@ -3130,11 +3130,21 @@ function updateSeat(coachId, seatNum, stop) {
 
     saveData();
 
-    // Cerrar modal
+// Capturar scroll antes de cerrar modal
+    const scrollBeforeClose = window.scrollY || document.documentElement.scrollTop;
+
+// Cerrar modal
     state.selectedSeat = null;
     state.searchQuery = "";
     unlockBodyScroll();
     render();
+
+// Solo restaurar si NO estamos en modal (modal ya gestiona su propio scroll)
+    if (!state.selectedSeat) {
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollBeforeClose);
+        });
+    }
 }
 
 function updateSeatFromList(abbr) {
@@ -3182,10 +3192,23 @@ function clearSeat(coachId, seatNum) {
         }
     }
 
+// Capturar scroll antes de operaciones
+    const scrollBeforeClear = window.scrollY || document.documentElement.scrollTop;
+
     saveData();
     state.selectedSeat = null;
     unlockBodyScroll();
     render();
+
+// Restaurar scroll después
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollBeforeClear);
+    });
+
+// Restaurar scroll DESPUÉS de render
+    requestAnimationFrame(() => {
+        window.scrollTo(0, currentScroll);
+    });
 }
 
 function toggleFlag(coachId, seatNum, flagName) {
@@ -3195,12 +3218,17 @@ function toggleFlag(coachId, seatNum, flagName) {
     }
     state.seatData[key][flagName] = !state.seatData[key][flagName];
 
-    // Si desmarca comentarioFlag, borrar el comentario
+// Si desmarca comentarioFlag, borrar el comentario
     if (flagName === "comentarioFlag" && !state.seatData[key][flagName]) {
         delete state.seatData[key].comentario;
     }
 
     saveData();
+
+// NO renderizar si estamos en medio de un long press
+    if (seatHoldTimer) {
+        return;
+    }
 
     // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
     if (state.copyMode && lastCopiedSeatData) {
@@ -3208,11 +3236,26 @@ function toggleFlag(coachId, seatNum, flagName) {
         state.lastCopiedSeatData = { ...lastCopiedSeatData };
     }
 
-    // Guardar posición del scroll antes de renderizar
-    saveModalScrollPosition();
+    saveData();
+// Si hay modal abierto, guardar su scroll
+    if (state.selectedSeat) {
+        saveModalScrollPosition();
+    } else {
+        // Si no hay modal, guardar scroll de página
+        const pageScroll = window.scrollY || document.documentElement.scrollTop;
+        window._pageScrollBeforeRender = pageScroll;
+    }
+
     render();
-    // Restaurar posición del scroll después de renderizar
-    restoreModalScrollPosition();
+
+// Restaurar scroll apropiado
+    if (state.selectedSeat) {
+        restoreModalScrollPosition();
+    } else if (window._pageScrollBeforeRender !== undefined) {
+        requestAnimationFrame(() => {
+            window.scrollTo(0, window._pageScrollBeforeRender);
+        });
+    }
 }
 
 function updateComment(coachId, seatNum, comment) {
@@ -5344,6 +5387,7 @@ function handleSeatPress(coach, num, event) {
     // Iniciar timer para long press
     seatHoldTimer = setTimeout(() => {
         if (!isScrolling) {
+            const scrollBeforeLongPress = window.scrollY || document.documentElement.scrollTop;
             seatHoldTriggered = true;
             if (navigator.vibrate) navigator.vibrate(40);
 
@@ -5390,9 +5434,18 @@ function handleSeatPress(coach, num, event) {
                 }
 
                 saveData();
+
+// Capturar scroll antes de render
+                const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
                 render();
 
-                // Guardar datos completos para deshacer
+// Restaurar scroll después de render
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, scrollPosition);
+                });
+
+// Guardar datos completos para deshacer
                 state.undoData = {
                     coach,
                     num,
@@ -5465,12 +5518,39 @@ function handleSeatPress(coach, num, event) {
                     const stopObj = stops.find(s => s.full === finalStopName);
 
                     if (stopObj) {
+                        // Capturar scroll ANTES de cualquier operación
+                        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
                         // Asignar parada sin abrir modal
-                        updateSeat(coach, num, stopObj);
+                        const key = getSeatKey(coach, num);
+
+                        if (!state.seatData[key]) {
+                            state.seatData[key] = {};
+                        }
+
+                        state.seatData[key].stop = stopObj;
+
+                        // Guardar datos copiados
+                        lastCopiedSeatData = {
+                            stop: stopObj,
+                            enlace: state.seatData[key].enlace || false,
+                            seguir: state.seatData[key].seguir || false,
+                            comentarioFlag: state.seatData[key].comentarioFlag || false,
+                            comentario: state.seatData[key].comentario || ""
+                        };
+                        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+
+                        saveData();
 
                         if (navigator.vibrate) {
                             navigator.vibrate(30);
                         }
+
+                        // Renderizar y restaurar scroll
+                        render();
+                        requestAnimationFrame(() => {
+                            window.scrollTo(0, scrollPosition);
+                        });
                     }
                 }
             }
@@ -6103,6 +6183,38 @@ function getTotalTrainOccupancy() {
 
     return { occupied: occupiedSeats, total: totalSeats, percentage };
 }
+
+// Delegación de eventos para botones de coche (evita problemas con re-renders)
+document.addEventListener('click', function(e) {
+    const coachBtn = e.target.closest('.coach-btn');
+    if (coachBtn && !coachBtn.dataset.longpressLock) {
+        const coachId = coachBtn.dataset.coachId || coachBtn.textContent.trim();
+
+        // Para tren 470: gestionar doble tap
+        if (state.selectedTrain === "470") {
+            const now = Date.now();
+            if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
+                e.stopPropagation();
+                e.preventDefault();
+                show470VariantSelector(coachId, coachBtn);
+                coachLastTapTime = 0;
+                coachLastTappedId = null;
+                return;
+            }
+            coachLastTapTime = now;
+            coachLastTappedId = coachId;
+            setTimeout(() => {
+                if (coachLastTappedId === coachId) {
+                    selectCoach(coachId);
+                    coachLastTapTime = 0;
+                    coachLastTappedId = null;
+                }
+            }, COACH_DOUBLE_TAP_DELAY + 10);
+        } else {
+            selectCoach(coachId);
+        }
+    }
+});
 
 // Reaplicar después de render (los botones se regeneran)
 document.addEventListener("DOMContentLoaded", enableCoachLongPress);
