@@ -3107,7 +3107,6 @@ function getCurrentCoachLayout(coach) {
     return coach.layout;
 }
 
-// Actualizar asiento
 function updateSeat(coachId, seatNum, stop) {
     const key = getSeatKey(coachId, String(seatNum));
 
@@ -3115,7 +3114,7 @@ function updateSeat(coachId, seatNum, stop) {
         state.seatData[key] = {};
     }
 
-// Guardar la parada en el asiento
+    // Guardar la parada en el asiento
     state.seatData[key].stop = stop;
 
     // 🔴 NUEVO: Guardar TODA la información del asiento (no solo la parada)
@@ -3130,21 +3129,20 @@ function updateSeat(coachId, seatNum, stop) {
 
     saveData();
 
-// Capturar scroll antes de cerrar modal
-    const scrollBeforeClose = window.scrollY || document.documentElement.scrollTop;
-
-// Cerrar modal
+    // Cerrar modal
     state.selectedSeat = null;
     state.searchQuery = "";
+
+    // IMPORTANTE: Guardar scroll ANTES de unlock
+    const scrollToRestore = savedScrollPosition;
+
     unlockBodyScroll();
     render();
 
-// Solo restaurar si NO estamos en modal (modal ya gestiona su propio scroll)
-    if (!state.selectedSeat) {
-        requestAnimationFrame(() => {
-            window.scrollTo(0, scrollBeforeClose);
-        });
-    }
+    // Restaurar el scroll que teníamos guardado del modal
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollToRestore);
+    });
 }
 
 function updateSeatFromList(abbr) {
@@ -5357,8 +5355,7 @@ function unlockBodyScroll() {
     document.body.style.width = '';
     document.body.style.overflow = '';
 
-    // Restaurar scroll exacto
-    window.scrollTo(0, savedScrollPosition);
+    // NO restaurar scroll aquí - lo hace quien llama a esta función
 }
 
 function handleSeatPress(coach, num, event) {
