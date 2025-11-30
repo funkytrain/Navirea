@@ -3799,6 +3799,24 @@ function openServiceNotes() {
 function updateServiceNotes(value) {
     state.serviceNotes = value;
     saveData();
+
+    // Actualizar header para mostrar/ocultar badge
+    const headerElement = document.querySelector('.header');
+    if (headerElement) {
+        const notesBtn = headerElement.querySelector('[onclick="openServiceNotes()"]');
+        if (notesBtn) {
+            if (value && value.trim()) {
+                notesBtn.classList.add('has-notes');
+                if (!notesBtn.querySelector('.notes-badge')) {
+                    notesBtn.insertAdjacentHTML('beforeend', '<span class="notes-badge"></span>');
+                }
+            } else {
+                notesBtn.classList.remove('has-notes');
+                const badge = notesBtn.querySelector('.notes-badge');
+                if (badge) badge.remove();
+            }
+        }
+    }
 }
 
 function clearServiceNotes() {
@@ -3806,6 +3824,7 @@ function clearServiceNotes() {
         state.serviceNotes = "";
         saveData();
         closeServiceNotes();
+        render(); // Actualizar para quitar el badge
     }
 }
 
@@ -3825,6 +3844,11 @@ const DOOR_HEIGHT_THRESHOLD = 80; // 👈 Cambiar aquí para ajustar globalmente
 
 // Obtener clave de incidencia
 function getIncidentKey(coachId, elementId) {
+    // Para tren 470: incluir variante en la key
+    if (state.selectedTrain === "470") {
+        const variant = state.coach470Variants[coachId] || "A";
+        return `${coachId}-${variant}-${elementId}`;
+    }
     return `${coachId}-${elementId}`;
 }
 
@@ -3939,11 +3963,19 @@ function openIncidentsPanel() {
     }
 
     // Agrupar por coche
+// Agrupar por coche (y variante para 470)
     const byCoach = {};
     Object.keys(state.incidents).forEach(key => {
-        const [coachId] = key.split('-');
-        if (!byCoach[coachId]) byCoach[coachId] = [];
-        byCoach[coachId].push({ key, data: state.incidents[key] });
+        const parts = key.split('-');
+        let groupKey = parts[0]; // coachId
+
+        // Para 470: agrupar por coche-variante
+        if (state.selectedTrain === "470" && parts.length > 2) {
+            groupKey = `${parts[0]} (Variante ${parts[1]})`;
+        }
+
+        if (!byCoach[groupKey]) byCoach[groupKey] = [];
+        byCoach[groupKey].push({ key, data: state.incidents[key] });
     });
 
     let incidentsHTML = '';
@@ -3954,7 +3986,9 @@ function openIncidentsPanel() {
         `;
         byCoach[coachId].forEach(({ key, data }) => {
             const parts = key.split('-');
-            let label = parts.slice(1).join('-');
+            // Para 470: saltar la variante (parts[1])
+            const skipVariant = state.selectedTrain === "470" && parts.length > 2;
+            let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
 
 // Mejorar formato del label
             if (label.includes('D') && (label.includes('-L') || label.includes('-R'))) {
@@ -4058,7 +4092,8 @@ function removeIncident(key) {
         `;
         byCoach[coachId].forEach(({ key: k, data }) => {
             const parts = k.split('-');
-            let label = parts.slice(1).join('-');
+            const skipVariant = state.selectedTrain === "470" && parts.length > 2;
+            let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
 
             // Mejorar formato del label
             if (label.includes('D') && (label.includes('-L') || label.includes('-R'))) {
@@ -4512,13 +4547,16 @@ ${state.trainNumber ? `
                     ` : ''}
 
                     <div class="header-actions">
-    <button class="action-btn" onclick="openServiceNotes()" title="Notas del servicio">
+<button class="action-btn ${state.serviceNotes && state.serviceNotes.trim() ? 'has-notes' : ''}" 
+        onclick="openServiceNotes()" 
+        title="Notas del servicio">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
         <polyline points="14 2 14 8 20 8"/>
         <line x1="12" y1="18" x2="12" y2="12"/>
         <line x1="9" y1="15" x2="15" y2="15"/>
     </svg>
+    ${state.serviceNotes && state.serviceNotes.trim() ? '<span class="notes-badge"></span>' : ''}
 </button>
 <button class="action-btn ${Object.keys(state.incidents).length > 0 ? 'has-incidents' : ''}" 
         onclick="openIncidentsPanel()" 
@@ -6111,8 +6149,6 @@ function select470Variant(coachId, variant) {
     state.coach470Variants[coachId] = variant;
     localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
 
-    const keysToDelete = Object.keys(state.incidents).filter(key => key.startsWith(coachId + '-'));
-    keysToDelete.forEach(key => delete state.incidents[key]);
     saveData();
 
     // Cerrar selector
