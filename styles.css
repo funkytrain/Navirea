@@ -2490,6 +2490,26 @@ body.dark-mode .incident-item {
     text-align: center;
 }
 
+/* Badge para botón de notas */
+.action-btn.has-notes {
+    position: relative;
+}
+
+.notes-badge {
+    position: absolute;
+    top: -4px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #4f46e5;
+}
+
+body.dark-mode .notes-badge {
+    border-color: #4338ca;
+}
+
 /* Botón de rotación con animación */
 .rotation-btn svg {
     transition: transform 0.4s ease;
