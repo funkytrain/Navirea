@@ -420,10 +420,10 @@ const trainModels = {
                 layout: [
                     { type: "seats", positions: [[118, null, null, null, 119]] },
                     { type: "seats", positions: [[120, null, null, null, 121]] },
-                    { type: "space", height: 80 },
                     { type: "seats", positions: [[122, 123, null, 124, 125]] },
                     { type: "seats", positions: [["S1", "PMR-126", null, "PMR-127", "S3"]] },
                     { type: "seats", positions: [["S2", null, null, null, "S4"]] },
+                    { type: "space", height: 80 },
                     { type: "pmr-bathroom", height: 160 },
                     { type: "seats", positions: [[128, null, null, null, null]] },
                     { type: "seats", positions: [[129, null, null, 130, 131]] },
@@ -1482,23 +1482,23 @@ const trainModels = {
                             },
                             {
                                 type: "seats",
-                                positions: [[201, 202, null, 204, 203]]
+                                positions: [[203, 204, null, 202, 201]]
                             },
                             {
                                 type: "seats",
-                                positions: [[205, 206, null, 208, 207]]
+                                positions: [[207, 208, null, 206, 205]]
                             },
                             {
                                 type: "seats",
-                                positions: [[209, 210, null, 212, 211]]
+                                positions: [[211, 212, null, 210, 209]]
                             },
                             {
                                 type: "seats",
-                                positions: [[213, 214, null, 216, 215]]
+                                positions: [[215, 216, null, 214, 213]]
                             },
                             {
                                 type: "seats",
-                                positions: [[217, 218, null, 220, 219]]
+                                positions: [[219, 220, null, 218, 217]]
                             }]
                     },
                     "B": {
@@ -2083,7 +2083,11 @@ function openStopFilter() {
     // Crear modal interactivo
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por parada de bajada</h3>
@@ -2184,7 +2188,11 @@ function openRouteFilter() {
     // Crear modal para parada inicial
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por tramo recorrido</h3>
@@ -2346,7 +2354,11 @@ function openSeatFilter() {
 
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por asiento</h3>
@@ -3706,7 +3718,11 @@ function toggleHeaderCollapse() {
 function openAbout() {
     const aboutHTML = `
         <div class="modal-overlay" onclick="closeAbout(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Acerca de</h3>
@@ -3751,7 +3767,11 @@ function closeAbout(event) {
 function openServiceNotes() {
     const notesHTML = `
         <div class="modal-overlay" onclick="closeServiceNotes(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Notas del servicio</h3>
@@ -3879,7 +3899,11 @@ function openIncidentNote(coachId, elementId, elementType, elementLabel) {
 
     const modalHTML = `
         <div class="modal-overlay" onclick="closeIncidentNote(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Incidencia: ${elementLabel}</h3>
@@ -4019,7 +4043,11 @@ function openIncidentsPanel() {
 
     const modalHTML = `
         <div class="modal-overlay" onclick="closeIncidentsPanel(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Incidencias registradas (${incidentCount})</h3>
@@ -5760,7 +5788,14 @@ function modalSwipeEnd(event) {
         setTimeout(() => {
             modal.style.transition = '';
             modal.style.transform = '';
-            closeModal(); // sin evento → pasa la condición de closeModal
+            // Cerrar el overlay padre
+            const overlay = modal.closest('.modal-overlay');
+            if (overlay) overlay.remove();
+
+            // Desbloquear scroll si era necesario
+            if (!document.querySelector('.modal-overlay')) {
+                unlockBodyScroll();
+            }
         }, 200);
     } else {
         // No llega al umbral → animación de rebote
@@ -6407,7 +6442,11 @@ function openScreensModal() {
     removeAllScreenModals();
     const modal = `
         <div class="modal-overlay" onclick="closeScreensModal(event)">
-            <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal" onclick="event.stopPropagation()"
+     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+     ontouchmove="modalSwipeMove(event)"
+     ontouchend="modalSwipeEnd(event)"
+     ontouchcancel="modalSwipeEnd(event)">
 
                 <div class="modal-header">
                     <div class="modal-header-top">
