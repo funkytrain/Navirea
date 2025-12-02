@@ -2990,6 +2990,74 @@ const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
 // Variables para mantener scroll del modal
 let modalScrollPosition = 0;
 
+// Configuración de backup automático
+const BACKUP_INTERVAL = 5 * 60 * 1000; // 5 minutos en milisegundos
+const MAX_BACKUPS = 10; // Máximo de backups a mantener
+let backupTimer = null;
+
+// Guardar backup automático
+function saveAutoBackup() {
+    const timestamp = new Date().toISOString();
+    const backupData = {
+        trainModel: state.selectedTrain,
+        seatData: state.seatData,
+        trainDirection: state.trainDirection,
+        serviceNotes: state.serviceNotes || "",
+        incidents: state.incidents || {},
+        trainNumber: state.trainNumber || null,
+        currentStop: state.currentStop || null,
+        timestamp: timestamp,
+        ...(state.selectedTrain === "470" && {
+            coach470Variants: state.coach470Variants
+        })
+    };
+
+    // Obtener backups existentes
+    const backupsKey = `autoBackups_${state.selectedTrain}`;
+    let backups = [];
+
+    try {
+        const saved = localStorage.getItem(backupsKey);
+        if (saved) backups = JSON.parse(saved);
+    } catch (e) {
+        console.error("Error loading backups");
+    }
+
+    // Añadir nuevo backup
+    backups.push(backupData);
+
+    // Mantener solo los últimos MAX_BACKUPS
+    if (backups.length > MAX_BACKUPS) {
+        backups = backups.slice(-MAX_BACKUPS);
+    }
+
+    // Guardar
+    try {
+        localStorage.setItem(backupsKey, JSON.stringify(backups));
+        console.log(`✅ Backup automático guardado: ${new Date(timestamp).toLocaleString('es-ES')}`);
+    } catch (e) {
+        console.error("Error saving backup:", e);
+    }
+}
+
+// Iniciar backup automático
+function startAutoBackup() {
+    // Limpiar timer anterior si existe
+    if (backupTimer) {
+        clearInterval(backupTimer);
+    }
+
+    // Guardar backup inicial
+    saveAutoBackup();
+
+    // Configurar backup periódico
+    backupTimer = setInterval(() => {
+        saveAutoBackup();
+    }, BACKUP_INTERVAL);
+
+    console.log(`🔄 Backup automático activado (cada ${BACKUP_INTERVAL / 60000} minutos)`);
+}
+
 // Cargar datos guardados
 function loadData() {
     // Cargar último tren usado
@@ -3423,7 +3491,8 @@ function selectTrain(trainId) {
 
         render();
     }
-
+    // Reiniciar backup automático para el nuevo tren
+    startAutoBackup();
     // Cerrar el menú después de cambiar de tren
     setTimeout(() => {
         const selector = document.getElementById('train-selector');
@@ -3477,56 +3546,54 @@ function showTrainNumberPrompt() {
         return;
     }
 
-    // Si el número es distinto del actual, confirmamos y borramos datos previos
+    // Si el número es distinto del actual, mostrar confirmación
     if (trimmed !== state.trainNumber) {
-        // Si no está en la lista, preguntar si quiere usarlo (igual que antes)
-        if (!trainNumbers[trimmed]) {
-            const confirmUnknown = confirm(
-                `El número de tren "${trimmed}" no está en la lista.\n¿Deseas usarlo de todos modos?\n\n(No se aplicará esquina doblada automáticamente)`
-            );
-            if (!confirmUnknown) return;
+        // Verificar si está en la lista
+        const isKnown = trainNumbers[trimmed];
+
+        let confirmMessage = `¿Cambiar al tren número ${trimmed}?\n\n`;
+        confirmMessage += '⚠️ ESTO BORRARÁ:\n';
+        confirmMessage += '• Todos los asientos registrados\n';
+        confirmMessage += '• Notas del servicio\n';
+        confirmMessage += '• Incidencias\n';
+        confirmMessage += '• Parada actual\n';
+        confirmMessage += '• Direcciones del tren\n\n';
+
+        if (!isKnown) {
+            confirmMessage += '⚠️ Este número no está en la lista.\n';
+            confirmMessage += '(No se aplicará esquina doblada automáticamente)\n\n';
         }
 
-        // --- BORRAR DATOS DE LA SESIÓN ANTERIOR ---
-        // 1) Eliminar del state los asientos guardados (sesión actual: selectedTrain)
+        confirmMessage += '¿Continuar?';
+
+        if (!confirm(confirmMessage)) return;
+
+        // --- BORRAR TODOS LOS DATOS ---
         state.seatData = {};
-        // 2) Eliminar direcciones guardadas del tren (opcional/seguro)
         state.trainDirection = {};
-        // 3) Eliminar notas del servicio anterior
         state.serviceNotes = "";
         state.incidents = {};
-        lastCopiedSeatData = null;  // 👈 AÑADIR ESTO
-        state.lastCopiedSeatData = null;  // 👈 AÑADIR ESTO
+        state.currentStop = null; // 👈 BORRAR PARADA ACTUAL
+        lastCopiedSeatData = null;
+        state.lastCopiedSeatData = null;
 
-        // 3) Eliminar las claves de localStorage relativas al tren que estaba en uso
-        //    Usamos state.selectedTrain (modelo: 463, 464...) porque el guardado por asiento
-        //    se hace por selectedTrain: `train${state.selectedTrain}Data`.
+        // Eliminar de localStorage
         try {
             localStorage.removeItem(`train${state.selectedTrain}Data`);
             localStorage.removeItem(`train${state.selectedTrain}Direction`);
             localStorage.removeItem(`train${state.selectedTrain}Notes`);
             localStorage.removeItem(`train${state.selectedTrain}Incidents`);
+            localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
+            localStorage.removeItem('currentStop'); // 👈 BORRAR PARADA ACTUAL
         } catch (e) {
-            console.warn('No se pudo eliminar las claves antiguas de localStorage', e);
+            console.warn('Error al eliminar datos de localStorage', e);
         }
 
-        // También podemos eliminar currentStop (si quieres que se resetee)
-        // localStorage.removeItem('currentStop');
-        // state.currentStop = null;
-
-        // Guardar inmediatamente (creará una entrada vacía si tu saveData lo hace así)
+        // Guardar estado limpio
         saveData();
-    } else {
-        // Si el número es el mismo, no borramos nada — normal behaviour
-        if (!trainNumbers[trimmed]) {
-            const confirmUnknown = confirm(
-                `El número de tren "${trimmed}" no está en la lista.\n¿Deseas usarlo de todos modos?\n\n(No se aplicará esquina doblada automáticamente)`
-            );
-            if (!confirmUnknown) return;
-        }
     }
 
-    // Finalmente: actualizar estado y persistir número
+    // Actualizar número de tren
     state.trainNumber = trimmed;
     try {
         localStorage.setItem('trainNumber', trimmed);
@@ -3534,7 +3601,7 @@ function showTrainNumberPrompt() {
         console.warn('No se pudo guardar trainNumber en localStorage', e);
     }
 
-    // Re-renderizar la UI para reflejar el cambio
+    // Re-renderizar
     render();
 }
 
@@ -4185,8 +4252,11 @@ let doorHoldTriggered = false;
 const DOOR_LONG_PRESS_DURATION = 500;
 
 function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
-    event.preventDefault();
+    // NO prevenir el evento por defecto para permitir scroll
     event.stopPropagation();
+
+    // Registrar inicio del tap
+    event.currentTarget._tapStart = Date.now();
 
     doorHoldTriggered = false;
     clearTimeout(doorHoldTimer);
@@ -4201,28 +4271,45 @@ function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
 }
 
 function handleDoorRelease(event) {
-    event.preventDefault();
     event.stopPropagation();
 
     clearTimeout(doorHoldTimer);
 
     if (!doorHoldTriggered) {
-        // Tap simple: toggle incidencia
+        // Tap simple: solo activar si fue RÁPIDO (menos de 200ms)
         const button = event.currentTarget;
         const elementId = button.dataset.doorId || button.dataset.wcId;
         const elementType = button.dataset.doorId ? 'door' : 'wc';
 
-        if (elementId) {
+        const tapDuration = Date.now() - (button._tapStart || 0);
+
+        if (elementId && tapDuration < 200) {
+            event.preventDefault(); // Solo prevenir si vamos a activar
+
             toggleIncident(state.selectedCoach, elementId, elementType);
+
+            // Mantener scroll
+            const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            isLongPressActive = false;
+            render();
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollPosition);
+            });
         }
     }
 
     doorHoldTriggered = false;
+    delete event.currentTarget._tapStart; // Limpiar
 }
 
-function handleDoorCancel() {
+function handleDoorCancel(event) {
     clearTimeout(doorHoldTimer);
     doorHoldTriggered = false;
+
+    // Limpiar timestamp
+    if (event && event.currentTarget) {
+        delete event.currentTarget._tapStart;
+    }
 }
 
 function exportTurn() {
@@ -4574,84 +4661,107 @@ ${state.trainNumber ? `
                         </div>
                     ` : ''}
 
-                    <div class="header-actions">
-<button class="action-btn ${state.serviceNotes && state.serviceNotes.trim() ? 'has-notes' : ''}" 
-        onclick="openServiceNotes()" 
-        title="Notas del servicio">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="12" y1="18" x2="12" y2="12"/>
-        <line x1="9" y1="15" x2="15" y2="15"/>
-    </svg>
-    ${state.serviceNotes && state.serviceNotes.trim() ? '<span class="notes-badge"></span>' : ''}
-</button>
-<button class="action-btn ${Object.keys(state.incidents).length > 0 ? 'has-incidents' : ''}" 
-        onclick="openIncidentsPanel()" 
-        title="Incidencias">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-        <line x1="12" y1="9" x2="12" y2="13"/>
-        <line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-    ${Object.keys(state.incidents).length > 0 ? `<span class="incident-badge">${Object.keys(state.incidents).length}</span>` : ''}
-</button>
+<div class="header-actions">
+    <button class="action-btn" onclick="openServiceNotes()" title="Notas del servicio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+        ${state.serviceNotes && state.serviceNotes.trim() ? '<span class="notes-badge"></span>' : ''}
+    </button>
+    
+    <button class="action-btn ${Object.keys(state.incidents).length > 0 ? 'has-incidents' : ''}" 
+            onclick="openIncidentsPanel()" 
+            title="Incidencias">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        ${Object.keys(state.incidents).length > 0 ? `<span class="incident-badge">${Object.keys(state.incidents).length}</span>` : ''}
+    </button>
+    
     <button class="action-btn" onclick="toggleDarkMode()" title="Modo nocturno">
-                            ${state.darkMode ? `
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="5"/>
-                                    <line x1="12" y1="1" x2="12" y2="3"/>
-                                    <line x1="12" y1="21" x2="12" y2="23"/>
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                                    <line x1="1" y1="12" x2="3" y2="12"/>
-                                    <line x1="21" y1="12" x2="23" y2="12"/>
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                                </svg>
-                            ` : `
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                                </svg>
-                            `}
-                        </button>
-                        <button class="action-btn" onclick="openAbout()" title="Acerca de">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="16" x2="12" y2="12"/>
-                                <line x1="12" y1="8" x2="12" y2="8"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn rotation-btn ${state.rotateSeats ? 'rotated' : ''}" 
-        onclick="toggleSeatRotation()" 
-        title="Invertir disposición de asientos">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2v20M19 9l-7 7-7-7" />
-    </svg>
-</button>
-                        <button class="action-btn" onclick="exportTurn()" title="Exportar turno">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7 10 12 15 17 10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn" onclick="importTurn()" title="Importar turno">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn delete-btn" onclick="clearAllData()" title="Borrar todos los datos">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                <line x1="10" y1="11" x2="10" y2="17"/>
-                                <line x1="14" y1="11" x2="14" y2="17"/>
-                            </svg>
-                        </button>
-                    </div>
+        ${state.darkMode ? `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        ` : `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        `}
+    </button>
+    
+    <button class="action-btn rotation-btn ${state.rotateSeats ? 'rotated' : ''}" 
+            onclick="toggleSeatRotation()" 
+            title="Invertir disposición de asientos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+    
+    <button class="action-btn more-options-btn" onclick="toggleMoreOptions()" title="Más opciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="12" cy="5" r="1"/>
+            <circle cx="12" cy="19" r="1"/>
+        </svg>
+    </button>
+    
+    <div id="more-options-menu" class="more-options-dropdown hidden">
+        <button class="more-option" onclick="openBackupsPanel(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12h18M3 6h18M3 18h18"/>
+                <circle cx="7" cy="12" r="2"/>
+            </svg>
+            Backups automáticos
+        </button>
+        <button class="more-option" onclick="exportTurn(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Exportar turno
+        </button>
+        <button class="more-option" onclick="importTurn(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Importar turno
+        </button>
+        <button class="more-option" onclick="openAbout(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12" y2="8"/>
+            </svg>
+            Acerca de
+        </button>
+        <button class="more-option delete-option" onclick="clearAllData(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+            Borrar todos los datos
+        </button>
+    </div>
+</div>
                 </div>
             ` : ''}
 
@@ -4749,10 +4859,10 @@ function renderSeats() {
                 data-wc-id="${pmrId}"
                 onmousedown="handleDoorPress('${state.selectedCoach}', '${pmrId}', 'wc', 'Baño PMR', event)"
                 onmouseup="handleDoorRelease(event)"
-                onmouseleave="handleDoorCancel()"
+                onmouseleave="handleDoorCancel(event)"
                 ontouchstart="handleDoorPress('${state.selectedCoach}', '${pmrId}', 'wc', 'Baño PMR', event)"
                 ontouchend="handleDoorRelease(event)"
-                ontouchcancel="handleDoorCancel()">
+                ontouchcancel="handleDoorCancel(event)">
             ${label}
         </button>
     `;
@@ -4787,10 +4897,10 @@ function renderSeats() {
                     data-door-id="${leftId}"
                     onmousedown="handleDoorPress('${state.selectedCoach}', '${leftId}', 'door', '${leftLabel}', event)"
                     onmouseup="handleDoorRelease(event)"
-                    onmouseleave="handleDoorCancel()"
+                    onmouseleave="handleDoorCancel(event)"
                     ontouchstart="handleDoorPress('${state.selectedCoach}', '${leftId}', 'door', '${leftLabel}', event)"
                     ontouchend="handleDoorRelease(event)"
-                    ontouchcancel="handleDoorCancel()">
+                    oontouchcancel="handleDoorCancel(event)">
                 <span class="door-label">P${doorNum}</span>
             </button>
             <div class="door-center"></div>
@@ -4840,10 +4950,10 @@ function renderSeats() {
                 data-wc-id="${wcId}"
                 onmousedown="handleDoorPress('${state.selectedCoach}', '${wcId}', 'wc', 'WC', event)"
                 onmouseup="handleDoorRelease(event)"
-                onmouseleave="handleDoorCancel()"
+                onmouseleave="handleDoorCancel(event)"
                 ontouchstart="handleDoorPress('${state.selectedCoach}', '${wcId}', 'wc', 'WC', event)"
                 ontouchend="handleDoorRelease(event)"
-                ontouchcancel="handleDoorCancel()">
+                ontouchcancel="handleDoorCancel(event)">
             ${wcLabel}
         </button>
     `;
@@ -5090,8 +5200,8 @@ function renderModal() {
                         readonly onfocus="this.removeAttribute('readonly')"
                     />
                 </div>
-                                <div class="modal-list">
-                    ${filteredStops
+<div class="modal-list">
+    ${filteredStops
         .map((stop) => {
             const stopIndex = route.indexOf(stop.full);
             const isPassed =
@@ -5103,17 +5213,18 @@ function renderModal() {
                 stopIndex === currentRouteIndex;
 
             return `
-                                <button
-                                    class="stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''}"
-                                    onclick="updateSeatFromList('${stop.abbr}')"
-                                >
-                                    <span class="stop-name">${stop.full}</span>
-                                    <span class="stop-abbr">${stop.abbr}</span>
-                                </button>
-                            `;
+                <button
+                    class="stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''}"
+                    ${isCurrent ? 'id="current-stop-item"' : ''}
+                    onclick="updateSeatFromList('${stop.abbr}')"
+                >
+                    <span class="stop-name">${stop.full}</span>
+                    <span class="stop-abbr">${stop.abbr}</span>
+                </button>
+            `;
         })
         .join("")}
-                </div>
+</div>
 
                 ${
         currentStop
@@ -5197,6 +5308,30 @@ function render() {
         // Si cerramos el modal, resetear la posición guardada
         modalScrollPosition = 0;
     }
+}
+
+function scrollToCurrentStop() {
+    // Esperar a que el DOM esté listo
+    requestAnimationFrame(() => {
+        const currentStopElement = document.getElementById('current-stop-item');
+        const modalList = document.querySelector('.modal-list');
+
+        if (currentStopElement && modalList) {
+            // Calcular posición para centrar el elemento
+            const elementTop = currentStopElement.offsetTop;
+            const elementHeight = currentStopElement.offsetHeight;
+            const listHeight = modalList.clientHeight;
+
+            // Centrar el elemento en la lista
+            const scrollPosition = elementTop - (listHeight / 2) + (elementHeight / 2);
+
+            // Hacer scroll suave
+            modalList.scrollTo({
+                top: Math.max(0, scrollPosition),
+                behavior: 'smooth'
+            });
+        }
+    });
 }
 
 function saveModalScrollPosition() {
@@ -5286,6 +5421,9 @@ function selectSeat(coach, num) {
     isModalOpen = true;
     lockBodyScroll();
     render();
+
+    // Hacer scroll a la parada actual
+    scrollToCurrentStop();
 }
 
 function lockBodyScroll() {
@@ -5552,7 +5690,75 @@ function handleSeatPress(coach, num, event) {
                 );
             }
             else {
-                // 🔴 NO tiene parada activa → Asignar parada final del tren
+                // 🔴 NO tiene parada activa
+
+                // Primero verificar si tiene SOLO checkboxes/comentario (sin parada)
+                const hasOnlyMetadata = seatInfo && (
+                    seatInfo.enlace ||
+                    seatInfo.seguir ||
+                    seatInfo.comentarioFlag ||
+                    seatInfo.comentario
+                );
+
+                if (hasOnlyMetadata) {
+                    // BORRAR checkboxes y comentarios
+                    const previousData = {
+                        enlace: seatInfo.enlace || false,
+                        seguir: seatInfo.seguir || false,
+                        comentarioFlag: seatInfo.comentarioFlag || false,
+                        comentario: seatInfo.comentario || "",
+                        historial: seatInfo.historial ? [...seatInfo.historial] : []
+                    };
+
+                    delete seatInfo.enlace;
+                    delete seatInfo.seguir;
+                    delete seatInfo.comentarioFlag;
+                    delete seatInfo.comentario;
+
+                    // Si no queda historial, eliminar key completa
+                    if (!seatInfo.historial || seatInfo.historial.length === 0) {
+                        delete state.seatData[key];
+                    }
+
+                    saveData();
+
+                    // Capturar scroll antes de render
+                    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+                    isLongPressActive = false;
+                    render();
+                    requestAnimationFrame(() => {
+                        window.scrollTo(0, scrollPosition);
+                    });
+
+                    showUndoBanner(
+                        `Información borrada del asiento ${num}`,
+                        () => {
+                            const key = getSeatKey(coach, num);
+                            if (!state.seatData[key]) {
+                                state.seatData[key] = {};
+                            }
+                            state.seatData[key].enlace = previousData.enlace;
+                            state.seatData[key].seguir = previousData.seguir;
+                            state.seatData[key].comentarioFlag = previousData.comentarioFlag;
+                            state.seatData[key].comentario = previousData.comentario;
+                            if (previousData.historial && previousData.historial.length > 0) {
+                                state.seatData[key].historial = previousData.historial;
+                            }
+                            saveData();
+
+                            const scrollPos = window.scrollY || document.documentElement.scrollTop;
+                            render();
+                            requestAnimationFrame(() => {
+                                window.scrollTo(0, scrollPos);
+                            });
+                        }
+                    );
+
+                    // IMPORTANTE: Salir aquí para no continuar con asignar parada
+                    return;
+                }
+
+                // Si llegamos aquí: NO tiene parada NI metadata → Asignar parada final del tren
 
                 // 🚫 Si el modo copiado rápido está activo → copiar toda la información
                 if (state.copyMode && lastCopiedSeatData) {
@@ -6096,7 +6302,6 @@ function showCoachStats(coachId) {
 }
 
 // Mostrar selector de variantes del 470
-// Mostrar selector de variantes del 470
 function show470VariantSelector(coachId, buttonElement) {
     // Eliminar selector previo si existe
     const existingSelector = document.querySelector('.variant-selector-popup');
@@ -6104,79 +6309,96 @@ function show470VariantSelector(coachId, buttonElement) {
 
     const currentVariant = state.coach470Variants[coachId] || "A";
 
-    const popup = document.createElement("div");
-    popup.className = "variant-selector-popup";
-    popup.innerHTML = `
-        <div class="variant-selector-content">
-            <div class="variant-selector-title">${coachId} - Seleccionar variante</div>
-            <button class="variant-option ${currentVariant === 'A' ? 'active' : ''}" 
-                    onclick="select470Variant('${coachId}', 'A')">
-                Variante A
-            </button>
-            <button class="variant-option ${currentVariant === 'B' ? 'active' : ''}" 
-                    onclick="select470Variant('${coachId}', 'B')">
-                Variante B
-            </button>
-            <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}" 
-                    onclick="select470Variant('${coachId}', 'C')">
-                Variante C
-            </button>
-            <button class="variant-cancel" onclick="closeVariantSelector()">
-                Cancelar
-            </button>
+    // Crear overlay modal obligatorio
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay variant-modal-overlay";
+    modal.innerHTML = `
+        <div class="variant-selector-popup modal-required">
+            <div class="variant-selector-content">
+                <div class="variant-selector-title">
+                    ${coachId} - Seleccionar variante
+                    <small style="display: block; font-size: 0.75rem; font-weight: normal; margin-top: 0.25rem; color: #6b7280;">
+                        Elige una variante para continuar
+                    </small>
+                </div>
+                <button class="variant-option ${currentVariant === 'A' ? 'active' : ''}" 
+                        onclick="select470Variant('${coachId}', 'A')">
+                    Variante A
+                </button>
+                <button class="variant-option ${currentVariant === 'B' ? 'active' : ''}" 
+                        onclick="select470Variant('${coachId}', 'B')">
+                    Variante B
+                </button>
+                <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}" 
+                        onclick="select470Variant('${coachId}', 'C')">
+                    Variante C
+                </button>
+            </div>
         </div>
     `;
 
-    document.body.appendChild(popup);
-
-    // 🔴 MEJORADO: Posicionamiento más robusto
-    const rect = buttonElement.getBoundingClientRect();
-    const popupHeight = 240; // altura aproximada del popup
-    const popupWidth = 200;
-
-    // Calcular posición centrada debajo del botón
-    let top = rect.bottom + 10;
-    let left = rect.left + (rect.width / 2);
-
-    // Ajustar si se sale de la pantalla por abajo
-    if (top + popupHeight > window.innerHeight) {
-        top = rect.top - popupHeight - 10; // Mostrar arriba del botón
+    document.body.appendChild(modal);
+    // Prevenir que clicks dentro del popup lo cierren
+    const popupElement = modal.querySelector('.variant-selector-popup');
+    if (popupElement) {
+        popupElement.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     }
+    lockBodyScroll();
 
-    // Ajustar si se sale por la derecha
-    if (left + (popupWidth / 2) > window.innerWidth) {
-        left = window.innerWidth - (popupWidth / 2) - 20;
-    }
-
-    // Ajustar si se sale por la izquierda
-    if (left - (popupWidth / 2) < 0) {
-        left = (popupWidth / 2) + 20;
-    }
-
-    popup.style.position = "fixed";
-    popup.style.top = `${top}px`;
-    popup.style.left = `${left}px`;
-    popup.style.transform = "translateX(-50%)";
-    popup.style.zIndex = "10000";
-
-// Cerrar al hacer clic fuera
-    setTimeout(() => {
-        function closeOnClickOutside(e) {
-            const popup = document.querySelector('.variant-selector-popup');
-            if (popup && !popup.contains(e.target) && !buttonElement.contains(e.target)) {
-                popup.remove();
-                document.removeEventListener('click', closeOnClickOutside);
-                document.removeEventListener('touchstart', closeOnClickOutside);
-
-                // 🔴 NUEVO: Resetear variables de doble tap
-                coachLastTapTime = 0;
-                coachLastTappedId = null;
+    // Prevenir cierre al hacer click en el overlay
+    modal.addEventListener('click', (e) => {
+        // Si el click fue en el overlay (no en el popup), no hacer nada
+        if (e.target === modal) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Opcional: pequeña animación de "sacudida" para indicar que no se puede cerrar
+            const popup = modal.querySelector('.variant-selector-popup');
+            if (popup) {
+                popup.style.animation = 'none';
+                setTimeout(() => {
+                    popup.style.animation = 'variantShake 0.3s ease';
+                }, 10);
             }
         }
+    });
 
-        document.addEventListener('click', closeOnClickOutside);
-        document.addEventListener('touchstart', closeOnClickOutside);
-    }, 100);
+    // Esperar a que el DOM se actualice
+    requestAnimationFrame(() => {
+        const popupElement = modal.querySelector('.variant-selector-popup');
+        if (!popupElement) return;
+
+        const rect = buttonElement.getBoundingClientRect();
+        const popupHeight = popupElement.offsetHeight || 240;
+        const popupWidth = popupElement.offsetWidth || 200;
+
+        // Calcular posición centrada debajo del botón
+        let top = rect.bottom + 10;
+        let left = rect.left + (rect.width / 2);
+
+        // Ajustar si se sale de la pantalla por abajo
+        if (top + popupHeight > window.innerHeight) {
+            top = rect.top - popupHeight - 10; // Mostrar arriba del botón
+        }
+
+        // Ajustar si se sale por la derecha
+        if (left + (popupWidth / 2) > window.innerWidth) {
+            left = window.innerWidth - (popupWidth / 2) - 20;
+        }
+
+        // Ajustar si se sale por la izquierda
+        if (left - (popupWidth / 2) < 0) {
+            left = (popupWidth / 2) + 20;
+        }
+
+        popupElement.style.position = "fixed";
+        popupElement.style.top = `${top}px`;
+        popupElement.style.left = `${left}px`;
+        popupElement.style.transform = "translateX(-50%)";
+        popupElement.style.zIndex = "10002";
+    });
+
 }
 
 // Seleccionar variante del 470
@@ -6186,9 +6408,11 @@ function select470Variant(coachId, variant) {
 
     saveData();
 
-    // Cerrar selector
-    const popup = document.querySelector('.variant-selector-popup');
-    if (popup) popup.remove();
+    // Cerrar modal obligatorio
+    const overlay = document.querySelector('.variant-modal-overlay');
+    if (overlay) overlay.remove();
+
+    unlockBodyScroll();
 
     // Re-renderizar
     if (state.selectedCoach === coachId) {
@@ -6214,10 +6438,14 @@ function select470Variant(coachId, variant) {
 
 // Cerrar selector de variantes
 function closeVariantSelector() {
+    // NO hacer nada si es modal obligatorio
+    const isModalRequired = document.querySelector('.modal-required');
+    if (isModalRequired) return;
+
     const popup = document.querySelector('.variant-selector-popup');
     if (popup) popup.remove();
 
-    // 🔴 NUEVO: Resetear variables de doble tap al cerrar
+    // Resetear variables de doble tap al cerrar
     coachLastTapTime = 0;
     coachLastTappedId = null;
 }
@@ -6301,6 +6529,171 @@ const domObserver = new MutationObserver(() => {
 });
 domObserver.observe(document.body, { childList: true, subtree: true });
 
+function openBackupsPanel() {
+    const backupsKey = `autoBackups_${state.selectedTrain}`;
+    let backups = [];
+
+    try {
+        const saved = localStorage.getItem(backupsKey);
+        if (saved) backups = JSON.parse(saved);
+    } catch (e) {
+        console.error("Error loading backups");
+    }
+
+    if (backups.length === 0) {
+        alert('No hay backups automáticos disponibles para este tren.');
+        return;
+    }
+
+    // Ordenar del más reciente al más antiguo
+    backups.reverse();
+
+    const backupsHTML = backups.map((backup, index) => {
+        const date = new Date(backup.timestamp);
+        const dateStr = date.toLocaleDateString('es-ES');
+        const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+        const seatCount = Object.keys(backup.seatData || {}).length;
+        const incidentCount = Object.keys(backup.incidents || {}).length;
+
+        return `
+            <div class="backup-item">
+                <div class="backup-info">
+                    <strong>${dateStr} - ${timeStr}</strong>
+                    <small>Asientos: ${seatCount} | Incidencias: ${incidentCount}</small>
+                    ${backup.trainNumber ? `<small>Tren: ${backup.trainNumber}</small>` : ''}
+                </div>
+                <button class="backup-restore-btn" onclick="restoreBackup(${backups.length - 1 - index})">
+                    Restaurar
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    const modal = `
+        <div class="modal-overlay" onclick="closeBackupsPanel(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()"
+                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+                 ontouchmove="modalSwipeMove(event)"
+                 ontouchend="modalSwipeEnd(event)"
+                 ontouchcancel="modalSwipeEnd(event)">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Backups automáticos (${backups.length})</h3>
+                        <button class="close-btn" onclick="closeBackupsPanel()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="about-content" style="max-height: 500px; overflow-y: auto;">
+                    ${backupsHTML}
+                </div>
+                <div class="modal-footer">
+                    <button class="clear-btn delete-btn" onclick="clearAllBackups()">
+                        Borrar todos los backups
+                    </button>
+                    <button class="clear-btn" onclick="closeBackupsPanel()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
+}
+
+function closeBackupsPanel(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+function restoreBackup(index) {
+    const backupsKey = `autoBackups_${state.selectedTrain}`;
+    let backups = [];
+
+    try {
+        const saved = localStorage.getItem(backupsKey);
+        if (saved) backups = JSON.parse(saved);
+    } catch (e) {
+        alert('Error al cargar backups');
+        return;
+    }
+
+    const backup = backups[index];
+    if (!backup) {
+        alert('Backup no encontrado');
+        return;
+    }
+
+    const date = new Date(backup.timestamp).toLocaleString('es-ES');
+
+    if (confirm(`¿Restaurar backup del ${date}?\n\nEsto reemplazará los datos actuales.`)) {
+        // Restaurar datos
+        state.seatData = backup.seatData || {};
+        state.trainDirection = backup.trainDirection || {};
+        state.serviceNotes = backup.serviceNotes || "";
+        state.incidents = backup.incidents || {};
+
+        if (backup.trainNumber) {
+            state.trainNumber = backup.trainNumber;
+            localStorage.setItem('trainNumber', backup.trainNumber);
+        }
+
+        if (backup.currentStop) {
+            state.currentStop = backup.currentStop;
+            localStorage.setItem('currentStop', backup.currentStop);
+        }
+
+        if (state.selectedTrain === "470" && backup.coach470Variants) {
+            state.coach470Variants = backup.coach470Variants;
+            localStorage.setItem('coach470Variants', JSON.stringify(backup.coach470Variants));
+        }
+
+        // Guardar en localStorage
+        saveData();
+
+        closeBackupsPanel();
+        render();
+
+        alert('✅ Backup restaurado correctamente');
+    }
+}
+
+function clearAllBackups() {
+    if (confirm('¿Seguro que quieres borrar TODOS los backups automáticos?\n\nEsta acción no se puede deshacer.')) {
+        const backupsKey = `autoBackups_${state.selectedTrain}`;
+        localStorage.removeItem(backupsKey);
+        closeBackupsPanel();
+        alert('Todos los backups han sido borrados');
+    }
+}
+
+function toggleMoreOptions() {
+    const menu = document.getElementById('more-options-menu');
+    if (menu) {
+        menu.classList.toggle('hidden');
+    }
+}
+
+// Cerrar menú al hacer clic fuera
+document.addEventListener('click', function(e) {
+    const menu = document.getElementById('more-options-menu');
+    const btn = e.target.closest('.more-options-btn');
+
+    if (menu && !menu.contains(e.target) && !btn) {
+        menu.classList.add('hidden');
+    }
+});
+
 // Inicializar
 window.selectCoach = selectCoach;
 window.selectSeat = selectSeat;
@@ -6376,6 +6769,11 @@ window.handleDoorRelease = handleDoorRelease;
 window.handleDoorCancel = handleDoorCancel;
 window.getDoorSideText = getDoorSideText;
 window.getTotalTrainOccupancy = getTotalTrainOccupancy;
+window.openBackupsPanel = openBackupsPanel;
+window.closeBackupsPanel = closeBackupsPanel;
+window.restoreBackup = restoreBackup;
+window.clearAllBackups = clearAllBackups;
+window.toggleMoreOptions = toggleMoreOptions;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
@@ -6582,6 +6980,15 @@ function toggleScreen() {
         _currentScreen = "arrivals";
     }
 }
+
+// Inicializar
+loadData();
+
+// Iniciar backup automático
+startAutoBackup();
+
+// Mostrar prompt de número de tren si no existe
+if (!state.trainNumber) {}
 
 render();
 
