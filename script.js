@@ -6900,13 +6900,12 @@ function scanQRCode() {
                     </div>
                 </div>
                 <div class="scan-content">
-                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
+                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280; font-size: 0.9rem;">
                         📷 Apunta la cámara al código QR
                     </p>
-                    <video id="qr-video" autoplay playsinline style="width: 100%; max-width: 400px; border-radius: 8px;"></video>
-                    <canvas id="qr-canvas" style="display: none;"></canvas>
-                    <p id="scan-status" style="text-align: center; margin-top: 1rem; color: #4b5563;">
-                        Esperando código...
+                    <div id="qr-reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+                    <p id="scan-status" style="text-align: center; margin-top: 1rem; color: #4b5563; font-size: 0.85rem;">
+                        Iniciando cámara...
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -6922,51 +6921,85 @@ function scanQRCode() {
     startQRScanning();
 }
 
-let scanStream = null;
-let scanInterval = null;
+let html5QrCode = null;
 
 async function startQRScanning() {
-    const video = document.getElementById('qr-video');
-    const canvas = document.getElementById('qr-canvas');
+    const readerDiv = document.getElementById('qr-reader');
     const status = document.getElementById('scan-status');
 
-    if (!video || !canvas) return;
+    if (!readerDiv) return;
 
     try {
-        scanStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: 'environment' }
+        // Crear instancia de Html5Qrcode
+        html5QrCode = new Html5Qrcode("qr-reader");
+
+        // Configuración optimizada para mejor detección
+        const config = {
+            fps: 10,    // 10 frames por segundo (más rápido que antes)
+            qrbox: { width: 250, height: 250 },  // Área de escaneo visible
+            aspectRatio: 1.0,
+            disableFlip: false,  // Permite voltear la imagen para mejor detección
+            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+        };
+
+        // Callback cuando se detecta un QR
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            status.textContent = '✅ ¡Código detectado!';
+            status.style.color = '#22c55e';
+
+            // Vibrar si está disponible
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            }
+
+            // Detener escaneo
+            html5QrCode.stop().then(() => {
+                // Procesar datos
+                processQRData(decodedText);
+
+                // Cerrar modal
+                setTimeout(() => closeScanModal(), 500);
+            }).catch(err => {
+                console.error("Error stopping scanner:", err);
+                processQRData(decodedText);
+                setTimeout(() => closeScanModal(), 500);
+            });
+        };
+
+        // Callback de error (opcional, para debugging)
+        const qrCodeErrorCallback = (errorMessage) => {
+            // No hacer nada - es normal tener "errores" mientras busca
+        };
+
+        // Iniciar cámara con cámara trasera si está disponible
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            qrCodeSuccessCallback,
+            qrCodeErrorCallback
+        ).then(() => {
+            status.textContent = '🔍 Buscando código QR...';
+            status.style.color = '#4b5563';
+        }).catch((err) => {
+            status.textContent = '❌ Error al acceder a la cámara';
+            status.style.color = '#ef4444';
+            console.error("Camera start error:", err);
+
+            // Intentar con cualquier cámara disponible
+            html5QrCode.start(
+                { facingMode: "user" },
+                config,
+                qrCodeSuccessCallback,
+                qrCodeErrorCallback
+            ).catch(err2 => {
+                console.error("Fallback camera error:", err2);
+            });
         });
 
-        video.srcObject = scanStream;
-
-        // Escanear cada 500ms
-        scanInterval = setInterval(() => {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(video, 0, 0);
-
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                if (code) {
-                    status.textContent = '✅ ¡Código detectado!';
-                    status.style.color = '#22c55e';
-
-                    // Procesar datos
-                    processQRData(code.data);
-
-                    // Cerrar escáner
-                    setTimeout(() => closeScanModal(), 500);
-                }
-            }
-        }, 500);
-
     } catch (error) {
-        status.textContent = '❌ Error al acceder a la cámara';
+        status.textContent = '❌ Error al iniciar escáner';
         status.style.color = '#ef4444';
-        console.error('Camera error:', error);
+        console.error('Scanner init error:', error);
     }
 }
 
