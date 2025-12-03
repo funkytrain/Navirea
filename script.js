@@ -3527,9 +3527,6 @@ function toggleSeatRotation() {
         container.classList.toggle('rotated', state.rotateSeats);
     }
 
-    // NO cambiar la dirección del tren, solo rotar visualmente
-    // Pero SÍ volver a renderizar para actualizar las flechas del pasillo
-
     // Volver a renderizar (esto actualizará las flechas)
     render();
 }
@@ -3557,7 +3554,8 @@ function showTrainNumberPrompt() {
         confirmMessage += '• Notas del servicio\n';
         confirmMessage += '• Incidencias\n';
         confirmMessage += '• Parada actual\n';
-        confirmMessage += '• Direcciones del tren\n\n';
+        confirmMessage += '• Direcciones del tren\n';
+        confirmMessage += '• Backups automáticos\n\n';
 
         if (!isKnown) {
             confirmMessage += '⚠️ Este número no está en la lista.\n';
@@ -3585,6 +3583,7 @@ function showTrainNumberPrompt() {
             localStorage.removeItem(`train${state.selectedTrain}Incidents`);
             localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
             localStorage.removeItem('currentStop'); // 👈 BORRAR PARADA ACTUAL
+            localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
         } catch (e) {
             console.warn('Error al eliminar datos de localStorage', e);
         }
@@ -3666,33 +3665,49 @@ function setCurrentStop(stopName) {
         return;
     }
 
-    // Comprobar si estamos yendo hacia una parada anterior a la ya seleccionada
-    const previousStop = state.currentStop || null;
-    if (previousStop) {
-        const prevIndex = route.indexOf(previousStop);
-        if (prevIndex !== -1 && stopIndex < prevIndex) {
-            // Mostrar ventana de confirmación tipo "Confirmar"
-            showConfirmModal(
-                `La parada "${stopName}" es anterior a la parada actual\n` +
-                `("${previousStop}").\n\n` +
-                `¿Quieres cambiar igualmente la parada actual y liberar los asientos ` +
-                `de las paradas anteriores?`,
-                () => {
-                    // ACEPTAR → aplicar el cambio
-                    applyCurrentStopChange(stopName, route, stopIndex);
-                },
-                () => {
-                    // CANCELAR → no hacer nada, mantener parada actual
-                    state.currentStopSearch = '';
-                    render();
-                }
-            );
-            return;
+    // Calcular cuántos asientos se liberarán
+    const stopsToDelete = route.slice(0, stopIndex + 1);
+    let seatsToDelete = 0;
+
+    Object.keys(state.seatData).forEach(key => {
+        const seatInfo = state.seatData[key];
+        if (seatInfo && seatInfo.stop && stopsToDelete.includes(seatInfo.stop.full)) {
+            seatsToDelete++;
         }
+    });
+
+    // Verificar si estamos yendo hacia una parada anterior
+    const previousStop = state.currentStop || null;
+    const isGoingBackwards = previousStop && route.indexOf(previousStop) > stopIndex;
+
+    // Construir mensaje de confirmación
+    let confirmMessage = `¿Cambiar parada actual a "${stopName}"?\n\n`;
+
+    if (isGoingBackwards) {
+        confirmMessage += `⚠️ Esta parada es ANTERIOR a la actual ("${previousStop}").\n\n`;
     }
 
-    // Caso normal (no es anterior) → aplicar directamente
-    applyCurrentStopChange(stopName, route, stopIndex);
+    if (seatsToDelete > 0) {
+        confirmMessage += `Se liberarán ${seatsToDelete} asiento(s) de paradas anteriores.\n\n`;
+    } else {
+        confirmMessage += `No se liberarán asientos.\n\n`;
+    }
+
+    confirmMessage += '¿Continuar?';
+
+    // Mostrar confirmación SIEMPRE
+    showConfirmModal(
+        confirmMessage,
+        () => {
+            // ACEPTAR → aplicar el cambio
+            applyCurrentStopChange(stopName, route, stopIndex);
+        },
+        () => {
+            // CANCELAR → no hacer nada
+            state.currentStopSearch = '';
+            render();
+        }
+    );
 }
 
 function getCurrentRoute() {
@@ -4283,7 +4298,7 @@ function handleDoorRelease(event) {
 
         const tapDuration = Date.now() - (button._tapStart || 0);
 
-        if (elementId && tapDuration < 200) {
+        if (elementId && tapDuration < 150) {
             event.preventDefault(); // Solo prevenir si vamos a activar
 
             toggleIncident(state.selectedCoach, elementId, elementType);
@@ -4493,11 +4508,15 @@ function clearAllData() {
         localStorage.removeItem('currentStop');
         localStorage.removeItem(`train${state.selectedTrain}Notes`);
         localStorage.removeItem(`train${state.selectedTrain}Incidents`);
+        localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
+
+        // 👈 NUEVO: Borrar backups automáticos
+        localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
 
         // refrescar UI
         render();
 
-        alert('Todos los datos han sido borrados, incluyendo las notas del servicio y las incidencias.');
+        alert('Todos los datos han sido borrados, incluyendo backups automáticos.');
     }
 }
 
@@ -4710,7 +4729,14 @@ ${state.trainNumber ? `
             <path d="M12 2v20M19 9l-7 7-7-7" />
         </svg>
     </button>
-    
+    <button class="action-btn delete-btn" onclick="clearAllData()" title="Borrar todos los datos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <line x1="10" y1="11" x2="10" y2="17"/>
+        <line x1="14" y1="11" x2="14" y2="17"/>
+    </svg>
+</button>
     <button class="action-btn more-options-btn" onclick="toggleMoreOptions()" title="Más opciones">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="1"/>
@@ -4719,48 +4745,85 @@ ${state.trainNumber ? `
         </svg>
     </button>
     
-    <div id="more-options-menu" class="more-options-dropdown hidden">
-        <button class="more-option" onclick="openBackupsPanel(); toggleMoreOptions();">
+<div id="more-options-menu" class="more-options-dropdown hidden">
+    <button class="more-option" onclick="toggleShareSubmenu(); event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Compartir turno
+        <span class="submenu-arrow">›</span>
+    </button>
+    
+    <div id="share-submenu" class="submenu hidden">
+        <button class="more-option submenu-item" onclick="generateQRCode(); toggleMoreOptions();">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 12h18M3 6h18M3 18h18"/>
-                <circle cx="7" cy="12" r="2"/>
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
             </svg>
-            Backups automáticos
+            Por código QR
         </button>
-        <button class="more-option" onclick="exportTurn(); toggleMoreOptions();">
+        <button class="more-option submenu-item" onclick="exportTurn(); toggleMoreOptions();">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Exportar turno
-        </button>
-        <button class="more-option" onclick="importTurn(); toggleMoreOptions();">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            Importar turno
-        </button>
-        <button class="more-option" onclick="openAbout(); toggleMoreOptions();">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12" y2="8"/>
-            </svg>
-            Acerca de
-        </button>
-        <button class="more-option delete-option" onclick="clearAllData(); toggleMoreOptions();">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                <line x1="10" y1="11" x2="10" y2="17"/>
-                <line x1="14" y1="11" x2="14" y2="17"/>
-            </svg>
-            Borrar todos los datos
+            Por archivo JSON
         </button>
     </div>
+    
+    <button class="more-option" onclick="toggleImportSubmenu(); event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Importar turno
+        <span class="submenu-arrow">›</span>
+    </button>
+    
+    <div id="import-submenu" class="submenu hidden">
+        <button class="more-option submenu-item" onclick="scanQRCode(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            Escanear QR
+        </button>
+        <button class="more-option submenu-item" onclick="importTurn(); toggleMoreOptions();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                <polyline points="13 2 13 9 20 9"/>
+            </svg>
+            Desde archivo JSON
+        </button>
+    </div>
+    
+    <button class="more-option" onclick="openBackupsPanel(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+            <circle cx="7" cy="12" r="2"/>
+        </svg>
+        Backups automáticos
+    </button>
+    
+    <button class="more-option" onclick="openAbout(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12" y2="8"/>
+        </svg>
+        Acerca de
+    </button>
+</div>
 </div>
                 </div>
             ` : ''}
@@ -5322,8 +5385,11 @@ function scrollToCurrentStop() {
             const elementHeight = currentStopElement.offsetHeight;
             const listHeight = modalList.clientHeight;
 
-            // Centrar el elemento en la lista
-            const scrollPosition = elementTop - (listHeight / 2) + (elementHeight / 2);
+            // Ajuste: restar altura de ~2 elementos para subir el centrado
+            const offsetAdjustment = elementHeight * 2; // Altura aproximada de 2 paradas
+
+            // Centrar el elemento en la lista con ajuste
+            const scrollPosition = elementTop - (listHeight / 2) + (elementHeight / 2) - offsetAdjustment;
 
             // Hacer scroll suave
             modalList.scrollTo({
@@ -6694,6 +6760,300 @@ document.addEventListener('click', function(e) {
     }
 });
 
+function toggleShareSubmenu() {
+    const submenu = document.getElementById('share-submenu');
+    const importSubmenu = document.getElementById('import-submenu');
+
+    if (submenu) {
+        submenu.classList.toggle('hidden');
+        // Cerrar el otro submenú
+        if (importSubmenu) importSubmenu.classList.add('hidden');
+    }
+}
+
+function toggleImportSubmenu() {
+    const submenu = document.getElementById('import-submenu');
+    const shareSubmenu = document.getElementById('share-submenu');
+
+    if (submenu) {
+        submenu.classList.toggle('hidden');
+        // Cerrar el otro submenú
+        if (shareSubmenu) shareSubmenu.classList.add('hidden');
+    }
+}
+
+function generateQRCode() {
+    const turnData = {
+        trainModel: state.selectedTrain,
+        seatData: state.seatData,
+        trainDirection: state.trainDirection,
+        serviceNotes: state.serviceNotes || "",
+        incidents: state.incidents || {},
+        trainNumber: state.trainNumber || null,
+        currentStop: state.currentStop || null,
+        exportDate: new Date().toISOString(),
+        trainName: trainModels[state.selectedTrain].name,
+        ...(state.selectedTrain === "470" && {
+            coach470Variants: state.coach470Variants
+        })
+    };
+
+    const dataStr = JSON.stringify(turnData);
+
+    // Verificar tamaño (QR tiene límites)
+    if (dataStr.length > 2953) {
+        alert('⚠️ Los datos son demasiado grandes para un código QR.\n\nUsa "Exportar por archivo JSON" en su lugar.');
+        return;
+    }
+
+    const modal = `
+        <div class="modal-overlay" onclick="closeQRModal(event)">
+            <div class="modal qr-modal" onclick="event.stopPropagation()"
+                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+                 ontouchmove="modalSwipeMove(event)"
+                 ontouchend="modalSwipeEnd(event)"
+                 ontouchcancel="modalSwipeEnd(event)">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Compartir turno por QR</h3>
+                        <button class="close-btn" onclick="closeQRModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="qr-content">
+                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
+                        Escanea este código con otro dispositivo para importar el turno
+                    </p>
+                    <div id="qrcode-container"></div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <p style="font-size: 0.9rem; color: #4b5563;">
+                            <strong>${turnData.trainName}</strong>
+                            ${turnData.trainNumber ? ` - Nº ${turnData.trainNumber}` : ''}
+                        </p>
+                        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
+                            ${Object.keys(turnData.seatData).length} asientos registrados
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="clear-btn" onclick="closeQRModal()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
+
+    // Generar QR
+    setTimeout(() => {
+        const container = document.getElementById('qrcode-container');
+        if (container && typeof QRCode !== 'undefined') {
+            new QRCode(container, {
+                text: dataStr,
+                width: 280,
+                height: 280,
+                colorDark: state.darkMode ? "#f9fafb" : "#000000",
+                colorLight: state.darkMode ? "#1f2937" : "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        } else {
+            container.innerHTML = '<p style="color: #ef4444;">Error al generar código QR</p>';
+        }
+    }, 100);
+}
+
+function closeQRModal(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.qr-modal')?.closest('.modal-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+function scanQRCode() {
+    // Verificar soporte de cámara
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('❌ Tu navegador no soporta acceso a la cámara.\n\nUsa "Importar desde archivo JSON" en su lugar.');
+        return;
+    }
+
+    const modal = `
+        <div class="modal-overlay" onclick="closeScanModal(event)">
+            <div class="modal scan-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Escanear código QR</h3>
+                        <button class="close-btn" onclick="closeScanModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="scan-content">
+                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
+                        📷 Apunta la cámara al código QR
+                    </p>
+                    <video id="qr-video" autoplay playsinline style="width: 100%; max-width: 400px; border-radius: 8px;"></video>
+                    <canvas id="qr-canvas" style="display: none;"></canvas>
+                    <p id="scan-status" style="text-align: center; margin-top: 1rem; color: #4b5563;">
+                        Esperando código...
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="clear-btn" onclick="closeScanModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modal);
+    lockBodyScroll();
+
+    startQRScanning();
+}
+
+let scanStream = null;
+let scanInterval = null;
+
+async function startQRScanning() {
+    const video = document.getElementById('qr-video');
+    const canvas = document.getElementById('qr-canvas');
+    const status = document.getElementById('scan-status');
+
+    if (!video || !canvas) return;
+
+    try {
+        scanStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
+        });
+
+        video.srcObject = scanStream;
+
+        // Escanear cada 500ms
+        scanInterval = setInterval(() => {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                if (code) {
+                    status.textContent = '✅ ¡Código detectado!';
+                    status.style.color = '#22c55e';
+
+                    // Procesar datos
+                    processQRData(code.data);
+
+                    // Cerrar escáner
+                    setTimeout(() => closeScanModal(), 500);
+                }
+            }
+        }, 500);
+
+    } catch (error) {
+        status.textContent = '❌ Error al acceder a la cámara';
+        status.style.color = '#ef4444';
+        console.error('Camera error:', error);
+    }
+}
+
+function processQRData(dataStr) {
+    try {
+        const turnData = JSON.parse(dataStr);
+
+        // Validar datos
+        if (!turnData.trainModel || !trainModels[turnData.trainModel]) {
+            alert('❌ Código QR no válido o modelo de tren no reconocido');
+            return;
+        }
+
+        const trainName = turnData.trainName || turnData.trainModel;
+        const exportDate = turnData.exportDate ?
+            new Date(turnData.exportDate).toLocaleString('es-ES') :
+            'desconocida';
+
+        if (confirm(
+            `¿Importar turno escaneado?\n\n` +
+            `Tren: ${trainName}\n` +
+            `Fecha: ${exportDate}\n` +
+            `Asientos: ${Object.keys(turnData.seatData || {}).length}\n\n` +
+            `Esto reemplazará los datos actuales.`
+        )) {
+            // Cambiar al tren correcto
+            if (state.selectedTrain !== turnData.trainModel) {
+                state.selectedTrain = turnData.trainModel;
+                state.selectedCoach = trainModels[turnData.trainModel].coaches[0].id;
+                localStorage.setItem('selectedTrain', turnData.trainModel);
+            }
+
+            // Importar datos
+            state.seatData = turnData.seatData || {};
+            state.trainDirection = turnData.trainDirection || {};
+            state.serviceNotes = turnData.serviceNotes || "";
+            state.incidents = turnData.incidents || {};
+
+            if (turnData.trainNumber) {
+                state.trainNumber = turnData.trainNumber;
+                localStorage.setItem('trainNumber', turnData.trainNumber);
+            }
+
+            if (turnData.currentStop) {
+                state.currentStop = turnData.currentStop;
+                localStorage.setItem('currentStop', turnData.currentStop);
+            }
+
+            if (turnData.trainModel === "470" && turnData.coach470Variants) {
+                state.coach470Variants = turnData.coach470Variants;
+                localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+            }
+
+            saveData();
+            render();
+            alert('✅ Turno importado correctamente desde QR');
+        }
+
+    } catch (error) {
+        alert('❌ Error al procesar código QR');
+        console.error('QR processing error:', error);
+    }
+}
+
+function closeScanModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+
+    // Detener cámara
+    if (scanStream) {
+        scanStream.getTracks().forEach(track => track.stop());
+        scanStream = null;
+    }
+
+    // Detener intervalo
+    if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+    }
+
+    const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
+    if (overlay) overlay.remove();
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
 // Inicializar
 window.selectCoach = selectCoach;
 window.selectSeat = selectSeat;
@@ -6774,6 +7134,12 @@ window.closeBackupsPanel = closeBackupsPanel;
 window.restoreBackup = restoreBackup;
 window.clearAllBackups = clearAllBackups;
 window.toggleMoreOptions = toggleMoreOptions;
+window.toggleShareSubmenu = toggleShareSubmenu;
+window.toggleImportSubmenu = toggleImportSubmenu;
+window.generateQRCode = generateQRCode;
+window.closeQRModal = closeQRModal;
+window.scanQRCode = scanQRCode;
+window.closeScanModal = closeScanModal;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables

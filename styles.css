@@ -138,13 +138,13 @@ body {
 /* Botones de acción en 2 filas x 3 columnas */
 .header-actions {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 0.5rem;
 }
 
 @media (max-width: 640px) {
     .header-actions {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(6, 1fr);
     }
 }
 
@@ -2820,4 +2820,59 @@ body.dark-mode .more-option:hover {
 
 body.dark-mode .more-option.delete-option:hover {
     background-color: #3a2929;
+}
+
+/* Submenús */
+.submenu {
+    padding-left: 1rem;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.dark-mode .submenu {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.submenu-item {
+    font-size: 0.85rem !important;
+    padding: 0.6rem 1rem !important;
+}
+
+.submenu-arrow {
+    margin-left: auto;
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+/* Modal de QR */
+.qr-modal,
+.scan-modal {
+    max-width: 450px;
+    margin: auto;
+}
+
+.qr-content,
+.scan-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#qrcode-container {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+body.dark-mode #qrcode-container {
+    background: #1f2937;
+}
+
+#qr-video {
+    border: 2px solid #e5e7eb;
+}
+
+body.dark-mode #qr-video {
+    border-color: #4b5563;
 }
