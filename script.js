@@ -6935,10 +6935,10 @@ async function startQRScanning() {
 
         // Configuración optimizada para mejor detección
         const config = {
-            fps: 10,    // 10 frames por segundo (más rápido que antes)
-            qrbox: { width: 250, height: 250 },  // Área de escaneo visible
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
             aspectRatio: 1.0,
-            disableFlip: false,  // Permite voltear la imagen para mejor detección
+            disableFlip: false,
             formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
         };
 
@@ -6947,31 +6947,49 @@ async function startQRScanning() {
             status.textContent = '✅ ¡Código detectado!';
             status.style.color = '#22c55e';
 
-            // Vibrar si está disponible
             if (navigator.vibrate) {
                 navigator.vibrate(200);
             }
 
-            // Detener escaneo
-            html5QrCode.stop().then(() => {
-                // Procesar datos
-                processQRData(decodedText);
+            // Detener escaneo PRIMERO
+            html5QrCode.stop()
+                .then(() => {
+                    html5QrCode.clear();
+                    html5QrCode = null;
 
-                // Cerrar modal
-                setTimeout(() => closeScanModal(), 500);
-            }).catch(err => {
-                console.error("Error stopping scanner:", err);
-                processQRData(decodedText);
-                setTimeout(() => closeScanModal(), 500);
-            });
+                    processQRData(decodedText);
+
+                    setTimeout(() => {
+                        const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
+                        if (overlay) overlay.remove();
+
+                        if (!document.querySelector('.modal-overlay')) {
+                            unlockBodyScroll();
+                        }
+                    }, 500);
+                })
+                .catch(err => {
+                    console.error("Error stopping scanner:", err);
+                    html5QrCode = null;
+
+                    processQRData(decodedText);
+
+                    setTimeout(() => {
+                        const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
+                        if (overlay) overlay.remove();
+
+                        if (!document.querySelector('.modal-overlay')) {
+                            unlockBodyScroll();
+                        }
+                    }, 500);
+                });
         };
 
-        // Callback de error (opcional, para debugging)
         const qrCodeErrorCallback = (errorMessage) => {
-            // No hacer nada - es normal tener "errores" mientras busca
+            // Normal mientras busca
         };
 
-        // Iniciar cámara con cámara trasera si está disponible
+        // Iniciar cámara trasera
         html5QrCode.start(
             { facingMode: "environment" },
             config,
@@ -6983,9 +7001,9 @@ async function startQRScanning() {
         }).catch((err) => {
             status.textContent = '❌ Error al acceder a la cámara';
             status.style.color = '#ef4444';
-            console.error("Camera start error:", err);
+            console.error("Camera error:", err);
 
-            // Intentar con cualquier cámara disponible
+            // Intentar cámara frontal
             html5QrCode.start(
                 { facingMode: "user" },
                 config,
@@ -6993,6 +7011,7 @@ async function startQRScanning() {
                 qrCodeErrorCallback
             ).catch(err2 => {
                 console.error("Fallback camera error:", err2);
+                html5QrCode = null;
             });
         });
 
@@ -7000,6 +7019,7 @@ async function startQRScanning() {
         status.textContent = '❌ Error al iniciar escáner';
         status.style.color = '#ef4444';
         console.error('Scanner init error:', error);
+        html5QrCode = null;
     }
 }
 
@@ -7065,20 +7085,43 @@ function processQRData(dataStr) {
 }
 
 function closeScanModal(event) {
-    if (event && event.target !== event.currentTarget) return;
+    // Permitir cerrar con botones o overlay
+    const isButtonClick = event && event.target && (
+        event.target.classList.contains('close-btn') ||
+        event.target.closest('.close-btn') ||
+        event.target.classList.contains('clear-btn') ||
+        event.target.closest('.clear-btn')
+    );
 
-    // Detener cámara
-    if (scanStream) {
-        scanStream.getTracks().forEach(track => track.stop());
-        scanStream = null;
+    const isOverlayClick = event && event.target === event.currentTarget;
+
+    if (event && !isButtonClick && !isOverlayClick) return;
+
+    // Detener escáner de forma segura
+    if (html5QrCode) {
+        try {
+            html5QrCode.stop()
+                .then(() => {
+                    html5QrCode.clear();
+                    html5QrCode = null;
+                    removeModalAndUnlock();
+                })
+                .catch(err => {
+                    console.error("Error stopping:", err);
+                    html5QrCode = null;
+                    removeModalAndUnlock();
+                });
+        } catch (e) {
+            console.error("Exception stopping:", e);
+            html5QrCode = null;
+            removeModalAndUnlock();
+        }
+    } else {
+        removeModalAndUnlock();
     }
+}
 
-    // Detener intervalo
-    if (scanInterval) {
-        clearInterval(scanInterval);
-        scanInterval = null;
-    }
-
+function removeModalAndUnlock() {
     const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
     if (overlay) overlay.remove();
 
@@ -7173,6 +7216,7 @@ window.generateQRCode = generateQRCode;
 window.closeQRModal = closeQRModal;
 window.scanQRCode = scanQRCode;
 window.closeScanModal = closeScanModal;
+window.removeModalAndUnlock = removeModalAndUnlock;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
