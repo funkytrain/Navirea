@@ -1913,6 +1913,11 @@ const stationScreens = {
     "Logroño": 81100
 };
 
+
+// Configuración de JSONBin para compartir turnos
+const JSONBIN_API_KEY = 'REDACTED';
+const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
+
 // Función para determinar si un coche es el primero o último visualmente
 function getCoachPosition(coachId) {
     // Verificar si ya está en cache
@@ -6782,7 +6787,67 @@ function toggleImportSubmenu() {
     }
 }
 
-function generateQRCode() {
+// ============================================================================
+// 🆕 SISTEMA DE COMPARTIR POR QR CON CÓDIGO CORTO
+// ============================================================================
+
+// Subir turno a JSONBin y obtener código corto
+async function uploadTurnToServer(turnData) {
+    try {
+        const response = await fetch(`${JSONBIN_BASE_URL}/b`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_API_KEY,
+                'X-Bin-Private': 'false',
+                'X-Bin-Name': `Turno-${turnData.trainName}-${new Date().toISOString()}`
+            },
+            body: JSON.stringify(turnData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al subir datos al servidor');
+        }
+
+        const data = await response.json();
+
+        // Extraer ID corto del bin (últimos 24 caracteres)
+        const binId = data.metadata.id;
+
+        return binId;
+    } catch (error) {
+        console.error('Error uploading turn:', error);
+        throw error;
+    }
+}
+
+// Descargar turno desde JSONBin usando código corto
+async function downloadTurnFromServer(binId) {
+    try {
+        const response = await fetch(`${JSONBIN_BASE_URL}/b/${binId}/latest`, {
+            method: 'GET',
+            headers: {
+                'X-Master-Key': JSONBIN_API_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al descargar datos del servidor');
+        }
+
+        const data = await response.json();
+        return data.record; // Los datos están en .record
+    } catch (error) {
+        console.error('Error downloading turn:', error);
+        throw error;
+    }
+}
+
+// ============================================================================
+// FIN SISTEMA DE COMPARTIR
+// ============================================================================
+
+async function generateQRCode() {
     const turnData = {
         trainModel: state.selectedTrain,
         seatData: state.seatData,
@@ -6792,20 +6857,13 @@ function generateQRCode() {
         trainNumber: state.trainNumber || null,
         currentStop: state.currentStop || null,
         exportDate: new Date().toISOString(),
-        trainName: trainModels[state.selectedTrain].name,
+        trainName: getAllTrains()[state.selectedTrain].name,
         ...(state.selectedTrain === "470" && {
             coach470Variants: state.coach470Variants
         })
     };
 
-    const dataStr = JSON.stringify(turnData);
-
-    // Verificar tamaño (QR tiene límites)
-    if (dataStr.length > 2953) {
-        alert('⚠️ Los datos son demasiado grandes para un código QR.\n\nUsa "Exportar por archivo JSON" en su lugar.');
-        return;
-    }
-
+    // Mostrar modal con loading
     const modal = `
         <div class="modal-overlay" onclick="closeQRModal(event)">
             <div class="modal qr-modal" onclick="event.stopPropagation()"
@@ -6826,17 +6884,15 @@ function generateQRCode() {
                 </div>
                 <div class="qr-content">
                     <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
-                        Escanea este código con otro dispositivo para importar el turno
+                        ⏳ Generando código QR...
                     </p>
-                    <div id="qrcode-container"></div>
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <p style="font-size: 0.9rem; color: #4b5563;">
-                            <strong>${turnData.trainName}</strong>
-                            ${turnData.trainNumber ? ` - Nº ${turnData.trainNumber}` : ''}
-                        </p>
-                        <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
-                            ${Object.keys(turnData.seatData).length} asientos registrados
-                        </p>
+                    <div id="qrcode-container" style="display: flex; justify-content: center; align-items: center; min-height: 280px;">
+                        <div style="text-align: center;">
+                            <svg style="animation: spin 1s linear infinite; width: 48px; height: 48px; color: #4f46e5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                            </svg>
+                            <p style="margin-top: 1rem; color: #6b7280;">Subiendo datos...</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -6849,22 +6905,61 @@ function generateQRCode() {
     document.body.insertAdjacentHTML('beforeend', modal);
     lockBodyScroll();
 
-    // Generar QR
-    setTimeout(() => {
+    // Subir datos al servidor
+    try {
+        const binId = await uploadTurnToServer(turnData);
+
+        // Generar QR con solo el código corto
         const container = document.getElementById('qrcode-container');
         if (container && typeof QRCode !== 'undefined') {
+            container.innerHTML = ''; // Limpiar loading
+
             new QRCode(container, {
-                text: dataStr,
+                text: binId,
                 width: 280,
                 height: 280,
                 colorDark: state.darkMode ? "#f9fafb" : "#000000",
                 colorLight: state.darkMode ? "#1f2937" : "#ffffff",
                 correctLevel: QRCode.CorrectLevel.M
             });
-        } else {
-            container.innerHTML = '<p style="color: #ef4444;">Error al generar código QR</p>';
+
+            // Actualizar mensaje
+            const message = document.querySelector('.qr-content p');
+            if (message) {
+                message.innerHTML = `
+                    ✅ Código QR generado correctamente<br>
+                    <small style="color: #6b7280;">Válido por 30 días</small>
+                `;
+            }
+
+            // Añadir info del turno
+            container.insertAdjacentHTML('afterend', `
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p style="font-size: 0.9rem; color: #4b5563;">
+                        <strong>${turnData.trainName}</strong>
+                        ${turnData.trainNumber ? ` - Nº ${turnData.trainNumber}` : ''}
+                    </p>
+                    <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
+                        ${Object.keys(turnData.seatData).length} asientos registrados
+                    </p>
+                    <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">
+                        Código: <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 4px;">${binId}</code>
+                    </p>
+                </div>
+            `);
         }
-    }, 100);
+    } catch (error) {
+        const container = document.getElementById('qrcode-container');
+        if (container) {
+            container.innerHTML = `
+                <p style="color: #ef4444; text-align: center;">
+                    ❌ Error al generar código QR<br>
+                    <small>${error.message}</small><br><br>
+                    <small style="color: #6b7280;">Usa "Exportar por archivo JSON" como alternativa</small>
+                </p>
+            `;
+        }
+    }
 }
 
 function closeQRModal(event) {
@@ -7023,12 +7118,30 @@ async function startQRScanning() {
     }
 }
 
-function processQRData(dataStr) {
+async function processQRData(dataStr) {
     try {
-        const turnData = JSON.parse(dataStr);
+        // Verificar si es un código corto (24 caracteres hex) o JSON completo
+        const isShortCode = /^[a-f0-9]{24}$/i.test(dataStr.trim());
+
+        let turnData;
+
+        if (isShortCode) {
+            // Es código corto, descargar del servidor
+            const statusEl = document.getElementById('scan-status');
+            if (statusEl) {
+                statusEl.textContent = '📥 Descargando datos del servidor...';
+                statusEl.style.color = '#4f46e5';
+            }
+
+            turnData = await downloadTurnFromServer(dataStr.trim());
+        } else {
+            // Es JSON completo (retrocompatibilidad)
+            turnData = JSON.parse(dataStr);
+        }
 
         // Validar datos
-        if (!turnData.trainModel || !trainModels[turnData.trainModel]) {
+        const allTrains = getAllTrains();
+        if (!turnData.trainModel || !allTrains[turnData.trainModel]) {
             alert('❌ Código QR no válido o modelo de tren no reconocido');
             return;
         }
@@ -7048,7 +7161,7 @@ function processQRData(dataStr) {
             // Cambiar al tren correcto
             if (state.selectedTrain !== turnData.trainModel) {
                 state.selectedTrain = turnData.trainModel;
-                state.selectedCoach = trainModels[turnData.trainModel].coaches[0].id;
+                state.selectedCoach = allTrains[turnData.trainModel].coaches[0].id;
                 localStorage.setItem('selectedTrain', turnData.trainModel);
             }
 
@@ -7079,7 +7192,7 @@ function processQRData(dataStr) {
         }
 
     } catch (error) {
-        alert('❌ Error al procesar código QR');
+        alert('❌ Error al procesar código QR: ' + error.message);
         console.error('QR processing error:', error);
     }
 }
@@ -7217,6 +7330,8 @@ window.closeQRModal = closeQRModal;
 window.scanQRCode = scanQRCode;
 window.closeScanModal = closeScanModal;
 window.removeModalAndUnlock = removeModalAndUnlock;
+window.uploadTurnToServer = uploadTurnToServer;
+window.downloadTurnFromServer = downloadTurnFromServer;
 
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
