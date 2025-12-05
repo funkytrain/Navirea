@@ -2966,6 +2966,11 @@ let state = {
 let savedScrollPosition = 0;
 let isModalOpen = false;
 
+// Obtener todos los trenes (predeterminados + personalizados)
+function getAllTrains() {
+    return { ...trainModels, ...state.customTrains };
+}
+
 let _currentScreen = "arrivals";
 // Variables para doble tap en botones de coche 470
 let coachTapTimer = null;
