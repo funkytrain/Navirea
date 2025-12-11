@@ -656,14 +656,14 @@ const trainModels = {
                     { type: "seats", positions: [[null, null, null, "WC-A", "WC-A"]] },
                     { type: "space", height: 120 },
                     { type: "seats", positions: [["EQ", "EQ", null, 32, 31]] },
-                    { type: "seats", positions: [[35, 36, null, 34, 33]] },
-                    { type: "seats", positions: [[39, 40, null, 38, 37]] },
-                    { type: "seats", positions: [[43, 44, null, 42, 41]] },
-                    { type: "seats", positions: [[47, 48, null, 46, 45]] },
+                    { type: "seats", positions: [[33, 34, null, 36, 35]] },
+                    { type: "seats", positions: [[37, 38, null, 40, 39]] },
+                    { type: "seats", positions: [[41, 42, null, 44, 43]] },
+                    { type: "seats", positions: [[45, 46, null, 48, 47]] },
                     { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                    { type: "seats", positions: [[51, 52, null, 50, 49]] },
-                    { type: "seats", positions: [[55, 56, null, 54, 53]] },
-                    { type: "seats", positions: [[59, 60, null, 58, 57]] }
+                    { type: "seats", positions: [[49, 50, null, 52, 51]] },
+                    { type: "seats", positions: [[53, 54, null, 56, 55]] },
+                    { type: "seats", positions: [[57, 58, null, 60, 59]] }
                 ]
             },
             {
@@ -750,14 +750,14 @@ const trainModels = {
                     { type: "seats", positions: [[227, 228, null, "EQ", "EQ"]] },
                     { type: "space", height: 100 },
                     { type: "seats", positions: [["EQ", "EQ", null, 230, 229]] },
-                    { type: "seats", positions: [[233, 234, null, 232, 231]] },
-                    { type: "seats", positions: [[237, 238, null, 236, 235]] },
-                    { type: "seats", positions: [[241, 242, null, 240, 239]] },
-                    { type: "seats", positions: [[245, 246, null, 244, 243]] },
+                    { type: "seats", positions: [[231, 232, null, 234, 233]] },
+                    { type: "seats", positions: [[235, 236, null, 238, 237]] },
+                    { type: "seats", positions: [[239, 240, null, 242, 241]] },
+                    { type: "seats", positions: [[243, 244, null, 246, 245]] },
                     { type: "seats", positions: [["MESA", "MESA", null, "MESA", "MESA"]] },
-                    { type: "seats", positions: [[249, 250, null, 248, 247]] },
-                    { type: "seats", positions: [[253, 254, null, 252, 251]] },
-                    { type: "seats", positions: [[257, 258, null, 256, 255]] }
+                    { type: "seats", positions: [[247, 248, null, 250, 249]] },
+                    { type: "seats", positions: [[251, 252, null, 254, 253]] },
+                    { type: "seats", positions: [[255, 256, null, 258, 257]] }
                 ]
             }
         ]
@@ -1482,23 +1482,23 @@ const trainModels = {
                             },
                             {
                                 type: "seats",
-                                positions: [[203, 204, null, 202, 201]]
+                                positions: [[201, 202, null, 204, 203]]
                             },
                             {
                                 type: "seats",
-                                positions: [[207, 208, null, 206, 205]]
+                                positions: [[205, 206, null, 208, 207]]
                             },
                             {
                                 type: "seats",
-                                positions: [[211, 212, null, 210, 209]]
+                                positions: [[209, 210, null, 212, 211]]
                             },
                             {
                                 type: "seats",
-                                positions: [[215, 216, null, 214, 213]]
+                                positions: [[213, 214, null, 216, 215]]
                             },
                             {
                                 type: "seats",
-                                positions: [[219, 220, null, 218, 217]]
+                                positions: [[217, 218, null, 220, 219]]
                             }]
                     },
                     "B": {
@@ -1893,7 +1893,7 @@ const trainRoutes = {
     '18022': ['Vitoria Gasteiz', 'Alegria Dulantzi', 'Agurain Salvatierra', 'Araia', 'Altsasu Pueblo', 'Etxarri Aranatz', 'Uharte Arakil', 'Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón'],
     '18068': ['Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18074': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
-    '18046': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
+    '18046': ['Pamplona Iruña', 'Tafalla', 'Castejón', 'Tudela', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores'],
     '18073': ['Zaragoza Miraflores', 'Zaragoza Goya', 'Zaragoza Portillo', 'Zaragoza Delicias', 'Utebo', 'Casetas', 'Alagón', 'Cabañas', 'Pedrola', 'Luceni', 'Gallur', 'Cortes', 'Ribaforada', 'Tudela', 'Castejón', 'Alfaro', 'Rincón de Soto', 'Calahorra', 'Alcanadre', 'Logroño'],
     '16020': ['Pamplona Iruña', 'Tafalla', 'Olite Erriberri', 'Marcilla', 'Villafranca', 'Castejón', 'Tudela', 'Ribaforada', 'Cortes', 'Gallur', 'Luceni', 'Pedrola', 'Cabañas', 'Alagón', 'Casetas', 'Utebo', 'Zaragoza Delicias', 'Zaragoza Portillo', 'Zaragoza Goya', 'Zaragoza Miraflores']
 };
