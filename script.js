@@ -3827,7 +3827,7 @@ function openAbout() {
                     </div>
                 </div>
                 <div class="about-content">
-                    <p><strong>plantillaTren v1.0</strong></p>
+                    <p><strong>Navirea v1.0</strong></p>
                     <p>Creado por Adrián Fernández,</p>
 <p>y publicado bajo la licencia MIT.</p>
                     <p>Dudas o sugerencias a:<br><a href="mailto:plantillatren@gmail.com">plantillatren@gmail.com</a></p>
@@ -4308,7 +4308,7 @@ function handleDoorRelease(event) {
 
         const tapDuration = Date.now() - (button._tapStart || 0);
 
-        if (elementId && tapDuration < 150) {
+        if (elementId && tapDuration < 100) {
             event.preventDefault(); // Solo prevenir si vamos a activar
 
             toggleIncident(state.selectedCoach, elementId, elementType);
