@@ -6,7 +6,14 @@ const urlsToCache = [
     '/script.js',
     '/manifest.json',
     '/icon-192.png',
-    '/icon-512.png'
+    '/icon-512.png',
+    // ---- assets Navirea ----
+    '/icons/navirea-192.png',
+    '/icons/navirea-512.png',
+    '/icons/navirea-maskable.png',
+    '/splash.png',
+    '/css/splash.css',
+    '/js/splash.js'
 ];
 
 // Instalación del Service Worker
