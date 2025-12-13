@@ -3833,6 +3833,7 @@ function openAbout() {
                     <p>Dudas o sugerencias a:<br><a href="mailto:plantillatren@gmail.com">plantillatren@gmail.com</a></p>
                     <br>
                     <p><b>Proyecto no oficial ni afiliado con ADIF o RENFE, con propósito educacional. Las pantallas de las estaciones muestran contenido servido directamente por ADIF. Marca, logotipos y datos mostrados en el panel son propiedad de ADIF.</b></p>
+                    <p><b>El Manual Técnico Ferroviario es un proyecto creado por José Luis Domínguez y Juan Pablo Romero.</b></p>
                 </div>
                 <div class="modal-footer">
                     <button class="clear-btn" onclick="closeAbout()">Cerrar</button>
@@ -3842,6 +3843,310 @@ function openAbout() {
     `;
     document.body.insertAdjacentHTML('beforeend', aboutHTML);
     lockBodyScroll();
+}
+
+// Abrir modal de README / Guía de uso
+function openReadmeModal() {
+    const readmeContent = `
+# 📘 Guía Completa de Uso – Navirea
+
+Navirea es una herramienta diseñada para ayudar a los interventores a gestionar la ocupación del tren, el seguimiento del recorrido y las incidencias del servicio de forma clara, rápida y visual.
+
+---
+
+## 🚆 1. Vista general
+
+- Distribución real del tren: coches, pasillos, PMR, mesas.
+- Indicador de **dirección del tren** (con opción de invertirla).
+- Barra superior con herramientas principales.
+- Plantilla táctil desplazable.
+- Menú “Más opciones” con funciones avanzadas.
+
+---
+
+## 🟦 2. Selección del tren
+
+- Selecciona el modelo (463, 464, 465, 470, 499).
+- Introduce el número de venta.
+- La plantilla se cargará automáticamente.
+
+### 🔧 Variantes (serie 470)
+
+- Doble pulsación en el botón del coche → seleccionar variante adecuada.
+
+---
+
+## 🟩 3. Gestión básica de asientos
+
+### 🎫 Marcar asiento como ocupado
+
+- Toca un asiento libre.
+- Introduce la parada final.
+- Guarda.
+
+### ⚡ Asignación rápida (pulsación larga)
+
+- Mantén pulsado un asiento libre → asigna la *última parada* automáticamente.
+
+### 🔁 Modificar parada
+
+- Tocar → cambiar parada final.
+
+### 🧹 Liberar asiento (4 formas)
+
+- Tocar → “Liberar”.
+- Cambiar la parada actual.
+- Botón de liberado rápido.
+- Pulsación larga → borrado rápido.
+
+---
+
+## 🔎 4. Herramientas avanzadas
+
+### ✨ Copiado rápido
+
+- Activar interruptor.
+- Marcar primer asiento.
+- Los siguientes copiarán destino, enlace, comentario y destacado.
+
+### 🔗 Enlace
+
+- Tocar → activar “Enlace”.
+
+### ⭐ Seguir por aquí
+
+- Destaca un asiento importante.
+
+### 📝 Notas
+
+- Tocar asiento.
+- Pulsar “Comentario”.
+- Escribir y guardar.
+
+### 🕘 Historial del asiento
+
+- Ver cambios recientes y usos anteriores.
+
+---
+
+## 🛤️ 5. Parada actual del tren
+
+- Introducir la parada actual.
+- Navirea libera automáticamente viajeros que bajan ahí.
+- Se muestra cuántos asientos se liberarán.
+
+---
+
+## 💼 6. Gestión del servicio
+
+### ⚠️ Incidencias
+
+Registrar fallos de: WC, puertas, megafonía, PMR, equipos eléctricos…
+
+### 📒 Notas del servicio
+
+Notas internas del turno.
+
+### ⏱ Pantallas de estaciones en tiempo real
+
+Consultar retrasos, conexiones, horarios actualizados.
+
+### 🔧 Manual Técnico Ferroviario
+
+Guía externa para resolver:
+- Climatización  
+- Puertas  
+- Megafonía  
+- WC  
+- Problemas eléctricos  
+
+---
+
+## 🌓 7. Opciones de visualización
+
+### 🌙 Modo nocturno
+
+Reduce brillo y contraste.
+
+### 🔄 Girar plantilla
+
+Ideal si trabajas en sentido contrario al tren.
+
+---
+
+## 🔧 8. Filtros y búsqueda
+
+- Filtrar por parada final.
+- Filtrar por tramo.
+- Filtrar por enlace.
+- Filtrar por notas.
+- Buscar asiento → la pantalla se desplaza al asiento y lo resalta.
+
+---
+
+## 📊 9. Ocupación por coche
+
+- Mantener pulsado un coche → ver:
+  - % de ocupación  
+  - Asientos libres  
+  - Asientos ocupados  
+
+---
+
+## 📤 10. Guardado y trabajo en equipo
+
+### 💾 Guardar JSON
+
+Guardar estado completo del tren.
+
+### 📲 Compartir QR
+
+Transferir el estado a otro interventor.
+
+### 🔄 Backup automático
+
+Navirea recuerda siempre el último estado.
+
+---
+
+## 🎯 11. Consejos prácticos
+
+- Usa **copiado rápido** para grupos.  
+- Marca **enlace** cuanto antes.  
+- Mantén actualizada la **parada actual**.  
+- Usa “Seguir por aquí” en viajeros relevantes.  
+- Filtra por parada al acercarte a estaciones grandes.  
+- Gira la plantilla si estás orientado al contrario.  
+- Consulta el **Manual Técnico Ferroviario** ante incidencias.  
+- Guarda estado antes del relevo.
+
+FIN DE LA GUÍA.
+    `;
+
+    const modalHTML = `
+        <div class="modal-overlay readme-overlay" onclick="closeReadmeModal(event)">
+            <div class="modal readme-modal" onclick="event.stopPropagation()"
+                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
+                 ontouchmove="modalSwipeMove(event)"
+                 ontouchend="modalSwipeEnd(event)"
+                 ontouchcancel="modalSwipeEnd(event)">
+                <div class="modal-header readme-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">📖 Guía de uso</h3>
+                        <button class="close-btn" onclick="closeReadmeModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="readme-content" id="readme-content">
+                    ${parseMarkdown(readmeContent)}
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    lockBodyScroll();
+}
+
+// Abrir Manual Técnico embebido
+function openManualTecnico() {
+    const modalHTML = `
+        <div class="modal-overlay manual-overlay" onclick="closeManualTecnico(event)">
+            <div class="modal manual-modal" onclick="event.stopPropagation()">
+                <div class="modal-header manual-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">📚 Manual Técnico de Trenes</h3>
+                        <button class="close-btn" onclick="closeManualTecnico()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="manual-content">
+                    <iframe 
+                        src="https://manualtreneszgz.netlify.app/" 
+                        class="manual-iframe"
+                        title="Manual Técnico de Trenes"
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    lockBodyScroll();
+}
+
+// Cerrar Manual Técnico
+function closeManualTecnico(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.manual-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+// Cerrar modal de README
+function closeReadmeModal(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.readme-overlay');
+        if (overlay) overlay.remove();
+    }
+
+    if (!document.querySelector('.modal-overlay')) {
+        unlockBodyScroll();
+    }
+}
+
+// Parser simple de Markdown a HTML
+function parseMarkdown(md) {
+    let html = md;
+
+    // Headers
+    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+    // Bold
+    html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+
+    // Italic
+    html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+
+    // Code inline
+    html = html.replace(/`(.*?)`/gim, '<code>$1</code>');
+
+    // Links
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>');
+
+    // Horizontal rule
+    html = html.replace(/^\-\-\-$/gim, '<hr>');
+
+    // Line breaks
+    html = html.replace(/\n\n/g, '</p><p>');
+    html = html.replace(/\n/g, '<br>');
+
+    // Wrap in paragraphs
+    html = '<p>' + html + '</p>';
+
+    // Clean up empty paragraphs
+    html = html.replace(/<p><\/p>/g, '');
+    html = html.replace(/<p><h([1-6])>/g, '<h$1>');
+    html = html.replace(/<\/h([1-6])><\/p>/g, '</h$1>');
+    html = html.replace(/<p><hr><\/p>/g, '<hr>');
+
+    return html;
 }
 
 function closeAbout(event) {
@@ -4824,7 +5129,13 @@ ${state.trainNumber ? `
         </svg>
         Backups automáticos
     </button>
-    
+    <button class="more-option" onclick="openManualTecnico(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Manual Técnico de Trenes
+    </button>
     <button class="more-option" onclick="openAbout(); toggleMoreOptions();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -4832,6 +5143,15 @@ ${state.trainNumber ? `
             <line x1="12" y1="8" x2="12" y2="8"/>
         </svg>
         Acerca de
+    </button>
+    
+    <button class="more-option" onclick="openReadmeModal(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Guía de uso
     </button>
 </div>
 </div>
@@ -7268,6 +7588,10 @@ window.importTurn = importTurn;
 window.toggleDarkMode = toggleDarkMode;
 window.toggleSeatRotation = toggleSeatRotation;
 window.openAbout = openAbout;
+window.openReadmeModal = openReadmeModal;
+window.openManualTecnico = openManualTecnico;
+window.closeManualTecnico = closeManualTecnico;
+window.closeReadmeModal = closeReadmeModal;
 window.closeAbout = closeAbout;
 window.showTrainNumberPrompt = showTrainNumberPrompt;
 window.setCurrentStop = setCurrentStop;
