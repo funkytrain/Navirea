@@ -1,0 +1,28 @@
+{
+  "name": "Navirea",
+  "short_name": "Navirea",
+  "description": "Gestión visual de ocupación de asientos y estaciones para interventores de tren.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#5A2A82",
+  "theme_color": "#7B42B4",
+  "icons": [
+    {
+      "src": "/icons/navirea-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/navirea-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/navirea-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
