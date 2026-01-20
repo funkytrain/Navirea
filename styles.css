@@ -390,6 +390,8 @@ body.dark-mode .stop-option:hover {
 }
 
 .seats-layout {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-gray-200);
     border-radius: 1.5rem;
     padding: 1.5rem;
@@ -1038,10 +1040,7 @@ body.dark-mode .seat-number-label {
     letter-spacing: 0.05em;
 }
 
-.seats-container.rotated .cabina-label,
-.seats-container.rotated .pmr-bathroom {
-    transform: rotate(180deg);
-}
+/* Las etiquetas ya no necesitan rotarse cuando usamos flex-direction */
 
 body.dark-mode .cabina-label {
     background-color: var(--color-primary-dark);
@@ -1049,15 +1048,15 @@ body.dark-mode .cabina-label {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* 🔄 Rotación del plano de asientos */
+/* 🔄 Inversión del orden visual de asientos (sin rotar) */
 .seats-container.rotated .seats-layout {
-    transform: rotate(180deg);
-    transform-origin: center center;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
-/* Mantener legibles los textos dentro de los asientos */
-.seats-container.rotated .seat {
-    transform: rotate(180deg);
+/* Invertir cada grupo de asientos también */
+.seats-container.rotated .seat-group {
+    flex-direction: column-reverse;
 }
 
 /* Estilo específico del modal "Acerca de" */
@@ -1331,10 +1330,7 @@ body.dark-mode .aisle-arrow {
     opacity: 0.5;
 }
 
-/* Asegurar que las flechas se mantengan legibles al rotar */
-.seats-container.rotated .aisle-arrow {
-    transform: rotate(180deg);
-}
+/* Las flechas del pasillo se invierten automáticamente con flex-direction */
 
 /* Feedback visual para long press en asientos */
 .seat:active {
