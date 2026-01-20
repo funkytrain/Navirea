@@ -25,10 +25,6 @@ body {
     display: none !important;
 }
 
-.rotated {
-    transform: rotate(180deg);
-}
-
 /* ===== TRANSICIÓN MODO OSCURO ===== */
 
 body.dark-mode {

@@ -1139,11 +1139,13 @@ const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
 let modalScrollPosition = 0;
 
 // Configuración de backup automático
-const BACKUP_INTERVAL = 5 * 60 * 1000; // 5 minutos en milisegundos
-const MAX_BACKUPS = 10; // Máximo de backups a mantener
-let backupTimer = null;
+// MOVIDO A src/services/StorageService.js
+// const BACKUP_INTERVAL = 5 * 60 * 1000;
+// const MAX_BACKUPS = 10;
+// let backupTimer = null;
 
-// Guardar backup automático
+// MOVIDO A src/services/StorageService.js
+/*
 function saveAutoBackup() {
     const timestamp = new Date().toISOString();
     const backupData = {
@@ -1187,8 +1189,10 @@ function saveAutoBackup() {
         console.error("Error saving backup:", e);
     }
 }
+*/
 
-// Iniciar backup automático
+// MOVIDO A src/services/StorageService.js
+/*
 function startAutoBackup() {
     // Limpiar timer anterior si existe
     if (backupTimer) {
@@ -1205,8 +1209,10 @@ function startAutoBackup() {
 
     console.log(`🔄 Backup automático activado (cada ${BACKUP_INTERVAL / 60000} minutos)`);
 }
+*/
 
-// Cargar datos guardados
+// MOVIDO A src/services/StorageService.js
+/*
 function loadData() {
     // Cargar último tren usado
     const savedTrain = localStorage.getItem("selectedTrain");
@@ -1306,8 +1312,10 @@ function loadData() {
         }
     }
 }
+*/
 
-// Guardar datos
+// MOVIDO A src/services/StorageService.js
+/*
 function saveData() {
     localStorage.setItem(
         `train${state.selectedTrain}Data`,
@@ -1326,6 +1334,7 @@ function saveData() {
         localStorage.setItem(`train${state.selectedTrain}CopiedData`, JSON.stringify(lastCopiedSeatData));
     }
 }
+*/
 
 // Obtener clave del asiento
 function getSeatKey(coachId, seatNum) {
