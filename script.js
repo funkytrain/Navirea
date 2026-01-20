@@ -225,11 +225,7 @@ function openStopFilter() {
     // Crear modal interactivo
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por parada de bajada</h3>
@@ -330,11 +326,7 @@ function openRouteFilter() {
     // Crear modal para parada inicial
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por tramo recorrido</h3>
@@ -496,11 +488,7 @@ function openSeatFilter() {
 
     const modal = `
         <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Filtrar por asiento</h3>
@@ -1973,11 +1961,7 @@ function toggleHeaderCollapse() {
 function openAbout() {
     const aboutHTML = `
         <div class="modal-overlay" onclick="closeAbout(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Acerca de</h3>
@@ -2188,11 +2172,7 @@ FIN DE LA GUÍA.
 
     const modalHTML = `
         <div class="modal-overlay readme-overlay" onclick="closeReadmeModal(event)">
-            <div class="modal readme-modal" onclick="event.stopPropagation()"
-                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-                 ontouchmove="modalSwipeMove(event)"
-                 ontouchend="modalSwipeEnd(event)"
-                 ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal readme-modal" onclick="event.stopPropagation()">
                 <div class="modal-header readme-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">📖 Guía de uso</h3>
@@ -2312,11 +2292,7 @@ function closeAbout(event) {
 function openServiceNotes() {
     const notesHTML = `
         <div class="modal-overlay" onclick="closeServiceNotes(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Notas del servicio</h3>
@@ -2445,11 +2421,7 @@ function openIncidentNote(coachId, elementId, elementType, elementLabel) {
 
     const modalHTML = `
         <div class="modal-overlay" onclick="closeIncidentNote(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Incidencia: ${elementLabel}</h3>
@@ -2589,11 +2561,7 @@ function openIncidentsPanel() {
 
     const modalHTML = `
         <div class="modal-overlay" onclick="closeIncidentsPanel(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Incidencias registradas (${incidentCount})</h3>
@@ -3663,13 +3631,9 @@ function renderModal() {
              onmousedown="handleModalOverlayInteraction(event)"
              ontouchstart="handleModalOverlayInteraction(event)"
              ontouchend="closeModal(event)">
-            <div class="modal" 
+            <div class="modal"
                  onclick="event.stopPropagation()"
-                 onmousedown="event.stopPropagation()"
-                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-                 ontouchmove="modalSwipeMove(event)"
-                 ontouchend="modalSwipeEnd(event)"
-                 ontouchcancel="modalSwipeEnd(event)">
+                 onmousedown="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Asiento ${
@@ -4593,6 +4557,34 @@ function modalSwipeEnd(event) {
     modalSwipeDeltaY = 0;
 }
 
+// ===== DELEGACIÓN GLOBAL PARA MODAL SWIPE =====
+// Detectar si el touch empieza en un modal
+document.addEventListener('touchstart', function(e) {
+    const modal = e.target.closest('.modal');
+    if (modal) {
+        modalSwipeStart(e);
+        e.stopPropagation();
+    }
+}, { passive: true });
+
+document.addEventListener('touchmove', function(e) {
+    if (modalSwipeActive) {
+        modalSwipeMove(e);
+    }
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    if (modalSwipeActive) {
+        modalSwipeEnd(e);
+    }
+}, { passive: true });
+
+document.addEventListener('touchcancel', function(e) {
+    if (modalSwipeActive) {
+        modalSwipeEnd(e);
+    }
+}, { passive: true });
+
 function updateSearch(value) {
     state.searchQuery = value;
     // Solo actualizar la lista de paradas, no todo
@@ -5143,11 +5135,7 @@ function openBackupsPanel() {
 
     const modal = `
         <div class="modal-overlay" onclick="closeBackupsPanel(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()"
-                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-                 ontouchmove="modalSwipeMove(event)"
-                 ontouchend="modalSwipeEnd(event)"
-                 ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal about-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Backups automáticos (${backups.length})</h3>
@@ -5366,11 +5354,7 @@ async function generateQRCode() {
     // Mostrar modal con loading
     const modal = `
         <div class="modal-overlay" onclick="closeQRModal(event)">
-            <div class="modal qr-modal" onclick="event.stopPropagation()"
-                 ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-                 ontouchmove="modalSwipeMove(event)"
-                 ontouchend="modalSwipeEnd(event)"
-                 ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal qr-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
                         <h3 class="modal-title">Compartir turno por QR</h3>
@@ -5898,11 +5882,7 @@ function openScreensModal() {
     removeAllScreenModals();
     const modal = `
         <div class="modal-overlay" onclick="closeScreensModal(event)">
-            <div class="modal" onclick="event.stopPropagation()"
-     ontouchstart="modalSwipeStart(event); event.stopPropagation()"
-     ontouchmove="modalSwipeMove(event)"
-     ontouchend="modalSwipeEnd(event)"
-     ontouchcancel="modalSwipeEnd(event)">
+            <div class="modal" onclick="event.stopPropagation()">
 
                 <div class="modal-header">
                     <div class="modal-header-top">
