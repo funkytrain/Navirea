@@ -3455,7 +3455,7 @@ function renderModal() {
                             type="checkbox"
                             id="enlace-check"
                             ${state.seatData[key]?.enlace ? "checked" : ""}
-                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'enlace')"
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'enlace'); render();"
                         />
                         <label for="enlace-check">Enlace</label>
                     </div>
@@ -3491,7 +3491,7 @@ function renderModal() {
                             type="checkbox"
                             id="seguir-check"
                             ${state.seatData[key]?.seguir ? "checked" : ""}
-                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'seguir')"
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'seguir'); render();"
                         />
                         <label for="seguir-check">Seguir por aquí</label>
                     </div>
