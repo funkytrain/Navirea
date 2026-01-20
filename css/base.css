@@ -1,0 +1,45 @@
+/* ========================================
+   BASE - Reset y estilos fundamentales
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--color-surface);
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+#app {
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* ===== UTILIDADES GLOBALES ===== */
+
+.hidden {
+    display: none !important;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+/* ===== TRANSICIÓN MODO OSCURO ===== */
+
+body.dark-mode {
+    background: var(--color-dark-bg);
+    color: var(--color-dark-text);
+}
+
+/* Evitar flash al cambiar de modo */
+body.dark-mode,
+body.dark-mode * {
+    transition: background-color var(--transition-base),
+                color var(--transition-base),
+                border-color var(--transition-base);
+}
