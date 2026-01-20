@@ -1136,6 +1136,7 @@ let isScrolling = false;
 const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
 
 // Variables para mantener scroll del modal
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 let modalScrollPosition = 0;
 
 // Configuración de backup automático
@@ -3889,6 +3890,7 @@ function scrollToCurrentStop() {
     });
 }
 
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 function saveModalScrollPosition() {
     const modalList = document.querySelector('.modal-list');
     if (modalList) {
@@ -3912,7 +3914,7 @@ let modalTouchEndHandler = null;
 
 // ========== NUEVO SISTEMA DE SCROLL SIMPLIFICADO ==========
 
-// Prevenir scroll en overlay del modal (solo en el overlay, no globalmente)
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 function handleModalOverlayInteraction(e) {
     // Solo actuar si el click/touch es directamente en el overlay
     if (e.target.classList.contains('modal-overlay')) {
@@ -3993,6 +3995,8 @@ function lockBodyScroll() {
 }
 */
 
+// MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
+// Esta versión más compleja se mantiene aquí por ahora
 function setupModalListScrollGuards() {
     // Remover listeners previos si existen
     removeModalScrollGuards();
@@ -4484,6 +4488,7 @@ function showUndoBanner(message, onUndo) {
 
 // --- Swipe down para cerrar modal con rebote ---
 
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 let modalSwipeStartY = 0;
 let modalSwipeDeltaY = 0;
 let modalSwipeActive = false;
@@ -5720,6 +5725,7 @@ function closeScanModal(event) {
     }
 }
 
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 function removeModalAndUnlock() {
     const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
     if (overlay) overlay.remove();
@@ -5823,6 +5829,8 @@ window.removeModalAndUnlock = removeModalAndUnlock;
 window.uploadTurnToServer = uploadTurnToServer;
 window.downloadTurnFromServer = downloadTurnFromServer;
 
+// MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
+// Esta versión más compleja se mantiene aquí por ahora
 function setupModalScrollBehavior() {
     // Prevenir scroll en overlay excepto en áreas scrolleables
     ['wheel', 'touchmove'].forEach(eventType => {
@@ -5945,6 +5953,7 @@ function closeScreensModal(event) {
     }
 }
 
+// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 function removeAllScreenModals() {
     document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
 }
