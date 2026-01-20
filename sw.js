@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v5.6';
+const CACHE_NAME = 'plantillatren-v6.1';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -30,6 +30,7 @@ const urlsToCache = [
     '/src/config/constants.js',
     '/src/utils/data-loader.js',
     '/src/utils/dom.js',
+    '/src/utils/modal-helpers.js',
     // ---- services ----
     '/src/services/StorageService.js'
 ];
