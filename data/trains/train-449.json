@@ -1,0 +1,126 @@
+{
+  "id": "449",
+  "name": "Tren 449",
+  "coaches": [
+    {
+      "id": "C2",
+      "name": "Coche 2",
+      "layout": [
+        {"type": "seats", "positions": [[3, 4, null, 2, 1]]},
+        {"type": "seats", "positions": [[7, 8, null, 6, 5]]},
+        {"type": "seats", "positions": [[11, 12, null, 10, 9]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[15, 16, null, 14, 13]]},
+        {"type": "seats", "positions": [[19, 20, null, 18, 17]]},
+        {"type": "seats", "positions": [[23, 24, null, 22, 21]]},
+        {"type": "seats", "positions": [[27, 28, null, 26, 25]]},
+        {"type": "seats", "positions": [[29, 30, null, "EQ", "EQ"]]},
+        {"type": "seats", "positions": [[null, null, null, "WC-A", "WC-A"]]},
+        {"type": "space", "height": 120},
+        {"type": "seats", "positions": [["EQ", "EQ", null, 32, 31]]},
+        {"type": "seats", "positions": [[33, 34, null, 36, 35]]},
+        {"type": "seats", "positions": [[37, 38, null, 40, 39]]},
+        {"type": "seats", "positions": [[41, 42, null, 44, 43]]},
+        {"type": "seats", "positions": [[45, 46, null, 48, 47]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[49, 50, null, 52, 51]]},
+        {"type": "seats", "positions": [[53, 54, null, 56, 55]]},
+        {"type": "seats", "positions": [[57, 58, null, 60, 59]]}
+      ]
+    },
+    {
+      "id": "C4",
+      "name": "Coche 4",
+      "layout": [
+        {"type": "seats", "positions": [[63, 64, null, 62, 61]]},
+        {"type": "seats", "positions": [[67, 68, null, 66, 65]]},
+        {"type": "seats", "positions": [[71, 72, null, 70, 69]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[75, 76, null, 74, 73]]},
+        {"type": "seats", "positions": [[79, 80, null, 78, 77]]},
+        {"type": "seats", "positions": [[83, 84, null, 82, 81]]},
+        {"type": "seats", "positions": [[87, 88, null, 86, 85]]},
+        {"type": "seats", "positions": [["EQ", "EQ", null, "EQ", "EQ"]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [["EQ", "EQ", null, "EQ", "EQ"]]},
+        {"type": "seats", "positions": [[91, 92, null, 90, 89]]},
+        {"type": "seats", "positions": [[95, 96, null, 94, 93]]},
+        {"type": "seats", "positions": [[99, 100, null, 98, 97]]},
+        {"type": "seats", "positions": [[103, 104, null, 102, 101]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[107, 108, null, 106, 105]]},
+        {"type": "seats", "positions": [[111, 112, null, 110, 109]]},
+        {"type": "seats", "positions": [[115, 116, null, 114, 113]]}
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "Coche 3",
+      "layout": [
+        {"type": "seats", "positions": [[119, 120, null, 118, 117]]},
+        {"type": "seats", "positions": [[123, 124, null, 122, 121]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[127, 128, null, 126, 125]]},
+        {"type": "pmr-bathroom", "height": 160, "label": "ESPACIO OCIO, BAÑO PMR, BICIS, VENDING..."},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [["EQ", null, null, null, "PMR-0"]]},
+        {"type": "space", "height": 40},
+        {"type": "seats", "positions": [["S3", "S4", null, "S2", "S1"]]},
+        {"type": "seats", "positions": [[133, 134, null, 132, 131]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[137, 138, null, 136, 135]]},
+        {"type": "seats", "positions": [[141, 142, null, 140, 139]]}
+      ]
+    },
+    {
+      "id": "C5",
+      "name": "Coche 5",
+      "layout": [
+        {"type": "seats", "positions": [[145, 146, null, 144, 143]]},
+        {"type": "seats", "positions": [[149, 150, null, 148, 147]]},
+        {"type": "seats", "positions": [[153, 154, null, 152, 151]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[157, 158, null, 156, 155]]},
+        {"type": "seats", "positions": [[161, 162, null, 160, 159]]},
+        {"type": "seats", "positions": [[165, 166, null, 164, 163]]},
+        {"type": "seats", "positions": [[169, 170, null, 168, 167]]},
+        {"type": "seats", "positions": [["EQ", "EQ", null, "EQ", "EQ"]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [["EQ", "EQ", null, "EQ", "EQ"]]},
+        {"type": "seats", "positions": [[173, 174, null, 172, 171]]},
+        {"type": "seats", "positions": [[177, 178, null, 176, 175]]},
+        {"type": "seats", "positions": [[181, 182, null, 180, 179]]},
+        {"type": "seats", "positions": [[185, 186, null, 184, 183]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[189, 190, null, 188, 187]]},
+        {"type": "seats", "positions": [[193, 194, null, 192, 191]]},
+        {"type": "seats", "positions": [[197, 198, null, 196, 195]]}
+      ]
+    },
+    {
+      "id": "C1",
+      "name": "Coche 1",
+      "layout": [
+        {"type": "seats", "positions": [[201, 202, null, 200, 199]]},
+        {"type": "seats", "positions": [[205, 206, null, 204, 203]]},
+        {"type": "seats", "positions": [[209, 210, null, 208, 207]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[213, 214, null, 212, 211]]},
+        {"type": "seats", "positions": [[217, 218, null, 216, 215]]},
+        {"type": "seats", "positions": [[221, 222, null, 220, 219]]},
+        {"type": "seats", "positions": [[225, 226, null, 224, 223]]},
+        {"type": "seats", "positions": [[227, 228, null, "EQ", "EQ"]]},
+        {"type": "space", "height": 100},
+        {"type": "seats", "positions": [["EQ", "EQ", null, 230, 229]]},
+        {"type": "seats", "positions": [[231, 232, null, 234, 233]]},
+        {"type": "seats", "positions": [[235, 236, null, 238, 237]]},
+        {"type": "seats", "positions": [[239, 240, null, 242, 241]]},
+        {"type": "seats", "positions": [[243, 244, null, 246, 245]]},
+        {"type": "seats", "positions": [["MESA", "MESA", null, "MESA", "MESA"]]},
+        {"type": "seats", "positions": [[247, 248, null, 250, 249]]},
+        {"type": "seats", "positions": [[251, 252, null, 254, 253]]},
+        {"type": "seats", "positions": [[255, 256, null, 258, 257]]}
+      ]
+    }
+  ]
+}
