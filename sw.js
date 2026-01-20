@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v6.1';
+const CACHE_NAME = 'plantillatren-v6.3';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -28,6 +28,7 @@ const urlsToCache = [
     '/data/trains/train-470.json',
     // ---- new config/utils ----
     '/src/config/constants.js',
+    '/src/config/ui-constants.js',
     '/src/utils/data-loader.js',
     '/src/utils/dom.js',
     '/src/utils/modal-helpers.js',
