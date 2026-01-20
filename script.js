@@ -1101,7 +1101,7 @@ let state = {
     }
 };
 
-let savedScrollPosition = 0;
+// let savedScrollPosition = 0; // MOVIDO A src/utils/dom.js
 let isModalOpen = false;
 
 // Obtener todos los trenes (predeterminados + personalizados)
@@ -3972,16 +3972,17 @@ function selectSeat(coach, num) {
     scrollToCurrentStop();
 }
 
+// MOVIDO A src/utils/dom.js
+/*
 function lockBodyScroll() {
-    // Guardar posición actual
     savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
-
     document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.top = `-${savedScrollPosition}px`;
     document.body.style.width = '100%';
 }
+*/
 
 function setupModalListScrollGuards() {
     // Remover listeners previos si existen
@@ -4107,15 +4108,16 @@ function removeModalOverlayScrollBlock() {
     }
 }
 
+// MOVIDO A src/utils/dom.js
+/*
 function unlockBodyScroll() {
     document.body.classList.remove('modal-open');
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.width = '';
     document.body.style.overflow = '';
-
-    // NO restaurar scroll aquí - lo hace quien llama a esta función
 }
+*/
 
 function handleSeatPress(coach, num, event) {
     const key = getSeatKey(coach, num);

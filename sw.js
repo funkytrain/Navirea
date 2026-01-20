@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v5.2';
+const CACHE_NAME = 'plantillatren-v5.3';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -28,7 +28,8 @@ const urlsToCache = [
     '/data/trains/train-470.json',
     // ---- new config/utils ----
     '/src/config/constants.js',
-    '/src/utils/data-loader.js'
+    '/src/utils/data-loader.js',
+    '/src/utils/dom.js'
 ];
 
 // Instalación del Service Worker
