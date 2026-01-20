@@ -6066,13 +6066,10 @@ async function initializeApp() {
         // 3. Iniciar backup automático
         startAutoBackup();
 
-        // 4. Mostrar prompt de número de tren si no existe
-        if (!state.trainNumber) {}
-
-        // 5. Renderizar interfaz
+        // 4. Renderizar interfaz
         render();
 
-        // 6. Tras el primer render, engancha swipe
+        // 5. Tras el primer render, engancha swipe
         enableSeatmapSwipe();
 
         console.log('✅ Aplicación inicializada correctamente');
