@@ -1114,7 +1114,8 @@ let _currentScreen = "arrivals";
 let coachTapTimer = null;
 let coachLastTapTime = 0;
 let coachLastTappedId = null;
-const COACH_DOUBLE_TAP_DELAY = 300; // ms
+// MOVIDO A src/config/ui-constants.js
+// const COACH_DOUBLE_TAP_DELAY = 300; // ms
 // Última información copiada (para el modo copiar) - ahora copia TODO
 let lastCopiedSeatData = null;
 
@@ -1128,12 +1129,14 @@ let filterState = {
 // Variables para long tap en asientos
 let seatHoldTimer = null;
 let seatHoldTriggered = false;
-const SEAT_LONG_PRESS_DURATION = 500; // 500ms para long tap
+// MOVIDO A src/config/ui-constants.js
+// const SEAT_LONG_PRESS_DURATION = 500; // 500ms para long tap
 // Variables para detectar scroll vs tap
 let touchStartX = 0;
 let touchStartY = 0;
 let isScrolling = false;
-const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
+// MOVIDO A src/config/ui-constants.js
+// const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
 
 // Variables para mantener scroll del modal
 // NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
@@ -2407,7 +2410,8 @@ function closeServiceNotes(event) {
 }
 
 // Constante para umbral de puertas
-const DOOR_HEIGHT_THRESHOLD = 80; // 👈 Cambiar aquí para ajustar globalmente
+// MOVIDO A src/config/ui-constants.js
+// const DOOR_HEIGHT_THRESHOLD = 80; // 👈 Cambiar aquí para ajustar globalmente
 
 // Obtener clave de incidencia
 function getIncidentKey(coachId, elementId) {
@@ -2729,7 +2733,8 @@ function clearAllIncidents() {
 // Variables para long press en puertas/WC
 let doorHoldTimer = null;
 let doorHoldTriggered = false;
-const DOOR_LONG_PRESS_DURATION = 500;
+// MOVIDO A src/config/ui-constants.js
+// const DOOR_LONG_PRESS_DURATION = 500;
 
 function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
     // NO prevenir el evento por defecto para permitir scroll
@@ -4492,7 +4497,8 @@ function showUndoBanner(message, onUndo) {
 let modalSwipeStartY = 0;
 let modalSwipeDeltaY = 0;
 let modalSwipeActive = false;
-const MODAL_SWIPE_CLOSE_THRESHOLD = 80; // px necesarios para cerrar
+// MOVIDO A src/config/ui-constants.js
+// const MODAL_SWIPE_CLOSE_THRESHOLD = 80; // px necesarios para cerrar
 
 function modalSwipeStart(event) {
     if (!event.touches || event.touches.length === 0) return;
@@ -4609,9 +4615,10 @@ function updateSearch(value) {
 
 // --- Swipe lateral en la plantilla + cambio de coche con fade --- //
 let __touchStartX = 0, __touchStartY = 0, __touchStartTime = 0;
-const __SWIPE_X_THRESHOLD = 50;   // px mínimos en horizontal
-const __SWIPE_Y_MAX = 40;         // desvío vertical máximo
-const __SWIPE_TIME_MAX = 800;     // ms máximos de gesto
+// MOVIDO A src/config/ui-constants.js
+// const __SWIPE_X_THRESHOLD = 50;   // px mínimos en horizontal
+// const __SWIPE_Y_MAX = 40;         // desvío vertical máximo
+// const __SWIPE_TIME_MAX = 800;     // ms máximos de gesto
 
 function __getAdjacentCoachId(direction) {
     // Nos basamos en el orden visual de los botones .coach-btn
