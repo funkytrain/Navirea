@@ -556,16 +556,34 @@ function searchSeatFilter() {
     showSeatFilterResults(seatInfo);
 }
 
-function closeFilterInputModal(event) {
+// ===== FUNCIÓN GENÉRICA PARA CERRAR MODALES =====
+function closeGenericModal(modalSelector, event) {
     if (!event || event.target === event.currentTarget) {
-        const modal = document.querySelector('.about-modal')?.closest('.modal-overlay');
-        if (modal) modal.remove();
-    }
+        // Guardar scroll antes de cerrar
+        const scrollToRestore = savedScrollPosition;
 
-    // Si ya no queda ningún overlay, devolvemos el scroll del body
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
+        const modal = document.querySelector(modalSelector)?.closest('.modal-overlay');
+        if (!modal) {
+            // Si no encuentra con closest, buscar directamente
+            const directModal = document.querySelector(modalSelector);
+            if (directModal) directModal.remove();
+        } else {
+            modal.remove();
+        }
+
+        // Si ya no queda ningún overlay, devolvemos el scroll del body
+        if (!document.querySelector('.modal-overlay')) {
+            unlockBodyScroll();
+            // Restaurar scroll a la posición guardada
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollToRestore);
+            });
+        }
     }
+}
+
+function closeFilterInputModal(event) {
+    closeGenericModal('.about-modal', event);
 }
 
 function showConfirmModal(message, onConfirm, onCancel) {
@@ -1024,15 +1042,7 @@ function navigateToSeat(coachId, seatNum) {
 }
 
 function closeFilterModal(event) {
-    if (!event || event.target === event.currentTarget) {
-        const modal = document.querySelector('.filter-modal')?.closest('.modal-overlay');
-        if (modal) modal.remove();
-    }
-
-    // Si ya no queda ningún overlay, devolvemos el scroll del body
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
+    closeGenericModal('.filter-modal', event);
 }
 
 // Toggle del menú de filtros
@@ -2252,14 +2262,7 @@ function closeManualTecnico(event) {
 
 // Cerrar modal de README
 function closeReadmeModal(event) {
-    if (!event || event.target === event.currentTarget) {
-        const overlay = document.querySelector('.readme-overlay');
-        if (overlay) overlay.remove();
-    }
-
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
+    closeGenericModal('.readme-overlay', event);
 }
 
 // Parser simple de Markdown a HTML
@@ -2303,15 +2306,7 @@ function parseMarkdown(md) {
 }
 
 function closeAbout(event) {
-    if (!event || event.target === event.currentTarget) {
-        const overlay = document.querySelector('.about-modal')
-            ?.closest('.modal-overlay');
-        if (overlay) overlay.remove();
-    }
-
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
+    closeGenericModal('.about-modal', event);
 }
 
 function openServiceNotes() {
@@ -4555,6 +4550,9 @@ function modalSwipeEnd(event) {
 
     // Si hemos arrastrado suficiente, cerramos el modal deslizando hacia abajo
     if (modalSwipeDeltaY > MODAL_SWIPE_CLOSE_THRESHOLD) {
+        // Guardar posición de scroll ANTES de la animación
+        const scrollToRestore = savedScrollPosition;
+
         modal.style.transition = 'transform 0.2s ease-out';
         modal.style.transform = 'translateY(100%)';
 
@@ -4569,6 +4567,10 @@ function modalSwipeEnd(event) {
             // Desbloquear scroll si era necesario
             if (!document.querySelector('.modal-overlay')) {
                 unlockBodyScroll();
+                // Restaurar scroll a la posición guardada
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, scrollToRestore);
+                });
             }
         }, 200);
     } else {
@@ -5461,14 +5463,7 @@ async function generateQRCode() {
 }
 
 function closeQRModal(event) {
-    if (!event || event.target === event.currentTarget) {
-        const overlay = document.querySelector('.qr-modal')?.closest('.modal-overlay');
-        if (overlay) overlay.remove();
-    }
-
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
+    closeGenericModal('.qr-modal', event);
 }
 
 function scanQRCode() {
@@ -5953,11 +5948,7 @@ function openScreensModal() {
 }
 
 function closeScreensModal(event) {
-    if (!event || event.target === event.currentTarget) {
-        const overlay = document.querySelector('.modal-overlay');
-        if (overlay) overlay.remove();
-        unlockBodyScroll();
-    }
+    closeGenericModal('.modal-overlay', event);
 }
 
 // NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
