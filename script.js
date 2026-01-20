@@ -1099,7 +1099,6 @@ let state = {
     }
 };
 
-// let savedScrollPosition = 0; // MOVIDO A src/utils/dom.js
 let isModalOpen = false;
 
 // Obtener todos los trenes (predeterminados + personalizados)
@@ -1112,8 +1111,6 @@ let _currentScreen = "arrivals";
 let coachTapTimer = null;
 let coachLastTapTime = 0;
 let coachLastTappedId = null;
-// MOVIDO A src/config/ui-constants.js
-// const COACH_DOUBLE_TAP_DELAY = 300; // ms
 // Última información copiada (para el modo copiar) - ahora copia TODO
 let lastCopiedSeatData = null;
 
@@ -1127,216 +1124,14 @@ let filterState = {
 // Variables para long tap en asientos
 let seatHoldTimer = null;
 let seatHoldTriggered = false;
-// MOVIDO A src/config/ui-constants.js
-// const SEAT_LONG_PRESS_DURATION = 500; // 500ms para long tap
 // Variables para detectar scroll vs tap
 let touchStartX = 0;
 let touchStartY = 0;
 let isScrolling = false;
-// MOVIDO A src/config/ui-constants.js
-// const SCROLL_THRESHOLD = 5; // píxeles de movimiento para considerar scroll
 
 // Variables para mantener scroll del modal
 // NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 let modalScrollPosition = 0;
-
-// Configuración de backup automático
-// MOVIDO A src/services/StorageService.js
-// const BACKUP_INTERVAL = 5 * 60 * 1000;
-// const MAX_BACKUPS = 10;
-// let backupTimer = null;
-
-// MOVIDO A src/services/StorageService.js
-/*
-function saveAutoBackup() {
-    const timestamp = new Date().toISOString();
-    const backupData = {
-        trainModel: state.selectedTrain,
-        seatData: state.seatData,
-        trainDirection: state.trainDirection,
-        serviceNotes: state.serviceNotes || "",
-        incidents: state.incidents || {},
-        trainNumber: state.trainNumber || null,
-        currentStop: state.currentStop || null,
-        timestamp: timestamp,
-        ...(state.selectedTrain === "470" && {
-            coach470Variants: state.coach470Variants
-        })
-    };
-
-    // Obtener backups existentes
-    const backupsKey = `autoBackups_${state.selectedTrain}`;
-    let backups = [];
-
-    try {
-        const saved = localStorage.getItem(backupsKey);
-        if (saved) backups = JSON.parse(saved);
-    } catch (e) {
-        console.error("Error loading backups");
-    }
-
-    // Añadir nuevo backup
-    backups.push(backupData);
-
-    // Mantener solo los últimos MAX_BACKUPS
-    if (backups.length > MAX_BACKUPS) {
-        backups = backups.slice(-MAX_BACKUPS);
-    }
-
-    // Guardar
-    try {
-        localStorage.setItem(backupsKey, JSON.stringify(backups));
-        console.log(`✅ Backup automático guardado: ${new Date(timestamp).toLocaleString('es-ES')}`);
-    } catch (e) {
-        console.error("Error saving backup:", e);
-    }
-}
-*/
-
-// MOVIDO A src/services/StorageService.js
-/*
-function startAutoBackup() {
-    // Limpiar timer anterior si existe
-    if (backupTimer) {
-        clearInterval(backupTimer);
-    }
-
-    // Guardar backup inicial
-    saveAutoBackup();
-
-    // Configurar backup periódico
-    backupTimer = setInterval(() => {
-        saveAutoBackup();
-    }, BACKUP_INTERVAL);
-
-    console.log(`🔄 Backup automático activado (cada ${BACKUP_INTERVAL / 60000} minutos)`);
-}
-*/
-
-// MOVIDO A src/services/StorageService.js
-/*
-function loadData() {
-    // Cargar último tren usado
-    const savedTrain = localStorage.getItem("selectedTrain");
-    if (savedTrain && trainModels[savedTrain]) {
-        state.selectedTrain = savedTrain;
-    }
-
-    // Cargar datos de asientos del tren actual
-    const saved = localStorage.getItem(`train${state.selectedTrain}Data`);
-    if (saved) {
-        try {
-            state.seatData = JSON.parse(saved);
-        } catch (e) {
-            console.error("Error loading data");
-        }
-    }
-
-    // Cargar dirección del tren actual
-    const savedDirection = localStorage.getItem(
-        `train${state.selectedTrain}Direction`
-    );
-    if (savedDirection) {
-        try {
-            state.trainDirection = JSON.parse(savedDirection);
-        } catch (e) {
-            console.error("Error loading direction");
-        }
-    }
-
-    // Inicializar dirección si no existe (dirección por defecto "up")
-    const currentTrain = trainModels[state.selectedTrain];
-    if (currentTrain && currentTrain.coaches) {
-        currentTrain.coaches.forEach(coach => {
-            if (!state.trainDirection[coach.id]) {
-                state.trainDirection[coach.id] = "up";
-            }
-        });
-    }
-
-    // Cargar modo nocturno
-    const savedDarkMode = localStorage.getItem("darkMode");
-    if (savedDarkMode) {
-        state.darkMode = savedDarkMode === "true";
-    }
-    // Cargar rotación guardada
-    const savedRotation = localStorage.getItem("rotateSeats");
-    if (savedRotation) {
-        state.rotateSeats = savedRotation === "true";
-    }
-    // Cargar número de tren
-    const savedTrainNumber = localStorage.getItem('trainNumber');
-    if (savedTrainNumber) {
-        state.trainNumber = savedTrainNumber;
-    }
-    // Cargar parada actual
-    const savedCurrentStop = localStorage.getItem('currentStop');
-    if (savedCurrentStop) {
-        state.currentStop = savedCurrentStop;
-    }
-    // Cargar estado del header
-    const savedHeaderState = localStorage.getItem('headerCollapsed');
-    if (savedHeaderState) {
-        state.headerCollapsed = savedHeaderState === 'true';
-    }
-    // Cargar variantes del tren 470
-    const saved470Variants = localStorage.getItem('coach470Variants');
-    if (saved470Variants) {
-        try {
-            state.coach470Variants = JSON.parse(saved470Variants);
-        } catch (e) {
-            console.error("Error loading 470 variants");
-        }
-    }
-    // Cargar notas del servicio
-    const savedNotes = localStorage.getItem(`train${state.selectedTrain}Notes`);
-    if (savedNotes) {
-        state.serviceNotes = savedNotes;
-    }
-    // Cargar incidencias
-    const savedIncidents = localStorage.getItem(`train${state.selectedTrain}Incidents`);
-    if (savedIncidents) {
-        try {
-            state.incidents = JSON.parse(savedIncidents);
-        } catch (e) {
-            console.error("Error loading incidents");
-            state.incidents = {};
-        }
-    }
-    // Cargar datos copiados del modo copia
-    const savedCopiedData = localStorage.getItem(`train${state.selectedTrain}CopiedData`);
-    if (savedCopiedData) {
-        try {
-            lastCopiedSeatData = JSON.parse(savedCopiedData);
-            state.lastCopiedSeatData = { ...lastCopiedSeatData };
-        } catch (e) {
-            console.error("Error loading copied data");
-        }
-    }
-}
-*/
-
-// MOVIDO A src/services/StorageService.js
-/*
-function saveData() {
-    localStorage.setItem(
-        `train${state.selectedTrain}Data`,
-        JSON.stringify(state.seatData)
-    );
-    // Guardar variantes del tren 470
-    if (state.selectedTrain === "470") {
-        localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
-    }
-    // Guardar notas del servicio
-    localStorage.setItem(`train${state.selectedTrain}Notes`, state.serviceNotes || "");
-    // Guardar incidencias
-    localStorage.setItem(`train${state.selectedTrain}Incidents`, JSON.stringify(state.incidents));
-    // Guardar datos copiados del modo copia
-    if (lastCopiedSeatData) {
-        localStorage.setItem(`train${state.selectedTrain}CopiedData`, JSON.stringify(lastCopiedSeatData));
-    }
-}
-*/
 
 // Obtener clave del asiento
 function getSeatKey(coachId, seatNum) {
@@ -2380,10 +2175,6 @@ function closeServiceNotes(event) {
     }
 }
 
-// Constante para umbral de puertas
-// MOVIDO A src/config/ui-constants.js
-// const DOOR_HEIGHT_THRESHOLD = 80; // 👈 Cambiar aquí para ajustar globalmente
-
 // Obtener clave de incidencia
 function getIncidentKey(coachId, elementId) {
     // Para tren 470: incluir variante en la key
@@ -2696,8 +2487,6 @@ function clearAllIncidents() {
 // Variables para long press en puertas/WC
 let doorHoldTimer = null;
 let doorHoldTriggered = false;
-// MOVIDO A src/config/ui-constants.js
-// const DOOR_LONG_PRESS_DURATION = 500;
 
 function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
     // NO prevenir el evento por defecto para permitir scroll
@@ -3947,18 +3736,6 @@ function selectSeat(coach, num) {
     scrollToCurrentStop();
 }
 
-// MOVIDO A src/utils/dom.js
-/*
-function lockBodyScroll() {
-    savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
-    document.body.classList.add('modal-open');
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${savedScrollPosition}px`;
-    document.body.style.width = '100%';
-}
-*/
-
 // MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
 // Esta versión más compleja se mantiene aquí por ahora
 function setupModalListScrollGuards() {
@@ -4084,17 +3861,6 @@ function removeModalOverlayScrollBlock() {
         overlayWheelHandler = null;
     }
 }
-
-// MOVIDO A src/utils/dom.js
-/*
-function unlockBodyScroll() {
-    document.body.classList.remove('modal-open');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.overflow = '';
-}
-*/
 
 function handleSeatPress(coach, num, event) {
     const key = getSeatKey(coach, num);
@@ -4456,8 +4222,6 @@ function showUndoBanner(message, onUndo) {
 let modalSwipeStartY = 0;
 let modalSwipeDeltaY = 0;
 let modalSwipeActive = false;
-// MOVIDO A src/config/ui-constants.js
-// const MODAL_SWIPE_CLOSE_THRESHOLD = 80; // px necesarios para cerrar
 
 function modalSwipeStart(event) {
     if (!event.touches || event.touches.length === 0) return;
@@ -4609,10 +4373,6 @@ function updateSearch(value) {
 
 // --- Swipe lateral en la plantilla + cambio de coche con fade --- //
 let __touchStartX = 0, __touchStartY = 0, __touchStartTime = 0;
-// MOVIDO A src/config/ui-constants.js
-// const __SWIPE_X_THRESHOLD = 50;   // px mínimos en horizontal
-// const __SWIPE_Y_MAX = 40;         // desvío vertical máximo
-// const __SWIPE_TIME_MAX = 800;     // ms máximos de gesto
 
 function __getAdjacentCoachId(direction) {
     // Nos basamos en el orden visual de los botones .coach-btn
