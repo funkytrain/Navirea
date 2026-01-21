@@ -12,10 +12,6 @@
     transition: all var(--transition-slow);
 }
 
-.header.collapsed .header-main {
-    display: none;
-}
-
 .header-main {
     padding: 0.75rem;
     max-height: 70vh;
