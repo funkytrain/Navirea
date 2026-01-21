@@ -448,8 +448,11 @@ window.Incidents = {
 };
 
 // Aliases para compatibilidad con código existente
+window.getIncidentKey = getIncidentKey;
 window.toggleIncident = toggleIncident;
 window.openIncidentNote = openIncidentNote;
+window.saveIncidentNote = saveIncidentNote;
+window.closeIncidentNote = closeIncidentNote;
 window.openIncidentsPanel = openIncidentsPanel;
 window.closeIncidentsPanel = closeIncidentsPanel;
 window.removeIncident = removeIncident;
