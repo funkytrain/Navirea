@@ -7,10 +7,10 @@
 ## 📊 Estado Actual
 
 - **Líneas iniciales**: 5816
-- **Líneas actuales**: 4159
-- **Líneas reducidas**: 1657 (28.5%)
+- **Líneas actuales**: 3788
+- **Líneas reducidas**: 2028 (34.9%)
 - **Líneas objetivo**: ~3300-3800
-- **Progreso**: 66% ⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜
+- **Progreso**: 81% ⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜
 
 ---
 
@@ -162,8 +162,81 @@
 | 2 | Sistema modales | 282 | ✅ Completada | 100% |
 | 1 | Templates HTML | 554 | ✅ Completada | 100% |
 
-**Total reducción alcanzada**: 1657 líneas (66% del objetivo)
-**Total líneas en script.js**: 4159 (reducción del 28.5% desde inicio)
+**Total reducción alcanzada**: 2028 líneas (81% del objetivo)
+**Total líneas en script.js**: 3788 (reducción del 34.9% desde inicio)
+
+### 🎉 Fases Adicionales
+
+| Fase | Descripción | Líneas | Estado | Completado |
+|------|-------------|--------|--------|------------|
+| 8 | Gestión incidencias | 371 | ✅ Completada | 100% |
+
+**Total reducción fases adicionales**: 371 líneas
+
+---
+
+## 🚀 Fases Adicionales (Mejoras Opcionales)
+
+### ✅ Fase 8: Gestión de incidencias → src/features/incidents.js (~371 líneas)
+**Estado**: ✅ Completada
+
+**Líneas reducidas**: 371 líneas en script.js (4159 → 3788)
+**Módulo creado**: src/features/incidents.js (443 líneas)
+
+**Funciones extraídas**:
+- `getIncidentKey()` - Genera clave única para incidencias
+- `toggleIncident()` - Activa/desactiva incidencia
+- `openIncidentNote()` - Modal para añadir nota
+- `saveIncidentNote()` - Guarda nota de incidencia
+- `closeIncidentNote()` - Cierra modal de nota
+- `openIncidentsPanel()` - Panel resumen de incidencias
+- `closeIncidentsPanel()` - Cierra panel
+- `removeIncident()` - Elimina incidencia específica
+- `clearAllIncidents()` - Borra todas las incidencias
+- `handleDoorPress()` - Maneja press en puertas/WC
+- `handleDoorRelease()` - Maneja release
+- `formatIncidentLabel()` - Formatea labels para mostrar
+
+**Impacto**: ✅ Gestión completa de incidencias modularizada
+
+---
+
+### ⬜ Fase 9: Lógica de filtros → src/features/filters.js (~300 líneas)
+**Estado**: ⬜ Pendiente
+
+**Funciones a extraer**:
+- Lógica de filtrado por parada
+- Lógica de filtrado por tramo
+- Lógica de filtrado por asiento
+- `clearFilterHighlight()`
+- Gestión de estado de filtros
+
+**Impacto**: Centralizar toda la lógica de filtrado
+
+---
+
+### ⬜ Fase 10: Renderizado de asientos → src/renderers/seats-renderer.js (~250 líneas)
+**Estado**: ⬜ Pendiente
+
+**Funciones a modularizar**:
+- `renderSeats()` - Extraer generadores de componentes
+- Generadores de puertas, WC, asientos individuales
+- Lógica de layout y posicionamiento
+
+**Impacto**: Simplificar función más compleja del archivo
+
+---
+
+### ⬜ Fase 11: Gestión de estado → src/state/state-manager.js (~150 líneas)
+**Estado**: ⬜ Pendiente
+
+**Funciones a centralizar**:
+- `saveData()` / `loadData()`
+- Gestión de localStorage
+- Validación de estado
+- Migraciones de datos
+
+**Impacto**: Centralizar toda la gestión de persistencia
 
 ---
 
@@ -343,3 +416,38 @@
 - Permite reutilización de templates en futuras features
 
 **Estado**: ✅ Fase 1 completada sin incidencias
+
+---
+
+### [2026-01-21] - Fase 8 Completada
+**Fase 8: Gestión de incidencias**
+- ✅ Creado módulo `src/features/incidents.js` (443 líneas)
+- ✅ Extraídas 12 funciones de gestión de incidencias:
+  - `getIncidentKey()` - Generación de claves con soporte para variantes 470
+  - `toggleIncident()` - Toggle de incidencias
+  - `openIncidentNote()` - Modal para notas de incidencia
+  - `saveIncidentNote()` - Persistencia de notas
+  - `closeIncidentNote()` - Cierre de modal
+  - `openIncidentsPanel()` - Panel resumen con agrupación por coche
+  - `closeIncidentsPanel()` - Cierre de panel
+  - `removeIncident()` - Eliminación con actualización en vivo
+  - `clearAllIncidents()` - Limpieza total
+  - `handleDoorPress()` / `handleDoorRelease()` - Gestión de long press
+  - `formatIncidentLabel()` - Formateo de etiquetas (helper)
+- ✅ Añadido import en index.html (línea 66)
+- ✅ Reducción: 371 líneas brutas
+
+**Resultado**:
+- 📉 De 4159 → 3788 líneas (371 líneas eliminadas de script.js)
+- 📊 81% del objetivo de refactorización alcanzado (2028 líneas totales)
+- ✅ Sistema completo de incidencias modularizado
+- ✅ Soporte para tren 470 con variantes
+- ✅ Long press para añadir notas detalladas
+
+**Impacto**:
+- Centraliza toda la gestión de incidencias en un módulo
+- Incluye lógica de agrupación por coche y formateo de labels
+- Manejo completo de eventos táctiles (press/release/cancel)
+- Facilita futuros cambios en el sistema de incidencias
+
+**Estado**: ✅ Fase 8 completada sin incidencias
