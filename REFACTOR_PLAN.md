@@ -7,26 +7,42 @@
 ## 📊 Estado Actual
 
 - **Líneas iniciales**: 5816
-- **Líneas actuales**: 4713
-- **Líneas reducidas**: 1103 (19.0%)
+- **Líneas actuales**: 4159
+- **Líneas reducidas**: 1657 (28.5%)
 - **Líneas objetivo**: ~3300-3800
-- **Progreso**: 48% ⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
+- **Progreso**: 66% ⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜
 
 ---
 
 ## 🎯 Fases de Refactorización
 
-### ✅ Fase 1: Templates HTML → templates/ (~800 líneas)
-**Estado**: ⬜ Pendiente
+### ✅ Fase 1: Templates HTML → src/utils/templates.js (~554 líneas)
+**Estado**: ✅ Completada
 
-**Archivos a crear**:
-- `templates/header.html`
-- `templates/seats.html`
-- `templates/modal.html`
-- `templates/filter-modals.html`
-- `templates/readme-content.html`
+**Líneas reducidas**: 554 líneas en script.js (4713 → 4159)
+**Módulo creado**: src/utils/templates.js (480 líneas)
+**Reducción neta**: 74 líneas
 
-**Impacto**: Alta reducción de líneas, mejor mantenibilidad
+**Archivos creados**:
+- `src/utils/templates.js` - Generadores de templates HTML
+- `templates/readme-content.html` - Contenido Markdown de la guía
+
+**Templates consolidados**:
+- `generateHeaderTemplate()` - Header completo con menús y controles (~285 líneas de HTML)
+- `generateMoreOptionsMenu()` - Menú desplegable de opciones (~95 líneas)
+- `generateAboutModal()` - Modal "Acerca de" (~30 líneas)
+- `generateManualTecnicoModal()` - Modal del manual técnico (~25 líneas)
+- `generateServiceNotesModal()` - Modal de notas del servicio (~37 líneas)
+- `generateReadmeModal()` - Modal de guía (con carga asíncrona de README)
+
+**Funciones refactorizadas en script.js**:
+- `renderHeader()` - Ahora delega generación HTML a templates.js
+- `openAbout()` - Reducida a 3 líneas
+- `openReadmeModal()` - Reducida a 4 líneas (async)
+- `openManualTecnico()` - Reducida a 3 líneas
+- `openServiceNotes()` - Reducida a 8 líneas
+
+**Impacto**: ✅ Mejor modularización, templates centralizados y reutilizables
 
 ---
 
@@ -144,10 +160,10 @@
 | 7 | Markdown parser | 38 | ✅ Completada | 100% |
 | 3 | Scroll helpers | 187 | ✅ Completada | 100% |
 | 2 | Sistema modales | 282 | ✅ Completada | 100% |
-| 1 | Templates HTML | ~800 | ⬜ Pendiente | 0% |
+| 1 | Templates HTML | 554 | ✅ Completada | 100% |
 
-**Total reducción alcanzada**: 1103 líneas (48% del objetivo)
-**Total reducción estimada**: 1903 líneas (33% del archivo)
+**Total reducción alcanzada**: 1657 líneas (66% del objetivo)
+**Total líneas en script.js**: 4159 (reducción del 28.5% desde inicio)
 
 ---
 
@@ -290,3 +306,40 @@
 - ✅ Elimina duplicación de lógica de scroll en modales
 
 **Estado**: ✅ Fase 3 completada sin incidencias
+
+---
+
+### [2026-01-21] - Fase 1 Completada
+**Fase 1: Templates HTML consolidados**
+- ✅ Creado módulo `src/utils/templates.js` (480 líneas)
+- ✅ Extraído archivo `templates/readme-content.html` con contenido Markdown
+- ✅ Consolidados 6 generadores de templates HTML grandes:
+  - `generateHeaderTemplate()` - Header completo (~285 líneas HTML)
+  - `generateMoreOptionsMenu()` - Menú de opciones (~95 líneas)
+  - `generateAboutModal()` - Modal "Acerca de" (~30 líneas)
+  - `generateManualTecnicoModal()` - Modal manual técnico (~25 líneas)
+  - `generateServiceNotesModal()` - Modal notas servicio (~37 líneas)
+  - `generateReadmeModal()` - Modal guía (carga asíncrona)
+- ✅ Refactorizadas 5 funciones de script.js para usar templates:
+  - `renderHeader()` - Simplificada a lógica + llamada a generador
+  - `openAbout()` - Reducida de 32 → 3 líneas
+  - `openReadmeModal()` - Reducida de 201 → 4 líneas
+  - `openManualTecnico()` - Reducida de 29 → 3 líneas
+  - `openServiceNotes()` - Reducida de 47 → 8 líneas
+- ✅ Añadido import en index.html (línea 60)
+- ✅ Reducción: 554 líneas brutas (74 líneas netas)
+
+**Resultado**:
+- 📉 De 4713 → 4159 líneas (554 líneas eliminadas de script.js)
+- 📊 66% del objetivo de refactorización alcanzado (1657 líneas totales)
+- ✅ Templates HTML completamente modularizados
+- ✅ Código más mantenible y DRY
+- ✅ README content externalizado para fácil edición
+
+**Impacto**:
+- Centraliza todos los templates HTML grandes en un módulo
+- Facilita futuros cambios en diseño de modales y header
+- Mejora legibilidad de script.js al eliminar HTML extenso inline
+- Permite reutilización de templates en futuras features
+
+**Estado**: ✅ Fase 1 completada sin incidencias
