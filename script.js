@@ -3702,9 +3702,8 @@ Object.assign(window, {
 
     // Notas e incidencias
     openServiceNotes, updateServiceNotes, clearServiceNotes, closeServiceNotes,
-    toggleIncident, openIncidentNote, saveIncidentNote, closeIncidentNote,
-    openIncidentsPanel, closeIncidentsPanel, removeIncident, clearAllIncidents,
-    handleDoorPress, handleDoorRelease, handleDoorCancel, getDoorSideText,
+    // Las funciones de incidencias están en src/features/incidents.js
+    getDoorSideText,
 
     // Backups
     openBackupsPanel, closeBackupsPanel, restoreBackup, clearAllBackups,

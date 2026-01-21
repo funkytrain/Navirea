@@ -417,6 +417,20 @@ function handleDoorRelease(event) {
     doorHoldTriggered = false;
 }
 
+/**
+ * Maneja la cancelación del press en puertas/WC
+ * @param {Event} event - Evento de cancelación
+ */
+function handleDoorCancel(event) {
+    clearTimeout(doorHoldTimer);
+    doorHoldTriggered = false;
+
+    // Limpiar timestamp
+    if (event && event.currentTarget) {
+        delete event.currentTarget._tapStart;
+    }
+}
+
 // Exportar funciones al scope global
 window.Incidents = {
     getIncidentKey,
@@ -429,7 +443,8 @@ window.Incidents = {
     removeIncident,
     clearAllIncidents,
     handleDoorPress,
-    handleDoorRelease
+    handleDoorRelease,
+    handleDoorCancel
 };
 
 // Aliases para compatibilidad con código existente
@@ -441,3 +456,4 @@ window.removeIncident = removeIncident;
 window.clearAllIncidents = clearAllIncidents;
 window.handleDoorPress = handleDoorPress;
 window.handleDoorRelease = handleDoorRelease;
+window.handleDoorCancel = handleDoorCancel;
