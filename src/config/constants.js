@@ -114,3 +114,9 @@ export const INCIDENT_TYPES = {
     ELECTRICAL: 'Eléctrico',
     OTHER: 'Otro'
 };
+
+// Exportar constantes críticas a window para acceso desde módulos no-ES6
+if (typeof window !== 'undefined') {
+    window.JSONBIN_API_KEY = JSONBIN_API_KEY;
+    window.JSONBIN_BASE_URL = JSONBIN_BASE_URL;
+}
