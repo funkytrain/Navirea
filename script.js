@@ -222,48 +222,19 @@ function openStopFilter() {
         return;
     }
 
-    // Crear modal interactivo
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Filtrar por parada de bajada</h3>
-                        <button class="close-btn" onclick="closeFilterInputModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="filter-input-content">
-                    <label class="filter-input-label">Introduce el nombre de la parada:</label>
-                    <div style="position: relative;">
-                        <input 
-                            type="text" 
-                            id="stop-filter-input" 
-                            class="filter-text-input"
-                            placeholder="Escribe para buscar..."
-                            oninput="updateStopFilterSuggestions(this.value)"
-                            autocomplete="off"
-                        />
-                        <div id="stop-suggestions" class="filter-suggestions hidden"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeFilterInputModal()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createInputModalWithSuggestions({
+        title: 'Filtrar por parada de bajada',
+        label: 'Introduce el nombre de la parada:',
+        placeholder: 'Escribe para buscar...',
+        inputId: 'stop-filter-input',
+        suggestionsId: 'stop-suggestions',
+        oninput: 'updateStopFilterSuggestions'
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    setTimeout(() => {
+    showModal(modal, () => {
         const inp = document.getElementById('stop-filter-input');
         if (inp) inp.focus();
-    }, 50);
-    lockBodyScroll();
+    });
 }
 
 function updateStopFilterSuggestions(query) {
@@ -323,48 +294,19 @@ function openRouteFilter() {
         return;
     }
 
-    // Crear modal para parada inicial
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Filtrar por tramo recorrido</h3>
-                        <button class="close-btn" onclick="closeFilterInputModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="filter-input-content">
-                    <label class="filter-input-label">Introduce la parada inicial:</label>
-                    <div style="position: relative;">
-                        <input 
-                            type="text" 
-                            id="route-from-input" 
-                            class="filter-text-input"
-                            placeholder="Escribe para buscar..."
-                            oninput="updateRouteFromSuggestions(this.value)"
-                            autocomplete="off"
-                        />
-                        <div id="route-from-suggestions" class="filter-suggestions hidden"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeFilterInputModal()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createInputModalWithSuggestions({
+        title: 'Filtrar por tramo recorrido',
+        label: 'Introduce la parada inicial:',
+        placeholder: 'Escribe para buscar...',
+        inputId: 'route-from-input',
+        suggestionsId: 'route-from-suggestions',
+        oninput: 'updateRouteFromSuggestions'
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    setTimeout(() => {
+    showModal(modal, () => {
         const inp = document.getElementById('route-from-input');
         if (inp) inp.focus();
-    }, 50);
-    lockBodyScroll();
+    });
 }
 
 function updateRouteFromSuggestions(query) {
@@ -390,49 +332,21 @@ function updateRouteFromSuggestions(query) {
 function selectRouteFromStop(fromStop) {
     closeFilterInputModal();
 
-    // Ahora pedir parada final
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Filtrar por tramo recorrido</h3>
-                        <button class="close-btn" onclick="closeFilterInputModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="filter-input-content">
-                    <p style="margin-bottom: 1rem; color: #4f46e5; font-weight: 500;">Desde: ${fromStop}</p>
-                    <label class="filter-input-label">Introduce la parada final:</label>
-                    <div style="position: relative;">
-                        <input 
-                            type="text" 
-                            id="route-to-input" 
-                            class="filter-text-input"
-                            placeholder="Escribe para buscar..."
-                            oninput="updateRouteToSuggestions(this.value, '${fromStop}')"
-                            autocomplete="off"
-                        />
-                        <div id="route-to-suggestions" class="filter-suggestions hidden"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeFilterInputModal()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createInputModalWithSuggestions({
+        title: 'Filtrar por tramo recorrido',
+        extraContent: `<p style="margin-bottom: 1rem; color: #4f46e5; font-weight: 500;">Desde: ${fromStop}</p>`,
+        label: 'Introduce la parada final:',
+        placeholder: 'Escribe para buscar...',
+        inputId: 'route-to-input',
+        suggestionsId: 'route-to-suggestions',
+        oninput: 'updateRouteToSuggestions',
+        oninputArgs: `'${fromStop}'`
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    setTimeout(() => {
+    showModal(modal, () => {
         const inp = document.getElementById('route-to-input');
         if (inp) inp.focus();
-    }, 50);
-    lockBodyScroll();
+    });
 }
 
 function updateRouteToSuggestions(query, fromStop) {
@@ -486,44 +400,19 @@ function selectRouteToStop(fromStop, toStop) {
 function openSeatFilter() {
     toggleFiltersMenu();
 
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterInputModal(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Filtrar por asiento</h3>
-                        <button class="close-btn" onclick="closeFilterInputModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="filter-input-content">
-                    <label class="filter-input-label">Introduce el número de asiento:</label>
-                    <input 
-                        type="text" 
-                        id="seat-filter-input" 
-                        class="filter-text-input"
-                        placeholder="Ej: 42"
-                        onkeypress="if(event.key==='Enter') searchSeatFilter()"
-                    />
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" style="background-color: #4f46e5;" onclick="searchSeatFilter()">Buscar</button>
-                    <button class="clear-btn" onclick="closeFilterInputModal()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createSimpleInputModal({
+        title: 'Filtrar por asiento',
+        label: 'Introduce el número de asiento:',
+        placeholder: 'Ej: 42',
+        inputId: 'seat-filter-input',
+        onEnter: 'searchSeatFilter',
+        onSearch: 'searchSeatFilter'
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    setTimeout(() => {
+    showModal(modal, () => {
         const inp = document.getElementById('seat-filter-input');
         if (inp) inp.focus();
-    }, 50);
-    lockBodyScroll();
+    });
 }
 
 function searchSeatFilter() {
@@ -544,88 +433,8 @@ function searchSeatFilter() {
     showSeatFilterResults(seatInfo);
 }
 
-// ===== FUNCIÓN GENÉRICA PARA CERRAR MODALES =====
-function closeGenericModal(modalSelector, event) {
-    if (!event || event.target === event.currentTarget) {
-        // Guardar scroll antes de cerrar
-        const scrollToRestore = savedScrollPosition;
-
-        const modal = document.querySelector(modalSelector)?.closest('.modal-overlay');
-        if (!modal) {
-            // Si no encuentra con closest, buscar directamente
-            const directModal = document.querySelector(modalSelector);
-            if (directModal) directModal.remove();
-        } else {
-            modal.remove();
-        }
-
-        // Si ya no queda ningún overlay, devolvemos el scroll del body
-        if (!document.querySelector('.modal-overlay')) {
-            unlockBodyScroll();
-            // Restaurar scroll a la posición guardada
-            requestAnimationFrame(() => {
-                window.scrollTo(0, scrollToRestore);
-            });
-        }
-    }
-}
-
-function closeFilterInputModal(event) {
-    closeGenericModal('.about-modal', event);
-}
-
-function showConfirmModal(message, onConfirm, onCancel) {
-    const modal = `
-        <div class="modal-overlay" onclick="closeConfirmModal(false, event)">
-            <div class="modal confirm-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 class="modal-title">Confirmar</h3>
-                </div>
-                <div class="confirm-content">
-                    <p>${message.replace(/\n/g, '<br>')}</p>
-                </div>
-                <div class="modal-footer confirm-footer">
-                    <button class="confirm-btn cancel-btn" onclick="closeConfirmModal(false)">
-                        Cancelar
-                    </button>
-                    <button class="confirm-btn accept-btn" onclick="closeConfirmModal(true)">
-                        Aceptar
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modal);
-
-    // Guardar callbacks
-    window._confirmCallbacks = { onConfirm, onCancel };
-    lockBodyScroll();
-}
-
-function closeConfirmModal(accepted, event) {
-    if (event && event.target !== event.currentTarget) return;
-
-    const modal = document.querySelector('.confirm-modal')?.closest('.modal-overlay');
-    if (modal) {
-        modal.remove();
-
-        const callbacks = window._confirmCallbacks;
-        if (callbacks) {
-            if (accepted && callbacks.onConfirm) {
-                callbacks.onConfirm();
-            } else if (!accepted && callbacks.onCancel) {
-                callbacks.onCancel();
-            }
-            window._confirmCallbacks = null;
-        }
-    }
-
-    // 👇 IMPORTANTE: si ya no queda ningún overlay, devolver el scroll del body
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
-}
+// ===== FUNCIONES DE CIERRE DE MODALES =====
+// (Ahora definidas en src/utils/modal-system.js y exportadas a window)
 
 function showStopFilterResults(stopName, seats) {
     // Agrupar por coche
@@ -644,31 +453,13 @@ function showStopFilterResults(stopName, seats) {
         }).join(', ')}`;
     });
 
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterModal(event)">
-            <div class="modal filter-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 class="modal-title">Asientos con destino a ${stopName}</h3>
-                    <button class="close-btn" onclick="closeFilterModal()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="filter-results">
-                    <p><strong>Total: ${seats.length} asiento(s)</strong></p>
-                    <pre>${details}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeFilterModal()">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createFilterResultsModal({
+        title: `Asientos con destino a ${stopName}`,
+        total: seats.length,
+        details: details
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
+    showModal(modal);
 }
 
 function showRouteFilterResults(fromStop, toStop, seats) {
@@ -687,32 +478,15 @@ function showRouteFilterResults(fromStop, toStop, seats) {
         }).join(', ')}`;
     });
 
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterModal(event)">
-            <div class="modal filter-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 class="modal-title">Viajeros en tramo</h3>
-                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">${fromStop} → ${toStop}</p>
-                    <button class="close-btn" onclick="closeFilterModal()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="filter-results">
-                    <p><strong>Total: ${seats.length} viajero(s)</strong></p>
-                    <pre>${details}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeFilterModal()">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createFilterResultsModal({
+        title: 'Viajeros en tramo',
+        subtitle: `${fromStop} → ${toStop}`,
+        total: seats.length,
+        totalLabel: 'viajero(s)',
+        details: details
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
+    showModal(modal);
 }
 
 function showSeatFilterResults(seatInfo) {
@@ -733,31 +507,21 @@ function showSeatFilterResults(seatInfo) {
         info += `\nHistorial: ${data.historial.join(' → ')}`;
     }
 
-    const modal = `
-        <div class="modal-overlay" onclick="closeFilterModal(event)">
-            <div class="modal filter-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 class="modal-title">Información del asiento ${seat}</h3>
-                    <button class="close-btn" onclick="closeFilterModal()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="filter-results">
-                    <pre>${info}</pre>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" style="background-color: #4f46e5;" onclick="navigateToSeat('${coach}', '${seat}')">Mostrar</button>
-                    <button class="clear-btn" onclick="closeFilterModal()">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    const modal = createFilterResultsModal({
+        title: `Información del asiento ${seat}`,
+        total: 1,
+        totalLabel: '',
+        details: info,
+        actions: [
+            {
+                label: 'Mostrar',
+                onclick: `navigateToSeat('${coach}', '${seat}')`,
+                style: 'background-color: #4f46e5;'
+            }
+        ]
+    });
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
+    showModal(modal);
 }
 
 /* -----------------------
@@ -861,71 +625,18 @@ function showFilterListModal(type, items) {
     filterState.active = true;
     filterState.data = _currentFilterList.slice();
 
-    const modal = `
-<div class="modal-overlay filter-input-modal" onclick="closeFilterInputModal(event)">
-    <div class="modal about-modal" onclick="event.stopPropagation()">
-        
-        <div class="modal-header">
-            <div class="modal-header-top">
-                <h3 class="modal-title">
-                    ${type === 'links' ? 'Enlaces' : 'Con comentario'}
-                </h3>
-                <button class="close-btn" onclick="closeFilterInputModal()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
+    const title = type === 'links' ? 'Enlaces' : 'Con comentario';
+    const modal = createListModal({
+        title: title,
+        items: items,
+        onItemClick: 'onFilterListGo'
+    });
 
-        <div class="filter-input-content">
-            ${
-        items.length === 0
-            ? `<div style="color:#777; padding:1rem; text-align:center;">No hay asientos que mostrar.</div>`
-            : `<div class="filter-list-container">
-                        ${items.map((it, i) => `
-                            <div class="filter-list-row">
-                                <div class="filter-list-seat">
-                                    <strong>${it.coach}</strong> – ${it.seat}
-                                    ${it.extra ? `<div class="filter-extra">${escapeHtml(it.extra)}</div>` : ''}
-                                </div>
-                                <div class="filter-list-actions">
-                                    <button class="icon-btn small red" onclick="onFilterListGo(${i})" title="Ir">
-                                        <svg viewBox="0 0 24 24" width="16" height="16"
-                                             stroke="currentColor" fill="none" stroke-width="2">
-                                            <polyline points="9 6 15 12 9 18"></polyline>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>`
-    }
-        </div>
-
-        <div class="modal-footer">
-            <button class="clear-btn" onclick="closeFilterInputModal()">Cerrar</button>
-        </div>
-
-    </div>
-</div>
-`;
-
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
-
-    // Inicial: si hay elementos, centrar el primero
-    if (_currentFilterList.length > 0) {
-        navigateToFilterIndex(0);
-    }
-}
-
-// Utilidades para escape de HTML (por seguridad al inyectar en modal)
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/[&<>"']/g, function (m) {
-        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+    showModal(modal, () => {
+        // Inicial: si hay elementos, centrar el primero
+        if (_currentFilterList.length > 0) {
+            navigateToFilterIndex(0);
+        }
     });
 }
 
