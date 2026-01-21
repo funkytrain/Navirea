@@ -15,10 +15,6 @@
     transition: all 0.3s ease;
 }
 
-.header.collapsed .header-main {
-    display: none;
-}
-
 .header-main {
     padding: 0.75rem;
     max-height: 70vh;

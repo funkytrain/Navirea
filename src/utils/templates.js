@@ -33,8 +33,7 @@ function generateHeaderTemplate(config) {
 
     return `
         <div class="header ${headerCollapsed ? 'collapsed' : ''}">
-            ${!headerCollapsed ? `
-                <div class="header-main">
+            <div class="header-main">
                     <div class="header-row-1">
                         <div class="header-left">
     <svg class="train-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -131,7 +130,7 @@ ${trainNumber ? `
                     ` : ''}
 
 <div class="header-actions">
-    <button class="action-btn" onclick="openServiceNotes()" title="Notas del servicio">
+    <button class="action-btn" onclick="openServiceNotes(); event.stopPropagation();" title="Notas del servicio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
@@ -142,7 +141,7 @@ ${trainNumber ? `
     </button>
 
     <button class="action-btn ${incidentsCount > 0 ? 'has-incidents' : ''}"
-            onclick="openIncidentsPanel()"
+            onclick="openIncidentsPanel(); event.stopPropagation();"
             title="Incidencias">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -197,8 +196,7 @@ ${trainNumber ? `
 
 ${generateMoreOptionsMenu()}
 </div>
-                </div>
-            ` : ''}
+            </div>
 
             <div class="coach-selector-row">
                 <button class="header-collapse-btn" onclick="toggleHeaderCollapse()" title="${collapseTitle}">

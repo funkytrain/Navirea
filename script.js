@@ -807,9 +807,87 @@ function updateCurrentStopSearch(value) {
 }
 
 function toggleHeaderCollapse() {
-    state.headerCollapsed = !state.headerCollapsed;
+    const header = document.querySelector('.header');
+    const headerMain = header?.querySelector('.header-main');
+
+    if (!header || !headerMain) {
+        // Fallback: si no encuentra los elementos, hacer render completo
+        state.headerCollapsed = !state.headerCollapsed;
+        saveHeaderCollapsed();
+        render();
+        return;
+    }
+
+    // Si está expandido, colapsar con animación
+    if (!state.headerCollapsed) {
+        // Obtener altura actual antes de colapsar
+        const currentHeight = headerMain.scrollHeight;
+        headerMain.style.height = currentHeight + 'px';
+
+        // Forzar reflow
+        headerMain.offsetHeight;
+
+        // Agregar clase de transición
+        headerMain.style.transition = 'height 0.4s ease, opacity 0.3s ease, padding 0.3s ease';
+        headerMain.style.height = '0px';
+        headerMain.style.opacity = '0';
+        headerMain.style.paddingTop = '0';
+        headerMain.style.paddingBottom = '0';
+        headerMain.style.overflow = 'hidden';
+
+        state.headerCollapsed = true;
+    } else {
+        // Si está colapsado, expandir con animación
+        headerMain.style.transition = 'height 0.4s ease, opacity 0.3s ease, padding 0.3s ease';
+        headerMain.style.overflow = 'hidden';
+
+        // Remover restricciones temporalmente para medir
+        headerMain.style.height = 'auto';
+        headerMain.style.opacity = '1';
+        headerMain.style.paddingTop = '';
+        headerMain.style.paddingBottom = '';
+
+        const targetHeight = headerMain.scrollHeight;
+
+        // Volver a altura 0 para animar
+        headerMain.style.height = '0px';
+        headerMain.style.opacity = '0';
+        headerMain.style.paddingTop = '0';
+        headerMain.style.paddingBottom = '0';
+
+        // Forzar reflow
+        headerMain.offsetHeight;
+
+        // Animar a altura completa
+        headerMain.style.height = targetHeight + 'px';
+        headerMain.style.opacity = '1';
+        headerMain.style.paddingTop = '0.75rem';
+        headerMain.style.paddingBottom = '0.75rem';
+
+        state.headerCollapsed = false;
+
+        // Limpiar estilos inline después de la animación
+        setTimeout(() => {
+            if (!state.headerCollapsed) {
+                headerMain.style.height = '';
+                headerMain.style.overflow = '';
+            }
+        }, 400);
+    }
+
     saveHeaderCollapsed();
-    render();
+
+    // Actualizar el botón de colapsar
+    const collapseBtn = header.querySelector('.header-collapse-btn');
+    if (collapseBtn) {
+        collapseBtn.title = state.headerCollapsed ? 'Expandir' : 'Colapsar';
+        const svg = collapseBtn.querySelector('svg');
+        if (svg) {
+            svg.innerHTML = state.headerCollapsed ?
+                '<polyline points="6 9 12 15 18 9"/>' :
+                '<polyline points="18 15 12 9 6 15"/>';
+        }
+    }
 }
 
 function openAbout() {
@@ -853,6 +931,9 @@ function closeAbout(event) {
 }
 
 function openServiceNotes() {
+    // Resetear estado de doble tap al abrir modal
+    resetCoachDoubleTap();
+
     document.body.insertAdjacentHTML('beforeend', window.Templates.generateServiceNotesModal(state.serviceNotes));
     lockBodyScroll();
 
@@ -897,12 +978,19 @@ function clearServiceNotes() {
 
 function closeServiceNotes(event) {
     if (!event || event.target === event.currentTarget) {
+        // Guardar scroll antes de cerrar
+        const scrollToRestore = savedScrollPosition || 0;
+
         const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
         if (overlay) overlay.remove();
-    }
 
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
+        if (!document.querySelector('.modal-overlay')) {
+            unlockBodyScroll();
+            // Restaurar scroll a la posición guardada
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollToRestore);
+            });
+        }
     }
 }
 
@@ -2435,8 +2523,7 @@ function select470Variant(coachId, variant) {
     closeVariantSelector();
 
     // 🔴 NUEVO: Resetear variables de doble tap
-    coachLastTapTime = 0;
-    coachLastTappedId = null;
+    resetCoachDoubleTap();
 
     // Re-renderizar si estamos viendo ese coche
     if (state.selectedCoach === coachId) {
@@ -2445,6 +2532,12 @@ function select470Variant(coachId, variant) {
         // Si no estamos en ese coche, solo actualizar el header
         render();
     }
+}
+
+// Resetear estado de doble tap
+function resetCoachDoubleTap() {
+    coachLastTapTime = 0;
+    coachLastTappedId = null;
 }
 
 // Cerrar selector de variantes
@@ -2457,8 +2550,7 @@ function closeVariantSelector() {
     if (popup) popup.remove();
 
     // Resetear variables de doble tap al cerrar
-    coachLastTapTime = 0;
-    coachLastTappedId = null;
+    resetCoachDoubleTap();
 }
 
 // Calcular ocupación total del tren
@@ -2727,7 +2819,7 @@ Object.assign(window, {
     toggleDarkMode, toggleSeatRotation, toggleHeaderCollapse,
 
     // Variantes 470
-    show470VariantSelector, select470Variant, closeVariantSelector,
+    show470VariantSelector, select470Variant, closeVariantSelector, resetCoachDoubleTap,
 
     // Notas e incidencias
     openServiceNotes, updateServiceNotes, clearServiceNotes, closeServiceNotes,
