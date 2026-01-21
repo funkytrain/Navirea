@@ -235,3 +235,275 @@ function saveData() {
         );
     }
 }
+
+// ============================================
+// FUNCIONES ESPECÍFICAS DE PERSISTENCIA
+// ============================================
+
+/**
+ * Guarda la dirección del tren actual
+ */
+function saveTrainDirection() {
+    try {
+        localStorage.setItem(
+            `train${state.selectedTrain}Direction`,
+            JSON.stringify(state.trainDirection)
+        );
+    } catch (e) {
+        console.warn('Error al guardar dirección del tren', e);
+    }
+}
+
+/**
+ * Guarda el modo oscuro
+ */
+function saveDarkMode() {
+    try {
+        localStorage.setItem("darkMode", state.darkMode);
+    } catch (e) {
+        console.warn('Error al guardar modo oscuro', e);
+    }
+}
+
+/**
+ * Guarda la rotación de asientos
+ */
+function saveSeatRotation() {
+    try {
+        localStorage.setItem("rotateSeats", state.rotateSeats);
+    } catch (e) {
+        console.warn('Error al guardar rotación de asientos', e);
+    }
+}
+
+/**
+ * Guarda el número de tren
+ */
+function saveTrainNumber() {
+    try {
+        if (state.trainNumber) {
+            localStorage.setItem('trainNumber', state.trainNumber);
+        }
+    } catch (e) {
+        console.warn('Error al guardar número de tren', e);
+    }
+}
+
+/**
+ * Guarda la parada actual
+ */
+function saveCurrentStop() {
+    try {
+        if (state.currentStop) {
+            localStorage.setItem('currentStop', state.currentStop);
+        }
+    } catch (e) {
+        console.warn('Error al guardar parada actual', e);
+    }
+}
+
+/**
+ * Guarda las variantes del tren 470
+ */
+function save470Variants() {
+    try {
+        localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
+    } catch (e) {
+        console.warn('Error al guardar variantes del 470', e);
+    }
+}
+
+/**
+ * Guarda el estado de colapso del header
+ */
+function saveHeaderCollapsed() {
+    try {
+        localStorage.setItem('headerCollapsed', state.headerCollapsed);
+    } catch (e) {
+        console.warn('Error al guardar estado del header', e);
+    }
+}
+
+/**
+ * Borra todos los datos del tren actual
+ */
+function clearCurrentTrainData() {
+    try {
+        localStorage.removeItem(`train${state.selectedTrain}Data`);
+        localStorage.removeItem(`train${state.selectedTrain}Direction`);
+        localStorage.removeItem(`train${state.selectedTrain}Notes`);
+        localStorage.removeItem(`train${state.selectedTrain}Incidents`);
+        localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
+        localStorage.removeItem('currentStop');
+        localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
+    } catch (e) {
+        console.warn('Error al eliminar datos de localStorage', e);
+    }
+}
+
+/**
+ * Borra datos específicos al limpiar asientos
+ */
+function clearSeatsData() {
+    try {
+        localStorage.removeItem('currentStop');
+        localStorage.removeItem(`train${state.selectedTrain}Notes`);
+        localStorage.removeItem(`train${state.selectedTrain}Incidents`);
+        localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
+        localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
+    } catch (e) {
+        console.warn('Error al limpiar datos de asientos', e);
+    }
+}
+
+/**
+ * Guarda datos importados desde QR/JSON
+ */
+function saveImportedData(turnData) {
+    try {
+        // Guardar tren seleccionado
+        if (turnData.trainModel) {
+            localStorage.setItem("selectedTrain", turnData.trainModel);
+        }
+
+        // Guardar número de tren si existe
+        if (turnData.trainNumber) {
+            localStorage.setItem('trainNumber', turnData.trainNumber);
+        }
+
+        // Guardar parada actual si existe
+        if (turnData.currentStop) {
+            localStorage.setItem('currentStop', turnData.currentStop);
+        }
+
+        // Si es tren 470, importar variantes
+        if (turnData.trainModel === "470" && turnData.coach470Variants) {
+            localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+        }
+
+        // Guardar datos de asientos
+        if (turnData.seatData) {
+            localStorage.setItem(
+                `train${turnData.trainModel}Data`,
+                JSON.stringify(turnData.seatData)
+            );
+        }
+
+        // Guardar dirección del tren
+        if (turnData.trainDirection) {
+            localStorage.setItem(
+                `train${turnData.trainModel}Direction`,
+                JSON.stringify(turnData.trainDirection)
+            );
+        }
+
+        // Guardar notas de servicio
+        if (turnData.serviceNotes !== undefined) {
+            localStorage.setItem(
+                `train${turnData.trainModel}Notes`,
+                turnData.serviceNotes
+            );
+        }
+
+        // Guardar incidencias
+        if (turnData.incidents) {
+            localStorage.setItem(
+                `train${turnData.trainModel}Incidents`,
+                JSON.stringify(turnData.incidents)
+            );
+        }
+    } catch (e) {
+        console.warn('Error al guardar datos importados', e);
+    }
+}
+
+/**
+ * Obtiene los backups automáticos guardados
+ */
+function getAutoBackups() {
+    const backupsKey = `autoBackups_${state.selectedTrain}`;
+    let backups = [];
+
+    try {
+        const saved = localStorage.getItem(backupsKey);
+        if (saved) backups = JSON.parse(saved);
+    } catch (e) {
+        console.error('Error al cargar backups', e);
+    }
+
+    return backups;
+}
+
+/**
+ * Restaura un backup específico
+ */
+function restoreFromBackup(backup) {
+    try {
+        // Restaurar datos del backup
+        state.seatData = backup.seatData || {};
+        state.trainDirection = backup.trainDirection || {};
+        state.serviceNotes = backup.serviceNotes || "";
+        state.incidents = backup.incidents || {};
+
+        if (backup.trainNumber) {
+            state.trainNumber = backup.trainNumber;
+            localStorage.setItem('trainNumber', backup.trainNumber);
+        }
+
+        if (backup.currentStop) {
+            state.currentStop = backup.currentStop;
+            localStorage.setItem('currentStop', backup.currentStop);
+        }
+
+        if (state.selectedTrain === "470" && backup.coach470Variants) {
+            state.coach470Variants = backup.coach470Variants;
+            localStorage.setItem('coach470Variants', JSON.stringify(backup.coach470Variants));
+        }
+
+        // Guardar en localStorage
+        saveData();
+    } catch (e) {
+        console.error('Error al restaurar backup', e);
+        throw e;
+    }
+}
+
+/**
+ * Borra todos los backups automáticos
+ */
+function clearAllAutoBackups() {
+    try {
+        const backupsKey = `autoBackups_${state.selectedTrain}`;
+        localStorage.removeItem(backupsKey);
+    } catch (e) {
+        console.warn('Error al borrar backups', e);
+    }
+}
+
+// Exportar funciones a window para uso global
+Object.assign(window, {
+    // Funciones principales
+    saveData,
+    loadData,
+    startAutoBackup,
+    saveAutoBackup,
+
+    // Funciones específicas
+    saveTrainDirection,
+    saveDarkMode,
+    saveSeatRotation,
+    saveTrainNumber,
+    saveCurrentStop,
+    save470Variants,
+    saveHeaderCollapsed,
+
+    // Limpieza
+    clearCurrentTrainData,
+    clearSeatsData,
+
+    // Importación/Backups
+    saveImportedData,
+    getAutoBackups,
+    restoreFromBackup,
+    clearAllAutoBackups
+});
