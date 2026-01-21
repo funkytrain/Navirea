@@ -7,10 +7,10 @@
 ## 📊 Estado Actual
 
 - **Líneas iniciales**: 5816
-- **Líneas actuales**: 5182
-- **Líneas reducidas**: 634 (10.9%)
+- **Líneas actuales**: 4995
+- **Líneas reducidas**: 821 (14.1%)
 - **Líneas objetivo**: ~3300-3800
-- **Progreso**: 28% ⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜
+- **Progreso**: 36% ⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜
 
 ---
 
@@ -43,14 +43,18 @@
 ---
 
 ### ✅ Fase 3: Scroll helpers consolidado → src/utils/modal-helpers.js (~200 líneas)
-**Estado**: ⬜ Pendiente
+**Estado**: ✅ Completada
 
-**Funciones a consolidar**:
-- `setupModalListScrollGuards()` (líneas 3741-3791)
-- `setupModalOverlayScrollBlock()` (líneas 3814-3863)
-- `setupModalScrollBehavior()` (líneas 5580-5628)
+**Líneas movidas**: 187 líneas reales
 
-**Impacto**: Elimina lógica repetida de scroll
+**Funciones extraídas**:
+- `setupModalListScrollGuards()`
+- `removeModalScrollGuards()`
+- `setupModalOverlayScrollBlock()`
+- `removeModalOverlayScrollBlock()`
+- `setupModalScrollBehavior()`
+
+**Resultado**: ✅ Módulo creado con sistema completo de scroll guards
 
 ---
 
@@ -126,11 +130,11 @@
 | 4 | Pantallas estación | 140 | ✅ Completada | 100% |
 | 5 | QR/Compartir | 433 | ✅ Completada | 100% |
 | 7 | Markdown parser | 38 | ✅ Completada | 100% |
-| 3 | Scroll helpers | ~200 | ⬜ Pendiente | 0% |
+| 3 | Scroll helpers | 187 | ✅ Completada | 100% |
 | 2 | Sistema modales | ~400 | ⬜ Pendiente | 0% |
 | 1 | Templates HTML | ~800 | ⬜ Pendiente | 0% |
 
-**Total reducción alcanzada**: 634 líneas (28% del objetivo)
+**Total reducción alcanzada**: 821 líneas (36% del objetivo)
 **Total reducción estimada**: 2210 líneas (38% del archivo)
 
 ---
@@ -214,3 +218,26 @@
 - ✅ Parser de Markdown modularizado y reutilizable
 
 **Estado**: ✅ Fase 7 completada sin incidencias
+
+---
+
+### [2026-01-21] - Fase 3 Completada
+**Fase 3: Scroll helpers consolidado**
+- ✅ Reescrito módulo `src/utils/modal-helpers.js` con funciones completas
+- ✅ Extraídas 5 funciones de gestión de scroll:
+  - `setupModalListScrollGuards()` - Guards para scroll en listas
+  - `removeModalScrollGuards()` - Limpieza de listeners de lista
+  - `setupModalOverlayScrollBlock()` - Bloqueo de scroll en overlay
+  - `removeModalOverlayScrollBlock()` - Limpieza de listeners de overlay
+  - `setupModalScrollBehavior()` - Configuración unificada de scroll
+- ✅ Incluye variables globales de handlers (modalWheelHandler, overlayTouchMoveHandler, etc.)
+- ✅ Import ya existente en index.html (línea 57)
+- ✅ Reducción: 187 líneas
+
+**Resultado**:
+- 📉 De 5182 → 4995 líneas (187 líneas eliminadas)
+- 📊 36% del objetivo de refactorización alcanzado
+- ✅ Sistema de scroll guards completamente modularizado
+- ✅ Elimina duplicación de lógica de scroll en modales
+
+**Estado**: ✅ Fase 3 completada sin incidencias
