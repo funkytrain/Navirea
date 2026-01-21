@@ -5035,545 +5035,82 @@ function toggleImportSubmenu() {
     }
 }
 
-// ============================================================================
-// 🆕 SISTEMA DE COMPARTIR POR QR CON CÓDIGO CORTO
-// ============================================================================
+// ============================================
+// SISTEMA DE COMPARTIR POR QR
+// ============================================
+// Importado desde src/features/qr-sharing.js
+// Las funciones se cargan dinámicamente y se exportan a window
 
-// Subir turno a JSONBin y obtener código corto
-async function uploadTurnToServer(turnData) {
-    try {
-        const response = await fetch(`${JSONBIN_BASE_URL}/b`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_API_KEY,
-                'X-Bin-Private': 'false',
-                'X-Bin-Name': `Turno-${turnData.trainName}-${new Date().toISOString()}`
-            },
-            body: JSON.stringify(turnData)
-        });
 
-        if (!response.ok) {
-            throw new Error('Error al subir datos al servidor');
-        }
+// ============================================
+// EXPORTACIÓN DE FUNCIONES GLOBALES
+// ============================================
+// Sistema centralizado de exports para event handlers en HTML
+Object.assign(window, {
+    // Navegación y selección
+    selectCoach, selectSeat, selectTrain, navigateToSeat,
 
-        const data = await response.json();
+    // Gestión de asientos
+    clearSeat, clearAllData, updateSeat, updateSeatFromList,
+    toggleFlag, updateComment, deleteComment,
+    handleSeatPress, handleSeatRelease, handleSeatCancel, handleSeatMove,
 
-        // Extraer ID corto del bin (últimos 24 caracteres)
-        const binId = data.metadata.id;
+    // Modales principales
+    closeModal, updateSearch, openAbout, closeAbout,
+    openReadmeModal, closeReadmeModal,
+    openManualTecnico, closeManualTecnico,
 
-        return binId;
-    } catch (error) {
-        console.error('Error uploading turn:', error);
-        throw error;
-    }
-}
+    // Filtros
+    toggleFiltersMenu, openStopFilter, openRouteFilter, openSeatFilter,
+    clearFilterHighlight, closeFilterModal,
+    updateStopFilterSuggestions, selectStopForFilter,
+    updateRouteFromSuggestions, selectRouteFromStop,
+    updateRouteToSuggestions, selectRouteToStop,
+    searchSeatFilter, closeFilterInputModal,
 
-// Descargar turno desde JSONBin usando código corto
-async function downloadTurnFromServer(binId) {
-    try {
-        const response = await fetch(`${JSONBIN_BASE_URL}/b/${binId}/latest`, {
-            method: 'GET',
-            headers: {
-                'X-Master-Key': JSONBIN_API_KEY
-            }
-        });
+    // Modales genéricos
+    showConfirmModal, closeConfirmModal,
 
-        if (!response.ok) {
-            throw new Error('Error al descargar datos del servidor');
-        }
+    // Scroll y modal helpers
+    saveModalScrollPosition, restoreModalScrollPosition,
+    handleModalOverlayInteraction, lockBodyScroll, unlockBodyScroll,
+    modalSwipeStart, modalSwipeMove, modalSwipeEnd,
 
-        const data = await response.json();
-        return data.record; // Los datos están en .record
-    } catch (error) {
-        console.error('Error downloading turn:', error);
-        throw error;
-    }
-}
+    // Tren y configuración
+    toggleDirection, toggleTrainSelector, showTrainNumberPrompt,
+    setCurrentStop, updateCurrentStopSearch,
+    toggleDarkMode, toggleSeatRotation, toggleHeaderCollapse,
 
-// ============================================================================
-// FIN SISTEMA DE COMPARTIR
-// ============================================================================
+    // Variantes 470
+    show470VariantSelector, select470Variant, closeVariantSelector,
 
-async function generateQRCode() {
-    const turnData = {
-        trainModel: state.selectedTrain,
-        seatData: state.seatData,
-        trainDirection: state.trainDirection,
-        serviceNotes: state.serviceNotes || "",
-        incidents: state.incidents || {},
-        trainNumber: state.trainNumber || null,
-        currentStop: state.currentStop || null,
-        exportDate: new Date().toISOString(),
-        trainName: getAllTrains()[state.selectedTrain].name,
-        ...(state.selectedTrain === "470" && {
-            coach470Variants: state.coach470Variants
-        })
-    };
+    // Notas e incidencias
+    openServiceNotes, updateServiceNotes, clearServiceNotes, closeServiceNotes,
+    toggleIncident, openIncidentNote, saveIncidentNote, closeIncidentNote,
+    openIncidentsPanel, closeIncidentsPanel, removeIncident, clearAllIncidents,
+    handleDoorPress, handleDoorRelease, handleDoorCancel, getDoorSideText,
 
-    // Mostrar modal con loading
-    const modal = `
-        <div class="modal-overlay" onclick="closeQRModal(event)">
-            <div class="modal qr-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Compartir turno por QR</h3>
-                        <button class="close-btn" onclick="closeQRModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="qr-content">
-                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
-                        ⏳ Generando código QR...
-                    </p>
-                    <div id="qrcode-container" style="display: flex; justify-content: center; align-items: center; min-height: 280px;">
-                        <div style="text-align: center;">
-                            <svg style="animation: spin 1s linear infinite; width: 48px; height: 48px; color: #4f46e5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-                            </svg>
-                            <p style="margin-top: 1rem; color: #6b7280;">Subiendo datos...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeQRModal()">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    `;
+    // Backups
+    openBackupsPanel, closeBackupsPanel, restoreBackup, clearAllBackups,
 
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
+    // Compartir/Importar
+    exportTurn, importTurn, toggleMoreOptions,
+    toggleShareSubmenu, toggleImportSubmenu,
+    // generateQRCode, closeQRModal, scanQRCode, closeScanModal exportadas desde qr-sharing.js
+    // uploadTurnToServer, downloadTurnFromServer, removeModalAndUnlock exportadas desde qr-sharing.js
 
-    // Subir datos al servidor
-    try {
-        const binId = await uploadTurnToServer(turnData);
+    // Utilidades
+    getTotalTrainOccupancy,
 
-        // Generar QR con solo el código corto
-        const container = document.getElementById('qrcode-container');
-        if (container && typeof QRCode !== 'undefined') {
-            container.innerHTML = ''; // Limpiar loading
+    // Funciones auxiliares (necesarias para módulos externos)
+    getAllTrains, saveData, render
+});
 
-            new QRCode(container, {
-                text: binId,
-                width: 280,
-                height: 280,
-                colorDark: state.darkMode ? "#f9fafb" : "#000000",
-                colorLight: state.darkMode ? "#1f2937" : "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
-            });
-
-            // Actualizar mensaje
-            const message = document.querySelector('.qr-content p');
-            if (message) {
-                message.innerHTML = `
-                    ✅ Código QR generado correctamente<br>
-                    <small style="color: #6b7280;">Válido por 30 días</small>
-                `;
-            }
-
-            // Añadir info del turno
-            container.insertAdjacentHTML('afterend', `
-                <div style="text-align: center; margin-top: 1rem;">
-                    <p style="font-size: 0.9rem; color: #4b5563;">
-                        <strong>${turnData.trainName}</strong>
-                        ${turnData.trainNumber ? ` - Nº ${turnData.trainNumber}` : ''}
-                    </p>
-                    <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
-                        ${Object.keys(turnData.seatData).length} asientos registrados
-                    </p>
-                    <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">
-                        Código: <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 4px;">${binId}</code>
-                    </p>
-                </div>
-            `);
-        }
-    } catch (error) {
-        const container = document.getElementById('qrcode-container');
-        if (container) {
-            container.innerHTML = `
-                <p style="color: #ef4444; text-align: center;">
-                    ❌ Error al generar código QR<br>
-                    <small>${error.message}</small><br><br>
-                    <small style="color: #6b7280;">Usa "Exportar por archivo JSON" como alternativa</small>
-                </p>
-            `;
-        }
-    }
-}
-
-function closeQRModal(event) {
-    closeGenericModal('.qr-modal', event);
-}
-
-function scanQRCode() {
-    // Verificar soporte de cámara
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        alert('❌ Tu navegador no soporta acceso a la cámara.\n\nUsa "Importar desde archivo JSON" en su lugar.');
-        return;
-    }
-
-    const modal = `
-        <div class="modal-overlay" onclick="closeScanModal(event)">
-            <div class="modal scan-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Escanear código QR</h3>
-                        <button class="close-btn" onclick="closeScanModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="scan-content">
-                    <p style="text-align: center; margin-bottom: 1rem; color: #6b7280; font-size: 0.9rem;">
-                        📷 Apunta la cámara al código QR
-                    </p>
-                    <div id="qr-reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
-                    <p id="scan-status" style="text-align: center; margin-top: 1rem; color: #4b5563; font-size: 0.85rem;">
-                        Iniciando cámara...
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button class="clear-btn" onclick="closeScanModal()">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML('beforeend', modal);
-    lockBodyScroll();
-
-    startQRScanning();
-}
-
-let html5QrCode = null;
-
-async function startQRScanning() {
-    const readerDiv = document.getElementById('qr-reader');
-    const status = document.getElementById('scan-status');
-
-    if (!readerDiv) return;
-
-    try {
-        // Crear instancia de Html5Qrcode
-        html5QrCode = new Html5Qrcode("qr-reader");
-
-        // Configuración optimizada para mejor detección
-        const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0,
-            disableFlip: false,
-            formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
-        };
-
-        // Callback cuando se detecta un QR
-        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            status.textContent = '✅ ¡Código detectado!';
-            status.style.color = '#22c55e';
-
-            if (navigator.vibrate) {
-                navigator.vibrate(200);
-            }
-
-            // Detener escaneo PRIMERO
-            html5QrCode.stop()
-                .then(() => {
-                    html5QrCode.clear();
-                    html5QrCode = null;
-
-                    processQRData(decodedText);
-
-                    setTimeout(() => {
-                        const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
-                        if (overlay) overlay.remove();
-
-                        if (!document.querySelector('.modal-overlay')) {
-                            unlockBodyScroll();
-                        }
-                    }, 500);
-                })
-                .catch(err => {
-                    console.error("Error stopping scanner:", err);
-                    html5QrCode = null;
-
-                    processQRData(decodedText);
-
-                    setTimeout(() => {
-                        const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
-                        if (overlay) overlay.remove();
-
-                        if (!document.querySelector('.modal-overlay')) {
-                            unlockBodyScroll();
-                        }
-                    }, 500);
-                });
-        };
-
-        const qrCodeErrorCallback = (errorMessage) => {
-            // Normal mientras busca
-        };
-
-        // Iniciar cámara trasera
-        html5QrCode.start(
-            { facingMode: "environment" },
-            config,
-            qrCodeSuccessCallback,
-            qrCodeErrorCallback
-        ).then(() => {
-            status.textContent = '🔍 Buscando código QR...';
-            status.style.color = '#4b5563';
-        }).catch((err) => {
-            status.textContent = '❌ Error al acceder a la cámara';
-            status.style.color = '#ef4444';
-            console.error("Camera error:", err);
-
-            // Intentar cámara frontal
-            html5QrCode.start(
-                { facingMode: "user" },
-                config,
-                qrCodeSuccessCallback,
-                qrCodeErrorCallback
-            ).catch(err2 => {
-                console.error("Fallback camera error:", err2);
-                html5QrCode = null;
-            });
-        });
-
-    } catch (error) {
-        status.textContent = '❌ Error al iniciar escáner';
-        status.style.color = '#ef4444';
-        console.error('Scanner init error:', error);
-        html5QrCode = null;
-    }
-}
-
-async function processQRData(dataStr) {
-    try {
-        // Verificar si es un código corto (24 caracteres hex) o JSON completo
-        const isShortCode = /^[a-f0-9]{24}$/i.test(dataStr.trim());
-
-        let turnData;
-
-        if (isShortCode) {
-            // Es código corto, descargar del servidor
-            const statusEl = document.getElementById('scan-status');
-            if (statusEl) {
-                statusEl.textContent = '📥 Descargando datos del servidor...';
-                statusEl.style.color = '#4f46e5';
-            }
-
-            turnData = await downloadTurnFromServer(dataStr.trim());
-        } else {
-            // Es JSON completo (retrocompatibilidad)
-            turnData = JSON.parse(dataStr);
-        }
-
-        // Validar datos
-        const allTrains = getAllTrains();
-        if (!turnData.trainModel || !allTrains[turnData.trainModel]) {
-            alert('❌ Código QR no válido o modelo de tren no reconocido');
-            return;
-        }
-
-        const trainName = turnData.trainName || turnData.trainModel;
-        const exportDate = turnData.exportDate ?
-            new Date(turnData.exportDate).toLocaleString('es-ES') :
-            'desconocida';
-
-        if (confirm(
-            `¿Importar turno escaneado?\n\n` +
-            `Tren: ${trainName}\n` +
-            `Fecha: ${exportDate}\n` +
-            `Asientos: ${Object.keys(turnData.seatData || {}).length}\n\n` +
-            `Esto reemplazará los datos actuales.`
-        )) {
-            // Cambiar al tren correcto
-            if (state.selectedTrain !== turnData.trainModel) {
-                state.selectedTrain = turnData.trainModel;
-                state.selectedCoach = allTrains[turnData.trainModel].coaches[0].id;
-                localStorage.setItem('selectedTrain', turnData.trainModel);
-            }
-
-            // Importar datos
-            state.seatData = turnData.seatData || {};
-            state.trainDirection = turnData.trainDirection || {};
-            state.serviceNotes = turnData.serviceNotes || "";
-            state.incidents = turnData.incidents || {};
-
-            if (turnData.trainNumber) {
-                state.trainNumber = turnData.trainNumber;
-                localStorage.setItem('trainNumber', turnData.trainNumber);
-            }
-
-            if (turnData.currentStop) {
-                state.currentStop = turnData.currentStop;
-                localStorage.setItem('currentStop', turnData.currentStop);
-            }
-
-            if (turnData.trainModel === "470" && turnData.coach470Variants) {
-                state.coach470Variants = turnData.coach470Variants;
-                localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
-            }
-
-            saveData();
-            render();
-            alert('✅ Turno importado correctamente desde QR');
-        }
-
-    } catch (error) {
-        alert('❌ Error al procesar código QR: ' + error.message);
-        console.error('QR processing error:', error);
-    }
-}
-
-function closeScanModal(event) {
-    // Permitir cerrar con botones o overlay
-    const isButtonClick = event && event.target && (
-        event.target.classList.contains('close-btn') ||
-        event.target.closest('.close-btn') ||
-        event.target.classList.contains('clear-btn') ||
-        event.target.closest('.clear-btn')
-    );
-
-    const isOverlayClick = event && event.target === event.currentTarget;
-
-    if (event && !isButtonClick && !isOverlayClick) return;
-
-    // Detener escáner de forma segura
-    if (html5QrCode) {
-        try {
-            html5QrCode.stop()
-                .then(() => {
-                    html5QrCode.clear();
-                    html5QrCode = null;
-                    removeModalAndUnlock();
-                })
-                .catch(err => {
-                    console.error("Error stopping:", err);
-                    html5QrCode = null;
-                    removeModalAndUnlock();
-                });
-        } catch (e) {
-            console.error("Exception stopping:", e);
-            html5QrCode = null;
-            removeModalAndUnlock();
-        }
-    } else {
-        removeModalAndUnlock();
-    }
-}
-
-// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
-function removeModalAndUnlock() {
-    const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
-    if (overlay) overlay.remove();
-
-    if (!document.querySelector('.modal-overlay')) {
-        unlockBodyScroll();
-    }
-}
-
-// Inicializar
-window.selectCoach = selectCoach;
-window.selectSeat = selectSeat;
-window.closeModal = closeModal;
-window.updateSearch = updateSearch;
-window.clearSeat = clearSeat;
-window.clearAllData = clearAllData;
-window.updateSeat = updateSeat;
-window.updateSeatFromList = updateSeatFromList;
-window.toggleFlag = toggleFlag;
-window.updateComment = updateComment;
-window.deleteComment = deleteComment;
-window.toggleDirection = toggleDirection;
-window.selectTrain = selectTrain;
-window.toggleTrainSelector = toggleTrainSelector;
-window.exportTurn = exportTurn;
-window.importTurn = importTurn;
-window.toggleDarkMode = toggleDarkMode;
-window.toggleSeatRotation = toggleSeatRotation;
-window.openAbout = openAbout;
-window.openReadmeModal = openReadmeModal;
-window.openManualTecnico = openManualTecnico;
-window.closeManualTecnico = closeManualTecnico;
-window.closeReadmeModal = closeReadmeModal;
-window.closeAbout = closeAbout;
-window.showTrainNumberPrompt = showTrainNumberPrompt;
-window.setCurrentStop = setCurrentStop;
-window.updateCurrentStopSearch = updateCurrentStopSearch;
-window.toggleHeaderCollapse = toggleHeaderCollapse;
-window.handleSeatPress = handleSeatPress;
-window.handleSeatRelease = handleSeatRelease;
-window.handleSeatCancel = handleSeatCancel;
-window.handleSeatMove = handleSeatMove;
-window.toggleFiltersMenu = toggleFiltersMenu;
-window.openStopFilter = openStopFilter;
-window.openRouteFilter = openRouteFilter;
-window.openSeatFilter = openSeatFilter;
-window.clearFilterHighlight = clearFilterHighlight;
-window.closeFilterModal = closeFilterModal;
-window.updateStopFilterSuggestions = updateStopFilterSuggestions;
-window.selectStopForFilter = selectStopForFilter;
-window.updateRouteFromSuggestions = updateRouteFromSuggestions;
-window.selectRouteFromStop = selectRouteFromStop;
-window.updateRouteToSuggestions = updateRouteToSuggestions;
-window.selectRouteToStop = selectRouteToStop;
-window.searchSeatFilter = searchSeatFilter;
-window.closeFilterInputModal = closeFilterInputModal;
-window.showConfirmModal = showConfirmModal;
-window.closeConfirmModal = closeConfirmModal;
-window.saveModalScrollPosition = saveModalScrollPosition;
-window.restoreModalScrollPosition = restoreModalScrollPosition;
-// Scroll management
-window.handleModalOverlayInteraction = handleModalOverlayInteraction;
-window.lockBodyScroll = lockBodyScroll;
-window.unlockBodyScroll = unlockBodyScroll;
-window.modalSwipeStart = modalSwipeStart;
-window.modalSwipeMove = modalSwipeMove;
-window.modalSwipeEnd = modalSwipeEnd;
-window.navigateToSeat = navigateToSeat;
-window.show470VariantSelector = show470VariantSelector;
-window.select470Variant = select470Variant;
-window.closeVariantSelector = closeVariantSelector;
-window.openServiceNotes = openServiceNotes;
-window.updateServiceNotes = updateServiceNotes;
-window.clearServiceNotes = clearServiceNotes;
-window.closeServiceNotes = closeServiceNotes;
-window.toggleIncident = toggleIncident;
-window.openIncidentNote = openIncidentNote;
-window.saveIncidentNote = saveIncidentNote;
-window.closeIncidentNote = closeIncidentNote;
-window.openIncidentsPanel = openIncidentsPanel;
-window.closeIncidentsPanel = closeIncidentsPanel;
-window.removeIncident = removeIncident;
-window.clearAllIncidents = clearAllIncidents;
-window.handleDoorPress = handleDoorPress;
-window.handleDoorRelease = handleDoorRelease;
-window.handleDoorCancel = handleDoorCancel;
-window.getDoorSideText = getDoorSideText;
-window.getTotalTrainOccupancy = getTotalTrainOccupancy;
-window.openBackupsPanel = openBackupsPanel;
-window.closeBackupsPanel = closeBackupsPanel;
-window.restoreBackup = restoreBackup;
-window.clearAllBackups = clearAllBackups;
-window.toggleMoreOptions = toggleMoreOptions;
-window.toggleShareSubmenu = toggleShareSubmenu;
-window.toggleImportSubmenu = toggleImportSubmenu;
-window.generateQRCode = generateQRCode;
-window.closeQRModal = closeQRModal;
-window.scanQRCode = scanQRCode;
-window.closeScanModal = closeScanModal;
-window.removeModalAndUnlock = removeModalAndUnlock;
-window.uploadTurnToServer = uploadTurnToServer;
-window.downloadTurnFromServer = downloadTurnFromServer;
+// Exportar variables de estado y datos (necesarias para módulos externos)
+// IMPORTANTE: Exportar como getters para asegurar que siempre obtienen el valor actualizado
+Object.defineProperty(window, 'state', { get: () => state });
+Object.defineProperty(window, 'stops', { get: () => stops });
+Object.defineProperty(window, 'stationScreens', { get: () => stationScreens });
 
 // MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
 // Esta versión más compleja se mantiene aquí por ahora
@@ -5638,143 +5175,11 @@ if (!state.trainNumber) {
     }, 100);
 }
 
-function openScreensModal() {
-    removeAllScreenModals();
-    const modal = `
-        <div class="modal-overlay" onclick="closeScreensModal(event)">
-            <div class="modal" onclick="event.stopPropagation()">
-
-                <div class="modal-header">
-                    <div class="modal-header-top">
-                        <h3 class="modal-title">Pantallas de estación</h3>
-                        <button class="close-btn" onclick="closeScreensModal()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/>
-                                <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="modal-search">
-    <input 
-        type="text" 
-        class="search-input" 
-        placeholder="Introduce estación..." 
-        oninput="updateScreenSearch(this.value)"
-        autocomplete="off"
-        id="screen-search-input"
-    />
-
-    <!-- 🔴 Botón Cancelar -->
-    <button class="cancel-screens-btn" onclick="closeScreensModal()">
-        Cancelar
-    </button>
-</div>
-
-<div class="modal-list" id="screen-list"></div>
-
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML("beforeend", modal);
-    setTimeout(() => {
-        const inp = document.getElementById("screen-search-input");
-        if (inp) inp.focus();
-    }, 50);
-
-    lockBodyScroll();
-}
-
-function closeScreensModal(event) {
-    closeGenericModal('.modal-overlay', event);
-}
-
-// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
-function removeAllScreenModals() {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
-}
-
-function updateScreenSearch(query) {
-    const list = document.getElementById("screen-list");
-    query = query.toLowerCase().trim();
-
-    // 🔴 NUEVO: si está vacío → no mostrar nada
-    if (query === "") {
-        list.innerHTML = "";
-        return;
-    }
-
-    const stations = stops.map(s => s.full);
-
-    const filtered = stations.filter(s => s.toLowerCase().includes(query));
-
-    list.innerHTML = filtered.map(name => {
-        const hasScreen = stationScreens[name];
-        return `
-            <button class="stop-item" onclick="openStationScreen('${name}')">
-                <span class="stop-name" style="${hasScreen ? 'font-weight:700' : 'text-decoration:line-through; opacity:0.6;'}">
-                    ${name}
-                </span>
-            </button>
-        `;
-    }).join("");
-}
-
-function openStationScreen(name) {
-    removeAllScreenModals();
-    const code = stationScreens[name];
-
-    if (!code) {
-        alert("No existe pantalla disponible para esta estación.");
-        return;
-    }
-
-    const arrivals = `https://pantallas-estaciones.vercel.app/~/?station=${code}&interfaz=arrivals&showHeader=true&showAccess=false&showPlatform=true&showProduct=true&showNumber=true&countdown=true&maxShowStops=-1&showAllTrains=false&subtitle=station-name&fontSize=0`;
-    const departures = `https://pantallas-estaciones.vercel.app/~/?station=${code}&interfaz=departures&showHeader=true&showAccess=false&showPlatform=true&showProduct=true&showNumber=true&countdown=true&maxShowStops=-1&showAllTrains=false&subtitle=station-name&fontSize=0`;
-
-    const modal = `
-        <div class="modal-overlay" onclick="closeStationScreen(event)">
-            <div class="modal" style="height: 100%; border-radius:0;" onclick="event.stopPropagation()">
-
-                <iframe id="screen-iframe" src="${arrivals}" style="width:100%; height:100%; border:none;"></iframe>
-
-<button class="swipe-btn-left" onclick="toggleScreen()">←</button>
-<button class="swipe-btn-right" onclick="toggleScreen()">→</button>
-
-            </div>
-        </div>
-    `;
-
-    document.body.insertAdjacentHTML("beforeend", modal);
-    lockBodyScroll();
-
-    _currentScreen = "arrivals";
-
-    window._arrivalsURL = arrivals;
-    window._departuresURL = departures;
-}
-
-function closeStationScreen(event) {
-    if (!event || event.target === event.currentTarget) {
-        const overlay = document.querySelector('.modal-overlay');
-        if (overlay) overlay.remove();
-        unlockBodyScroll();
-    }
-}
-
-function toggleScreen() {
-    const iframe = document.getElementById("screen-iframe");
-
-    if (_currentScreen === "arrivals") {
-        iframe.src = window._departuresURL;
-        _currentScreen = "departures";
-    } else {
-        iframe.src = window._arrivalsURL;
-        _currentScreen = "arrivals";
-    }
-}
+// ============================================
+// PANTALLAS DE ESTACIÓN
+// ============================================
+// Importado desde src/features/station-screens.js
+// Las funciones se cargan dinámicamente y se exportan a window
 
 // ============================================
 // INICIALIZACIÓN DE LA APLICACIÓN
