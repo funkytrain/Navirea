@@ -16,3 +16,13 @@ const __SWIPE_Y_MAX = 40; // desvío vertical máximo permitido en swipe
 
 // Umbrales de altura/tamaño
 const DOOR_HEIGHT_THRESHOLD = 80; // px - altura mínima para elementos de puerta/WC
+
+// Exportar constantes al scope global para acceso desde módulos
+Object.assign(window, {
+    COACH_DOUBLE_TAP_DELAY,
+    SEAT_LONG_PRESS_DURATION,
+    DOOR_LONG_PRESS_DURATION,
+    SCROLL_THRESHOLD,
+    MODAL_SWIPE_CLOSE_THRESHOLD,
+    DOOR_HEIGHT_THRESHOLD
+});
