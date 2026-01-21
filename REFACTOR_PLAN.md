@@ -7,10 +7,10 @@
 ## 📊 Estado Actual
 
 - **Líneas iniciales**: 5816
-- **Líneas actuales**: 3788
-- **Líneas reducidas**: 2028 (34.9%)
+- **Líneas actuales**: 3708
+- **Líneas reducidas**: 2108 (36.3%)
 - **Líneas objetivo**: ~3300-3800
-- **Progreso**: 81% ⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜
+- **Progreso**: 84% ⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜
 
 ---
 
@@ -170,8 +170,9 @@
 | Fase | Descripción | Líneas | Estado | Completado |
 |------|-------------|--------|--------|------------|
 | 8 | Gestión incidencias | 371 | ✅ Completada | 100% |
+| 11 | Gestión de estado | 80 | ✅ Completada | 100% |
 
-**Total reducción fases adicionales**: 371 líneas
+**Total reducción fases adicionales**: 451 líneas
 
 ---
 
@@ -227,16 +228,28 @@
 
 ---
 
-### ⬜ Fase 11: Gestión de estado → src/state/state-manager.js (~150 líneas)
-**Estado**: ⬜ Pendiente
+### ✅ Fase 11: Gestión de estado → src/services/StorageService.js (~80 líneas)
+**Estado**: ✅ Completada
 
-**Funciones a centralizar**:
-- `saveData()` / `loadData()`
-- Gestión de localStorage
-- Validación de estado
-- Migraciones de datos
+**Líneas reducidas**: 80 líneas en script.js (3788 → 3708)
+**Módulo ampliado**: src/services/StorageService.js (238 → 509 líneas, +271 líneas)
 
-**Impacto**: Centralizar toda la gestión de persistencia
+**Funciones añadidas al módulo**:
+- `saveTrainDirection()` - Persistir dirección del tren
+- `saveDarkMode()` - Persistir modo oscuro
+- `saveSeatRotation()` - Persistir rotación de asientos
+- `saveTrainNumber()` - Persistir número de tren
+- `saveCurrentStop()` - Persistir parada actual
+- `save470Variants()` - Persistir variantes del 470
+- `saveHeaderCollapsed()` - Persistir estado del header
+- `clearCurrentTrainData()` - Borrar datos del tren actual
+- `clearSeatsData()` - Borrar datos de asientos
+- `saveImportedData()` - Guardar datos importados desde QR/JSON
+- `getAutoBackups()` - Obtener lista de backups
+- `restoreFromBackup()` - Restaurar backup específico
+- `clearAllAutoBackups()` - Borrar todos los backups
+
+**Impacto**: ✅ Toda la gestión de localStorage centralizada en un módulo
 
 ---
 
@@ -451,3 +464,47 @@
 - Facilita futuros cambios en el sistema de incidencias
 
 **Estado**: ✅ Fase 8 completada sin incidencias
+
+---
+
+### [2026-01-21] - Fase 11 Completada
+**Fase 11: Gestión de estado consolidada**
+- ✅ Ampliado módulo existente `src/services/StorageService.js` (238 → 509 líneas, +271 líneas)
+- ✅ Añadidas 13 funciones específicas de persistencia:
+  - `saveTrainDirection()` - Guarda dirección del tren
+  - `saveDarkMode()` - Guarda modo oscuro
+  - `saveSeatRotation()` - Guarda rotación de asientos
+  - `saveTrainNumber()` - Guarda número de tren
+  - `saveCurrentStop()` - Guarda parada actual
+  - `save470Variants()` - Guarda variantes del 470
+  - `saveHeaderCollapsed()` - Guarda estado del header
+  - `clearCurrentTrainData()` - Borra datos del tren actual
+  - `clearSeatsData()` - Borra datos de asientos (mantiene configuración)
+  - `saveImportedData()` - Persiste datos importados desde QR/JSON
+  - `getAutoBackups()` - Obtiene lista de backups automáticos
+  - `restoreFromBackup()` - Restaura backup específico
+  - `clearAllAutoBackups()` - Borra todos los backups
+- ✅ Reemplazadas 80 líneas de código con llamadas directas a localStorage por funciones centralizadas
+- ✅ Refactorizadas funciones en script.js para usar StorageService:
+  - `toggleDirection()`, `toggleDarkMode()`, `toggleSeatRotation()`
+  - `showTrainNumberPrompt()`, `applyCurrentStopChange()`, `toggleHeaderCollapse()`
+  - `importTurn()`, `clearAllData()`, `select470Variant()`
+  - `openBackupsPanel()`, `restoreBackup()`, `clearAllBackups()`
+- ✅ Import ya existente en index.html (línea 61)
+- ✅ Reducción: 80 líneas netas en script.js
+
+**Resultado**:
+- 📉 De 3788 → 3708 líneas (80 líneas eliminadas de script.js)
+- 📊 84% del objetivo de refactorización alcanzado (2108 líneas totales)
+- ✅ Toda la gestión de localStorage centralizada
+- ✅ Manejo consistente de errores en persistencia
+- ✅ Funciones específicas más mantenibles que código disperso
+
+**Impacto**:
+- Elimina llamadas directas a localStorage dispersas por todo el código
+- Centraliza gestión de persistencia en un único módulo
+- Facilita futuros cambios en estrategia de almacenamiento
+- Mejora testabilidad y mantenibilidad del código
+- Reduce duplicación de lógica de try/catch
+
+**Estado**: ✅ Fase 11 completada sin incidencias

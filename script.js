@@ -1054,10 +1054,7 @@ function toggleDirection(coachId) {
         state.trainDirection[coach.id] = newDirection;
     });
 
-    localStorage.setItem(
-        `train${state.selectedTrain}Direction`,
-        JSON.stringify(state.trainDirection)
-    );
+    saveTrainDirection();
     render();
 }
 
@@ -1178,7 +1175,7 @@ function toggleTrainSelector() {
 
 function toggleDarkMode() {
     state.darkMode = !state.darkMode;
-    localStorage.setItem("darkMode", state.darkMode);
+    saveDarkMode();
     document.body.classList.toggle("dark-mode", state.darkMode);
     render(); // 🔥 Esto vuelve a pintar el header con el nuevo icono
 }
@@ -1186,7 +1183,7 @@ function toggleDarkMode() {
 function toggleSeatRotation() {
     // Cambiar el estado
     state.rotateSeats = !state.rotateSeats;
-    localStorage.setItem("rotateSeats", state.rotateSeats);
+    saveSeatRotation();
 
     // Aplicar o quitar clase visual
     const container = document.querySelector('.seats-container');
@@ -1243,17 +1240,7 @@ function showTrainNumberPrompt() {
         state.lastCopiedSeatData = null;
 
         // Eliminar de localStorage
-        try {
-            localStorage.removeItem(`train${state.selectedTrain}Data`);
-            localStorage.removeItem(`train${state.selectedTrain}Direction`);
-            localStorage.removeItem(`train${state.selectedTrain}Notes`);
-            localStorage.removeItem(`train${state.selectedTrain}Incidents`);
-            localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
-            localStorage.removeItem('currentStop'); // 👈 BORRAR PARADA ACTUAL
-            localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
-        } catch (e) {
-            console.warn('Error al eliminar datos de localStorage', e);
-        }
+        clearCurrentTrainData();
 
         // Guardar estado limpio
         saveData();
@@ -1261,11 +1248,7 @@ function showTrainNumberPrompt() {
 
     // Actualizar número de tren
     state.trainNumber = trimmed;
-    try {
-        localStorage.setItem('trainNumber', trimmed);
-    } catch (e) {
-        console.warn('No se pudo guardar trainNumber en localStorage', e);
-    }
+    saveTrainNumber();
 
     // Re-renderizar
     render();
@@ -1279,7 +1262,7 @@ function getTrainFinalStops() {
 function applyCurrentStopChange(stopName, route, stopIndex) {
     // Guardar parada actual
     state.currentStop = stopName;
-    localStorage.setItem('currentStop', stopName);
+    saveCurrentStop();
 
     // Obtener todas las paradas hasta la actual (inclusive)
     const stopsToDelete = route.slice(0, stopIndex + 1);
@@ -1460,7 +1443,7 @@ function updateCurrentStopSearch(value) {
 
 function toggleHeaderCollapse() {
     state.headerCollapsed = !state.headerCollapsed;
-    localStorage.setItem('headerCollapsed', state.headerCollapsed);
+    saveHeaderCollapsed();
     render();
 }
 
@@ -1674,38 +1657,20 @@ function importTurn() {
                     // 🔴 NUEVO: Importar número de tren si existe
                     if (turnData.trainNumber) {
                         state.trainNumber = turnData.trainNumber;
-                        localStorage.setItem('trainNumber', turnData.trainNumber);
                     }
 
                     // 🔴 NUEVO: Importar parada actual si existe
                     if (turnData.currentStop) {
                         state.currentStop = turnData.currentStop;
-                        localStorage.setItem('currentStop', turnData.currentStop);
                     }
 
                     // 🔴 NUEVO: Si es tren 470, importar variantes
                     if (turnData.trainModel === "470" && turnData.coach470Variants) {
                         state.coach470Variants = turnData.coach470Variants;
-                        localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
                     }
 
-                    // Guardar todo en localStorage
-                    localStorage.setItem(
-                        `train${state.selectedTrain}Data`,
-                        JSON.stringify(state.seatData)
-                    );
-                    localStorage.setItem(
-                        `train${state.selectedTrain}Direction`,
-                        JSON.stringify(state.trainDirection)
-                    );
-                    localStorage.setItem(
-                        `train${state.selectedTrain}Notes`,
-                        state.serviceNotes
-                    );
-                    localStorage.setItem(
-                        `train${state.selectedTrain}Incidents`,
-                        JSON.stringify(state.incidents)
-                    );
+                    // Guardar todo en localStorage usando función centralizada
+                    saveImportedData(turnData);
 
                     // Recargar vista
                     render();
@@ -1739,13 +1704,7 @@ function clearAllData() {
         saveData();
 
         // eliminar entradas específicas
-        localStorage.removeItem('currentStop');
-        localStorage.removeItem(`train${state.selectedTrain}Notes`);
-        localStorage.removeItem(`train${state.selectedTrain}Incidents`);
-        localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
-
-        // 👈 NUEVO: Borrar backups automáticos
-        localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
+        clearSeatsData();
 
         // refrescar UI
         render();
@@ -3343,7 +3302,7 @@ function show470VariantSelector(coachId, buttonElement) {
 // Seleccionar variante del 470
 function select470Variant(coachId, variant) {
     state.coach470Variants[coachId] = variant;
-    localStorage.setItem('coach470Variants', JSON.stringify(state.coach470Variants));
+    save470Variants();
 
     saveData();
 
@@ -3469,15 +3428,7 @@ const domObserver = new MutationObserver(() => {
 domObserver.observe(document.body, { childList: true, subtree: true });
 
 function openBackupsPanel() {
-    const backupsKey = `autoBackups_${state.selectedTrain}`;
-    let backups = [];
-
-    try {
-        const saved = localStorage.getItem(backupsKey);
-        if (saved) backups = JSON.parse(saved);
-    } catch (e) {
-        console.error("Error loading backups");
-    }
+    let backups = getAutoBackups();
 
     if (backups.length === 0) {
         alert('No hay backups automáticos disponibles para este tren.');
@@ -3552,16 +3503,7 @@ function closeBackupsPanel(event) {
 }
 
 function restoreBackup(index) {
-    const backupsKey = `autoBackups_${state.selectedTrain}`;
-    let backups = [];
-
-    try {
-        const saved = localStorage.getItem(backupsKey);
-        if (saved) backups = JSON.parse(saved);
-    } catch (e) {
-        alert('Error al cargar backups');
-        return;
-    }
+    let backups = getAutoBackups();
 
     const backup = backups[index];
     if (!backup) {
@@ -3572,41 +3514,20 @@ function restoreBackup(index) {
     const date = new Date(backup.timestamp).toLocaleString('es-ES');
 
     if (confirm(`¿Restaurar backup del ${date}?\n\nEsto reemplazará los datos actuales.`)) {
-        // Restaurar datos
-        state.seatData = backup.seatData || {};
-        state.trainDirection = backup.trainDirection || {};
-        state.serviceNotes = backup.serviceNotes || "";
-        state.incidents = backup.incidents || {};
-
-        if (backup.trainNumber) {
-            state.trainNumber = backup.trainNumber;
-            localStorage.setItem('trainNumber', backup.trainNumber);
+        try {
+            restoreFromBackup(backup);
+            closeBackupsPanel();
+            render();
+            alert('✅ Backup restaurado correctamente');
+        } catch (e) {
+            alert('Error al restaurar backup');
         }
-
-        if (backup.currentStop) {
-            state.currentStop = backup.currentStop;
-            localStorage.setItem('currentStop', backup.currentStop);
-        }
-
-        if (state.selectedTrain === "470" && backup.coach470Variants) {
-            state.coach470Variants = backup.coach470Variants;
-            localStorage.setItem('coach470Variants', JSON.stringify(backup.coach470Variants));
-        }
-
-        // Guardar en localStorage
-        saveData();
-
-        closeBackupsPanel();
-        render();
-
-        alert('✅ Backup restaurado correctamente');
     }
 }
 
 function clearAllBackups() {
     if (confirm('¿Seguro que quieres borrar TODOS los backups automáticos?\n\nEsta acción no se puede deshacer.')) {
-        const backupsKey = `autoBackups_${state.selectedTrain}`;
-        localStorage.removeItem(backupsKey);
+        clearAllAutoBackups();
         closeBackupsPanel();
         alert('Todos los backups han sido borrados');
     }
