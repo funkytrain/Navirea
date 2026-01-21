@@ -7,10 +7,10 @@
 ## 📊 Estado Actual
 
 - **Líneas iniciales**: 5816
-- **Líneas actuales**: 4995
-- **Líneas reducidas**: 821 (14.1%)
+- **Líneas actuales**: 4713
+- **Líneas reducidas**: 1103 (19.0%)
 - **Líneas objetivo**: ~3300-3800
-- **Progreso**: 36% ⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜
+- **Progreso**: 48% ⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜
 
 ---
 
@@ -31,14 +31,26 @@
 ---
 
 ### ✅ Fase 2: Sistema de modales genérico → src/utils/modal-system.js (~400 líneas)
-**Estado**: ⬜ Pendiente
+**Estado**: ✅ Completada
 
-**Funciones a consolidar**:
-- `openStopFilter()`, `openRouteFilter()`, `openSeatFilter()`
-- `showStopFilterResults()`, `showRouteFilterResults()`, `showSeatFilterResults()`
-- Múltiples funciones `close*Modal()`
+**Líneas reducidas**: 282 líneas netas en script.js (4995 → 4713)
+**Módulo creado**: src/utils/modal-system.js (388 líneas)
 
-**Impacto**: Elimina duplicación masiva, código más mantenible
+**Funciones consolidadas**:
+- `openStopFilter()`, `openRouteFilter()`, `openSeatFilter()` - Ahora usan `createInputModalWithSuggestions()` y `createSimpleInputModal()`
+- `showStopFilterResults()`, `showRouteFilterResults()`, `showSeatFilterResults()` - Ahora usan `createFilterResultsModal()`
+- `showFilterListModal()` - Ahora usa `createListModal()`
+- `showConfirmModal()`, `closeConfirmModal()` - Movidos al módulo
+- `closeGenericModal()`, `closeFilterInputModal()`, `closeFilterModal()` - Movidos al módulo
+
+**Generadores genéricos creados**:
+- `createInputModalWithSuggestions()` - Modales con autocompletado
+- `createSimpleInputModal()` - Modales de entrada simples
+- `createFilterResultsModal()` - Modales de resultados con opciones
+- `createListModal()` - Modales con listas navegables
+- `createConfirmModal()` - Modales de confirmación
+
+**Impacto**: ✅ Elimina duplicación masiva, código mucho más mantenible
 
 ---
 
@@ -131,11 +143,11 @@
 | 5 | QR/Compartir | 433 | ✅ Completada | 100% |
 | 7 | Markdown parser | 38 | ✅ Completada | 100% |
 | 3 | Scroll helpers | 187 | ✅ Completada | 100% |
-| 2 | Sistema modales | ~400 | ⬜ Pendiente | 0% |
+| 2 | Sistema modales | 282 | ✅ Completada | 100% |
 | 1 | Templates HTML | ~800 | ⬜ Pendiente | 0% |
 
-**Total reducción alcanzada**: 821 líneas (36% del objetivo)
-**Total reducción estimada**: 2210 líneas (38% del archivo)
+**Total reducción alcanzada**: 1103 líneas (48% del objetivo)
+**Total reducción estimada**: 1903 líneas (33% del archivo)
 
 ---
 
@@ -155,6 +167,43 @@
 ---
 
 ## 📝 Log de Cambios
+
+### [2026-01-21] - Fase 2 Completada
+**Fase 2: Sistema de modales genérico**
+- ✅ Creado módulo `src/utils/modal-system.js` (388 líneas)
+- ✅ Consolidadas todas las funciones de modales duplicadas
+- ✅ Refactorizadas funciones de filtros para usar generadores genéricos:
+  - `openStopFilter()`, `openRouteFilter()`, `openSeatFilter()`
+  - `showStopFilterResults()`, `showRouteFilterResults()`, `showSeatFilterResults()`
+  - `showFilterListModal()` para enlaces y comentarios
+- ✅ Eliminadas funciones duplicadas:
+  - `closeGenericModal()`, `closeFilterInputModal()`, `closeFilterModal()`
+  - `showConfirmModal()`, `closeConfirmModal()`
+  - `escapeHtml()` (duplicada)
+- ✅ Creados 5 generadores de modales reutilizables:
+  - `createInputModalWithSuggestions()` - con autocompletado
+  - `createSimpleInputModal()` - entrada simple
+  - `createFilterResultsModal()` - resultados con acciones
+  - `createListModal()` - listas navegables
+  - `createConfirmModal()` - confirmaciones
+- ✅ Añadido import en index.html (antes de modal-helpers.js)
+- ✅ Reducción: **282 líneas netas** (4995 → 4713)
+
+**Resultado**:
+- 📉 De 4995 → 4713 líneas (282 líneas eliminadas)
+- 📊 48% del objetivo de refactorización alcanzado (1103 líneas totales)
+- ✅ Código de modales completamente DRY y mantenible
+- ✅ Sistema genérico listo para reutilizar en toda la app
+
+**Impacto**:
+- Elimina ~200 líneas de HTML duplicado en modales
+- Centraliza lógica de apertura/cierre de modales
+- Facilita futuros cambios en diseño de modales
+- Reduce complejidad cognitiva del código
+
+**Estado**: ✅ Fase 2 completada sin incidencias
+
+---
 
 ### [2026-01-21] - Fases 4, 5, 6 Completadas
 **Fase 6: Exports optimizados**
