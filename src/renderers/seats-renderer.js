@@ -25,9 +25,11 @@ function renderPMRBathroom(section, coachId) {
                 style="height: ${section.height}px"
                 data-wc-id="${pmrId}"
                 onmousedown="handleDoorPress('${coachId}', '${pmrId}', 'wc', 'Baño PMR', event)"
+                onmousemove="handleDoorMove(event)"
                 onmouseup="handleDoorRelease(event)"
                 onmouseleave="handleDoorCancel(event)"
                 ontouchstart="handleDoorPress('${coachId}', '${pmrId}', 'wc', 'Baño PMR', event)"
+                ontouchmove="handleDoorMove(event)"
                 ontouchend="handleDoorRelease(event)"
                 ontouchcancel="handleDoorCancel(event)">
             ${label}
@@ -55,9 +57,11 @@ function renderDoor(section, coachId, doorNumber) {
             <button class="door-side door-left ${leftActive}"
                     data-door-id="${leftId}"
                     onmousedown="handleDoorPress('${coachId}', '${leftId}', 'door', '${leftLabel}', event)"
+                    onmousemove="handleDoorMove(event)"
                     onmouseup="handleDoorRelease(event)"
                     onmouseleave="handleDoorCancel(event)"
                     ontouchstart="handleDoorPress('${coachId}', '${leftId}', 'door', '${leftLabel}', event)"
+                    ontouchmove="handleDoorMove(event)"
                     ontouchend="handleDoorRelease(event)"
                     ontouchcancel="handleDoorCancel(event)">
                 <span class="door-label">P${doorNumber}</span>
@@ -66,11 +70,13 @@ function renderDoor(section, coachId, doorNumber) {
             <button class="door-side door-right ${rightActive}"
                     data-door-id="${rightId}"
                     onmousedown="handleDoorPress('${coachId}', '${rightId}', 'door', '${rightLabel}', event)"
+                    onmousemove="handleDoorMove(event)"
                     onmouseup="handleDoorRelease(event)"
-                    onmouseleave="handleDoorCancel()"
+                    onmouseleave="handleDoorCancel(event)"
                     ontouchstart="handleDoorPress('${coachId}', '${rightId}', 'door', '${rightLabel}', event)"
+                    ontouchmove="handleDoorMove(event)"
                     ontouchend="handleDoorRelease(event)"
-                    ontouchcancel="handleDoorCancel()">
+                    ontouchcancel="handleDoorCancel(event)">
                 <span class="door-label">P${doorNumber}</span>
             </button>
         </div>
@@ -101,9 +107,11 @@ function renderWC(seatNum, coachId, index) {
         <button class="seat special-wc ${wcActive}"
                 data-wc-id="${wcId}"
                 onmousedown="handleDoorPress('${coachId}', '${wcId}', 'wc', 'WC', event)"
+                onmousemove="handleDoorMove(event)"
                 onmouseup="handleDoorRelease(event)"
                 onmouseleave="handleDoorCancel(event)"
                 ontouchstart="handleDoorPress('${coachId}', '${wcId}', 'wc', 'WC', event)"
+                ontouchmove="handleDoorMove(event)"
                 ontouchend="handleDoorRelease(event)"
                 ontouchcancel="handleDoorCancel(event)">
             ${wcLabel}
