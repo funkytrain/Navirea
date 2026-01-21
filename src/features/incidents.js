@@ -6,9 +6,16 @@
 // Variables para long press en puertas/WC
 let doorHoldTimer = null;
 let doorHoldTriggered = false;
+let doorTapStartPosition = null;
 
 // Duración del long press (debe coincidir con DOOR_LONG_PRESS_DURATION de script.js)
 const DOOR_LONG_PRESS_DURATION = 500;
+
+// Umbral de tap rápido para activar incidencia (aumentado para reducir activaciones accidentales)
+const DOOR_TAP_THRESHOLD = 200;
+
+// Distancia máxima de movimiento permitida para considerar un tap válido (en píxeles)
+const DOOR_MOVE_THRESHOLD = 10;
 
 /**
  * Genera la clave única para una incidencia
@@ -94,6 +101,9 @@ function openIncidentNote(coachId, elementId, elementType, elementLabel) {
         </div>
     `;
 
+    // Resetear estado de doble tap al abrir modal
+    window.resetCoachDoubleTap();
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     window.lockBodyScroll();
 
@@ -136,12 +146,19 @@ function saveIncidentNote(coachId, elementId, elementType) {
  */
 function closeIncidentNote(event) {
     if (!event || event.target === event.currentTarget) {
+        // Guardar scroll antes de cerrar
+        const scrollToRestore = window.savedScrollPosition || 0;
+
         const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
         if (overlay) overlay.remove();
-    }
 
-    if (!document.querySelector('.modal-overlay')) {
-        window.unlockBodyScroll();
+        if (!document.querySelector('.modal-overlay')) {
+            window.unlockBodyScroll();
+            // Restaurar scroll a la posición guardada
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollToRestore);
+            });
+        }
     }
 }
 
@@ -252,6 +269,9 @@ function openIncidentsPanel() {
         </div>
     `;
 
+    // Resetear estado de doble tap al abrir modal
+    window.resetCoachDoubleTap();
+
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     window.lockBodyScroll();
 }
@@ -262,12 +282,19 @@ function openIncidentsPanel() {
  */
 function closeIncidentsPanel(event) {
     if (!event || event.target === event.currentTarget) {
+        // Guardar scroll antes de cerrar
+        const scrollToRestore = window.savedScrollPosition || 0;
+
         const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
         if (overlay) overlay.remove();
-    }
 
-    if (!document.querySelector('.modal-overlay')) {
-        window.unlockBodyScroll();
+        if (!document.querySelector('.modal-overlay')) {
+            window.unlockBodyScroll();
+            // Restaurar scroll a la posición guardada
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollToRestore);
+            });
+        }
     }
 }
 
@@ -367,19 +394,50 @@ function clearAllIncidents() {
 function handleDoorPress(coachId, elementId, elementType, elementLabel, event) {
     event.stopPropagation();
 
-    // Registrar inicio del tap
+    // Registrar inicio del tap y posición inicial
     event.currentTarget._tapStart = Date.now();
+
+    // Guardar posición inicial del touch/mouse
+    const touch = event.touches ? event.touches[0] : event;
+    doorTapStartPosition = {
+        x: touch.clientX,
+        y: touch.clientY
+    };
+
+    // Marcar que no ha habido movimiento significativo aún
+    event.currentTarget._hasMoved = false;
 
     doorHoldTriggered = false;
     clearTimeout(doorHoldTimer);
 
     doorHoldTimer = setTimeout(() => {
-        doorHoldTriggered = true;
-        if (navigator.vibrate) navigator.vibrate(40);
+        // Solo activar long press si no hubo movimiento significativo
+        if (!event.currentTarget._hasMoved) {
+            doorHoldTriggered = true;
+            if (navigator.vibrate) navigator.vibrate(40);
 
-        // Long press: abrir modal para nota
-        openIncidentNote(coachId, elementId, elementType, elementLabel);
+            // Long press: abrir modal para nota
+            openIncidentNote(coachId, elementId, elementType, elementLabel);
+        }
     }, DOOR_LONG_PRESS_DURATION);
+}
+
+/**
+ * Detecta movimiento durante el press en puertas/WC
+ * @param {Event} event - Evento del movimiento
+ */
+function handleDoorMove(event) {
+    if (!doorTapStartPosition) return;
+
+    const touch = event.touches ? event.touches[0] : event;
+    const deltaX = Math.abs(touch.clientX - doorTapStartPosition.x);
+    const deltaY = Math.abs(touch.clientY - doorTapStartPosition.y);
+
+    // Si el movimiento supera el umbral, marcar como movido y cancelar long press
+    if (deltaX > DOOR_MOVE_THRESHOLD || deltaY > DOOR_MOVE_THRESHOLD) {
+        event.currentTarget._hasMoved = true;
+        clearTimeout(doorHoldTimer);
+    }
 }
 
 /**
@@ -392,14 +450,16 @@ function handleDoorRelease(event) {
     clearTimeout(doorHoldTimer);
 
     if (!doorHoldTriggered) {
-        // Tap simple: solo activar si fue RÁPIDO (menos de 100ms)
+        // Tap simple: solo activar si fue RÁPIDO y sin movimiento significativo
         const button = event.currentTarget;
         const elementId = button.dataset.doorId || button.dataset.wcId;
         const elementType = button.dataset.doorId ? 'door' : 'wc';
 
         const tapDuration = Date.now() - (button._tapStart || 0);
+        const hasMoved = button._hasMoved || false;
 
-        if (elementId && tapDuration < 100) {
+        // Solo activar si el tap fue rápido Y no hubo movimiento (scroll)
+        if (elementId && tapDuration < DOOR_TAP_THRESHOLD && !hasMoved) {
             event.preventDefault();
 
             toggleIncident(window.state.selectedCoach, elementId, elementType);
@@ -415,6 +475,7 @@ function handleDoorRelease(event) {
     }
 
     doorHoldTriggered = false;
+    doorTapStartPosition = null;
 }
 
 /**
@@ -424,10 +485,12 @@ function handleDoorRelease(event) {
 function handleDoorCancel(event) {
     clearTimeout(doorHoldTimer);
     doorHoldTriggered = false;
+    doorTapStartPosition = null;
 
-    // Limpiar timestamp
+    // Limpiar timestamp y flag de movimiento
     if (event && event.currentTarget) {
         delete event.currentTarget._tapStart;
+        delete event.currentTarget._hasMoved;
     }
 }
 
@@ -443,6 +506,7 @@ window.Incidents = {
     removeIncident,
     clearAllIncidents,
     handleDoorPress,
+    handleDoorMove,
     handleDoorRelease,
     handleDoorCancel
 };
@@ -458,5 +522,6 @@ window.closeIncidentsPanel = closeIncidentsPanel;
 window.removeIncident = removeIncident;
 window.clearAllIncidents = clearAllIncidents;
 window.handleDoorPress = handleDoorPress;
+window.handleDoorMove = handleDoorMove;
 window.handleDoorRelease = handleDoorRelease;
 window.handleDoorCancel = handleDoorCancel;
