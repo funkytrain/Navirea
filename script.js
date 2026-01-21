@@ -3622,25 +3622,16 @@ function restoreModalScrollPosition() {
     });
 }
 
-// Referencias globales para poder remover los listeners
-let modalTouchMoveHandler = null;
-let modalTouchEndHandler = null;
+// ========== SCROLL HELPERS MOVIDOS A src/utils/modal-helpers.js ==========
+// Las funciones de scroll guards ahora se cargan desde el módulo externo
 
-// ========== NUEVO SISTEMA DE SCROLL SIMPLIFICADO ==========
-
-// NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
+// Función helper para prevenir interacciones en overlay
 function handleModalOverlayInteraction(e) {
     // Solo actuar si el click/touch es directamente en el overlay
     if (e.target.classList.contains('modal-overlay')) {
         e.preventDefault();
     }
 }
-
-// No necesitamos más funciones de scroll complejas
-// El navegador manejará el scroll naturalmente
-
-// ========== FIN SISTEMA SIMPLIFICADO ==========
-
 
 // Funciones globales para eventos
 function selectCoach(coachId) {
@@ -3697,131 +3688,9 @@ function selectSeat(coach, num) {
     scrollToCurrentStop();
 }
 
-// MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
-// Esta versión más compleja se mantiene aquí por ahora
-function setupModalListScrollGuards() {
-    // Remover listeners previos si existen
-    removeModalScrollGuards();
-
-    // wheel (ratón / trackpad)
-    modalWheelHandler = (e) => {
-        const list = e.target.closest('.modal-list');
-        if (!list) return;
-
-        const atTop = list.scrollTop === 0;
-        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
-
-        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-            e.preventDefault();
-        }
-
-        e.stopPropagation();
-    };
-
-    // touchmove (móvil)
-    modalTouchMoveHandler = (e) => {
-        const list = e.target.closest('.modal-list');
-        if (!list) return;
-
-        const touch = e.touches[0];
-        const lastY = list._lastTouchY ?? touch.clientY;
-        const deltaY = lastY - touch.clientY;
-        list._lastTouchY = touch.clientY;
-
-        const atTop = list.scrollTop === 0;
-        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
-
-        if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
-            e.preventDefault();
-        }
-
-        e.stopPropagation();
-    };
-
-    // touchend/cancel
-    modalTouchEndHandler = (e) => {
-        const list = e.target.closest('.modal-list');
-        if (list) list._lastTouchY = null;
-    };
-
-    // Añadir listeners
-    document.addEventListener('wheel', modalWheelHandler, { passive: false, capture: true });
-    document.addEventListener('touchmove', modalTouchMoveHandler, { passive: false, capture: true });
-    document.addEventListener('touchend', modalTouchEndHandler, { capture: true });
-    document.addEventListener('touchcancel', modalTouchEndHandler, { capture: true });
-}
-
-// ✅ NUEVA FUNCIÓN: Remover listeners cuando se cierra el modal
-function removeModalScrollGuards() {
-    if (modalWheelHandler) {
-        document.removeEventListener('wheel', modalWheelHandler, { capture: true });
-        modalWheelHandler = null;
-    }
-    if (modalTouchMoveHandler) {
-        document.removeEventListener('touchmove', modalTouchMoveHandler, { capture: true });
-        modalTouchMoveHandler = null;
-    }
-    if (modalTouchEndHandler) {
-        document.removeEventListener('touchend', modalTouchEndHandler, { capture: true });
-        document.removeEventListener('touchcancel', modalTouchEndHandler, { capture: true });
-        modalTouchEndHandler = null;
-    }
-}
-
-// Referencias globales para overlay
-let overlayWheelHandler = null;
-let overlayTouchMoveHandler = null;
-
-function setupModalOverlayScrollBlock() {
-    // Remover listeners previos
-    removeModalOverlayScrollBlock();
-
-    const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
-
-    // Prevenir scroll en el modal excepto en áreas específicas
-    overlayTouchMoveHandler = (e) => {
-        const overlay = e.target.closest('.modal-overlay');
-        if (!overlay) return;
-
-        const isInScrollable = scrollableSelectors.some(selector =>
-            e.target.closest(selector)
-        );
-
-        if (!isInScrollable) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    };
-
-    overlayWheelHandler = (e) => {
-        const overlay = e.target.closest('.modal-overlay');
-        if (!overlay) return;
-
-        const isInScrollable = scrollableSelectors.some(selector =>
-            e.target.closest(selector)
-        );
-
-        if (!isInScrollable) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    };
-
-    document.addEventListener('touchmove', overlayTouchMoveHandler, { passive: false, capture: true });
-    document.addEventListener('wheel', overlayWheelHandler, { passive: false, capture: true });
-}
-
-// ✅ NUEVA FUNCIÓN: Remover listeners de overlay
-function removeModalOverlayScrollBlock() {
-    if (overlayTouchMoveHandler) {
-        document.removeEventListener('touchmove', overlayTouchMoveHandler, { capture: true });
-        overlayTouchMoveHandler = null;
-    }
-    if (overlayWheelHandler) {
-        document.removeEventListener('wheel', overlayWheelHandler, { capture: true });
-        overlayWheelHandler = null;
-    }
-}
+// MOVIDO A src/utils/modal-helpers.js
+// Ver: setupModalListScrollGuards(), removeModalScrollGuards()
+// Ver: setupModalOverlayScrollBlock(), removeModalOverlayScrollBlock()
 
 function handleSeatPress(coach, num, event) {
     const key = getSeatKey(coach, num);
@@ -5073,57 +4942,8 @@ Object.defineProperty(window, 'state', { get: () => state });
 Object.defineProperty(window, 'stops', { get: () => stops });
 Object.defineProperty(window, 'stationScreens', { get: () => stationScreens });
 
-// MOVIDO A src/utils/modal-helpers.js (versión simplificada disponible)
-// Esta versión más compleja se mantiene aquí por ahora
-function setupModalScrollBehavior() {
-    // Prevenir scroll en overlay excepto en áreas scrolleables
-    ['wheel', 'touchmove'].forEach(eventType => {
-        document.addEventListener(eventType, (e) => {
-            const overlay = e.target.closest('.modal-overlay');
-            if (!overlay) return;
-
-            const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
-            const isInScrollable = scrollableSelectors.some(sel => e.target.closest(sel));
-
-            if (!isInScrollable) {
-                e.preventDefault();
-                e.stopPropagation();
-                return;
-            }
-
-            // Lógica específica para modal-list
-            const list = e.target.closest('.modal-list');
-            if (list) {
-                const atTop = list.scrollTop === 0;
-                const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
-
-                if (eventType === 'wheel') {
-                    if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-                        e.preventDefault();
-                    }
-                } else { // touchmove
-                    const touch = e.touches[0];
-                    const lastY = list._lastTouchY ?? touch.clientY;
-                    const deltaY = lastY - touch.clientY;
-                    list._lastTouchY = touch.clientY;
-
-                    if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
-                        e.preventDefault();
-                    }
-                }
-                e.stopPropagation();
-            }
-        }, { passive: false, capture: true });
-    });
-
-    // Limpiar memoria del último toque
-    ['touchend', 'touchcancel'].forEach(type => {
-        document.addEventListener(type, (e) => {
-            const list = e.target.closest('.modal-list');
-            if (list) list._lastTouchY = null;
-        }, { capture: true });
-    });
-}
+// MOVIDO A src/utils/modal-helpers.js
+// Ver: setupModalScrollBehavior()
 
 // Inicializar
 loadData();

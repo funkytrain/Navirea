@@ -1,217 +1,219 @@
 /* ========================================
-   MODAL HELPERS - Utilidades para modales
+   MODAL HELPERS - Sistema de Scroll Guards
    ======================================== */
 
-// NOTA: Estas utilidades están disponibles aquí para uso futuro,
-// pero actualmente script.js tiene sus propias versiones activas
-// para mantener la funcionalidad existente.
+// Referencias globales para poder remover los listeners
+let modalWheelHandler = null;
+let modalTouchMoveHandler = null;
+let modalTouchEndHandler = null;
+let overlayWheelHandler = null;
+let overlayTouchMoveHandler = null;
 
-/*
-// Variables de estado para scroll y swipe
-let modalScrollPosition = 0;
-let modalSwipeStartY = 0;
-let modalSwipeDeltaY = 0;
-let modalSwipeActive = false;
-const MODAL_SWIPE_CLOSE_THRESHOLD = 80; // px necesarios para cerrar
+/* ========================================
+   FUNCIONES DE SCROLL GUARDS PARA LISTAS
+   ======================================== */
 
-// ===== GESTIÓN DE SCROLL EN MODALES =====
-
-function saveModalScrollPosition() {
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modalScrollPosition = modal.scrollTop || 0;
-    }
-}
-
-function restoreModalScrollPosition() {
-    requestAnimationFrame(() => {
-        const modal = document.querySelector('.modal');
-        if (modal && modalScrollPosition > 0) {
-            modal.scrollTop = modalScrollPosition;
-        }
-    });
-}
-
-// Evitar propagación de scroll del modal al body
-function handleModalOverlayInteraction(e) {
-    const modal = e.target.closest('.modal');
-    if (modal) {
-        e.stopPropagation();
-    }
-}
-
+/**
+ * Configura listeners de scroll para evitar overscroll en modal-list
+ * Previene que el scroll de la lista propague al body
+ */
 function setupModalListScrollGuards() {
-    const modal = document.querySelector('.modal');
-    if (!modal) return;
+    // Remover listeners previos si existen
+    removeModalScrollGuards();
 
-    const scrollableContent = modal.querySelector('.modal-list, .modal-content');
-    if (!scrollableContent) return;
+    // wheel (ratón / trackpad)
+    modalWheelHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (!list) return;
 
-    scrollableContent.addEventListener('touchstart', function (e) {
-        const scrollTop = this.scrollTop;
-        const scrollHeight = this.scrollHeight;
-        const clientHeight = this.clientHeight;
-        const delta = e.touches[0].clientY - (this._lastY || 0);
-        this._lastY = e.touches[0].clientY;
+        const atTop = list.scrollTop === 0;
+        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
 
-        // Bloquear overscroll arriba
-        if (scrollTop === 0 && delta > 0) {
+        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
             e.preventDefault();
         }
 
-        // Bloquear overscroll abajo
-        if (scrollTop + clientHeight >= scrollHeight && delta < 0) {
+        e.stopPropagation();
+    };
+
+    // touchmove (móvil)
+    modalTouchMoveHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (!list) return;
+
+        const touch = e.touches[0];
+        const lastY = list._lastTouchY ?? touch.clientY;
+        const deltaY = lastY - touch.clientY;
+        list._lastTouchY = touch.clientY;
+
+        const atTop = list.scrollTop === 0;
+        const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
+
+        if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
             e.preventDefault();
         }
-    }, { passive: false });
 
-    scrollableContent.addEventListener('touchmove', function (e) {
-        const scrollTop = this.scrollTop;
-        const scrollHeight = this.scrollHeight;
-        const clientHeight = this.clientHeight;
-        const delta = e.touches[0].clientY - this._lastY;
-        this._lastY = e.touches[0].clientY;
+        e.stopPropagation();
+    };
 
-        // Bloquear overscroll arriba
-        if (scrollTop === 0 && delta > 0) {
-            e.preventDefault();
-        }
+    // touchend/cancel
+    modalTouchEndHandler = (e) => {
+        const list = e.target.closest('.modal-list');
+        if (list) list._lastTouchY = null;
+    };
 
-        // Bloquear overscroll abajo
-        if (scrollTop + clientHeight >= scrollHeight && delta < 0) {
-            e.preventDefault();
-        }
-    }, { passive: false });
+    // Añadir listeners
+    document.addEventListener('wheel', modalWheelHandler, { passive: false, capture: true });
+    document.addEventListener('touchmove', modalTouchMoveHandler, { passive: false, capture: true });
+    document.addEventListener('touchend', modalTouchEndHandler, { capture: true });
+    document.addEventListener('touchcancel', modalTouchEndHandler, { capture: true });
 }
 
+/**
+ * Remover listeners de scroll guards cuando se cierra el modal
+ */
 function removeModalScrollGuards() {
-    const modal = document.querySelector('.modal');
-    if (!modal) return;
-
-    const scrollableContent = modal.querySelector('.modal-list, .modal-content');
-    if (!scrollableContent) {
-        scrollableContent.removeEventListener('touchstart', () => { });
-        scrollableContent.removeEventListener('touchmove', () => { });
+    if (modalWheelHandler) {
+        document.removeEventListener('wheel', modalWheelHandler, { capture: true });
+        modalWheelHandler = null;
+    }
+    if (modalTouchMoveHandler) {
+        document.removeEventListener('touchmove', modalTouchMoveHandler, { capture: true });
+        modalTouchMoveHandler = null;
+    }
+    if (modalTouchEndHandler) {
+        document.removeEventListener('touchend', modalTouchEndHandler, { capture: true });
+        document.removeEventListener('touchcancel', modalTouchEndHandler, { capture: true });
+        modalTouchEndHandler = null;
     }
 }
 
+/* ========================================
+   FUNCIONES DE BLOQUEO DE SCROLL EN OVERLAY
+   ======================================== */
+
+/**
+ * Prevenir scroll en el overlay del modal excepto en áreas específicas
+ * Permite scroll en: .modal-list, .comment-input, .current-stop-dropdown
+ */
 function setupModalOverlayScrollBlock() {
-    const overlay = document.querySelector('.modal-overlay');
-    if (!overlay) return;
+    // Remover listeners previos
+    removeModalOverlayScrollBlock();
 
-    overlay.addEventListener('touchstart', function (e) {
-        const modal = e.target.closest('.modal');
-        if (!modal) {
-            e.preventDefault();
-        }
-    }, { passive: false });
+    const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
 
-    overlay.addEventListener('touchmove', function (e) {
-        const modal = e.target.closest('.modal');
-        if (!modal) {
+    // Prevenir scroll en el modal excepto en áreas específicas
+    overlayTouchMoveHandler = (e) => {
+        const overlay = e.target.closest('.modal-overlay');
+        if (!overlay) return;
+
+        const isInScrollable = scrollableSelectors.some(selector =>
+            e.target.closest(selector)
+        );
+
+        if (!isInScrollable) {
             e.preventDefault();
+            e.stopPropagation();
         }
-    }, { passive: false });
+    };
+
+    overlayWheelHandler = (e) => {
+        const overlay = e.target.closest('.modal-overlay');
+        if (!overlay) return;
+
+        const isInScrollable = scrollableSelectors.some(selector =>
+            e.target.closest(selector)
+        );
+
+        if (!isInScrollable) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    document.addEventListener('touchmove', overlayTouchMoveHandler, { passive: false, capture: true });
+    document.addEventListener('wheel', overlayWheelHandler, { passive: false, capture: true });
 }
 
+/**
+ * Remover listeners de overlay cuando se cierra el modal
+ */
 function removeModalOverlayScrollBlock() {
-    const overlay = document.querySelector('.modal-overlay');
-    if (!overlay) return;
-
-    overlay.removeEventListener('touchstart', () => { });
-    overlay.removeEventListener('touchmove', () => { });
+    if (overlayTouchMoveHandler) {
+        document.removeEventListener('touchmove', overlayTouchMoveHandler, { capture: true });
+        overlayTouchMoveHandler = null;
+    }
+    if (overlayWheelHandler) {
+        document.removeEventListener('wheel', overlayWheelHandler, { capture: true });
+        overlayWheelHandler = null;
+    }
 }
 
+/* ========================================
+   FUNCIÓN PRINCIPAL DE CONFIGURACIÓN
+   ======================================== */
+
+/**
+ * Configura todo el comportamiento de scroll para modales
+ * Combina guards de lista y bloqueo de overlay con gestión de eventos unificada
+ */
 function setupModalScrollBehavior() {
-    requestAnimationFrame(() => {
-        setupModalListScrollGuards();
-        setupModalOverlayScrollBlock();
-        restoreModalScrollPosition();
+    // Prevenir scroll en overlay excepto en áreas scrolleables
+    ['wheel', 'touchmove'].forEach(eventType => {
+        document.addEventListener(eventType, (e) => {
+            const overlay = e.target.closest('.modal-overlay');
+            if (!overlay) return;
+
+            const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
+            const isInScrollable = scrollableSelectors.some(sel => e.target.closest(sel));
+
+            if (!isInScrollable) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+
+            // Lógica específica para modal-list
+            const list = e.target.closest('.modal-list');
+            if (list) {
+                const atTop = list.scrollTop === 0;
+                const atBottom = Math.ceil(list.scrollTop) === list.scrollHeight - list.clientHeight;
+
+                if (eventType === 'wheel') {
+                    if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                        e.preventDefault();
+                    }
+                } else { // touchmove
+                    const touch = e.touches[0];
+                    const lastY = list._lastTouchY ?? touch.clientY;
+                    const deltaY = lastY - touch.clientY;
+                    list._lastTouchY = touch.clientY;
+
+                    if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+                        e.preventDefault();
+                    }
+                }
+                e.stopPropagation();
+            }
+        }, { passive: false, capture: true });
+    });
+
+    // Limpiar memoria del último toque
+    ['touchend', 'touchcancel'].forEach(type => {
+        document.addEventListener(type, (e) => {
+            const list = e.target.closest('.modal-list');
+            if (list) list._lastTouchY = null;
+        }, { capture: true });
     });
 }
 
-// ===== SWIPE PARA CERRAR MODAL =====
+/* ========================================
+   EXPORTS
+   ======================================== */
 
-function modalSwipeStart(event) {
-    if (!event.touches || event.touches.length === 0) return;
-
-    // Solo activamos el swipe si el gesto empieza en el header del modal
-    const header = event.target.closest('.modal-header');
-    if (!header) {
-        modalSwipeActive = false;
-        return;
-    }
-
-    modalSwipeActive = true;
-    const touch = event.touches[0];
-    modalSwipeStartY = touch.clientY;
-    modalSwipeDeltaY = 0;
-
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.style.transition = 'none';
-    }
-}
-
-function modalSwipeMove(event) {
-    if (!modalSwipeActive || !event.touches || event.touches.length === 0) return;
-
-    const touch = event.touches[0];
-    modalSwipeDeltaY = touch.clientY - modalSwipeStartY;
-
-    // Solo permitir swipe hacia abajo (valores positivos)
-    if (modalSwipeDeltaY < 0) {
-        modalSwipeDeltaY = 0;
-    }
-
-    const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.style.transform = `translateY(${modalSwipeDeltaY}px)`;
-    }
-}
-
-function modalSwipeEnd(event) {
-    if (!modalSwipeActive) return;
-
-    modalSwipeActive = false;
-
-    const modal = document.querySelector('.modal');
-    if (!modal) return;
-
-    // Restaurar transición
-    modal.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-
-    // Si superamos el threshold, cerrar modal
-    if (modalSwipeDeltaY > MODAL_SWIPE_CLOSE_THRESHOLD) {
-        modal.style.transform = 'translateY(100%)';
-        modal.style.opacity = '0';
-        setTimeout(() => {
-            // Llamar a la función global closeModal
-            if (typeof closeModal === 'function') {
-                closeModal();
-            }
-        }, 300);
-    } else {
-        // Si no, volver a la posición original con rebote
-        modal.style.transform = 'translateY(0)';
-    }
-
-    modalSwipeDeltaY = 0;
-}
-
-// ===== UTILIDAD PARA ELIMINAR MODALES =====
-
-function removeModalAndUnlock() {
-    const modal = document.querySelector('.modal-overlay');
-    if (modal) {
-        modal.remove();
-    }
-    unlockBodyScroll();
-}
-
-function removeAllScreenModals() {
-    const screenModals = document.querySelectorAll('.screen-modal-overlay, .station-screen-overlay');
-    screenModals.forEach(modal => modal.remove());
-    unlockBodyScroll();
-}
-*/
+// Exportar funciones a window para uso global
+window.setupModalListScrollGuards = setupModalListScrollGuards;
+window.removeModalScrollGuards = removeModalScrollGuards;
+window.setupModalOverlayScrollBlock = setupModalOverlayScrollBlock;
+window.removeModalOverlayScrollBlock = removeModalOverlayScrollBlock;
+window.setupModalScrollBehavior = setupModalScrollBehavior;
