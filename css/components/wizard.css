@@ -365,33 +365,29 @@
     align-items: center;
     gap: 8px;
     min-width: 100px;
-    opacity: 0.5;
-    transition: opacity 0.3s;
-}
-
-.wizard-step-indicator.active,
-.wizard-step-indicator.completed {
-    opacity: 1;
+    transition: all 0.3s;
 }
 
 .step-number {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #e0e0e0;
-    color: #666;
+    background: #4f46e5;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     font-size: 18px;
     transition: all 0.3s;
+    position: relative;
 }
 
 .wizard-step-indicator.active .step-number {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transform: scale(1.1);
 }
 
 .wizard-step-indicator.completed .step-number {
@@ -399,14 +395,15 @@
     color: white;
 }
 
-.wizard-step-indicator.completed .step-number::before {
+.wizard-step-indicator.completed .step-number::after {
     content: '✓';
+    position: absolute;
 }
 
 .step-label {
     font-size: 14px;
     font-weight: 500;
-    color: #666;
+    color: #374151;
     text-align: center;
 }
 
@@ -417,15 +414,20 @@
 
 .wizard-step-indicator.completed .step-label {
     color: #10b981;
+    font-weight: 600;
 }
 
 .step-separator {
     flex: 1;
     height: 2px;
-    background: #e0e0e0;
+    background: #c7d2fe;
     margin: 0 8px;
     margin-bottom: 32px;
     transition: background 0.3s;
+}
+
+.step-separator.completed {
+    background: #10b981;
 }
 
 /* ============================================================================
@@ -897,28 +899,36 @@ body.dark-mode .wizard-close-btn:hover {
     color: #f9fafb;
 }
 
-body.dark-mode .wizard-step-indicator {
-    background: #374151;
-    color: #9ca3af;
+body.dark-mode .step-number {
+    background: #6366f1;
 }
 
-body.dark-mode .wizard-step-indicator.completed,
-body.dark-mode .wizard-step-indicator.active {
-    background: #4f46e5;
-    color: white;
+body.dark-mode .wizard-step-indicator.active .step-number {
+    background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+}
+
+body.dark-mode .wizard-step-indicator.completed .step-number {
+    background: #10b981;
 }
 
 body.dark-mode .step-label {
-    color: #9ca3af;
-}
-
-body.dark-mode .wizard-step-indicator.active .step-label,
-body.dark-mode .wizard-step-indicator.completed .step-label {
     color: #e5e7eb;
 }
 
+body.dark-mode .wizard-step-indicator.active .step-label {
+    color: #a5b4fc;
+}
+
+body.dark-mode .wizard-step-indicator.completed .step-label {
+    color: #6ee7b7;
+}
+
 body.dark-mode .step-separator {
-    background: #374151;
+    background: #4f46e5;
+}
+
+body.dark-mode .step-separator.completed {
+    background: #10b981;
 }
 
 body.dark-mode .wizard-step-title {
