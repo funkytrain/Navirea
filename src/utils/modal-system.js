@@ -256,9 +256,9 @@ function createConfirmModal(message, onConfirm, onCancel) {
                 <div class="confirm-content">
                     <p>${message.replace(/\n/g, '<br>')}</p>
                 </div>
-                <div class="modal-footer">
-                    <button class="primary-btn" onclick="closeConfirmModal(true)">Aceptar</button>
-                    <button class="clear-btn" onclick="closeConfirmModal(false)">Cancelar</button>
+                <div class="modal-footer" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button class="clear-btn" style="width: 100%; background-color: #4f46e5;" onclick="closeConfirmModal(true)">Aceptar</button>
+                    <button class="clear-btn" style="width: 100%;" onclick="closeConfirmModal(false)">Cancelar</button>
                 </div>
             </div>
         </div>
