@@ -348,6 +348,15 @@ const SeatLayoutEditor = {
         const container = document.createElement('div');
         container.className = 'editor-actions';
 
+        // Botón para agregar fila de asientos con numeración continua
+        const addSeatRowBtn = document.createElement('button');
+        addSeatRowBtn.className = 'editor-action-btn editor-action-btn-primary';
+        addSeatRowBtn.textContent = '+ Agregar Fila de Asientos';
+        addSeatRowBtn.addEventListener('click', () => {
+            this.addSeatRowToLastSection();
+        });
+        container.appendChild(addSeatRowBtn);
+
         const addSeatSectionBtn = document.createElement('button');
         addSeatSectionBtn.className = 'editor-action-btn';
         addSeatSectionBtn.textContent = '+ Agregar Sección de Asientos';
@@ -518,6 +527,30 @@ const SeatLayoutEditor = {
             ]
         });
         this.refresh();
+    },
+
+    /**
+     * Agrega una fila de asientos a la última sección de asientos existente
+     * Si no existe ninguna sección de asientos, crea una nueva
+     */
+    addSeatRowToLastSection() {
+        // Buscar la última sección de asientos
+        let lastSeatsIndex = -1;
+        for (let i = this.state.layout.length - 1; i >= 0; i--) {
+            if (this.state.layout[i].type === 'seats') {
+                lastSeatsIndex = i;
+                break;
+            }
+        }
+
+        // Si no hay ninguna sección de asientos, crear una nueva
+        if (lastSeatsIndex === -1) {
+            this.addSeatsSection();
+            return;
+        }
+
+        // Agregar fila a la última sección de asientos encontrada
+        this.addRow(lastSeatsIndex);
     },
 
     /**

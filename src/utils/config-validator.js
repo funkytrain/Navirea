@@ -179,6 +179,11 @@ function validateLayout(layout, prefix) {
             if (typeof row.height !== 'number' || row.height < 0) {
                 errors.push(`${prefix} Fila ${rowIndex + 1}: El baño PMR debe tener una altura válida`);
             }
+        } else if (row.type === 'door') {
+            // Validar puerta
+            if (typeof row.height !== 'number' || row.height < 0) {
+                errors.push(`${prefix} Fila ${rowIndex + 1}: La puerta debe tener una altura válida`);
+            }
         } else {
             errors.push(`${prefix} Fila ${rowIndex + 1}: Tipo "${row.type}" no válido`);
         }

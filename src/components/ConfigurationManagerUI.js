@@ -66,6 +66,9 @@ class ConfigurationManagerUI {
         this.container.appendChild(modal);
         parentElement.appendChild(this.container);
 
+        // Bloquear scroll del body
+        window.lockBodyScroll();
+
         // Guardar referencia global para actualización desde import QR
         window.currentConfigManagerUI = this;
 
@@ -639,6 +642,9 @@ class ConfigurationManagerUI {
         if (this.container && this.container.parentElement) {
             this.container.parentElement.removeChild(this.container);
         }
+
+        // Desbloquear scroll del body
+        window.unlockBodyScroll();
 
         // Limpiar referencia global
         window.currentConfigManagerUI = null;
