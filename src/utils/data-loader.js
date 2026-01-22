@@ -34,12 +34,25 @@ async function loadAllData() {
             loadAllTrains()
         ]);
 
+        // Fusionar datos del sistema con configuraciones personalizadas
+        const allStops = window.ConfigurationManager
+            ? window.ConfigurationManager.getAllStops(stops)
+            : stops;
+
+        const allTrainRoutes = window.ConfigurationManager
+            ? window.ConfigurationManager.getAllRoutes(trainRoutes)
+            : trainRoutes;
+
+        const allTrainModels = window.ConfigurationManager
+            ? window.ConfigurationManager.getAllTrainModels(trains)
+            : trains;
+
         return {
-            stops,
+            stops: allStops,
             trainNumbers,
-            trainRoutes,
+            trainRoutes: allTrainRoutes,
             stationScreens,
-            trainModels: trains
+            trainModels: allTrainModels
         };
     } catch (error) {
         console.error('Error loading application data:', error);

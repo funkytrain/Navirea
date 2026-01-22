@@ -480,6 +480,98 @@ function clearAllAutoBackups() {
     }
 }
 
+// ============================================
+// FUNCIONES DE CONFIGURACIONES PERSONALIZADAS
+// ============================================
+
+/**
+ * Guarda un modelo de tren personalizado
+ */
+function saveCustomTrainModel(trainModel) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.saveCustomTrainModel(trainModel);
+}
+
+/**
+ * Elimina un modelo de tren personalizado
+ */
+function deleteCustomTrainModel(modelId) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.deleteCustomTrainModel(modelId);
+}
+
+/**
+ * Guarda una ruta personalizada
+ */
+function saveCustomRoute(route) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.saveCustomRoute(route);
+}
+
+/**
+ * Elimina una ruta personalizada
+ */
+function deleteCustomRoute(trainNumber) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.deleteCustomRoute(trainNumber);
+}
+
+/**
+ * Guarda una parada personalizada
+ */
+function saveCustomStop(stop) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.saveCustomStop(stop);
+}
+
+/**
+ * Elimina una parada personalizada
+ */
+function deleteCustomStop(abbr) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.deleteCustomStop(abbr);
+}
+
+/**
+ * Exporta todas las configuraciones personalizadas
+ */
+function exportCustomConfigurations() {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return null;
+    }
+    return window.ConfigurationManager.exportConfiguration();
+}
+
+/**
+ * Importa configuraciones desde un objeto
+ */
+function importCustomConfigurations(config, merge = true) {
+    if (!window.ConfigurationManager) {
+        console.error('ConfigurationManager no está disponible');
+        return { success: false, error: 'ConfigurationManager no disponible' };
+    }
+    return window.ConfigurationManager.importConfiguration(config, merge);
+}
+
 // Exportar funciones a window para uso global
 Object.assign(window, {
     // Funciones principales
@@ -505,5 +597,15 @@ Object.assign(window, {
     saveImportedData,
     getAutoBackups,
     restoreFromBackup,
-    clearAllAutoBackups
+    clearAllAutoBackups,
+
+    // Configuraciones personalizadas
+    saveCustomTrainModel,
+    deleteCustomTrainModel,
+    saveCustomRoute,
+    deleteCustomRoute,
+    saveCustomStop,
+    deleteCustomStop,
+    exportCustomConfigurations,
+    importCustomConfigurations
 });
