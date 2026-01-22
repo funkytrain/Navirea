@@ -3,6 +3,275 @@
    ============================================================================ */
 
 /* ============================================================================
+   ROUTE WIZARD - Estilos específicos para editor de rutas
+   ============================================================================ */
+
+/* Contenedor del editor de paradas */
+.stops-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stops-list-container {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    min-height: 200px;
+}
+
+.stops-list-title {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.stops-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Item de parada con drag & drop */
+.stop-item {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: move;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.stop-item:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.stop-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+.stop-item.drag-over {
+    border-color: #27ae60;
+    border-style: dashed;
+    background: #e8f5e9;
+}
+
+.stop-order {
+    background: #667eea;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.drag-handle {
+    color: #95a5a6;
+    font-size: 18px;
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.stop-name {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.stop-position-label {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.stop-position-label.start {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.stop-position-label.end {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.stop-delete-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.stop-delete-btn:hover {
+    background: #c0392b;
+}
+
+/* Mensaje vacío */
+.empty-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #95a5a6;
+    font-style: italic;
+}
+
+/* Contenedor para agregar parada */
+.add-stop-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Autocompletado */
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 4px;
+}
+
+.autocomplete-suggestion {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-suggestion:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-suggestion:hover {
+    background: #f8f9fa;
+}
+
+.stop-full {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.stop-abbr {
+    background: #e8eaf6;
+    color: #667eea;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Vista previa - Lista de paradas */
+.preview-stops-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.preview-stop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 6px;
+}
+
+.preview-stop-number {
+    background: #667eea;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.preview-stop-name {
+    flex: 1;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.preview-badge {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.preview-badge.start {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.preview-badge.end {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.preview-badge.destination {
+    background: #e8f5e9;
+    color: #27ae60;
+}
+
+.preview-stop-arrow {
+    text-align: center;
+    color: #95a5a6;
+    font-size: 20px;
+    padding: 4px 0;
+}
+
+/* ============================================================================
+   BASE WIZARD STYLES
+   ============================================================================ */
+
+/* ============================================================================
    OVERLAY Y CONTENEDOR PRINCIPAL
    ============================================================================ */
 
