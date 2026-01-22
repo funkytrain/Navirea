@@ -52,6 +52,12 @@
     <!-- Load configuration and data utilities -->
     <script type="module" src="src/config/constants.js"></script>
     <script src="src/config/ui-constants.js"></script>
+
+    <!-- Configuration management (load before data-loader) -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+
     <script src="src/utils/data-loader.js"></script>
     <script src="src/utils/dom.js"></script>
     <script src="src/utils/modal-system.js"></script>
