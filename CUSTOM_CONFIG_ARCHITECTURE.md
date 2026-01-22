@@ -286,13 +286,13 @@ src/
 - [x] Modificar `index.html` para cargar nuevos scripts
 - [x] Crear `test-config-manager.html` para testing básico
 
-### Fase 2: Editor Visual de Asientos
-- [ ] Crear componente base `SeatLayoutEditor.js`
-- [ ] Crear `ElementPalette.js`
-- [ ] Crear `SeatRowEditor.js`
-- [ ] Implementar lógica de numeración automática
-- [ ] Crear `LayoutPreview.js`
-- [ ] Testing del editor
+### Fase 2: Editor Visual de Asientos ✅ COMPLETADA
+- [x] Crear componente base `SeatLayoutEditor.js`
+- [x] Crear `ElementPalette.js`
+- [x] Crear `SeatRowEditor.js`
+- [x] Implementar lógica de numeración automática
+- [x] Crear `LayoutPreview.js`
+- [x] Testing del editor
 
 ### Fase 3: Wizard de Modelo de Tren
 - [ ] Crear `WizardCore.js` (base común)
@@ -400,6 +400,28 @@ function generateCustomId(prefix = 'custom') {
   - `test-config-manager.html` - Panel de testing completo
 
 **Estado actual:** Sistema base completamente funcional. Listo para Fase 2 (Editor Visual).
+
+### 2026-01-22 - Fase 2 Completada
+- ✅ Creado directorio `src/components/`
+- ✅ **Implementados componentes del editor:**
+  - `src/components/ElementPalette.js` - Paleta de elementos disponibles (asientos, WC, PMR, etc.)
+  - `src/components/SeatRowEditor.js` - Editor de fila individual con controles de posición
+  - `src/components/LayoutPreview.js` - Vista previa en tiempo real del layout
+  - `src/components/SeatLayoutEditor.js` - Editor principal con panel dual
+- ✅ Creado `css/components/seat-editor.css` - Estilos completos del editor
+- ✅ Modificado `index.html` - Cargados componentes y estilos
+- ✅ Creado `test-seat-editor.html` - Panel de testing completo con ejemplos
+
+**Características implementadas:**
+- Editor visual drag & drop de layouts de asientos
+- Numeración automática de asientos
+- Soporte para elementos especiales (WC, EQ, MESA, PMR, MIN)
+- Vista previa en tiempo real
+- Validación de layouts
+- Operaciones CRUD en filas y posiciones
+- Guardado en ConfigurationManager
+
+**Estado actual:** Editor visual completamente funcional. Listo para Fase 3 (Wizard de Modelo de Tren).
 
 ---
 
