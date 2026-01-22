@@ -530,27 +530,29 @@ const SeatLayoutEditor = {
     },
 
     /**
-     * Agrega una fila de asientos a la última sección de asientos existente
-     * Si no existe ninguna sección de asientos, crea una nueva
+     * Agrega una fila de asientos al final del layout
+     * Si el último elemento es una sección de asientos, agrega la fila ahí
+     * Si no, crea una nueva sección de asientos al final
      */
     addSeatRowToLastSection() {
-        // Buscar la última sección de asientos
-        let lastSeatsIndex = -1;
-        for (let i = this.state.layout.length - 1; i >= 0; i--) {
-            if (this.state.layout[i].type === 'seats') {
-                lastSeatsIndex = i;
-                break;
-            }
-        }
+        const lastIndex = this.state.layout.length - 1;
 
-        // Si no hay ninguna sección de asientos, crear una nueva
-        if (lastSeatsIndex === -1) {
-            this.addSeatsSection();
+        // Si el último elemento es una sección de asientos, agregar fila ahí
+        if (lastIndex >= 0 && this.state.layout[lastIndex].type === 'seats') {
+            this.addRow(lastIndex);
             return;
         }
 
-        // Agregar fila a la última sección de asientos encontrada
-        this.addRow(lastSeatsIndex);
+        // Si no hay secciones o el último elemento no es de asientos,
+        // crear nueva sección de asientos al final
+        this.state.layout.push({
+            type: 'seats',
+            positions: []
+        });
+
+        // Agregar fila a la nueva sección
+        const newSectionIndex = this.state.layout.length - 1;
+        this.addRow(newSectionIndex);
     },
 
     /**

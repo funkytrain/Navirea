@@ -7,6 +7,13 @@
    MODAL DE COMPARTICIÓN
    ============================================ */
 
+/* Z-index más alto que config-manager (10000) para que aparezca encima */
+.modal-overlay:has(.config-sharing-modal),
+.modal-overlay:has(.config-scan-modal),
+.config-processing-overlay {
+    z-index: 10001 !important;
+}
+
 .config-sharing-modal {
     min-width: 400px;
 }
