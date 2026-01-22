@@ -433,3 +433,114 @@
         justify-content: center;
     }
 }
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+body.dark-mode .config-manager-modal {
+    background: #1f2937;
+}
+
+body.dark-mode .config-manager-header {
+    border-bottom-color: #374151;
+}
+
+body.dark-mode .config-manager-header h2 {
+    color: #f9fafb;
+}
+
+body.dark-mode .config-close-btn {
+    background: #374151;
+    color: #9ca3af;
+}
+
+body.dark-mode .config-close-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+}
+
+body.dark-mode .config-manager-tabs {
+    border-bottom-color: #374151;
+    background: #111827;
+}
+
+body.dark-mode .config-tab {
+    color: #9ca3af;
+}
+
+body.dark-mode .config-tab:hover {
+    color: #f9fafb;
+}
+
+body.dark-mode .config-tab.active {
+    color: #818cf8;
+    border-bottom-color: #818cf8;
+    background: #1f2937;
+}
+
+body.dark-mode .config-section-title {
+    color: #e5e7eb;
+}
+
+body.dark-mode .config-empty {
+    background: #111827;
+    border-color: #374151;
+    color: #6b7280;
+}
+
+body.dark-mode .config-item {
+    border-color: #374151;
+    background: #111827;
+}
+
+body.dark-mode .config-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .config-item-system {
+    background: #0f172a;
+}
+
+body.dark-mode .config-item-custom {
+    background: #111827;
+}
+
+body.dark-mode .config-item-name {
+    color: #f9fafb;
+}
+
+body.dark-mode .config-item-meta {
+    color: #9ca3af;
+}
+
+body.dark-mode .config-action-btn {
+    background: #374151;
+    color: #9ca3af;
+}
+
+body.dark-mode .config-action-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+}
+
+body.dark-mode .config-action-delete:hover {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+body.dark-mode .config-manager-footer {
+    border-top-color: #374151;
+    background: #111827;
+}
+
+body.dark-mode .config-btn-secondary {
+    background: #374151;
+    color: #e5e7eb;
+    border-color: #4b5563;
+}
+
+body.dark-mode .config-btn-secondary:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+}
