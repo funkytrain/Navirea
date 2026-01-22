@@ -1044,15 +1044,9 @@ body.dark-mode .cabina-label {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* 🔄 Inversión del orden visual de asientos (sin rotar) */
+/* 🔄 Giro de 180 grados de la plantilla de asientos */
 .seats-container.rotated .seats-layout {
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-/* Invertir cada grupo de asientos también */
-.seats-container.rotated .seat-group {
-    flex-direction: column-reverse;
+    transform: rotate(180deg);
 }
 
 /* Estilo específico del modal "Acerca de" */
