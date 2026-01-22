@@ -294,12 +294,12 @@ src/
 - [x] Crear `LayoutPreview.js`
 - [x] Testing del editor
 
-### Fase 3: Wizard de Modelo de Tren
-- [ ] Crear `WizardCore.js` (base común)
-- [ ] Crear `TrainModelWizard.js`
-- [ ] Integrar con `SeatLayoutEditor`
-- [ ] Implementar validación de modelos
-- [ ] Testing de creación de modelos
+### Fase 3: Wizard de Modelo de Tren ✅ COMPLETADA
+- [x] Crear `WizardCore.js` (base común)
+- [x] Crear `TrainModelWizard.js`
+- [x] Integrar con `SeatLayoutEditor`
+- [x] Implementar validación de modelos
+- [x] Testing de creación de modelos
 
 ### Fase 4: Wizard de Trayecto
 - [ ] Crear `RouteWizard.js`
@@ -422,6 +422,30 @@ function generateCustomId(prefix = 'custom') {
 - Guardado en ConfigurationManager
 
 **Estado actual:** Editor visual completamente funcional. Listo para Fase 3 (Wizard de Modelo de Tren).
+
+### 2026-01-22 - Fase 3 Completada
+- ✅ Creado directorio `src/wizards/`
+- ✅ **Implementados componentes del wizard:**
+  - `src/wizards/WizardCore.js` - Sistema base para wizards multi-paso con navegación, validación y gestión de estado
+  - `src/wizards/TrainModelWizard.js` - Asistente completo para crear/editar modelos de tren
+- ✅ Creado `css/components/wizard.css` - Estilos completos del sistema de wizards
+- ✅ Modificado `index.html` - Cargados scripts y estilos de wizards
+- ✅ Creado `test-train-wizard.html` - Panel de testing completo del wizard
+
+**Características implementadas:**
+- Wizard de 4 pasos para crear modelos de tren:
+  1. Información básica (nombre, descripción)
+  2. Configuración de coches (cantidad, nombres)
+  3. Editor de layouts (integrado con SeatLayoutEditor)
+  4. Vista previa completa antes de guardar
+- Navegación entre pasos con validación
+- Integración completa con ConfigurationManager
+- Capacidad de editar modelos existentes
+- Indicadores de progreso visuales
+- Diseño responsive y accesible
+- Animaciones y transiciones fluidas
+
+**Estado actual:** Wizard de Modelo de Tren completamente funcional. Listo para Fase 4 (Wizard de Trayecto).
 
 ---
 
