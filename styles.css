@@ -1466,24 +1466,42 @@ body.dark-mode .seat:active {
 
 /* Pill para limpiar filtro */
 .filter-clear-pill {
-    position: absolute;
-    left: 12rem;      /* mueve hacia la izquierda (menos = más izquierda) */
-    top: 2.6rem;
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
     background: rgba(239, 68, 68, 0.9);
     border: none;
     color: white;
-    padding: 0.3rem 0.7rem;
-    border-radius: 1rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    margin-right: 0.5rem;
     transition: all 0.2s;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filter-clear-pill:hover {
     background: rgba(220, 38, 38, 1);
-    transform: scale(1.05);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .filter-clear-pill {
+        right: 0.75rem;
+        top: 0.75rem;
+        width: 2.8rem;
+        height: 2.8rem;
+        font-size: 1.5rem;
+    }
 }
 
 /* Modal de resultados de filtro */
