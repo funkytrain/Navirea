@@ -908,6 +908,16 @@ function openManualTecnico() {
     lockBodyScroll();
 }
 
+// Abrir Configuration Manager
+function openConfigurationManager() {
+    const managerUI = new ConfigurationManagerUI();
+    managerUI.onClose = () => {
+        // Refrescar la interfaz para mostrar nuevas configuraciones
+        render();
+    };
+    managerUI.render(document.body);
+}
+
 // Cerrar Manual Técnico
 function closeManualTecnico(event) {
     if (!event || event.target === event.currentTarget) {

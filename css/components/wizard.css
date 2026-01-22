@@ -575,10 +575,10 @@ textarea.form-input {
 }
 
 /* ============================================================================
-   SELECTOR DE COCHE
+   SELECTOR DE COCHE (solo en wizard, no afectar al header)
    ============================================================================ */
 
-.coach-selector {
+.wizard-step .coach-selector {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -589,12 +589,12 @@ textarea.form-input {
     border: 2px solid #e5e7eb;
 }
 
-.coach-selector .form-label {
+.wizard-step .coach-selector .form-label {
     margin: 0;
     white-space: nowrap;
 }
 
-.coach-selector .form-input {
+.wizard-step .coach-selector .form-input {
     max-width: 300px;
 }
 

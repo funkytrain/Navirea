@@ -280,6 +280,13 @@ function generateMoreOptionsMenu() {
         </button>
     </div>
 
+    <button class="more-option" onclick="openConfigurationManager(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Configuraciones Personalizadas
+    </button>
     <button class="more-option" onclick="openBackupsPanel(); toggleMoreOptions();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>
