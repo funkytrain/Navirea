@@ -54,11 +54,20 @@ class ConfigurationManagerUI {
                 <button class="config-btn config-btn-secondary" id="import-btn">
                     📥 Importar
                 </button>
+                <button class="config-btn config-btn-secondary" id="share-qr-btn">
+                    📱 Compartir QR
+                </button>
+                <button class="config-btn config-btn-secondary" id="scan-qr-btn">
+                    📷 Escanear QR
+                </button>
             </div>
         `;
 
         this.container.appendChild(modal);
         parentElement.appendChild(this.container);
+
+        // Guardar referencia global para actualización desde import QR
+        window.currentConfigManagerUI = this;
 
         this.attachEventListeners();
         this.renderModelsView();
@@ -95,6 +104,13 @@ class ConfigurationManagerUI {
 
         const importBtn = this.container.querySelector('#import-btn');
         importBtn.addEventListener('click', () => this.importConfiguration());
+
+        // Botones de QR
+        const shareQRBtn = this.container.querySelector('#share-qr-btn');
+        shareQRBtn.addEventListener('click', () => window.generateConfigQR());
+
+        const scanQRBtn = this.container.querySelector('#scan-qr-btn');
+        scanQRBtn.addEventListener('click', () => window.scanConfigQR());
     }
 
     /**
@@ -623,6 +639,9 @@ class ConfigurationManagerUI {
         if (this.container && this.container.parentElement) {
             this.container.parentElement.removeChild(this.container);
         }
+
+        // Limpiar referencia global
+        window.currentConfigManagerUI = null;
 
         if (this.onClose) {
             this.onClose();

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Configuration Sharing System</title>
+
+    <!-- Estilos base -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Estilos de componentes -->
+    <link rel="stylesheet" href="css/components/config-manager.css">
+    <link rel="stylesheet" href="css/components/config-sharing.css">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            background: #f3f4f6;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .test-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .test-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .test-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-btn:hover {
+            background: #4338ca;
+        }
+
+        .test-btn-secondary {
+            background: #6b7280;
+        }
+
+        .test-btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .status {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test: Sistema de Compartición de Configuraciones</h1>
+        <p style="color: #6b7280; margin-bottom: 2rem;">
+            Testing de generación de QR, escaneo, y compartición de configuraciones personalizadas.
+        </p>
+
+        <!-- Test 1: Generar Datos de Prueba -->
+        <div class="test-section">
+            <h2>1. Preparar Datos de Prueba</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">
+                Crea configuraciones de prueba en localStorage
+            </p>
+            <button class="test-btn" onclick="createTestData('small')">
+                Crear Datos Pequeños (&lt;2KB)
+            </button>
+            <button class="test-btn" onclick="createTestData('large')">
+                Crear Datos Grandes (&gt;2KB)
+            </button>
+            <button class="test-btn test-btn-secondary" onclick="clearTestData()">
+                Limpiar Datos
+            </button>
+            <div id="status-data" class="status"></div>
+        </div>
+
+        <!-- Test 2: Generar QR -->
+        <div class="test-section">
+            <h2>2. Generar QR Code</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">
+                Genera QR para compartir configuraciones
+            </p>
+            <button class="test-btn" onclick="window.generateConfigQR()">
+                📱 Generar QR
+            </button>
+            <div id="status-qr" class="status"></div>
+        </div>
+
+        <!-- Test 3: Escanear QR -->
+        <div class="test-section">
+            <h2>3. Escanear QR Code</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">
+                Escanea QR desde cámara
+            </p>
+            <button class="test-btn" onclick="window.scanConfigQR()">
+                📷 Escanear QR
+            </button>
+        </div>
+
+        <!-- Test 4: Importar Manual -->
+        <div class="test-section">
+            <h2>4. Importar con Código Corto</h2>
+            <p style="color: #6b7280; margin-bottom: 1rem;">
+                Prueba importación con código corto de JSONBin
+            </p>
+            <input type="text" id="bin-id-input" placeholder="Pegar código (24 chars hex)"
+                   style="width: 300px; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; margin-right: 0.5rem;">
+            <button class="test-btn" onclick="testImportFromCode()">
+                Importar
+            </button>
+            <div id="status-import" class="status"></div>
+        </div>
+
+        <!-- Test 5: Verificar Estado -->
+        <div class="test-section">
+            <h2>5. Verificar Configuraciones Actuales</h2>
+            <button class="test-btn" onclick="showCurrentConfig()">
+                Ver Configuraciones
+            </button>
+            <div id="status-current" class="status"></div>
+        </div>
+    </div>
+
+    <!-- Scripts necesarios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
+    <script type="module" src="src/config/constants.js"></script>
+    <script src="src/config/ui-constants.js"></script>
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/utils/dom.js"></script>
+
+    <script type="module" src="src/features/config-sharing.js"></script>
+
+    <script>
+        // Funciones de testing
+
+        function createTestData(size) {
+            const status = document.getElementById('status-data');
+
+            if (size === 'small') {
+                // 1 modelo pequeño
+                const model = {
+                    id: 'test_small_001',
+                    name: 'Tren Test Pequeño',
+                    custom: true,
+                    createdAt: new Date().toISOString(),
+                    coaches: [
+                        {
+                            id: 'C1',
+                            name: 'Coche 1',
+                            layout: [
+                                { type: 'seats', positions: [[1, 2, null, 3, 4]] }
+                            ]
+                        }
+                    ]
+                };
+
+                const models = { [model.id]: model };
+                localStorage.setItem('userTrainModels', JSON.stringify(models));
+
+                status.textContent = '✅ Datos pequeños creados:\n' +
+                    '- 1 modelo de tren (4 asientos)\n' +
+                    `- Tamaño: ~${JSON.stringify(models).length} bytes`;
+
+            } else {
+                // 5 modelos grandes
+                const models = {};
+                for (let i = 1; i <= 5; i++) {
+                    const coaches = [];
+                    for (let c = 1; c <= 4; c++) {
+                        const layout = [];
+                        for (let row = 0; row < 10; row++) {
+                            layout.push({ type: 'seats', positions: [[1,2,null,3,4]] });
+                        }
+                        coaches.push({
+                            id: `C${c}`,
+                            name: `Coche ${c}`,
+                            layout: layout
+                        });
+                    }
+
+                    models[`test_large_${String(i).padStart(3, '0')}`] = {
+                        id: `test_large_${String(i).padStart(3, '0')}`,
+                        name: `Tren Test Grande ${i}`,
+                        custom: true,
+                        createdAt: new Date().toISOString(),
+                        coaches: coaches
+                    };
+                }
+
+                localStorage.setItem('userTrainModels', JSON.stringify(models));
+
+                status.textContent = '✅ Datos grandes creados:\n' +
+                    '- 5 modelos de tren\n' +
+                    '- 4 coches por modelo\n' +
+                    '- 10 filas x 4 asientos por coche\n' +
+                    `- Tamaño: ~${JSON.stringify(models).length} bytes`;
+            }
+        }
+
+        function clearTestData() {
+            localStorage.setItem('userTrainModels', JSON.stringify({}));
+            localStorage.setItem('userRoutes', JSON.stringify({}));
+            localStorage.setItem('userStops', JSON.stringify([]));
+
+            document.getElementById('status-data').textContent =
+                '✅ Datos de prueba eliminados';
+        }
+
+        async function testImportFromCode() {
+            const input = document.getElementById('bin-id-input');
+            const status = document.getElementById('status-import');
+            const binId = input.value.trim();
+
+            if (!binId) {
+                status.textContent = '❌ Ingresa un código primero';
+                return;
+            }
+
+            if (!/^[a-f0-9]{24}$/i.test(binId)) {
+                status.textContent = '❌ Formato de código inválido (debe ser 24 hex chars)';
+                return;
+            }
+
+            status.textContent = '⏳ Descargando...';
+
+            try {
+                const config = await window.downloadConfigFromServer(binId);
+                const result = window.ConfigurationManager.importConfiguration(config, true);
+
+                if (result.success) {
+                    status.textContent =
+                        `✅ Importado correctamente:\n` +
+                        `- ${result.imported.trainModels} modelos\n` +
+                        `- ${result.imported.routes} rutas\n` +
+                        `- ${result.imported.stops} paradas`;
+                } else {
+                    status.textContent = `❌ Error: ${result.error}`;
+                }
+            } catch (error) {
+                status.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        function showCurrentConfig() {
+            const config = window.ConfigurationManager.exportConfiguration();
+            const status = document.getElementById('status-current');
+
+            const json = JSON.stringify(config, null, 2);
+            const size = json.length;
+
+            status.textContent =
+                `📦 Configuración actual:\n\n` +
+                `Modelos: ${config.data.trainModels.length}\n` +
+                `Rutas: ${config.data.routes.length}\n` +
+                `Paradas: ${config.data.stops.length}\n\n` +
+                `Tamaño total: ${size} bytes (${(size/1024).toFixed(2)} KB)\n` +
+                `${size > 2000 ? '⚠️ Excede límite de QR (2KB)' : '✅ Compatible con QR'}\n\n` +
+                `JSON:\n${json.substring(0, 500)}...`;
+        }
+    </script>
+</body>
+</html>
