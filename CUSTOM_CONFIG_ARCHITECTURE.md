@@ -308,12 +308,12 @@ src/
 - [x] Implementar drag & drop para reordenar
 - [x] Testing de creación de rutas
 
-### Fase 5: UI de Gestión
-- [ ] Crear `ConfigurationManagerUI.js`
-- [ ] Listados de modelos y rutas
-- [ ] Operaciones CRUD (editar, eliminar, duplicar)
-- [ ] Integrar wizards
-- [ ] Testing de gestión completa
+### Fase 5: UI de Gestión ✅ COMPLETADA
+- [x] Crear `ConfigurationManagerUI.js`
+- [x] Listados de modelos y rutas
+- [x] Operaciones CRUD (editar, eliminar, duplicar)
+- [x] Integrar wizards
+- [x] Testing de gestión completa
 
 ### Fase 6: Sistema de Compartición
 - [ ] Crear `config-sharing.js`
@@ -476,6 +476,35 @@ function generateCustomId(prefix = 'custom') {
 - Diseño responsive y accesible
 
 **Estado actual:** Wizard de Trayecto completamente funcional. Listo para Fase 5 (UI de Gestión).
+
+### 2026-01-22 - Fase 5 Completada
+- ✅ **Implementado ConfigurationManagerUI completo:**
+  - `src/components/ConfigurationManagerUI.js` - UI principal de gestión de configuraciones
+  - Sistema de tabs para alternar entre modelos y rutas
+  - Listados separados de configuraciones del sistema y personalizadas
+  - Operaciones CRUD completas (crear, editar, duplicar, eliminar)
+  - Integración completa con TrainModelWizard y RouteWizard
+  - Sistema de exportación/importación de configuraciones
+  - Notificaciones toast de feedback al usuario
+- ✅ Creado `css/components/config-manager.css` - Estilos completos de la UI
+- ✅ Modificado `index.html` - Cargados componente y estilos
+- ✅ Creado `test-config-manager-ui.html` - Panel de testing completo
+
+**Características implementadas:**
+- UI modal completa con tabs para modelos y rutas
+- Visualización separada de configuraciones del sistema vs. personalizadas
+- Botones de acción para cada item (editar, duplicar, eliminar)
+- Integración fluida con wizards (oculta el manager mientras está el wizard abierto)
+- Exportación de todas las configuraciones a JSON descargable
+- Importación desde archivos JSON con validación
+- Estadísticas en tiempo real (contadores de configuraciones)
+- Formato de fechas relativas (hace Xh, hace Xd)
+- Diseño responsive y accesible
+- Animaciones y transiciones suaves
+- Confirmaciones antes de eliminaciones
+- Sistema de notificaciones toast
+
+**Estado actual:** UI de Gestión completamente funcional. Listo para Fase 6 (Sistema de Compartición).
 
 ---
 

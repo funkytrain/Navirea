@@ -87,6 +87,40 @@ const ConfigurationManager = {
     },
 
     /**
+     * Obtiene modelos del sistema (excluye personalizados)
+     * @param {Object} allModels - Todos los modelos disponibles
+     * @returns {Array} Array de modelos del sistema
+     */
+    getSystemTrainModels(allModels = {}) {
+        const userModels = this.getUserTrainModels();
+        const userModelIds = Object.keys(userModels);
+
+        return Object.entries(allModels)
+            .filter(([id]) => !userModelIds.includes(id))
+            .map(([id, model]) => ({ id, ...model }));
+    },
+
+    /**
+     * Obtiene modelos personalizados como array
+     * @returns {Array} Array de modelos personalizados
+     */
+    getCustomTrainModels() {
+        const userModels = this.getUserTrainModels();
+        return Object.entries(userModels)
+            .map(([id, model]) => ({ id, ...model }));
+    },
+
+    /**
+     * Obtiene un modelo personalizado por ID
+     * @param {string} modelId - ID del modelo
+     * @returns {Object|null} Modelo o null
+     */
+    getCustomTrainModelById(modelId) {
+        const userModels = this.getUserTrainModels();
+        return userModels[modelId] ? { id: modelId, ...userModels[modelId] } : null;
+    },
+
+    /**
      * Obtiene un modelo de tren específico
      * @param {string} modelId - ID del modelo
      * @param {Object} systemModels - Modelos del sistema
@@ -272,6 +306,51 @@ const ConfigurationManager = {
             console.error('Error cargando rutas personalizadas:', e);
             return {};
         }
+    },
+
+    /**
+     * Obtiene rutas del sistema (excluye personalizadas)
+     * @param {Object} allRoutes - Todas las rutas disponibles
+     * @returns {Array} Array de rutas del sistema
+     */
+    getSystemRoutes(allRoutes = {}) {
+        const userRoutes = this.getUserRoutes();
+        const userRouteNumbers = Object.keys(userRoutes);
+
+        return Object.entries(allRoutes)
+            .filter(([trainNumber]) => !userRouteNumbers.includes(trainNumber))
+            .map(([trainNumber, data]) => {
+                // Si data es un array (formato antiguo), convertir a objeto
+                if (Array.isArray(data)) {
+                    return {
+                        trainNumber,
+                        stops: data,
+                        destination: data[data.length - 1]
+                    };
+                }
+                // Si es un objeto, retornar tal cual
+                return { trainNumber, ...data };
+            });
+    },
+
+    /**
+     * Obtiene rutas personalizadas como array
+     * @returns {Array} Array de rutas personalizadas
+     */
+    getCustomRoutes() {
+        const userRoutes = this.getUserRoutes();
+        return Object.entries(userRoutes)
+            .map(([trainNumber, route]) => ({ trainNumber, ...route }));
+    },
+
+    /**
+     * Obtiene una ruta personalizada por número
+     * @param {string} trainNumber - Número de tren
+     * @returns {Object|null} Ruta o null
+     */
+    getCustomRouteByNumber(trainNumber) {
+        const userRoutes = this.getUserRoutes();
+        return userRoutes[trainNumber] ? { trainNumber, ...userRoutes[trainNumber] } : null;
     },
 
     /**

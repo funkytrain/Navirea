@@ -211,7 +211,7 @@
     gap: 8px;
     margin-bottom: 10px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding: 0 8px 8px 8px; /* Padding horizontal para ver el primer y último asiento completos */
 }
 
 /* Estilo de scrollbar para el grid de posiciones */
@@ -529,7 +529,8 @@
     }
 
     .seat-positions-grid {
-        justify-content: center;
+        /* Removido justify-content: center para que el scroll funcione correctamente */
+        padding: 0 12px 8px 12px; /* Aumentado padding horizontal en móvil */
     }
 
     .element-palette-grid {
