@@ -397,9 +397,14 @@
 
         // Crear parada de prueba
         function createTestStop() {
+            // Generar abreviatura aleatoria solo con letras
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const randomLetter1 = letters[Math.floor(Math.random() * letters.length)];
+            const randomLetter2 = letters[Math.floor(Math.random() * letters.length)];
+
             const testStop = {
                 full: `Parada Test ${Math.floor(Math.random() * 1000)}`,
-                abbr: `PT${Math.floor(Math.random() * 100)}`
+                abbr: `PT${randomLetter1}${randomLetter2}`
             };
 
             const result = window.ConfigurationManager.saveCustomStop(testStop);
