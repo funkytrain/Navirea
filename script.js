@@ -17,29 +17,14 @@ function isDataLoaded() {
 // Función para cargar datos JSON
 async function loadJSONData() {
     try {
-        // Cargar datos de paradas
-        const stopsResponse = await fetch('data/stops.json');
-        stops = await stopsResponse.json();
+        // Usar DataLoader que fusiona configuraciones del sistema + custom
+        const data = await window.DataLoader.loadAllData();
 
-        // Cargar números de tren
-        const trainNumbersResponse = await fetch('data/train-numbers.json');
-        trainNumbers = await trainNumbersResponse.json();
-
-        // Cargar rutas de tren
-        const trainRoutesResponse = await fetch('data/train-routes.json');
-        trainRoutes = await trainRoutesResponse.json();
-
-        // Cargar pantallas de estación
-        const stationScreensResponse = await fetch('data/station-screens.json');
-        stationScreens = await stationScreensResponse.json();
-
-        // Cargar modelos de trenes
-        const trainIds = ['463', '464', '465', '449', '470'];
-        for (const id of trainIds) {
-            const response = await fetch(`data/trains/train-${id}.json`);
-            const trainData = await response.json();
-            trainModels[id] = trainData;
-        }
+        trainModels = data.trainModels;
+        stops = data.stops;
+        trainNumbers = data.trainNumbers;
+        trainRoutes = data.trainRoutes;
+        stationScreens = data.stationScreens;
 
         console.log('✅ Datos cargados correctamente desde JSON');
         console.log('📊 Trenes disponibles:', Object.keys(trainModels));
@@ -535,6 +520,21 @@ function toggleTrainSelector() {
     const selector = document.getElementById("train-selector");
     if (selector) {
         selector.classList.toggle("hidden");
+    }
+}
+
+function openConfigurationManager() {
+    // Cerrar el selector de trenes
+    const selector = document.getElementById("train-selector");
+    if (selector) {
+        selector.classList.add("hidden");
+    }
+
+    // Abrir el gestor de configuraciones
+    if (window.ConfigurationManagerUI) {
+        window.ConfigurationManagerUI.open();
+    } else {
+        alert('El gestor de configuraciones no está disponible');
     }
 }
 
@@ -1218,17 +1218,49 @@ function renderHeader() {
     if (occupancyPercentage > 80) occupancyClass = 'occ-high';
     else if (occupancyPercentage > 50) occupancyClass = 'occ-mid';
 
-    // Generar opciones del selector de trenes
-    const trainSelectorOptions = Object.entries(trainModels)
-        .map(([id, train]) => `
-            <button
-                class="train-option ${state.selectedTrain === id ? "active" : ""}"
-                onclick="selectTrain('${id}'); toggleTrainSelector();"
-            >
-                ${train.name}
-            </button>
-        `)
-        .join("");
+    // Generar opciones del selector de trenes (separar sistema y custom)
+    const systemTrains = Object.entries(trainModels).filter(([id, train]) => !train.custom);
+    const customTrains = Object.entries(trainModels).filter(([id, train]) => train.custom);
+
+    let trainSelectorOptions = '';
+
+    // Primero mostrar trenes del sistema
+    if (systemTrains.length > 0) {
+        trainSelectorOptions += systemTrains
+            .map(([id, train]) => `
+                <button
+                    class="train-option ${state.selectedTrain === id ? "active" : ""}"
+                    onclick="selectTrain('${id}'); toggleTrainSelector();"
+                >
+                    ${train.name}
+                </button>
+            `)
+            .join("");
+    }
+
+    // Luego mostrar trenes personalizados con badge
+    if (customTrains.length > 0) {
+        trainSelectorOptions += '<div class="selector-divider"></div>';
+        trainSelectorOptions += customTrains
+            .map(([id, train]) => `
+                <button
+                    class="train-option custom ${state.selectedTrain === id ? "active" : ""}"
+                    onclick="selectTrain('${id}'); toggleTrainSelector();"
+                >
+                    ${train.name}
+                    <span class="custom-badge">PERSONALIZADO</span>
+                </button>
+            `)
+            .join("");
+    }
+
+    // Agregar botón de gestión de configuraciones
+    trainSelectorOptions += `
+        <div class="selector-divider"></div>
+        <button class="train-option config-manager-btn" onclick="openConfigurationManager()">
+            ⚙️ Gestionar Configuraciones
+        </button>
+    `;
 
     // Generar dropdown de parada actual
     const currentStopDropdown = state.currentStopSearch && filterCurrentStops().length > 0 ? `
@@ -1272,10 +1304,15 @@ function renderHeader() {
         })
         .join("");
 
+    // Verificar si la ruta actual es personalizada
+    const currentRoute = trainRoutes[state.trainNumber];
+    const isCustomRoute = currentRoute && currentRoute.custom;
+
     // Usar el generador de templates
     return window.Templates.generateHeaderTemplate({
         headerCollapsed: state.headerCollapsed,
         trainName: currentTrain.name,
+        trainIsCustom: currentTrain.custom,
         occupancyPercentage,
         occupancyClass,
         trainSelectorOptions,
@@ -1290,6 +1327,7 @@ function renderHeader() {
         currentStopSearch: state.currentStopSearch,
         currentStopDropdown,
         hasTrainRoute: trainRoutes[state.trainNumber],
+        isCustomRoute: isCustomRoute,
         coachButtons,
         collapseTitle: state.headerCollapsed ? 'Expandir' : 'Colapsar',
         collapseIcon: state.headerCollapsed ?
