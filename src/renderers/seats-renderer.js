@@ -93,12 +93,27 @@ function renderSpace(section) {
 /**
  * Renderiza un WC (baño estándar)
  */
-function renderWC(seatNum, coachId, index) {
+function renderWC(seatNum, coachId, wcCounter) {
     // WC ahora soporta IDs personalizados (ej: "WC-A", "WC-B") para agrupar
-    // Si es solo "WC" sin ID, se trata individualmente
-    const wcId = String(seatNum).includes("-") ? String(seatNum) : `WC${index + 1}`;
+    // Si es solo "WC" sin ID, se trata individualmente con contador global
+    const wcId = String(seatNum).includes("-") ? String(seatNum) : `WC${wcCounter.value}`;
+
+    // Verificar si este WC pertenece a alguna incidencia de grupo
+    let wcActive = '';
+
+    // Primero verificar si tiene incidencia individual
     const wcKey = window.getIncidentKey(coachId, wcId);
-    const wcActive = window.state.incidents[wcKey] ? 'incident-active' : '';
+    if (window.state.incidents[wcKey]) {
+        wcActive = 'incident-active';
+    } else {
+        // Verificar si pertenece a algún bloque de WC con incidencia
+        Object.keys(window.state.incidents).forEach(key => {
+            const incident = window.state.incidents[key];
+            if (incident.type === 'wc' && incident.wcIds && incident.wcIds.includes(wcId)) {
+                wcActive = 'incident-active';
+            }
+        });
+    }
 
     // Label para mostrar
     const wcLabel = String(seatNum).includes("-") ? "WC" : String(seatNum);
@@ -236,7 +251,7 @@ function renderSeat(seatNum, coachId) {
 /**
  * Renderiza una fila de asientos
  */
-function renderSeatRow(row, coachId) {
+function renderSeatRow(row, coachId, wcCounter) {
     let html = '<div class="seat-row">';
 
     row.forEach((seatNum, index) => {
@@ -251,38 +266,51 @@ function renderSeatRow(row, coachId) {
                 html += '<div class="seat empty-space"></div>';
             }
         } else if (String(seatNum).includes("WC")) {
-            html += renderWC(seatNum, coachId, index);
-        } else if (seatNum === "EQ" || seatNum === "MIN" || seatNum === "MESA") {
+            html += renderWC(seatNum, coachId, wcCounter);
+            wcCounter.value++;
+        } else if (typeof seatNum === 'string') {
+            // Cualquier string (EQ, MIN, MESA, PMR, etc.) se trata como elemento especial no seleccionable
             html += renderSpecialElement(seatNum);
-        } else {
+        } else if (typeof seatNum === 'number') {
+            // Solo los números son asientos seleccionables
             html += renderSeat(seatNum, coachId);
+        } else {
+            // Cualquier otra cosa se renderiza como elemento especial
+            html += renderSpecialElement(String(seatNum));
         }
     });
 
     html += '</div>'; // seat-row
-    return html;
+    return { html, wcCounter };
 }
 
 /**
  * Renderiza un grupo de asientos (sección con posiciones)
  */
-function renderSeatGroup(section, coachId) {
+function renderSeatGroup(section, coachId, doorCounter, wcCounter) {
     let html = '<div class="seat-group">';
 
-    section.positions.forEach((row) => {
-        html += renderSeatRow(row, coachId);
-    });
+    // Validar que section.positions existe y es un array
+    if (section.positions && Array.isArray(section.positions)) {
+        section.positions.forEach((row) => {
+            const result = renderSeatRow(row, coachId, wcCounter);
+            html += result.html;
+            wcCounter.value = result.wcCounter.value;
+        });
+    } else {
+        console.warn('[seats-renderer] Sección de asientos sin positions:', section);
+    }
 
     html += '</div>'; // seat-group
-    return html;
+    return { html, doorCounter, wcCounter };
 }
 
 /**
  * Renderiza una sección del layout (puerta, espacio, grupo de asientos, PMR)
  */
-function renderSection(section, coachId, doorCounter) {
+function renderSection(section, coachId, doorCounter, wcCounter) {
     if (section.type === "pmr-bathroom") {
-        return { html: renderPMRBathroom(section, coachId), doorCounter };
+        return { html: renderPMRBathroom(section, coachId), doorCounter, wcCounter };
     }
 
     if (section.type === "space") {
@@ -299,14 +327,14 @@ function renderSection(section, coachId, doorCounter) {
         if (isDoor && coachHasDoors) {
             const html = renderDoor(section, coachId, doorCounter.value);
             doorCounter.value++;
-            return { html, doorCounter };
+            return { html, doorCounter, wcCounter };
         } else {
-            return { html: renderSpace(section), doorCounter };
+            return { html: renderSpace(section), doorCounter, wcCounter };
         }
     }
 
     // Por defecto es un grupo de asientos
-    return { html: renderSeatGroup(section, coachId), doorCounter };
+    return renderSeatGroup(section, coachId, doorCounter, wcCounter);
 }
 
 /**
@@ -336,11 +364,13 @@ function renderSeatsLayout() {
 
     const coachLayout = window.getCurrentCoachLayout(currentCoach);
     const doorCounter = { value: 1 }; // Objeto para pasar por referencia
+    const wcCounter = { value: 1 }; // Contador global para WCs
 
     coachLayout.forEach((section) => {
-        const result = renderSection(section, window.state.selectedCoach, doorCounter);
+        const result = renderSection(section, window.state.selectedCoach, doorCounter, wcCounter);
         html += result.html;
         doorCounter.value = result.doorCounter.value;
+        wcCounter.value = result.wcCounter.value;
     });
 
     // CABEZA/COLA al final

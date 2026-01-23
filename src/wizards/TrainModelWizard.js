@@ -60,6 +60,18 @@ const TrainModelWizard = {
      * @returns {Array} Definiciones de pasos
      */
     createSteps(editModel = null) {
+        // Si estamos editando, precargar datos
+        if (editModel) {
+            this.initialData = {
+                modelId: editModel.id,
+                modelName: editModel.name,
+                modelDescription: editModel.description || '',
+                coaches: editModel.coaches || [],
+                custom: true,
+                createdAt: editModel.createdAt || new Date().toISOString()
+            };
+        }
+
         return [
             {
                 title: 'Información Básica',
@@ -67,13 +79,13 @@ const TrainModelWizard = {
                 showTitle: true,
                 render: (data) => this.renderStep1_BasicInfo(data, editModel),
                 validate: (data) => this.validateStep1(data),
-                onNext: (data) => this.saveStep1(data)
+                onNext: (data) => this.saveStep1(data, editModel)
             },
             {
                 title: 'Configuración de Coches',
                 description: 'Define cuántos coches tiene el tren y sus nombres',
                 showTitle: true,
-                render: (data) => this.renderStep2_Coaches(data),
+                render: (data) => this.renderStep2_Coaches(data, editModel),
                 validate: (data) => this.validateStep2(data),
                 onNext: (data) => this.saveStep2(data)
             },
@@ -200,15 +212,21 @@ const TrainModelWizard = {
     /**
      * Renderiza el paso 2
      */
-    renderStep2_Coaches(data) {
+    renderStep2_Coaches(data, editModel = null) {
         const container = document.createElement('div');
         container.className = 'wizard-form';
 
         // Inicializar coches si no existen
         if (!data.coaches || data.coaches.length === 0) {
-            data.coaches = [
-                { id: 'C1', name: 'Coche 1', layout: [] }
-            ];
+            if (editModel && editModel.coaches && editModel.coaches.length > 0) {
+                // Cargar coches del modelo a editar
+                data.coaches = JSON.parse(JSON.stringify(editModel.coaches)); // Deep copy
+            } else {
+                // Crear coche por defecto
+                data.coaches = [
+                    { id: 'C1', name: 'Coche 1', layout: [] }
+                ];
+            }
         }
 
         // Campo: Número de coches
@@ -372,15 +390,44 @@ const TrainModelWizard = {
         // Variable para mantener el índice actual
         let currentCoachIndex = 0;
 
+        // Función para calcular el siguiente número de asiento basado en coches anteriores
+        const getNextSeatNumber = (upToCoachIndex) => {
+            let maxSeat = 0;
+
+            // Recorrer todos los coches anteriores al actual
+            for (let i = 0; i < upToCoachIndex; i++) {
+                const coach = data.coaches[i];
+                if (coach.layout) {
+                    coach.layout.forEach(section => {
+                        if (section.type === 'seats' && section.positions) {
+                            section.positions.forEach(row => {
+                                row.forEach(pos => {
+                                    if (typeof pos === 'number' && pos > maxSeat) {
+                                        maxSeat = pos;
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+
+            return maxSeat + 1;
+        };
+
         // Función para renderizar el editor del coche actual
         const renderEditor = (coachIndex) => {
             editorContainer.innerHTML = '';
             const coach = data.coaches[coachIndex];
 
+            // Calcular el siguiente número de asiento basado en coches anteriores
+            const startNumber = getNextSeatNumber(coachIndex);
+
             // Crear editor de layout
             const editor = window.SeatLayoutEditor.init({
                 layout: coach.layout.length > 0 ? coach.layout : undefined,
                 coachName: coach.name,
+                startNumber: startNumber, // Pasar número inicial
                 onChange: (newLayout) => {
                     // Guardar layout en el coche
                     coach.layout = newLayout;
@@ -423,6 +470,9 @@ const TrainModelWizard = {
             data.coaches[currentCoachIndex].layout = editor.getLayout();
         }
 
+        // Recopilar todos los números de asientos del tren completo
+        const seatNumbers = {}; // { number: coachName }
+
         // Validar que cada coche tenga al menos un layout
         for (let i = 0; i < data.coaches.length; i++) {
             const coach = data.coaches[i];
@@ -434,6 +484,50 @@ const TrainModelWizard = {
             const hasSeats = coach.layout.some(section => section.type === 'seats');
             if (!hasSeats) {
                 return `El ${coach.name} debe tener al menos una sección de asientos.`;
+            }
+
+            // Recopilar números de asientos para detectar duplicados
+            coach.layout.forEach(section => {
+                if (section.type === 'seats' && section.positions) {
+                    section.positions.forEach(row => {
+                        row.forEach(pos => {
+                            if (typeof pos === 'number') {
+                                if (seatNumbers[pos]) {
+                                    // Número duplicado encontrado!
+                                    return `❌ Error: El número de asiento ${pos} está duplicado.\n\nSe encuentra en:\n• ${seatNumbers[pos]}\n• ${coach.name}\n\nPor favor, corrige los números duplicados antes de continuar.`;
+                                }
+                                seatNumbers[pos] = coach.name;
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        // Hacer una segunda pasada para detectar duplicados que puedan haberse saltado
+        for (const seatNum in seatNumbers) {
+            let count = 0;
+            let coaches = [];
+
+            data.coaches.forEach(coach => {
+                coach.layout.forEach(section => {
+                    if (section.type === 'seats' && section.positions) {
+                        section.positions.forEach(row => {
+                            row.forEach(pos => {
+                                if (pos == seatNum) {
+                                    count++;
+                                    if (!coaches.includes(coach.name)) {
+                                        coaches.push(coach.name);
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+
+            if (count > 1) {
+                return `❌ Error: El número de asiento ${seatNum} está duplicado.\n\nSe encuentra en:\n${coaches.map(c => `• ${c}`).join('\n')}\n\nPor favor, corrige los números duplicados antes de continuar.`;
             }
         }
 

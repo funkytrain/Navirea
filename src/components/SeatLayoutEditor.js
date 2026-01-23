@@ -17,18 +17,28 @@ const SeatLayoutEditor = {
 
     /**
      * Inicializa el editor
-     * @param {Object} options - { layout, coachName, onChange }
+     * @param {Object} options - { layout, coachName, onChange, startNumber }
      * @returns {HTMLElement} Contenedor del editor
      */
     init(options = {}) {
+        // Establecer número inicial ANTES de crear el layout
+        const startNumber = options.startNumber !== undefined ? options.startNumber : 1;
+
         // Inicializar estado
-        this.state.layout = options.layout || this.createDefaultLayout();
+        this.state.layout = options.layout || this.createDefaultLayout(startNumber);
         this.state.coachName = options.coachName || 'Coche 1';
         this.state.onChange = options.onChange || null;
         this.state.autoNumber = options.autoNumber !== false;
 
-        // Calcular próximo número de asiento
-        this.recalculateNextSeatNumber();
+        // Establecer número inicial
+        if (options.startNumber !== undefined) {
+            this.state.nextSeatNumber = options.startNumber;
+            // Recalcular basándose en el layout que acabamos de crear
+            this.recalculateNextSeatNumber();
+        } else {
+            // Calcular próximo número de asiento basándose en el layout existente
+            this.recalculateNextSeatNumber();
+        }
 
         // Crear contenedor principal
         const container = document.createElement('div');
@@ -388,12 +398,12 @@ const SeatLayoutEditor = {
      * Crea un layout por defecto
      * @returns {Array} Layout vacío
      */
-    createDefaultLayout() {
+    createDefaultLayout(startNumber = 1) {
         return [
             {
                 type: 'seats',
                 positions: [
-                    [1, 2, null, 3, 4]
+                    [startNumber, startNumber + 1, null, startNumber + 2, startNumber + 3]
                 ]
             }
         ];
@@ -473,6 +483,11 @@ const SeatLayoutEditor = {
         const section = this.state.layout[sectionIndex];
         if (!section || section.type !== 'seats') return;
 
+        // Si la autonumeración está activa, recalcular el siguiente número basándose en los asientos existentes
+        if (this.state.autoNumber) {
+            this.recalculateNextSeatNumber();
+        }
+
         // Crear fila con 4 asientos por defecto
         const newRow = this.state.autoNumber
             ? [
@@ -496,7 +511,13 @@ const SeatLayoutEditor = {
         if (!section || section.type !== 'seats') return;
 
         section.positions.splice(rowIndex, 1);
-        this.refresh();
+
+        // Renumerar todos los asientos para que sean consecutivos
+        if (this.state.autoNumber) {
+            this.renumberSeats();
+        } else {
+            this.refresh();
+        }
     },
 
     /**
