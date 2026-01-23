@@ -207,21 +207,47 @@ Suite completa de testing con 6 tests:
 
 ### Cómo Probar
 
-1. **Abrir test-integration.html**
+#### Opción 1: Sin Servidor (solo configuraciones custom)
+
+1. **Abrir test-integration.html directamente en el navegador**
    ```
-   Abrir en navegador: test-integration.html
+   Doble clic en test-integration.html
    ```
 
 2. **Ejecutar tests en orden:**
-   - Test 1: Verifica carga correcta de datos
+   - Test 1: Verifica ConfigurationManager (solo custom sin servidor)
    - Test 2: Crea configuraciones de prueba
    - Test 3: Verifica badges en la página
    - Test 4: Prueba el botón de gestión
-   - Test 5: Muestra separación sistema/custom
+   - Test 5: Muestra separación sistema/custom (solo custom sin servidor)
    - Test 6: Limpia datos de prueba
 
-3. **Testing manual en la aplicación principal:**
-   - Abrir `index.html`
+**Nota:** Sin servidor HTTP, solo se pueden probar configuraciones personalizadas debido a restricciones CORS de `file://`.
+
+#### Opción 2: Con Servidor (testing completo)
+
+1. **Iniciar servidor HTTP:**
+   ```bash
+   # Opción 1: Python
+   python -m http.server 8000
+
+   # Opción 2: VS Code Live Server
+   # Click derecho en index.html → "Open with Live Server"
+   ```
+
+2. **Abrir en navegador:**
+   ```
+   http://localhost:8000/test-integration.html
+   ```
+
+3. **Ejecutar todos los tests:**
+   - Ahora incluyen configuraciones del sistema (470, 449, 463, 464, 465)
+   - Se prueban tanto configuraciones del sistema como personalizadas
+
+#### Opción 3: Testing manual en la aplicación
+
+1. **Con servidor HTTP:**
+   - Abrir `http://localhost:8000/index.html`
    - Crear un tren personalizado desde el gestor
    - Verificar que aparece en el selector con badge
    - Seleccionarlo y verificar badge en header
