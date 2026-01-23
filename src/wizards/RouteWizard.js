@@ -40,7 +40,7 @@ const RouteWizard = {
             {
                 title: 'Paradas',
                 description: 'Configura las paradas del trayecto',
-                render: (data) => this.renderStep2_Stops(data, availableStops),
+                render: (data) => this.renderStep2_Stops(data, availableStops, mode, existingRoute),
                 validate: (data) => this.validateStep2(data),
                 onNext: (data) => this.onStep2Next(data)
             },
@@ -168,13 +168,18 @@ const RouteWizard = {
     // PASO 2: CONFIGURACIÓN DE PARADAS
     // ========================================================================
 
-    renderStep2_Stops(data, availableStops) {
+    renderStep2_Stops(data, availableStops, mode, existingRoute) {
         const container = document.createElement('div');
         container.className = 'wizard-form stops-editor';
 
         // Inicializar paradas si no existen
         if (!data.stops || !Array.isArray(data.stops)) {
-            data.stops = [];
+            // Si es modo edición y existe la ruta, cargar sus paradas
+            if (mode === 'edit' && existingRoute && existingRoute.stops) {
+                data.stops = [...existingRoute.stops]; // Clonar el array
+            } else {
+                data.stops = [];
+            }
         }
 
         // Contenedor de la lista de paradas

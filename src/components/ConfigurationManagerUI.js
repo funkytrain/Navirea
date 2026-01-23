@@ -389,7 +389,12 @@ class ConfigurationManagerUI {
         // Abrir wizard usando la API correcta
         TrainModelWizard.open({
             editModel: modelData,
-            onComplete: (savedModel) => {
+            onComplete: async (savedModel) => {
+                // Recargar datos globales para que trainModels se actualice
+                if (window.loadJSONData) {
+                    await window.loadJSONData();
+                }
+
                 // Mostrar manager de nuevo
                 this.container.style.display = 'flex';
 
@@ -421,7 +426,12 @@ class ConfigurationManagerUI {
             mode: routeData ? 'edit' : 'create',
             route: routeData,
             availableStops: availableStops,
-            onComplete: (savedRoute) => {
+            onComplete: async (savedRoute) => {
+                // Recargar datos globales para que trainRoutes se actualice
+                if (window.loadJSONData) {
+                    await window.loadJSONData();
+                }
+
                 // Mostrar manager de nuevo
                 this.container.style.display = 'flex';
 

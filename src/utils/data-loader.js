@@ -39,9 +39,27 @@ async function loadAllData() {
             ? window.ConfigurationManager.getAllStops(stops)
             : stops;
 
-        const allTrainRoutes = window.ConfigurationManager
+        let allTrainRoutes = window.ConfigurationManager
             ? window.ConfigurationManager.getAllRoutes(trainRoutes)
             : trainRoutes;
+
+        // Normalizar rutas: convertir objetos { stops: [...] } a arrays directos
+        const normalizedRoutes = {};
+        for (const [trainNumber, route] of Object.entries(allTrainRoutes)) {
+            if (Array.isArray(route)) {
+                // Ya es un array (ruta del sistema)
+                normalizedRoutes[trainNumber] = route;
+            } else if (route && route.stops && Array.isArray(route.stops)) {
+                // Es un objeto de ruta personalizada con propiedad stops
+                normalizedRoutes[trainNumber] = route.stops;
+                // Guardar metadata en un objeto separado si es necesario
+                normalizedRoutes[trainNumber].custom = route.custom;
+                normalizedRoutes[trainNumber].destination = route.destination;
+            } else {
+                // Formato desconocido, mantener como está
+                normalizedRoutes[trainNumber] = route;
+            }
+        }
 
         const allTrainModels = window.ConfigurationManager
             ? window.ConfigurationManager.getAllTrainModels(trains)
@@ -50,7 +68,7 @@ async function loadAllData() {
         return {
             stops: allStops,
             trainNumbers,
-            trainRoutes: allTrainRoutes,
+            trainRoutes: normalizedRoutes,
             stationScreens,
             trainModels: allTrainModels
         };
