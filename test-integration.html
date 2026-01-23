@@ -92,6 +92,19 @@
 <body>
     <h1 style="margin-bottom: 30px;">🧪 Test de Integración - Fase 7</h1>
 
+    <div class="test-section" style="background-color: #fffbeb; border-left: 4px solid #f59e0b;">
+        <h3 style="margin-top: 0; color: #92400e;">ℹ️ Información Importante</h3>
+        <p style="margin-bottom: 0; color: #78350f;">
+            Este archivo de test puede abrirse directamente en el navegador (protocolo <code>file://</code>).
+            Los tests funcionarán correctamente para verificar las <strong>configuraciones personalizadas</strong> almacenadas en localStorage.
+            <br><br>
+            <strong>Nota:</strong> Para probar con configuraciones del sistema (trenes 470, 449, etc.),
+            debes ejecutar la aplicación desde un servidor HTTP debido a restricciones de seguridad CORS.
+            <br><br>
+            <strong>Servidor rápido:</strong> <code>python -m http.server 8000</code> o usar Live Server en VS Code.
+        </p>
+    </div>
+
     <!-- Test 1: Verificar carga de configuraciones -->
     <div class="test-section">
         <div class="test-title">1. Verificar Carga de Configuraciones</div>
@@ -178,25 +191,29 @@
     <script src="src/utils/data-loader.js"></script>
 
     <script>
-        // Test 1: Verificar carga de configuraciones
-        async function testLoadConfigurations() {
+        // Test 1: Verificar carga de configuraciones desde localStorage
+        function testLoadConfigurations() {
             const result = document.getElementById('result-1');
             try {
-                const data = await window.DataLoader.loadAllData();
+                // Cargar directamente desde ConfigurationManager (no requiere servidor)
+                const allTrains = window.ConfigurationManager.getAllTrainModels();
+                const allRoutes = window.ConfigurationManager.getAllRoutes();
 
-                const systemTrains = Object.values(data.trainModels).filter(t => !t.custom);
-                const customTrains = Object.values(data.trainModels).filter(t => t.custom);
+                const systemTrains = Object.values(allTrains).filter(t => !t.custom);
+                const customTrains = Object.values(allTrains).filter(t => t.custom);
 
-                const systemRoutes = Object.values(data.trainRoutes).filter(r => !r.custom);
-                const customRoutes = Object.values(data.trainRoutes).filter(r => r.custom);
+                const systemRoutes = Object.values(allRoutes).filter(r => !r.custom);
+                const customRoutes = Object.values(allRoutes).filter(r => r.custom);
 
                 result.innerHTML = `
                     <div class="test-result success">
-                        ✅ Datos cargados correctamente<br>
-                        <strong>Trenes del sistema:</strong> ${systemTrains.length}<br>
+                        ✅ ConfigurationManager funcionando correctamente<br>
+                        <strong>Trenes del sistema:</strong> ${systemTrains.length} (no disponibles sin servidor)<br>
                         <strong>Trenes personalizados:</strong> ${customTrains.length}<br>
-                        <strong>Rutas del sistema:</strong> ${systemRoutes.length}<br>
-                        <strong>Rutas personalizadas:</strong> ${customRoutes.length}
+                        <strong>Rutas del sistema:</strong> ${systemRoutes.length} (no disponibles sin servidor)<br>
+                        <strong>Rutas personalizadas:</strong> ${customRoutes.length}<br>
+                        <br>
+                        <em>ℹ️ Para ver trenes del sistema, ejecuta este test desde un servidor HTTP.</em>
                     </div>
                 `;
             } catch (error) {
@@ -307,20 +324,25 @@
         }
 
         // Test 5: Verificar separación
-        async function testSeparation() {
+        function testSeparation() {
             const result = document.getElementById('result-5');
             try {
-                const data = await window.DataLoader.loadAllData();
+                const allTrains = window.ConfigurationManager.getAllTrainModels();
 
-                const systemTrains = Object.entries(data.trainModels).filter(([id, t]) => !t.custom);
-                const customTrains = Object.entries(data.trainModels).filter(([id, t]) => t.custom);
+                const systemTrains = Object.entries(allTrains).filter(([id, t]) => !t.custom);
+                const customTrains = Object.entries(allTrains).filter(([id, t]) => t.custom);
 
                 let html = '<div class="test-result success">';
-                html += '<strong>Trenes del Sistema:</strong><ul>';
-                systemTrains.forEach(([id, train]) => {
-                    html += `<li>${train.name} (ID: ${id})</li>`;
-                });
-                html += '</ul>';
+
+                if (systemTrains.length > 0) {
+                    html += '<strong>Trenes del Sistema:</strong><ul>';
+                    systemTrains.forEach(([id, train]) => {
+                        html += `<li>${train.name} (ID: ${id})</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<strong>Trenes del Sistema:</strong> <em>No disponibles sin servidor HTTP</em><br>';
+                }
 
                 if (customTrains.length > 0) {
                     html += '<strong>Trenes Personalizados:</strong><ul>';
@@ -328,7 +350,10 @@
                         html += `<li>${train.name} (ID: ${id}) <span class="badge-example">CUSTOM</span></li>`;
                     });
                     html += '</ul>';
+                } else {
+                    html += '<strong>Trenes Personalizados:</strong> <em>Ninguno (crea uno en el Test 2)</em>';
                 }
+
                 html += '</div>';
 
                 result.innerHTML = html;
