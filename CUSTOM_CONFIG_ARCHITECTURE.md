@@ -323,12 +323,12 @@ src/
 - [x] Implementar importación JSON (ya existente, integrado)
 - [x] Testing de compartición
 
-### Fase 7: Integración Final
-- [ ] Modificar selectores de tren para mostrar custom
-- [ ] Modificar selectores de ruta para mostrar custom
-- [ ] Añadir indicadores visuales (badges)
-- [ ] Actualizar UI existente
-- [ ] Testing de integración completa
+### Fase 7: Integración Final ✅ COMPLETADA
+- [x] Modificar selectores de tren para mostrar custom
+- [x] Modificar selectores de ruta para mostrar custom
+- [x] Añadir indicadores visuales (badges)
+- [x] Actualizar UI existente
+- [x] Testing de integración completa
 
 ### Fase 8: Pulido y Documentación
 - [ ] Añadir templates predefinidos
@@ -533,6 +533,53 @@ function generateCustomId(prefix = 'custom') {
 
 **Estado actual:** Sistema de compartición completamente funcional. Configuraciones se pueden compartir mediante QR codes o archivos JSON. Listo para Fase 7 (Integración Final).
 
+### 2026-01-23 - Fase 7 Completada
+- ✅ **Modificado sistema de carga de datos:**
+  - Actualizada función `loadJSONData()` en `script.js` para usar `DataLoader.loadAllData()`
+  - El DataLoader fusiona automáticamente configuraciones del sistema + custom
+- ✅ **Actualizado selector de trenes:**
+  - Separación visual entre trenes del sistema y personalizados
+  - Divisor entre secciones
+  - Badge "PERSONALIZADO" en trenes custom
+  - Botón "⚙️ Gestionar Configuraciones" al final del selector
+- ✅ **Actualizado header principal:**
+  - Badge "CUSTOM" junto al nombre del tren cuando es personalizado
+  - Badge "RUTA CUSTOM" en área de "Parada actual" cuando es ruta personalizada
+- ✅ **Agregados estilos CSS:**
+  - `.selector-divider` - Divisor entre secciones
+  - `.custom-badge` - Badge verde para configuraciones personalizadas
+  - `.config-manager-btn` - Botón especial para gestión
+  - Soporte completo para modo oscuro
+- ✅ **Creada función `openConfigurationManager()`:**
+  - Cierra el selector de trenes
+  - Abre el gestor de configuraciones
+  - Integración completa con ConfigurationManagerUI
+- ✅ **Creado `test-integration.html`:**
+  - 6 tests de integración completos
+  - Verificación de carga de datos
+  - Creación de configuraciones de prueba
+  - Verificación de badges visuales
+  - Verificación de separación sistema/custom
+  - Limpieza de datos de prueba
+
+**Características implementadas:**
+- Distinción visual clara entre configuraciones del sistema y personalizadas
+- Badges identificativos en todos los selectores y header
+- Acceso rápido al gestor desde el selector de trenes
+- También accesible desde "Más opciones" → "Configuraciones Personalizadas"
+- Testing completo de integración
+- Soporte completo en modo claro y oscuro
+
+**Archivos modificados:**
+- `script.js` - Actualizada carga de datos y selector de trenes
+- `src/utils/templates.js` - Agregados badges en header
+- `styles.css` - Agregados estilos para badges y divisores
+
+**Archivos creados:**
+- `test-integration.html` - Suite de testing de integración
+
+**Estado actual:** Integración completa finalizada. Configuraciones personalizadas totalmente integradas en la UI existente. Listo para Fase 8 (Pulido y Documentación).
+
 ---
 
-_Última actualización: 2026-01-22_
+_Última actualización: 2026-01-23_

@@ -12,6 +12,7 @@ function generateHeaderTemplate(config) {
     const {
         headerCollapsed,
         trainName,
+        trainIsCustom,
         occupancyPercentage,
         occupancyClass,
         trainSelectorOptions,
@@ -26,6 +27,7 @@ function generateHeaderTemplate(config) {
         currentStopSearch,
         currentStopDropdown,
         hasTrainRoute,
+        isCustomRoute,
         coachButtons,
         collapseTitle,
         collapseIcon
@@ -45,6 +47,7 @@ function generateHeaderTemplate(config) {
 <div class="header-title-group">
     <button class="title train-selector-btn" onclick="toggleTrainSelector()">
         <span class="train-name">${trainName}</span>
+        ${trainIsCustom ? '<span class="custom-badge" style="margin-left: 0.4rem;">CUSTOM</span>' : ''}
         <span class="train-occupancy-badge ${occupancyClass}">${occupancyPercentage}%</span>
         <span class="train-selector-arrow">▼</span>
     </button>
@@ -115,7 +118,10 @@ ${trainNumber ? `
                     ${trainNumber && hasTrainRoute ? `
                         <div class="current-stop-row">
                             <div class="current-stop-selector">
-                                <label class="current-stop-label">Parada actual:</label>
+                                <label class="current-stop-label">
+                                    Parada actual:
+                                    ${isCustomRoute ? '<span class="custom-badge" style="margin-left: 0.4rem; font-size: 0.6rem;">RUTA CUSTOM</span>' : ''}
+                                </label>
                                 <input
                                     type="text"
                                     class="current-stop-input"
