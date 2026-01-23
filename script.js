@@ -2875,12 +2875,10 @@ window.isDataLoaded = isDataLoaded;
 // Inicializar
 loadData();
 
-// Mostrar prompt de número de tren si no existe
+// Asignar número de tren por defecto si no existe
 if (!state.trainNumber) {
-    // Esperar un momento para que se cargue el DOM
-    setTimeout(() => {
-        showTrainNumberPrompt();
-    }, 100);
+    state.trainNumber = '0000';
+    localStorage.setItem('trainNumber', state.trainNumber);
 }
 
 // ============================================
