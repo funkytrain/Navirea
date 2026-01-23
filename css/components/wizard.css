@@ -803,16 +803,28 @@ textarea.form-input {
 
     .wizard-step-indicator {
         min-width: 80px;
+        flex-shrink: 0;
     }
 
     .step-number {
         width: 36px;
         height: 36px;
         font-size: 16px;
+        flex-shrink: 0;
     }
 
     .step-label {
         font-size: 12px;
+        line-height: 1.3;
+        max-width: 80px;
+        word-wrap: break-word;
+        hyphens: auto;
+    }
+
+    .step-separator {
+        margin-bottom: 28px;
+        align-self: flex-start;
+        margin-top: 14px;
     }
 
     .wizard-content {
