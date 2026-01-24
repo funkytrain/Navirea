@@ -12,6 +12,7 @@ function generateHeaderTemplate(config) {
     const {
         headerCollapsed,
         trainName,
+        trainIsCustom,
         occupancyPercentage,
         occupancyClass,
         trainSelectorOptions,
@@ -26,6 +27,7 @@ function generateHeaderTemplate(config) {
         currentStopSearch,
         currentStopDropdown,
         hasTrainRoute,
+        isCustomRoute,
         coachButtons,
         collapseTitle,
         collapseIcon
@@ -45,6 +47,7 @@ function generateHeaderTemplate(config) {
 <div class="header-title-group">
     <button class="title train-selector-btn" onclick="toggleTrainSelector()">
         <span class="train-name">${trainName}</span>
+        ${trainIsCustom ? '<span class="custom-badge" style="margin-left: 0.4rem;">CUSTOM</span>' : ''}
         <span class="train-occupancy-badge ${occupancyClass}">${occupancyPercentage}%</span>
         <span class="train-selector-arrow">▼</span>
     </button>
@@ -115,7 +118,10 @@ ${trainNumber ? `
                     ${trainNumber && hasTrainRoute ? `
                         <div class="current-stop-row">
                             <div class="current-stop-selector">
-                                <label class="current-stop-label">Parada actual:</label>
+                                <label class="current-stop-label">
+                                    Parada actual:
+                                    ${isCustomRoute ? '<span class="custom-badge" style="margin-left: 0.4rem; font-size: 0.6rem;">RUTA CUSTOM</span>' : ''}
+                                </label>
                                 <input
                                     type="text"
                                     class="current-stop-input"
@@ -280,6 +286,13 @@ function generateMoreOptionsMenu() {
         </button>
     </div>
 
+    <button class="more-option" onclick="openConfigurationManager(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Configuraciones Personalizadas
+    </button>
     <button class="more-option" onclick="openBackupsPanel(); toggleMoreOptions();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12h18M3 6h18M3 18h18"/>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple - Wizard</title>
+
+    <!-- Solo estilos del wizard -->
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+    <link rel="stylesheet" href="css/components/wizard.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 40px;
+            background: #f3f4f6;
+        }
+
+        .test-btn {
+            padding: 16px 32px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        h1 {
+            margin-bottom: 24px;
+            color: #1f2937;
+        }
+
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .info h2 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .info pre {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Simple del Wizard</h1>
+    <button class="test-btn" onclick="testWizard()">
+        ✨ Abrir Wizard de Prueba
+    </button>
+
+    <div class="info">
+        <h2>Estado:</h2>
+        <pre id="status">Esperando...</pre>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/services/StorageService.js"></script>
+    <script src="src/utils/data-loader.js"></script>
+
+    <!-- Editor components -->
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <!-- Wizard components -->
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/TrainModelWizard.js"></script>
+
+    <script>
+        function log(msg) {
+            const status = document.getElementById('status');
+            const timestamp = new Date().toLocaleTimeString();
+            status.textContent = `[${timestamp}] ${msg}`;
+            console.log(msg);
+        }
+
+        function testWizard() {
+            log('Abriendo wizard...');
+
+            try {
+                window.TrainModelWizard.open({
+                    onComplete: (model) => {
+                        log('✅ Modelo creado: ' + model.name);
+                        console.log('Modelo completo:', model);
+                    },
+                    onCancel: () => {
+                        log('❌ Cancelado');
+                    }
+                });
+
+                log('Wizard abierto correctamente');
+            } catch (error) {
+                log('❌ Error: ' + error.message);
+                console.error('Error completo:', error);
+            }
+        }
+
+        // Verificar que todo esté cargado
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Página cargada. Verificando componentes...');
+
+            const checks = {
+                'WizardCore': !!window.WizardCore,
+                'TrainModelWizard': !!window.TrainModelWizard,
+                'SeatLayoutEditor': !!window.SeatLayoutEditor,
+                'ConfigurationManager': !!window.ConfigurationManager
+            };
+
+            console.log('Componentes cargados:', checks);
+
+            const allLoaded = Object.values(checks).every(v => v);
+            if (allLoaded) {
+                log('✅ Todos los componentes cargados correctamente');
+            } else {
+                log('⚠️ Faltan componentes: ' + Object.keys(checks).filter(k => !checks[k]).join(', '));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -166,9 +166,10 @@ function closeIncidentNote(event) {
  * Formatea el label de una incidencia para mostrar
  * @param {string} label - Label original
  * @param {string} key - Clave de la incidencia
+ * @param {Object} incident - Datos de la incidencia
  * @returns {string} Label formateado
  */
-function formatIncidentLabel(label, key) {
+function formatIncidentLabel(label, key, incident) {
     // Mejorar formato del label
     if (label.includes('D') && (label.includes('-L') || label.includes('-R'))) {
         // Es una puerta (ej: "D1-L" o "D2-R")
@@ -180,8 +181,12 @@ function formatIncidentLabel(label, key) {
         }
     } else if (label === 'PMR-WC') {
         return 'Baño PMR';
+    } else if (label.startsWith('WC-BLOCK-')) {
+        // Es un bloque de WC (incidencia agrupada)
+        const wcCount = incident?.wcIds ? incident.wcIds.length : 0;
+        return `Bloque de WC (${wcCount} unidades)`;
     } else if (label.startsWith('WC-')) {
-        // Es un grupo de WC (ej: "WC-A")
+        // Es un grupo de WC con ID personalizado (ej: "WC-A")
         return `Grupo de WC ${label.replace('WC-', '')}`;
     } else if (label.startsWith('WC')) {
         // WC individual
@@ -228,7 +233,7 @@ function openIncidentsPanel() {
             const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
             let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
 
-            label = formatIncidentLabel(label, key);
+            label = formatIncidentLabel(label, key, data);
 
             const typeLabel = data.type === 'door' ? '🚪' : '🚽';
             incidentsHTML += `
@@ -341,7 +346,7 @@ function removeIncident(key) {
             const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
             let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
 
-            label = formatIncidentLabel(label, k);
+            label = formatIncidentLabel(label, k, data);
 
             const typeLabel = data.type === 'door' ? '🚪' : '🚽';
             incidentsHTML += `
@@ -441,6 +446,122 @@ function handleDoorMove(event) {
 }
 
 /**
+ * Encuentra todos los WC contiguos en un bloque
+ * @param {string} coachId - ID del coche
+ * @param {string} wcId - ID del WC clickeado
+ * @returns {Array} Array de IDs de WC en el bloque contiguo
+ */
+function getContiguousWCBlock(coachId, wcId) {
+    // Obtener el layout del coche actual
+    const trainModel = window.trainModels[window.state.selectedTrain];
+    if (!trainModel || !trainModel.coaches) return [wcId];
+
+    const coach = trainModel.coaches.find(c => c.id === coachId);
+    if (!coach || !coach.layout) return [wcId];
+
+    // Si el wcId tiene formato con guión (WC-A, WC-B), buscar TODAS las posiciones con ese mismo valor
+    if (wcId.includes('-')) {
+        const allMatchingWCs = [];
+        coach.layout.forEach((section) => {
+            if (section.type === 'seats' && section.positions) {
+                section.positions.forEach((row) => {
+                    row.forEach((seat) => {
+                        if (String(seat) === wcId) {
+                            allMatchingWCs.push(wcId);
+                        }
+                    });
+                });
+            }
+        });
+
+        // Si encontramos múltiples WCs con el mismo ID, retornar array con ese ID repetido
+        // Esto hará que todos se marquen juntos
+        if (allMatchingWCs.length > 0) {
+            console.log(`[getContiguousWCBlock] ${wcId} encontrado ${allMatchingWCs.length} veces - es un grupo predefinido`);
+            return allMatchingWCs;
+        }
+    }
+
+    // Para WCs sin ID con guión, buscar bloques contiguos
+    const wcPositions = [];
+    let wcCounter = 0;
+
+    coach.layout.forEach((section, sectionIndex) => {
+        if (section.type === 'seats' && section.positions) {
+            section.positions.forEach((row, rowIndex) => {
+                row.forEach((seat, colIndex) => {
+                    if (String(seat).includes('WC')) {
+                        wcCounter++;
+                        const generatedId = String(seat).includes("-") ? String(seat) : `WC${wcCounter}`;
+                        wcPositions.push({
+                            sectionIndex,
+                            rowIndex,
+                            colIndex,
+                            id: seat,
+                            generatedId: generatedId
+                        });
+                    }
+                });
+            });
+        }
+    });
+
+    console.log('[getContiguousWCBlock] Todas las posiciones de WC:', wcPositions);
+
+    // Encontrar el WC clickeado usando el wcId generado
+    const clickedWC = wcPositions.find(wc => wc.generatedId === wcId);
+
+    console.log('[getContiguousWCBlock] WC clickeado encontrado:', clickedWC);
+
+    if (!clickedWC) {
+        console.log('[getContiguousWCBlock] ❌ No se encontró el WC clickeado');
+        return [wcId];
+    }
+
+    // Encontrar WCs contiguos (misma fila o filas adyacentes, columnas adyacentes)
+    const blockWCs = [clickedWC];
+    const checked = new Set([`${clickedWC.sectionIndex}-${clickedWC.rowIndex}-${clickedWC.colIndex}`]);
+
+    // Función recursiva para encontrar WCs adyacentes
+    const findAdjacent = (wc) => {
+        wcPositions.forEach(otherWC => {
+            const key = `${otherWC.sectionIndex}-${otherWC.rowIndex}-${otherWC.colIndex}`;
+            if (checked.has(key)) return;
+
+            // Verificar si es adyacente (misma sección, fila adyacente o misma fila con columna adyacente)
+            const sameSection = wc.sectionIndex === otherWC.sectionIndex;
+            const rowDiff = Math.abs(wc.rowIndex - otherWC.rowIndex);
+            const colDiff = Math.abs(wc.colIndex - otherWC.colIndex);
+
+            // Adyacente si está en la misma sección y:
+            // - Misma fila, columna adyacente
+            // - Fila adyacente, misma columna o columna adyacente
+            const isAdjacent = sameSection && (
+                (rowDiff === 0 && colDiff <= 1) ||
+                (rowDiff === 1 && colDiff <= 1)
+            );
+
+            if (isAdjacent) {
+                checked.add(key);
+                blockWCs.push(otherWC);
+                findAdjacent(otherWC); // Recursivo para encontrar más
+            }
+        });
+    };
+
+    findAdjacent(clickedWC);
+
+    // Extraer los IDs generados de los WCs en el bloque
+    const wcIds = blockWCs.map(wc => wc.generatedId);
+
+    console.log('[getContiguousWCBlock] WC clickeado:', wcId);
+    console.log('[getContiguousWCBlock] Bloque contiguo encontrado:', wcIds);
+    console.log('[getContiguousWCBlock] Posiciones del bloque:', blockWCs.map(wc => `[${wc.rowIndex},${wc.colIndex}]`));
+
+    return wcIds.length > 0 ? wcIds : [wcId];
+}
+
+/**
  * Maneja el fin del press en puertas/WC
  * @param {Event} event - Evento del release
  */
@@ -462,10 +583,53 @@ function handleDoorRelease(event) {
         if (elementId && tapDuration < DOOR_TAP_THRESHOLD && !hasMoved) {
             event.preventDefault();
 
-            toggleIncident(window.state.selectedCoach, elementId, elementType);
+            // Si es un WC, marcar todo el bloque contiguo
+            if (elementType === 'wc') {
+                const wcBlock = getContiguousWCBlock(window.state.selectedCoach, elementId);
+
+                console.log('[handleDoorRelease] Bloque WC detectado:', wcBlock);
+
+                // Buscar si existe una incidencia de grupo que incluya alguno de estos WCs
+                let existingGroupKey = null;
+                Object.keys(window.state.incidents).forEach(key => {
+                    const incident = window.state.incidents[key];
+                    if (incident.type === 'wc' && incident.wcIds) {
+                        // Es una incidencia de grupo, verificar si contiene algún WC de nuestro bloque
+                        if (incident.wcIds.some(id => wcBlock.includes(id))) {
+                            existingGroupKey = key;
+                        }
+                    }
+                });
+
+                console.log('[handleDoorRelease] Incidencia de grupo existente?', existingGroupKey);
+
+                if (existingGroupKey) {
+                    // Ya existe una incidencia para este bloque, eliminarla
+                    delete window.state.incidents[existingGroupKey];
+                } else {
+                    // No existe, crear una nueva incidencia de grupo
+                    // Usar el primer WC del bloque como ID representativo
+                    const groupId = wcBlock.length > 1 ? `WC-BLOCK-${wcBlock[0]}` : wcBlock[0];
+
+                    console.log('[handleDoorRelease] Creando incidencia de grupo:', groupId);
+
+                    // Crear UNA SOLA incidencia para todo el bloque
+                    const groupKey = getIncidentKey(window.state.selectedCoach, groupId);
+                    window.state.incidents[groupKey] = {
+                        type: 'wc',
+                        broken: true,
+                        note: "",
+                        wcIds: wcBlock // Guardar todos los IDs del bloque
+                    };
+                }
+            } else {
+                // Para puertas, comportamiento normal
+                toggleIncident(window.state.selectedCoach, elementId, elementType);
+            }
 
             // Mantener scroll
             const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+            window.saveData();
             window.isLongPressActive = false;
             window.render();
             requestAnimationFrame(() => {

@@ -17,29 +17,14 @@ function isDataLoaded() {
 // Función para cargar datos JSON
 async function loadJSONData() {
     try {
-        // Cargar datos de paradas
-        const stopsResponse = await fetch('data/stops.json');
-        stops = await stopsResponse.json();
+        // Usar DataLoader que fusiona configuraciones del sistema + custom
+        const data = await window.DataLoader.loadAllData();
 
-        // Cargar números de tren
-        const trainNumbersResponse = await fetch('data/train-numbers.json');
-        trainNumbers = await trainNumbersResponse.json();
-
-        // Cargar rutas de tren
-        const trainRoutesResponse = await fetch('data/train-routes.json');
-        trainRoutes = await trainRoutesResponse.json();
-
-        // Cargar pantallas de estación
-        const stationScreensResponse = await fetch('data/station-screens.json');
-        stationScreens = await stationScreensResponse.json();
-
-        // Cargar modelos de trenes
-        const trainIds = ['463', '464', '465', '449', '470'];
-        for (const id of trainIds) {
-            const response = await fetch(`data/trains/train-${id}.json`);
-            const trainData = await response.json();
-            trainModels[id] = trainData;
-        }
+        trainModels = data.trainModels;
+        stops = data.stops;
+        trainNumbers = data.trainNumbers;
+        trainRoutes = data.trainRoutes;
+        stationScreens = data.stationScreens;
 
         console.log('✅ Datos cargados correctamente desde JSON');
         console.log('📊 Trenes disponibles:', Object.keys(trainModels));
@@ -267,7 +252,13 @@ function updateSeat(coachId, seatNum, stop) {
 }
 
 function updateSeatFromList(abbr) {
-    const stop = stops.find((s) => s.abbr === abbr);
+    // Buscar en las paradas filtradas (incluye tanto sistema como custom)
+    const filteredStops = getFilteredStops();
+    const stop = filteredStops.find((s) => s.abbr === abbr);
+
+    console.log('[updateSeatFromList] abbr:', abbr);
+    console.log('[updateSeatFromList] stop encontrada:', stop);
+
     if (stop && state.selectedSeat) {
         updateSeat(state.selectedSeat.coach, state.selectedSeat.num, stop);
 
@@ -278,6 +269,8 @@ function updateSeatFromList(abbr) {
 
         // Quitar estado del seat seleccionado
         state.selectedSeat = null;
+    } else {
+        console.log('[updateSeatFromList] ❌ No se encontró la parada o no hay asiento seleccionado');
     }
 }
 
@@ -538,6 +531,21 @@ function toggleTrainSelector() {
     }
 }
 
+function openConfigurationManager() {
+    // Cerrar el selector de trenes
+    const selector = document.getElementById("train-selector");
+    if (selector) {
+        selector.classList.add("hidden");
+    }
+
+    // Abrir el gestor de configuraciones
+    if (window.ConfigurationManagerUI) {
+        window.ConfigurationManagerUI.open();
+    } else {
+        alert('El gestor de configuraciones no está disponible');
+    }
+}
+
 function toggleDarkMode() {
     state.darkMode = !state.darkMode;
     saveDarkMode();
@@ -727,7 +735,35 @@ function setCurrentStop(stopName) {
 
 function getCurrentRoute() {
     if (!state.trainNumber) return [];
-    return trainRoutes[state.trainNumber] || [];
+    const route = trainRoutes[state.trainNumber];
+
+    // Debug: ver qué tipo de ruta tenemos
+    console.log('[getCurrentRoute] trainNumber:', state.trainNumber);
+    console.log('[getCurrentRoute] route:', route);
+    console.log('[getCurrentRoute] typeof route:', typeof route);
+    console.log('[getCurrentRoute] isArray:', Array.isArray(route));
+
+    // Si no existe la ruta, retornar array vacío
+    if (!route) {
+        console.log('[getCurrentRoute] ❌ No se encontró ruta');
+        return [];
+    }
+
+    // Si ya es un array, retornarlo directamente
+    if (Array.isArray(route)) {
+        console.log('[getCurrentRoute] ✅ Ruta es array, length:', route.length);
+        return route;
+    }
+
+    // Si es un objeto con propiedad stops, retornar stops
+    if (route.stops && Array.isArray(route.stops)) {
+        console.log('[getCurrentRoute] ✅ Ruta es objeto con stops, length:', route.stops.length);
+        return route.stops;
+    }
+
+    // Fallback: array vacío
+    console.log('[getCurrentRoute] ❌ Formato desconocido');
+    return [];
 }
 
 function filterCurrentStops() {
@@ -906,6 +942,16 @@ async function openReadmeModal() {
 function openManualTecnico() {
     document.body.insertAdjacentHTML('beforeend', window.Templates.generateManualTecnicoModal());
     lockBodyScroll();
+}
+
+// Abrir Configuration Manager
+function openConfigurationManager() {
+    const managerUI = new ConfigurationManagerUI();
+    managerUI.onClose = () => {
+        // Refrescar la interfaz para mostrar nuevas configuraciones
+        render();
+    };
+    managerUI.render(document.body);
 }
 
 // Cerrar Manual Técnico
@@ -1173,8 +1219,37 @@ function getFilteredStops() {
     // Si hay número de tren, filtrar solo las paradas de esa ruta
     let availableStops = stops;
     if (state.trainNumber && trainRoutes[state.trainNumber]) {
-        const routeStops = trainRoutes[state.trainNumber];
-        availableStops = stops.filter(stop => routeStops.includes(stop.full));
+        const route = trainRoutes[state.trainNumber];
+        const isCustomRoute = route && (route.custom === true || (Array.isArray(route) && route.custom === true));
+        const routeStops = getCurrentRoute();
+
+        console.log('[getFilteredStops] trainNumber:', state.trainNumber);
+        console.log('[getFilteredStops] isCustomRoute:', isCustomRoute);
+        console.log('[getFilteredStops] routeStops:', routeStops);
+
+        if (isCustomRoute) {
+            // Para rutas personalizadas: crear objetos de parada dinámicamente
+            // desde los nombres de las paradas en la ruta custom
+            console.log('[getFilteredStops] 🟢 Ruta CUSTOM detectada - creando paradas dinámicamente');
+
+            availableStops = routeStops.map(stopName => {
+                // Generar abreviatura: primeras 3 letras en mayúsculas
+                const abbr = stopName.substring(0, 3).toUpperCase();
+                return {
+                    full: stopName,
+                    abbr: abbr
+                };
+            });
+
+            console.log('[getFilteredStops] availableStops creadas:', availableStops);
+        } else {
+            // Para rutas del sistema: filtrar contra stops.json
+            console.log('[getFilteredStops] 🔵 Ruta del SISTEMA - filtrando contra stops.json');
+
+            availableStops = stops.filter(stop => routeStops.includes(stop.full));
+
+            console.log('[getFilteredStops] availableStops filtradas:', availableStops.length);
+        }
     }
 
     const filtered = availableStops.filter(
@@ -1183,12 +1258,13 @@ function getFilteredStops() {
             stop.abbr.toLowerCase().includes(query)
     );
 
-// Ordenar SIEMPRE siguiendo el orden de trainRoutes
-    const route = trainRoutes[state.trainNumber] || [];
+    // Ordenar SIEMPRE siguiendo el orden de trainRoutes
+    const route = getCurrentRoute();
     filtered.sort((a, b) => {
         return route.indexOf(a.full) - route.indexOf(b.full);
     });
 
+    console.log('[getFilteredStops] filtered:', filtered.length);
     return filtered;
 
 }
@@ -1208,17 +1284,49 @@ function renderHeader() {
     if (occupancyPercentage > 80) occupancyClass = 'occ-high';
     else if (occupancyPercentage > 50) occupancyClass = 'occ-mid';
 
-    // Generar opciones del selector de trenes
-    const trainSelectorOptions = Object.entries(trainModels)
-        .map(([id, train]) => `
-            <button
-                class="train-option ${state.selectedTrain === id ? "active" : ""}"
-                onclick="selectTrain('${id}'); toggleTrainSelector();"
-            >
-                ${train.name}
-            </button>
-        `)
-        .join("");
+    // Generar opciones del selector de trenes (separar sistema y custom)
+    const systemTrains = Object.entries(trainModels).filter(([id, train]) => !train.custom);
+    const customTrains = Object.entries(trainModels).filter(([id, train]) => train.custom);
+
+    let trainSelectorOptions = '';
+
+    // Primero mostrar trenes del sistema
+    if (systemTrains.length > 0) {
+        trainSelectorOptions += systemTrains
+            .map(([id, train]) => `
+                <button
+                    class="train-option ${state.selectedTrain === id ? "active" : ""}"
+                    onclick="selectTrain('${id}'); toggleTrainSelector();"
+                >
+                    ${train.name}
+                </button>
+            `)
+            .join("");
+    }
+
+    // Luego mostrar trenes personalizados con badge
+    if (customTrains.length > 0) {
+        trainSelectorOptions += '<div class="selector-divider"></div>';
+        trainSelectorOptions += customTrains
+            .map(([id, train]) => `
+                <button
+                    class="train-option custom ${state.selectedTrain === id ? "active" : ""}"
+                    onclick="selectTrain('${id}'); toggleTrainSelector();"
+                >
+                    ${train.name}
+                    <span class="custom-badge">PERSONALIZADO</span>
+                </button>
+            `)
+            .join("");
+    }
+
+    // Agregar botón de gestión de configuraciones
+    trainSelectorOptions += `
+        <div class="selector-divider"></div>
+        <button class="train-option config-manager-btn" onclick="openConfigurationManager()">
+            ⚙️ Gestionar Configuraciones
+        </button>
+    `;
 
     // Generar dropdown de parada actual
     const currentStopDropdown = state.currentStopSearch && filterCurrentStops().length > 0 ? `
@@ -1262,10 +1370,16 @@ function renderHeader() {
         })
         .join("");
 
+    // Verificar si la ruta actual es personalizada
+    const currentRoute = trainRoutes[state.trainNumber];
+    // La ruta podría ser un array con propiedad custom, o un objeto
+    const isCustomRoute = currentRoute && (currentRoute.custom === true || (Array.isArray(currentRoute) && currentRoute.custom === true));
+
     // Usar el generador de templates
     return window.Templates.generateHeaderTemplate({
         headerCollapsed: state.headerCollapsed,
         trainName: currentTrain.name,
+        trainIsCustom: currentTrain.custom,
         occupancyPercentage,
         occupancyClass,
         trainSelectorOptions,
@@ -1280,6 +1394,7 @@ function renderHeader() {
         currentStopSearch: state.currentStopSearch,
         currentStopDropdown,
         hasTrainRoute: trainRoutes[state.trainNumber],
+        isCustomRoute: isCustomRoute,
         coachButtons,
         collapseTitle: state.headerCollapsed ? 'Expandir' : 'Colapsar',
         collapseIcon: state.headerCollapsed ?
@@ -1316,8 +1431,8 @@ function renderModal() {
     const currentStop = state.seatData[key]?.stop;
     const filteredStops = getFilteredStops();
 
-    // Ruta completa y parada actual del tren
-    const route = trainRoutes[state.trainNumber] || [];
+    // Ruta completa y parada actual del tren (usar getCurrentRoute para manejar rutas custom)
+    const route = getCurrentRoute();
     const currentRouteStop = state.currentStop || null;
     const currentRouteIndex = currentRouteStop ? route.indexOf(currentRouteStop) : -1;
 
@@ -1848,19 +1963,40 @@ function handleSeatPress(coach, num, event) {
                 }
 
                 // Obtener parada final del tren
-                const route = state.trainNumber && trainRoutes[state.trainNumber];
+                const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+                const isCustomRoute = routeData && (routeData.custom === true || (Array.isArray(routeData) && routeData.custom === true));
+                const route = getCurrentRoute();
+
+                console.log('[handleSeatPress - Long press] routeData:', routeData);
+                console.log('[handleSeatPress - Long press] isCustomRoute:', isCustomRoute);
+                console.log('[handleSeatPress - Long press] route:', route);
 
                 if (route && route.length > 0) {
                     let finalStopName = route[route.length - 1];
 
-                    // Ajustes de parada efectiva
-                    if (finalStopName === 'Miranda') {
-                        finalStopName = 'Vitoria Gasteiz';
-                    } else if (finalStopName === 'Logroño') {
-                        finalStopName = 'Castejón';
+                    console.log('[handleSeatPress - Long press] finalStopName:', finalStopName);
+
+                    // Ajustes de parada efectiva (solo para rutas del sistema)
+                    if (!isCustomRoute) {
+                        if (finalStopName === 'Miranda') {
+                            finalStopName = 'Vitoria Gasteiz';
+                        } else if (finalStopName === 'Logroño') {
+                            finalStopName = 'Castejón';
+                        }
                     }
 
-                    const stopObj = stops.find(s => s.full === finalStopName);
+                    // Obtener objeto de parada
+                    let stopObj;
+                    if (isCustomRoute) {
+                        // Para rutas custom: crear objeto dinámicamente
+                        const abbr = finalStopName.substring(0, 3).toUpperCase();
+                        stopObj = { full: finalStopName, abbr: abbr };
+                        console.log('[handleSeatPress - Long press] ✅ Parada custom creada:', stopObj);
+                    } else {
+                        // Para rutas del sistema: buscar en stops.json
+                        stopObj = stops.find(s => s.full === finalStopName);
+                        console.log('[handleSeatPress - Long press] ✅ Parada del sistema encontrada:', stopObj);
+                    }
 
                     if (stopObj) {
                         // Capturar scroll ANTES de cualquier operación

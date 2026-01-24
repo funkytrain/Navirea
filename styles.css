@@ -271,6 +271,37 @@
     color: white;
 }
 
+/* Divisor entre secciones del selector */
+.selector-divider {
+    height: 1px;
+    background-color: var(--color-gray-300);
+    margin: 0.5rem 0;
+}
+
+/* Badge para configuraciones personalizadas */
+.custom-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    background-color: #10b981;
+    color: white;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Botón de gestión de configuraciones */
+.train-option.config-manager-btn {
+    background-color: #f3f4f6;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.train-option.config-manager-btn:hover {
+    background-color: #e5e7eb;
+}
+
 .current-stop-dropdown {
     position: absolute;
     top: 100%;
@@ -327,6 +358,23 @@ body.dark-mode .train-option:hover {
 
 body.dark-mode .train-option.active {
     background-color: var(--color-primary-dark);
+}
+
+body.dark-mode .selector-divider {
+    background-color: var(--color-dark-surface);
+}
+
+body.dark-mode .custom-badge {
+    background-color: #059669;
+}
+
+body.dark-mode .train-option.config-manager-btn {
+    background-color: var(--color-dark-surface);
+    color: var(--color-primary-light);
+}
+
+body.dark-mode .train-option.config-manager-btn:hover {
+    background-color: #374151;
 }
 
 body.dark-mode .current-stop-dropdown {
