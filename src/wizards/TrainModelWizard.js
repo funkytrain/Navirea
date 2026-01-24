@@ -131,12 +131,71 @@ const TrainModelWizard = {
             console.log('[TrainModelWizard] Datos prellenados desde editModel');
         }
 
+        // Templates - Solo mostrar si NO estamos editando
+        if (!editModel && window.TrainTemplates) {
+            const templatesGroup = document.createElement('div');
+            templatesGroup.className = 'form-group';
+            templatesGroup.innerHTML = `
+                <label class="form-label">
+                    <span class="tooltip-wrapper">
+                        Comenzar desde una plantilla
+                        <span class="tooltip-icon" title="Selecciona una plantilla predefinida para comenzar más rápido o crea un modelo desde cero">?</span>
+                    </span>
+                </label>
+                <div id="template-selector" class="template-grid">
+                </div>
+                <small class="form-help">Selecciona una plantilla o comienza desde cero</small>
+            `;
+            container.appendChild(templatesGroup);
+
+            const templateGrid = templatesGroup.querySelector('#template-selector');
+            const templates = window.TrainTemplates.getAll();
+
+            templates.forEach(template => {
+                const templateCard = document.createElement('div');
+                templateCard.className = 'template-card';
+                templateCard.dataset.templateId = template.id;
+                templateCard.innerHTML = `
+                    <div class="template-icon">${template.icon}</div>
+                    <div class="template-name">${template.name}</div>
+                    <div class="template-description">${template.description}</div>
+                `;
+
+                // Marcar como seleccionado si es el actual
+                if (data.selectedTemplate === template.id) {
+                    templateCard.classList.add('selected');
+                }
+
+                templateCard.addEventListener('click', () => {
+                    // Deseleccionar todos
+                    templateGrid.querySelectorAll('.template-card').forEach(card => {
+                        card.classList.remove('selected');
+                    });
+                    // Seleccionar este
+                    templateCard.classList.add('selected');
+                    data.selectedTemplate = template.id;
+
+                    // Autocompletar nombre si está vacío
+                    const nameInput = container.querySelector('#model-name');
+                    if (!nameInput.value.trim()) {
+                        nameInput.value = template.name;
+                        data.modelName = template.name;
+                    }
+                });
+
+                templateGrid.appendChild(templateCard);
+            });
+        }
+
         // Campo: Nombre del Modelo
         const nameGroup = document.createElement('div');
         nameGroup.className = 'form-group';
         nameGroup.innerHTML = `
             <label for="model-name" class="form-label">
-                Nombre del Modelo <span class="required">*</span>
+                <span class="tooltip-wrapper">
+                    Nombre del Modelo <span class="required">*</span>
+                    <span class="tooltip-icon" title="Un nombre descriptivo que te ayude a identificar este modelo de tren">?</span>
+                </span>
             </label>
             <input
                 type="text"
@@ -154,7 +213,10 @@ const TrainModelWizard = {
         descGroup.className = 'form-group';
         descGroup.innerHTML = `
             <label for="model-description" class="form-label">
-                Descripción (opcional)
+                <span class="tooltip-wrapper">
+                    Descripción (opcional)
+                    <span class="tooltip-icon" title="Información adicional sobre las características de este modelo">?</span>
+                </span>
             </label>
             <textarea
                 id="model-description"
@@ -196,13 +258,23 @@ const TrainModelWizard = {
     /**
      * Guarda datos del paso 1
      */
-    saveStep1(data) {
+    saveStep1(data, editModel) {
         // Generar ID si no existe (nuevo modelo)
         if (!data.modelId) {
             data.modelId = window.IdGenerator.generateCustomId('custom');
         }
         data.custom = true;
         data.createdAt = data.createdAt || new Date().toISOString();
+
+        // Aplicar template si fue seleccionado y no estamos editando
+        if (!editModel && data.selectedTemplate && window.TrainTemplates && !data.coaches) {
+            const template = window.TrainTemplates.getTemplate(data.selectedTemplate);
+            if (template && template.coaches) {
+                // Clonar coaches del template
+                data.coaches = JSON.parse(JSON.stringify(template.coaches));
+                console.log('[TrainModelWizard] Template aplicado:', data.selectedTemplate);
+            }
+        }
     },
 
     // ========================================================================
@@ -234,7 +306,10 @@ const TrainModelWizard = {
         countGroup.className = 'form-group';
         countGroup.innerHTML = `
             <label for="coach-count" class="form-label">
-                Número de Coches <span class="required">*</span>
+                <span class="tooltip-wrapper">
+                    Número de Coches <span class="required">*</span>
+                    <span class="tooltip-icon" title="Define cuántos coches tendrá tu tren. Puedes aumentar o reducir este número más tarde, pero se perderán los layouts al eliminar coches">?</span>
+                </span>
             </label>
             <input
                 type="number"
@@ -244,7 +319,7 @@ const TrainModelWizard = {
                 max="20"
                 value="${data.coaches.length}"
             />
-            <small class="form-help">Cantidad de coches que tendrá el tren</small>
+            <small class="form-help">Cantidad de coches que tendrá el tren (1-20)</small>
         `;
         container.appendChild(countGroup);
 
@@ -252,7 +327,12 @@ const TrainModelWizard = {
         const coachesListContainer = document.createElement('div');
         coachesListContainer.className = 'form-group';
         coachesListContainer.innerHTML = `
-            <label class="form-label">Nombres de los Coches</label>
+            <label class="form-label">
+                <span class="tooltip-wrapper">
+                    Nombres de los Coches
+                    <span class="tooltip-icon" title="Asigna un nombre identificativo a cada coche. Estos nombres te ayudarán a reconocerlos al diseñar los layouts">?</span>
+                </span>
+            </label>
         `;
 
         const coachesList = document.createElement('div');

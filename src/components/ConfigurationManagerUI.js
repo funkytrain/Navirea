@@ -663,6 +663,20 @@ class ConfigurationManagerUI {
             this.onClose();
         }
     }
+
+    /**
+     * Método estático para abrir el gestor de configuraciones
+     */
+    static open() {
+        // Si ya hay uno abierto, no abrir otro
+        if (window.currentConfigManagerUI) {
+            return;
+        }
+
+        const managerUI = new ConfigurationManagerUI();
+        managerUI.render(document.body);
+        window.currentConfigManagerUI = managerUI;
+    }
 }
 
 // Hacer disponible globalmente
