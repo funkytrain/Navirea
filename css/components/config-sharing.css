@@ -1,0 +1,137 @@
+/**
+ * Estilos para Sistema de Compartición de Configuraciones
+ * Complementa config-manager.css con estilos específicos para QR
+ */
+
+/* ============================================
+   MODAL DE COMPARTICIÓN
+   ============================================ */
+
+/* Z-index más alto que config-manager (10000) para que aparezca encima */
+.modal-overlay:has(.config-sharing-modal),
+.modal-overlay:has(.config-scan-modal),
+.config-processing-overlay {
+    z-index: 10001 !important;
+}
+
+.config-sharing-modal {
+    min-width: 400px;
+}
+
+.config-sharing-modal .qr-content {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ============================================
+   MODAL DE ESCANEO
+   ============================================ */
+
+.config-scan-modal {
+    max-width: 600px;
+}
+
+.config-scan-modal #config-qr-reader {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+}
+
+.config-scan-modal #config-qr-reader video {
+    border-radius: 8px;
+}
+
+/* ============================================
+   SPINNER DE LOADING
+   ============================================ */
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   QR CODE CONTAINER
+   ============================================ */
+
+#config-qrcode-container {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#config-qrcode-container img {
+    display: block;
+    border-radius: 4px;
+}
+
+/* ============================================
+   BOTONES DEL FOOTER
+   ============================================ */
+
+.config-manager-footer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.config-manager-footer .config-btn {
+    width: 100%;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+    .config-sharing-modal {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .config-scan-modal {
+        max-width: 100%;
+    }
+
+    .config-manager-footer {
+        grid-template-columns: 1fr;
+    }
+
+    #config-qrcode-container {
+        padding: 0.5rem;
+    }
+
+    .spinner {
+        width: 36px;
+        height: 36px;
+        border-width: 3px;
+    }
+}
+
+/* ============================================
+   DARK MODE (opcional para futuro)
+   ============================================ */
+
+body.dark-mode .config-sharing-modal,
+body.dark-mode .config-scan-modal {
+    background: #1f2937;
+    color: #f9fafb;
+}
+
+body.dark-mode #config-qrcode-container {
+    background: #111827;
+}

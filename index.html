@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="styles.css">
 
+    <!-- Component styles -->
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+    <link rel="stylesheet" href="css/components/wizard.css">
+    <link rel="stylesheet" href="css/components/config-manager.css">
+    <link rel="stylesheet" href="css/components/config-sharing.css">
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4f46e5">
@@ -48,10 +54,17 @@
     <script src="js/splash.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
     <!-- Load configuration and data utilities -->
     <script type="module" src="src/config/constants.js"></script>
     <script src="src/config/ui-constants.js"></script>
+
+    <!-- Configuration management (load before data-loader) -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+
     <script src="src/utils/data-loader.js"></script>
     <script src="src/utils/dom.js"></script>
     <script src="src/utils/modal-system.js"></script>
@@ -63,11 +76,29 @@
     <!-- Feature modules -->
     <script type="module" src="src/features/station-screens.js"></script>
     <script type="module" src="src/features/qr-sharing.js"></script>
+    <script type="module" src="src/features/config-sharing.js"></script>
     <script type="module" src="src/features/incidents.js"></script>
     <script type="module" src="src/features/filters.js"></script>
 
     <!-- Renderer modules -->
     <script src="src/renderers/seats-renderer.js"></script>
+
+    <!-- Editor components -->
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <!-- Templates -->
+    <script src="src/utils/train-templates.js"></script>
+
+    <!-- Wizard components -->
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/TrainModelWizard.js"></script>
+    <script src="src/wizards/RouteWizard.js"></script>
+
+    <!-- Configuration Manager UI -->
+    <script src="src/components/ConfigurationManagerUI.js"></script>
 
     <!-- Main application script -->
     <script src="script.js"></script>

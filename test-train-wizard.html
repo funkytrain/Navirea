@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Wizard de Modelo de Tren</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+    <link rel="stylesheet" href="css/components/wizard.css">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+
+        .test-header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .test-header h1 {
+            margin: 0 0 8px 0;
+            color: #1f2937;
+        }
+
+        .test-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .test-controls {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .test-controls h2 {
+            margin: 0 0 16px 0;
+            color: #1f2937;
+            font-size: 18px;
+        }
+
+        .test-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .test-btn:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .test-btn.secondary {
+            background: white;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .test-btn.secondary:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            box-shadow: none;
+        }
+
+        .test-results {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .test-results h2 {
+            margin: 0 0 16px 0;
+            color: #1f2937;
+            font-size: 18px;
+        }
+
+        .test-output {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .test-output pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .saved-models {
+            margin-top: 24px;
+        }
+
+        .saved-models h3 {
+            margin: 0 0 12px 0;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        .model-card {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 12px;
+        }
+
+        .model-card h4 {
+            margin: 0 0 8px 0;
+            color: #1f2937;
+            font-size: 15px;
+        }
+
+        .model-card p {
+            margin: 0 0 4px 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .model-card .model-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .model-card .model-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .model-card .model-btn.delete {
+            background: #ef4444;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #10b981;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧙‍♂️ Test: Wizard de Modelo de Tren</h1>
+        <p>Prueba el asistente paso a paso para crear modelos de tren personalizados</p>
+    </div>
+
+    <div class="test-controls">
+        <h2>Acciones</h2>
+        <button class="test-btn" onclick="openNewModelWizard()">
+            ✨ Crear Nuevo Modelo
+        </button>
+        <button class="test-btn secondary" onclick="refreshSavedModels()">
+            🔄 Refrescar Modelos
+        </button>
+        <button class="test-btn secondary" onclick="clearAllModels()">
+            🗑️ Limpiar Todos los Modelos
+        </button>
+        <button class="test-btn secondary" onclick="exportModels()">
+            📤 Exportar Modelos
+        </button>
+    </div>
+
+    <div class="test-results">
+        <h2>Resultados</h2>
+        <div class="test-output" id="output">
+            <pre>Listo para crear modelos de tren...</pre>
+        </div>
+
+        <div class="saved-models">
+            <h3>Modelos Guardados</h3>
+            <div id="saved-models-list">
+                <p style="color: #6b7280;">No hay modelos guardados aún.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/services/StorageService.js"></script>
+    <script src="src/utils/data-loader.js"></script>
+
+    <!-- Editor components -->
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <!-- Wizard components -->
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/TrainModelWizard.js"></script>
+
+    <script>
+        // ====================================================================
+        // FUNCIONES DE TEST
+        // ====================================================================
+
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            let logMessage = `[${timestamp}] ${message}`;
+
+            if (data) {
+                logMessage += '\n' + JSON.stringify(data, null, 2);
+            }
+
+            output.innerHTML = `<pre>${logMessage}</pre>`;
+            console.log(message, data);
+        }
+
+        /**
+         * Abre el wizard para crear un nuevo modelo
+         */
+        function openNewModelWizard() {
+            log('Abriendo wizard para nuevo modelo...');
+
+            window.TrainModelWizard.open({
+                onComplete: (model) => {
+                    log('✅ Modelo creado exitosamente', model);
+                    refreshSavedModels();
+                },
+                onCancel: () => {
+                    log('❌ Creación cancelada');
+                }
+            });
+        }
+
+        /**
+         * Abre el wizard para editar un modelo existente
+         */
+        function editModel(modelId) {
+            log(`Abriendo wizard para editar modelo ${modelId}...`);
+
+            const models = window.ConfigurationManager.getAllTrainModels();
+            const model = models.find(m => m.id === modelId);
+
+            if (!model) {
+                log('❌ Modelo no encontrado');
+                return;
+            }
+
+            window.TrainModelWizard.open({
+                editModel: model,
+                onComplete: (updatedModel) => {
+                    log('✅ Modelo actualizado exitosamente', updatedModel);
+                    refreshSavedModels();
+                },
+                onCancel: () => {
+                    log('❌ Edición cancelada');
+                }
+            });
+        }
+
+        /**
+         * Elimina un modelo
+         */
+        function deleteModel(modelId) {
+            if (!confirm('¿Estás seguro de eliminar este modelo?')) {
+                return;
+            }
+
+            log(`Eliminando modelo ${modelId}...`);
+            const result = window.ConfigurationManager.deleteCustomTrainModel(modelId);
+
+            if (result.success) {
+                log('✅ Modelo eliminado exitosamente');
+                refreshSavedModels();
+            } else {
+                log('❌ Error al eliminar modelo', result);
+            }
+        }
+
+        /**
+         * Refresca la lista de modelos guardados
+         */
+        function refreshSavedModels() {
+            log('Refrescando lista de modelos...');
+
+            const models = window.ConfigurationManager.getAllTrainModels();
+            const customModels = models.filter(m => m.custom === true);
+
+            log(`Encontrados ${customModels.length} modelos personalizados`, {
+                total: models.length,
+                custom: customModels.length
+            });
+
+            renderSavedModels(customModels);
+        }
+
+        /**
+         * Renderiza la lista de modelos guardados
+         */
+        function renderSavedModels(models) {
+            const container = document.getElementById('saved-models-list');
+
+            if (models.length === 0) {
+                container.innerHTML = '<p style="color: #6b7280;">No hay modelos guardados aún.</p>';
+                return;
+            }
+
+            container.innerHTML = models.map(model => {
+                const coachCount = model.coaches ? model.coaches.length : 0;
+                const seatCount = model.coaches
+                    ? model.coaches.reduce((total, coach) => {
+                        let count = 0;
+                        if (coach.layout) {
+                            coach.layout.forEach(section => {
+                                if (section.type === 'seats' && section.positions) {
+                                    section.positions.forEach(row => {
+                                        row.forEach(pos => {
+                                            if (typeof pos === 'number') count++;
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                        return total + count;
+                    }, 0)
+                    : 0;
+
+                return `
+                    <div class="model-card">
+                        <h4>
+                            ${model.name}
+                            <span class="badge">Custom</span>
+                        </h4>
+                        <p><strong>ID:</strong> ${model.id}</p>
+                        <p><strong>Coches:</strong> ${coachCount}</p>
+                        <p><strong>Asientos:</strong> ${seatCount}</p>
+                        ${model.description ? `<p><strong>Descripción:</strong> ${model.description}</p>` : ''}
+                        <p><strong>Creado:</strong> ${new Date(model.createdAt).toLocaleString()}</p>
+                        <div class="model-actions">
+                            <button class="model-btn" onclick="editModel('${model.id}')">
+                                ✏️ Editar
+                            </button>
+                            <button class="model-btn" onclick="viewModelDetails('${model.id}')">
+                                👁️ Ver
+                            </button>
+                            <button class="model-btn delete" onclick="deleteModel('${model.id}')">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Ver detalles de un modelo
+         */
+        function viewModelDetails(modelId) {
+            const models = window.ConfigurationManager.getAllTrainModels();
+            const model = models.find(m => m.id === modelId);
+
+            if (!model) {
+                log('❌ Modelo no encontrado');
+                return;
+            }
+
+            log('Detalles del modelo:', model);
+        }
+
+        /**
+         * Limpiar todos los modelos personalizados
+         */
+        function clearAllModels() {
+            if (!confirm('¿Estás seguro de eliminar TODOS los modelos personalizados?')) {
+                return;
+            }
+
+            log('Limpiando todos los modelos...');
+
+            const models = window.ConfigurationManager.getAllTrainModels();
+            const customModels = models.filter(m => m.custom === true);
+
+            customModels.forEach(model => {
+                window.ConfigurationManager.deleteCustomTrainModel(model.id);
+            });
+
+            log(`✅ ${customModels.length} modelos eliminados`);
+            refreshSavedModels();
+        }
+
+        /**
+         * Exportar modelos a JSON
+         */
+        function exportModels() {
+            log('Exportando modelos...');
+
+            try {
+                const exportData = window.ConfigurationManager.exportConfiguration();
+                log('✅ Configuración exportada', exportData);
+
+                // Descargar como archivo
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `train-models-${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                log('✅ Archivo descargado');
+            } catch (error) {
+                log('❌ Error al exportar', error);
+            }
+        }
+
+        // ====================================================================
+        // INICIALIZACIÓN
+        // ====================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            log('Test wizard inicializado');
+            refreshSavedModels();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Configuration Manager UI</title>
+
+    <!-- Estilos base -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+
+    <!-- Estilos de componentes -->
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+    <link rel="stylesheet" href="css/components/wizard.css">
+    <link rel="stylesheet" href="css/components/config-manager.css">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            background: #f3f4f6;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+
+        .description {
+            margin-bottom: 2rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .test-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .test-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .test-section h2 {
+            margin-bottom: 1rem;
+            color: #374151;
+            font-size: 1.25rem;
+        }
+
+        .test-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .test-btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .test-btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .test-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+
+        .test-status pre {
+            margin: 0;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🧪 Test: Configuration Manager UI</h1>
+        <p class="description">
+            Panel de prueba para el UI de gestión de configuraciones personalizadas.
+            Permite crear, editar, eliminar, importar y exportar modelos de tren y trayectos.
+        </p>
+
+        <!-- Estado actual -->
+        <div class="test-section">
+            <h2>📊 Estado Actual</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Modelos del Sistema</div>
+                    <div class="stat-value" id="system-models-count">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Modelos Personalizados</div>
+                    <div class="stat-value" id="custom-models-count">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Rutas del Sistema</div>
+                    <div class="stat-value" id="system-routes-count">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Rutas Personalizadas</div>
+                    <div class="stat-value" id="custom-routes-count">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test 1: Abrir UI -->
+        <div class="test-section">
+            <h2>✅ Test 1: Abrir Configuration Manager</h2>
+            <p>Abre la interfaz de gestión de configuraciones personalizadas.</p>
+            <button class="test-btn" onclick="test1_openManager()">Abrir Configuration Manager</button>
+            <div class="test-status" id="test1-status" style="display: none;"></div>
+        </div>
+
+        <!-- Test 2: Datos de prueba -->
+        <div class="test-section">
+            <h2>🧪 Test 2: Generar Datos de Prueba</h2>
+            <p>Genera configuraciones de prueba para testing.</p>
+            <button class="test-btn" onclick="test2_generateData()">Generar 3 Modelos de Prueba</button>
+            <button class="test-btn test-btn-secondary" onclick="test3_generateRoutes()">Generar 3 Rutas de Prueba</button>
+            <button class="test-btn test-btn-secondary" onclick="test4_clearData()">Limpiar Todo</button>
+            <div class="test-status" id="test2-status" style="display: none;"></div>
+        </div>
+
+        <!-- Test 3: Exportar/Importar -->
+        <div class="test-section">
+            <h2>📦 Test 3: Exportar e Importar</h2>
+            <p>Prueba las funciones de exportación e importación de configuraciones.</p>
+            <button class="test-btn" onclick="test5_export()">Exportar Configuraciones</button>
+            <button class="test-btn test-btn-secondary" onclick="test6_viewExport()">Ver JSON de Exportación</button>
+            <div class="test-status" id="test3-status" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Scripts necesarios -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/StorageService.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/utils/data-loader.js"></script>
+
+    <!-- Componentes del editor -->
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <!-- Wizards -->
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/TrainModelWizard.js"></script>
+    <script src="src/wizards/RouteWizard.js"></script>
+
+    <!-- Configuration Manager UI -->
+    <script src="src/components/ConfigurationManagerUI.js"></script>
+
+    <script>
+        let managerUI = null;
+
+        // Actualizar estadísticas
+        function updateStats() {
+            // Cargar datos del sistema (vacío en test, pero necesario para la API)
+            const allModels = {};
+            const allRoutes = {};
+
+            const systemModels = window.ConfigurationManager.getSystemTrainModels(allModels);
+            const customModels = window.ConfigurationManager.getCustomTrainModels();
+            const systemRoutes = window.ConfigurationManager.getSystemRoutes(allRoutes);
+            const customRoutes = window.ConfigurationManager.getCustomRoutes();
+
+            document.getElementById('system-models-count').textContent = systemModels.length;
+            document.getElementById('custom-models-count').textContent = customModels.length;
+            document.getElementById('system-routes-count').textContent = systemRoutes.length;
+            document.getElementById('custom-routes-count').textContent = customRoutes.length;
+        }
+
+        // Cargar estadísticas al inicio
+        updateStats();
+
+        // Test 1: Abrir Configuration Manager
+        function test1_openManager() {
+            try {
+                managerUI = new ConfigurationManagerUI();
+                managerUI.onClose = () => {
+                    managerUI = null;
+                    updateStats();
+                };
+                managerUI.render(document.body);
+
+                showStatus('test1-status', '✅ Configuration Manager abierto correctamente', 'success');
+            } catch (error) {
+                showStatus('test1-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 2: Generar modelos de prueba
+        function test2_generateData() {
+            try {
+                const models = [];
+
+                // Modelo 1: Tren Regional Simple
+                const model1 = {
+                    name: 'Tren Regional Simple',
+                    coaches: [
+                        {
+                            name: 'Coche 1',
+                            layout: [
+                                { type: 'seats', positions: [[1, 2, null, 3, 4]] },
+                                { type: 'seats', positions: [[5, 6, null, 7, 8]] },
+                                { type: 'space', height: 40 },
+                                { type: 'seats', positions: [[9, 10, null, 11, 12]] }
+                            ]
+                        },
+                        {
+                            name: 'Coche 2',
+                            layout: [
+                                { type: 'seats', positions: [[1, 2, null, 3, 4]] },
+                                { type: 'special', element: 'wc' },
+                                { type: 'seats', positions: [[5, 6, null, 7, 8]] }
+                            ]
+                        }
+                    ]
+                };
+
+                // Modelo 2: Tren Urbano
+                const model2 = {
+                    name: 'Tren Urbano Compacto',
+                    coaches: [
+                        {
+                            name: 'Coche 1',
+                            layout: [
+                                { type: 'seats', positions: [[1, 2, null, 3, 4]] },
+                                { type: 'space', height: 60 },
+                                { type: 'seats', positions: [[5, 6, null, 7, 8]] }
+                            ]
+                        }
+                    ]
+                };
+
+                // Modelo 3: Tren con servicios
+                const model3 = {
+                    name: 'Tren Premium con Servicios',
+                    coaches: [
+                        {
+                            name: 'Coche 1 - Estándar',
+                            layout: [
+                                { type: 'seats', positions: [[1, 2, null, 3, 4]] },
+                                { type: 'seats', positions: [[5, 6, null, 7, 8]] }
+                            ]
+                        },
+                        {
+                            name: 'Coche 2 - Premium',
+                            layout: [
+                                { type: 'special', element: 'mesa' },
+                                { type: 'seats', positions: [[1, 2]] },
+                                { type: 'space', height: 40 },
+                                { type: 'special', element: 'wc' }
+                            ]
+                        }
+                    ]
+                };
+
+                // Guardar modelos
+                [model1, model2, model3].forEach(model => {
+                    const result = window.ConfigurationManager.saveCustomTrainModel(model);
+                    if (result.success) {
+                        models.push(result.data.name);
+                    }
+                });
+
+                updateStats();
+                showStatus('test2-status', `✅ Creados ${models.length} modelos:\n${models.map(n => '  • ' + n).join('\n')}`, 'success');
+            } catch (error) {
+                showStatus('test2-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 3: Generar rutas de prueba
+        function test3_generateRoutes() {
+            try {
+                const routes = [];
+
+                // Ruta 1
+                const route1 = {
+                    trainNumber: '99001',
+                    stops: ['Huesca', 'Tardienta', 'Zaragoza Delicias'],
+                    destination: 'Zaragoza Delicias'
+                };
+
+                // Ruta 2
+                const route2 = {
+                    trainNumber: '99002',
+                    stops: ['Madrid Chamartín', 'Guadalajara', 'Zaragoza Delicias', 'Lleida'],
+                    destination: 'Lleida'
+                };
+
+                // Ruta 3
+                const route3 = {
+                    trainNumber: '99003',
+                    stops: ['Barcelona Sants', 'Tarragona', 'Valencia'],
+                    destination: 'Valencia'
+                };
+
+                // Guardar rutas
+                [route1, route2, route3].forEach(route => {
+                    const result = window.ConfigurationManager.saveCustomRoute(route);
+                    if (result.success) {
+                        routes.push(route.trainNumber);
+                    }
+                });
+
+                updateStats();
+                showStatus('test2-status', `✅ Creadas ${routes.length} rutas:\n${routes.map(n => '  • Tren ' + n).join('\n')}`, 'success');
+            } catch (error) {
+                showStatus('test2-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 4: Limpiar datos
+        function test4_clearData() {
+            if (!confirm('¿Estás seguro de que quieres eliminar TODAS las configuraciones personalizadas?')) {
+                return;
+            }
+
+            try {
+                // Eliminar modelos
+                const models = window.ConfigurationManager.getCustomTrainModels();
+                models.forEach(model => {
+                    window.ConfigurationManager.deleteCustomTrainModel(model.id);
+                });
+
+                // Eliminar rutas
+                const routes = window.ConfigurationManager.getCustomRoutes();
+                routes.forEach(route => {
+                    window.ConfigurationManager.deleteCustomRoute(route.trainNumber);
+                });
+
+                updateStats();
+                showStatus('test2-status', '✅ Todas las configuraciones personalizadas han sido eliminadas', 'success');
+            } catch (error) {
+                showStatus('test2-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 5: Exportar
+        function test5_export() {
+            try {
+                const data = window.ConfigurationManager.exportConfiguration();
+                const json = JSON.stringify(data, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `navirea-config-test-${Date.now()}.json`;
+                a.click();
+
+                URL.revokeObjectURL(url);
+
+                showStatus('test3-status', '✅ Configuraciones exportadas correctamente', 'success');
+            } catch (error) {
+                showStatus('test3-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 6: Ver exportación
+        function test6_viewExport() {
+            try {
+                const data = window.ConfigurationManager.exportConfiguration();
+                const json = JSON.stringify(data, null, 2);
+                showStatus('test3-status', `📋 Exportación:\n${json}`, 'info');
+            } catch (error) {
+                showStatus('test3-status', '❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        // Helper: Mostrar estado
+        function showStatus(id, message, type) {
+            const statusEl = document.getElementById(id);
+            statusEl.style.display = 'block';
+            statusEl.innerHTML = `<pre>${message}</pre>`;
+
+            if (type === 'success') {
+                statusEl.style.background = '#d1fae5';
+                statusEl.style.borderColor = '#6ee7b7';
+                statusEl.style.color = '#065f46';
+            } else if (type === 'error') {
+                statusEl.style.background = '#fee2e2';
+                statusEl.style.borderColor = '#fca5a5';
+                statusEl.style.color = '#991b1b';
+            } else {
+                statusEl.style.background = '#dbeafe';
+                statusEl.style.borderColor = '#93c5fd';
+                statusEl.style.color = '#1e40af';
+            }
+        }
+    </script>
+</body>
+
+</html>
