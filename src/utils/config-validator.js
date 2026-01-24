@@ -184,6 +184,27 @@ function validateLayout(layout, prefix) {
             if (typeof row.height !== 'number' || row.height < 0) {
                 errors.push(`${prefix} Fila ${rowIndex + 1}: La puerta debe tener una altura válida`);
             }
+        } else if (row.type === 'special') {
+            // Validar fila de elementos especiales (WC, EQ, MESA, PMR, MIN)
+            if (!row.positions || !Array.isArray(row.positions)) {
+                errors.push(`${prefix} Fila ${rowIndex + 1}: Debe tener posiciones`);
+                return;
+            }
+
+            row.positions.forEach((specialRow, specialRowIndex) => {
+                if (!Array.isArray(specialRow)) {
+                    errors.push(`${prefix} Fila ${rowIndex + 1}: Las posiciones deben ser arrays`);
+                    return;
+                }
+
+                // Los elementos especiales pueden ser: null, 'WC', 'EQ', 'MESA', 'PMR', 'MIN'
+                const validSpecials = [null, 'WC', 'EQ', 'MESA', 'PMR', 'MIN'];
+                specialRow.forEach((element, elementIndex) => {
+                    if (!validSpecials.includes(element)) {
+                        errors.push(`${prefix} Fila ${rowIndex + 1} Posición ${elementIndex + 1}: Elemento "${element}" no válido. Debe ser: null, WC, EQ, MESA, PMR o MIN`);
+                    }
+                });
+            });
         } else {
             errors.push(`${prefix} Fila ${rowIndex + 1}: Tipo "${row.type}" no válido`);
         }
