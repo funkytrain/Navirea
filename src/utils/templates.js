@@ -111,6 +111,9 @@ ${trainNumber ? `
         <button class="train-number-display" onclick="showTrainNumberPrompt()">
             Nº ${trainNumber}
         </button>
+        <button class="important-stop-config-btn" onclick="event.stopPropagation(); openImportantStopSelector();" title="Configurar parada importante">
+            ⚙️
+        </button>
     ` : ''}
 </div>
                     </div>
