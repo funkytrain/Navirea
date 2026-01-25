@@ -40,11 +40,15 @@ class ConfigurationManagerUI {
                 <button class="config-tab" data-view="routes">
                     🚂 Trayectos
                 </button>
+                <button class="config-tab" data-view="restore">
+                    ♻️ Restauración
+                </button>
             </div>
 
             <div class="config-manager-content">
                 <div class="config-view" id="models-view"></div>
                 <div class="config-view hidden" id="routes-view"></div>
+                <div class="config-view hidden" id="restore-view"></div>
             </div>
 
             <div class="config-manager-footer">
@@ -75,6 +79,7 @@ class ConfigurationManagerUI {
         this.attachEventListeners();
         this.renderModelsView();
         this.renderRoutesView();
+        this.renderRestoreView();
     }
 
     /**
@@ -198,6 +203,11 @@ class ConfigurationManagerUI {
                     <div class="config-item-name">${model.name}</div>
                     <div class="config-item-meta">${model.coaches.length} coches</div>
                 </div>
+                <div class="config-item-actions">
+                    <button class="config-action-btn config-action-delete" data-action="delete-system" data-type="model" data-id="${model.id}" title="Eliminar">
+                        ✕
+                    </button>
+                </div>
             </div>
         `).join('');
     }
@@ -292,6 +302,11 @@ class ConfigurationManagerUI {
                         ${route.stops[0]} → ${route.destination} (${route.stops.length} paradas)
                     </div>
                 </div>
+                <div class="config-item-actions">
+                    <button class="config-action-btn config-action-delete" data-action="delete-system" data-type="route" data-id="${route.trainNumber}" title="Eliminar">
+                        ✕
+                    </button>
+                </div>
             </div>
         `).join('');
     }
@@ -330,6 +345,173 @@ class ConfigurationManagerUI {
     }
 
     /**
+     * Renderiza la vista de restauración de elementos ocultos
+     */
+    renderRestoreView() {
+        const view = this.container.querySelector('#restore-view');
+
+        // Obtener elementos ocultos
+        const hiddenModels = this.getHiddenSystemModelsWithDetails();
+        const hiddenRoutes = this.getHiddenSystemRoutesWithDetails();
+
+        const totalHidden = hiddenModels.length + hiddenRoutes.length;
+
+        view.innerHTML = `
+            ${totalHidden > 0 ? `
+                <div class="config-section">
+                    <div class="config-section-header">
+                        <h3 class="config-section-title">Restauración Rápida</h3>
+                        <button class="config-btn config-btn-primary" id="restore-all-btn">
+                            ♻️ Restaurar Todo
+                        </button>
+                    </div>
+                    <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                        Restaura todos los modelos y trayectos ocultos de una sola vez.
+                    </p>
+                </div>
+            ` : ''}
+
+            <div class="config-section">
+                <h3 class="config-section-title">Modelos Ocultos (${hiddenModels.length})</h3>
+                <div class="config-list">
+                    ${this.renderHiddenModelsList(hiddenModels)}
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3 class="config-section-title">Trayectos Ocultos (${hiddenRoutes.length})</h3>
+                <div class="config-list">
+                    ${this.renderHiddenRoutesList(hiddenRoutes)}
+                </div>
+            </div>
+        `;
+
+        // Event listeners para restaurar
+        this.attachRestoreActions(view);
+
+        // Event listener para restaurar todo
+        const restoreAllBtn = view.querySelector('#restore-all-btn');
+        if (restoreAllBtn) {
+            restoreAllBtn.addEventListener('click', () => this.restoreAll());
+        }
+    }
+
+    /**
+     * Obtiene modelos ocultos con sus detalles
+     */
+    getHiddenSystemModelsWithDetails() {
+        const hiddenIds = window.ConfigurationManager.getHiddenSystemModels();
+        // Usar datos originales sin filtrar
+        const allModels = window._originalTrainModels || {};
+
+        return hiddenIds.map(id => ({
+            id,
+            ...allModels[id]
+        })).filter(model => model && model.name); // Filtrar los que existen
+    }
+
+    /**
+     * Obtiene rutas ocultas con sus detalles
+     */
+    getHiddenSystemRoutesWithDetails() {
+        const hiddenNumbers = window.ConfigurationManager.getHiddenSystemRoutes();
+        // Usar datos originales sin filtrar
+        const allRoutes = window._originalTrainRoutes || {};
+
+        return hiddenNumbers.map(trainNumber => {
+            const routeData = allRoutes[trainNumber];
+            if (!routeData) return null;
+
+            // Manejar formato array o objeto
+            if (Array.isArray(routeData)) {
+                return {
+                    trainNumber,
+                    stops: routeData,
+                    destination: routeData[routeData.length - 1]
+                };
+            } else {
+                return {
+                    trainNumber,
+                    stops: routeData.stops || routeData,
+                    destination: routeData.destination || (Array.isArray(routeData.stops) ? routeData.stops[routeData.stops.length - 1] : routeData[routeData.length - 1])
+                };
+            }
+        }).filter(route => route !== null); // Filtrar los que existen
+    }
+
+    /**
+     * Renderiza lista de modelos ocultos
+     */
+    renderHiddenModelsList(models) {
+        if (models.length === 0) {
+            return '<p class="config-empty">No hay modelos ocultos</p>';
+        }
+
+        return models.map(model => `
+            <div class="config-item config-item-hidden">
+                <div class="config-item-icon">🚄</div>
+                <div class="config-item-info">
+                    <div class="config-item-name">${model.name}</div>
+                    <div class="config-item-meta">${model.coaches.length} coches</div>
+                </div>
+                <div class="config-item-actions">
+                    <button class="config-action-btn config-action-restore" data-action="restore-model" data-id="${model.id}" title="Restaurar">
+                        ♻️
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Renderiza lista de rutas ocultas
+     */
+    renderHiddenRoutesList(routes) {
+        if (routes.length === 0) {
+            return '<p class="config-empty">No hay trayectos ocultos</p>';
+        }
+
+        return routes.map(route => `
+            <div class="config-item config-item-hidden">
+                <div class="config-item-icon">🛤️</div>
+                <div class="config-item-info">
+                    <div class="config-item-name">Tren ${route.trainNumber}</div>
+                    <div class="config-item-meta">
+                        ${route.stops[0]} → ${route.destination} (${route.stops.length} paradas)
+                    </div>
+                </div>
+                <div class="config-item-actions">
+                    <button class="config-action-btn config-action-restore" data-action="restore-route" data-id="${route.trainNumber}" title="Restaurar">
+                        ♻️
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * Adjunta event listeners para acciones de restauración
+     */
+    attachRestoreActions(view) {
+        const actionButtons = view.querySelectorAll('.config-action-btn');
+        actionButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                const id = btn.dataset.id;
+
+                switch (action) {
+                    case 'restore-model':
+                        this.restoreModel(id);
+                        break;
+                    case 'restore-route':
+                        this.restoreRoute(id);
+                        break;
+                }
+            });
+        });
+    }
+
+    /**
      * Adjunta event listeners para acciones de modelos
      */
     attachModelActions(view) {
@@ -338,6 +520,7 @@ class ConfigurationManagerUI {
             btn.addEventListener('click', () => {
                 const action = btn.dataset.action;
                 const id = btn.dataset.id;
+                const type = btn.dataset.type;
 
                 switch (action) {
                     case 'edit':
@@ -348,6 +531,9 @@ class ConfigurationManagerUI {
                         break;
                     case 'delete':
                         this.deleteModel(id);
+                        break;
+                    case 'delete-system':
+                        this.deleteSystemItem(type, id);
                         break;
                 }
             });
@@ -363,6 +549,7 @@ class ConfigurationManagerUI {
             btn.addEventListener('click', () => {
                 const action = btn.dataset.action;
                 const id = btn.dataset.id;
+                const type = btn.dataset.type;
 
                 switch (action) {
                     case 'edit':
@@ -373,6 +560,9 @@ class ConfigurationManagerUI {
                         break;
                     case 'delete':
                         this.deleteRoute(id);
+                        break;
+                    case 'delete-system':
+                        this.deleteSystemItem(type, id);
                         break;
                 }
             });
@@ -536,6 +726,171 @@ class ConfigurationManagerUI {
             } else {
                 alert('Error al eliminar el trayecto: ' + result.error);
             }
+        }
+    }
+
+    /**
+     * Elimina un elemento del sistema (modelo o ruta)
+     */
+    deleteSystemItem(type, id) {
+        if (type === 'model') {
+            const result = window.ConfigurationManager.hideSystemTrainModel(id);
+            if (result.success) {
+                // Recargar datos globales para que el modelo desaparezca del selector
+                if (window.loadJSONData) {
+                    window.loadJSONData().then(() => {
+                        // Verificar cuántos modelos quedan disponibles
+                        const availableModels = Object.keys(window.trainModels || {});
+
+                        if (availableModels.length === 0) {
+                            // No hay modelos disponibles
+                            console.warn('⚠️ No hay modelos disponibles');
+                            this.renderModelsView();
+                            this.renderRestoreView();
+                            alert('⚠️ Has ocultado todos los modelos de tren.\n\nNo podrás usar la aplicación hasta que restaures al menos un modelo desde la pestaña de Restauración.');
+                            return;
+                        }
+
+                        // Verificar si el modelo oculto era el que estaba en uso
+                        if (window.state && window.state.selectedTrain === id) {
+                            // Cambiar al primer modelo disponible
+                            window.state.selectedTrain = availableModels[0];
+                            console.log(`⚠️ Modelo en uso ocultado, cambiando a: ${availableModels[0]}`);
+                            // Re-renderizar la interfaz
+                            if (window.render) {
+                                window.render();
+                            }
+                        }
+
+                        this.renderModelsView();
+                        this.renderRestoreView();
+                        this.showSuccessMessage('Modelo ocultado correctamente');
+                    });
+                } else {
+                    this.renderModelsView();
+                    this.renderRestoreView();
+                    this.showSuccessMessage('Modelo ocultado correctamente');
+                }
+            } else {
+                alert('Error al ocultar el modelo: ' + result.error);
+            }
+        } else if (type === 'route') {
+            const result = window.ConfigurationManager.hideSystemRoute(id);
+            if (result.success) {
+                // Recargar datos globales para que la ruta desaparezca del selector
+                if (window.loadJSONData) {
+                    window.loadJSONData().then(() => {
+                        // Verificar si la ruta oculta era la que estaba en uso
+                        if (window.state && window.state.trainNumber === id) {
+                            // Buscar otra ruta disponible
+                            const availableRoutes = Object.keys(window.trainRoutes || {});
+                            if (availableRoutes.length > 0) {
+                                window.state.trainNumber = availableRoutes[0];
+                                console.log(`⚠️ Ruta en uso ocultada, cambiando a: ${availableRoutes[0]}`);
+                                // Re-renderizar la interfaz
+                                if (window.render) {
+                                    window.render();
+                                }
+                            } else {
+                                // Si no hay rutas, poner valor por defecto
+                                window.state.trainNumber = '0000';
+                                console.warn('⚠️ No hay rutas disponibles, usando valor por defecto');
+                            }
+                        }
+                        this.renderRoutesView();
+                        this.renderRestoreView();
+                        this.showSuccessMessage('Trayecto ocultado correctamente');
+                    });
+                } else {
+                    this.renderRoutesView();
+                    this.renderRestoreView();
+                    this.showSuccessMessage('Trayecto ocultado correctamente');
+                }
+            } else {
+                alert('Error al ocultar el trayecto: ' + result.error);
+            }
+        }
+    }
+
+    /**
+     * Restaura un modelo del sistema previamente oculto
+     */
+    restoreModel(modelId) {
+        const result = window.ConfigurationManager.showSystemTrainModel(modelId);
+        if (result.success) {
+            // Recargar datos globales
+            if (window.loadJSONData) {
+                window.loadJSONData().then(() => {
+                    this.renderModelsView();
+                    this.renderRestoreView();
+                    this.showSuccessMessage('Modelo restaurado correctamente');
+                });
+            } else {
+                this.renderModelsView();
+                this.renderRestoreView();
+                this.showSuccessMessage('Modelo restaurado correctamente');
+            }
+        } else {
+            alert('Error al restaurar el modelo: ' + result.error);
+        }
+    }
+
+    /**
+     * Restaura una ruta del sistema previamente oculta
+     */
+    restoreRoute(trainNumber) {
+        const result = window.ConfigurationManager.showSystemRoute(trainNumber);
+        if (result.success) {
+            // Recargar datos globales
+            if (window.loadJSONData) {
+                window.loadJSONData().then(() => {
+                    this.renderRoutesView();
+                    this.renderRestoreView();
+                    this.showSuccessMessage('Trayecto restaurado correctamente');
+                });
+            } else {
+                this.renderRoutesView();
+                this.renderRestoreView();
+                this.showSuccessMessage('Trayecto restaurado correctamente');
+            }
+        } else {
+            alert('Error al restaurar el trayecto: ' + result.error);
+        }
+    }
+
+    /**
+     * Restaura todos los elementos ocultos del sistema
+     */
+    restoreAll() {
+        if (!confirm('¿Deseas restaurar todos los modelos y trayectos ocultos?\n\nEsto hará visibles nuevamente todos los elementos del sistema que has ocultado.')) {
+            return;
+        }
+
+        // Limpiar listas de elementos ocultos
+        localStorage.removeItem('hiddenSystemModels');
+        localStorage.removeItem('hiddenSystemRoutes');
+
+        console.log('✅ Todos los elementos del sistema restaurados');
+
+        // Recargar datos globales
+        if (window.loadJSONData) {
+            window.loadJSONData().then(() => {
+                this.renderModelsView();
+                this.renderRoutesView();
+                this.renderRestoreView();
+
+                // Si hay un render global, ejecutarlo para actualizar la UI principal
+                if (window.render) {
+                    window.render();
+                }
+
+                this.showSuccessMessage('Todos los elementos restaurados correctamente');
+            });
+        } else {
+            this.renderModelsView();
+            this.renderRoutesView();
+            this.renderRestoreView();
+            this.showSuccessMessage('Todos los elementos restaurados correctamente');
         }
     }
 
