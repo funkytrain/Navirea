@@ -83,6 +83,26 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
+.important-stop-config-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.important-stop-config-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.important-stop-config-btn:active {
+    transform: scale(0.95);
+}
+
 /* Fila de parada actual */
 .current-stop-row {
     margin-bottom: 0.75rem;
@@ -3190,4 +3210,170 @@ body.dark-mode #qr-video {
 .dark-mode .manual-header {
     background: var(--color-gray-800);
     border-bottom-color: var(--color-gray-700);
+}
+
+/* ========================================
+   QUICK STOP MENU - Menú flotante de paradas rápidas
+   ======================================== */
+
+.quick-stop-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 9999;
+    animation: fadeIn 0.15s ease;
+}
+
+.quick-stop-menu {
+    position: fixed;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    min-width: 180px;
+    transform: scale(0.9);
+    opacity: 0;
+    animation: popIn 0.2s ease forwards;
+    z-index: 10000;
+}
+
+@keyframes popIn {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.quick-stop-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+}
+
+.quick-stop-option:hover {
+    background: var(--color-gray-100);
+}
+
+.quick-stop-option:active {
+    transform: scale(0.95);
+}
+
+.quick-stop-option.final-stop {
+    color: #059669;
+}
+
+.quick-stop-option.important-stop {
+    color: #f59e0b;
+}
+
+.quick-stop-option .stop-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.quick-stop-option .stop-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Modo oscuro */
+.dark-mode .quick-stop-menu {
+    background: var(--color-gray-800);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .quick-stop-option:hover {
+    background: var(--color-gray-700);
+}
+
+/* ========================================
+   IMPORTANT STOP MODAL - Modal de parada importante
+   ======================================== */
+
+.important-stop-modal .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.important-stop-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.important-stop-list .stop-option {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--color-gray-200);
+    background: white;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+    color: var(--color-gray-700);
+}
+
+.important-stop-list .stop-option:hover {
+    border-color: var(--color-primary);
+    background: rgba(59, 130, 246, 0.05);
+    transform: translateX(4px);
+}
+
+.important-stop-list .stop-option.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.important-stop-list .stop-option:first-child {
+    font-style: italic;
+}
+
+/* Estilo para el botón en el selector de trenes */
+.train-selector-dropdown .important-stop-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0.875rem 1rem;
+}
+
+.train-selector-dropdown .important-stop-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Modo oscuro */
+.dark-mode .important-stop-list .stop-option {
+    background: var(--color-gray-800);
+    border-color: var(--color-gray-600);
+    color: var(--color-gray-200);
+}
+
+.dark-mode .important-stop-list .stop-option:hover {
+    background: var(--color-gray-700);
+    border-color: var(--color-primary);
+}
+
+.dark-mode .important-stop-list .stop-option.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
 }

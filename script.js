@@ -157,7 +157,8 @@ let state = {
         "C1": "A",
         "C2": "A",
         "C3": "A"
-    }
+    },
+    importantStop: null // Parada importante para marcado rápido
 };
 
 let isModalOpen = false;
@@ -543,6 +544,76 @@ function openConfigurationManager() {
         window.ConfigurationManagerUI.open();
     } else {
         alert('El gestor de configuraciones no está disponible');
+    }
+}
+
+function openImportantStopSelector() {
+    // Cerrar el selector de trenes
+    const selector = document.getElementById("train-selector");
+    if (selector) {
+        selector.classList.add("hidden");
+    }
+
+    // Obtener las paradas del trayecto actual
+    const route = getCurrentRoute();
+
+    if (!route || route.length === 0) {
+        alert('No hay un trayecto configurado para este tren');
+        return;
+    }
+
+    // Crear modal para seleccionar parada importante
+    const modalHTML = `
+        <div class="modal-overlay" onclick="closeImportantStopSelector(event)">
+            <div class="modal important-stop-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>⭐ Configurar Parada Importante</h2>
+                    <button class="modal-close-btn" onclick="closeImportantStopSelector()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p style="margin-bottom: 1rem; opacity: 0.8;">
+                        Selecciona una parada importante para marcado rápido con long press en los asientos.
+                    </p>
+                    <div class="important-stop-list">
+                        <button class="stop-option ${!state.importantStop ? 'active' : ''}"
+                                onclick="setImportantStop(null)">
+                            <span style="opacity: 0.6;">Sin parada importante</span>
+                        </button>
+                        ${route.map(stop => `
+                            <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
+                                    onclick="setImportantStop('${stop}')">
+                                ${stop}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Agregar clase modal-open al body para mostrar el overlay
+    document.body.classList.add('modal-open');
+    lockBodyScroll();
+}
+
+function setImportantStop(stopName) {
+    state.importantStop = stopName;
+    saveData();
+    closeImportantStopSelector();
+    render(); // Refrescar para mostrar el cambio
+}
+
+function closeImportantStopSelector(event) {
+    if (!event || event.target === event.currentTarget || event.target.classList.contains('modal-close-btn')) {
+        const modal = document.querySelector('.important-stop-modal');
+        if (modal) {
+            modal.closest('.modal-overlay').remove();
+        }
+        // Remover clase modal-open y desbloquear scroll
+        document.body.classList.remove('modal-open');
+        unlockBodyScroll();
     }
 }
 
@@ -1940,7 +2011,7 @@ function handleSeatPress(coach, num, event) {
                     return;
                 }
 
-                // Si llegamos aquí: NO tiene parada NI metadata → Asignar parada final del tren
+                // Si llegamos aquí: NO tiene parada NI metadata
 
                 // 🚫 Si el modo copiado rápido está activo → copiar toda la información
                 if (state.copyMode && lastCopiedSeatData) {
@@ -1962,81 +2033,161 @@ function handleSeatPress(coach, num, event) {
                     return;
                 }
 
-                // Obtener parada final del tren
-                const routeData = state.trainNumber && trainRoutes[state.trainNumber];
-                const isCustomRoute = routeData && (routeData.custom === true || (Array.isArray(routeData) && routeData.custom === true));
-                const route = getCurrentRoute();
-
-                console.log('[handleSeatPress - Long press] routeData:', routeData);
-                console.log('[handleSeatPress - Long press] isCustomRoute:', isCustomRoute);
-                console.log('[handleSeatPress - Long press] route:', route);
-
-                if (route && route.length > 0) {
-                    let finalStopName = route[route.length - 1];
-
-                    console.log('[handleSeatPress - Long press] finalStopName:', finalStopName);
-
-                    // Ajustes de parada efectiva (solo para rutas del sistema)
-                    if (!isCustomRoute) {
-                        if (finalStopName === 'Miranda') {
-                            finalStopName = 'Vitoria Gasteiz';
-                        } else if (finalStopName === 'Logroño') {
-                            finalStopName = 'Castejón';
-                        }
-                    }
-
-                    // Obtener objeto de parada
-                    let stopObj;
-                    if (isCustomRoute) {
-                        // Para rutas custom: crear objeto dinámicamente
-                        const abbr = finalStopName.substring(0, 3).toUpperCase();
-                        stopObj = { full: finalStopName, abbr: abbr };
-                        console.log('[handleSeatPress - Long press] ✅ Parada custom creada:', stopObj);
-                    } else {
-                        // Para rutas del sistema: buscar en stops.json
-                        stopObj = stops.find(s => s.full === finalStopName);
-                        console.log('[handleSeatPress - Long press] ✅ Parada del sistema encontrada:', stopObj);
-                    }
-
-                    if (stopObj) {
-                        // Capturar scroll ANTES de cualquier operación
-                        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-
-                        // Asignar parada sin abrir modal
-                        const key = getSeatKey(coach, num);
-
-                        if (!state.seatData[key]) {
-                            state.seatData[key] = {};
-                        }
-
-                        state.seatData[key].stop = stopObj;
-
-                        // Guardar datos copiados
-                        lastCopiedSeatData = {
-                            stop: stopObj,
-                            enlace: state.seatData[key].enlace || false,
-                            seguir: state.seatData[key].seguir || false,
-                            comentarioFlag: state.seatData[key].comentarioFlag || false,
-                            comentario: state.seatData[key].comentario || ""
-                        };
-                        state.lastCopiedSeatData = { ...lastCopiedSeatData };
-
-                        saveData();
-
-                        if (navigator.vibrate) {
-                            navigator.vibrate(30);
-                        }
-
-                        // Renderizar y restaurar scroll
-                        render();
-                        requestAnimationFrame(() => {
-                            window.scrollTo(0, scrollPosition);
-                        });
-                    }
-                }
+                // 🔴 NUEVO: Mostrar menú flotante con opciones de paradas
+                showQuickStopMenu(coach, num);
+                return;
             }
         }
     }, SEAT_LONG_PRESS_DURATION);
+}
+
+// Función para mostrar menú flotante de paradas rápidas
+function showQuickStopMenu(coach, num) {
+    // Obtener coordenadas guardadas (ya fueron capturadas en handleSeatPress)
+    let clientX = touchStartX || 100;
+    let clientY = touchStartY || 100;
+
+    // Obtener información de la ruta
+    const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+    const isCustomRoute = routeData && (routeData.custom === true || (Array.isArray(routeData) && routeData.custom === true));
+    const route = getCurrentRoute();
+
+    if (!route || route.length === 0) {
+        // No hay ruta configurada, no mostrar menú
+        return;
+    }
+
+    // Obtener parada final
+    let finalStopName = route[route.length - 1];
+
+    // Ajustes de parada efectiva (solo para rutas del sistema)
+    if (!isCustomRoute) {
+        if (finalStopName === 'Miranda') {
+            finalStopName = 'Vitoria Gasteiz';
+        } else if (finalStopName === 'Logroño') {
+            finalStopName = 'Castejón';
+        }
+    }
+
+    // Crear menú flotante
+    const menuHTML = `
+        <div class="quick-stop-menu-overlay" onclick="closeQuickStopMenu()">
+            <div class="quick-stop-menu" style="left: ${clientX}px; top: ${clientY}px;" onclick="event.stopPropagation();">
+                <button class="quick-stop-option final-stop" onclick="assignQuickStop('${coach}', '${num}', '${finalStopName}', ${isCustomRoute})">
+                    <span class="stop-icon">🏁</span>
+                    <span class="stop-name">${finalStopName}</span>
+                </button>
+                ${state.importantStop ? `
+                    <button class="quick-stop-option important-stop" onclick="assignQuickStop('${coach}', '${num}', '${state.importantStop}', ${isCustomRoute})">
+                        <span class="stop-icon">⭐</span>
+                        <span class="stop-name">${state.importantStop}</span>
+                    </button>
+                ` : ''}
+            </div>
+        </div>
+    `;
+
+    // Eliminar menú anterior si existe
+    const existingMenu = document.querySelector('.quick-stop-menu-overlay');
+    if (existingMenu) {
+        existingMenu.remove();
+    }
+
+    // Insertar menú
+    document.body.insertAdjacentHTML('beforeend', menuHTML);
+
+    // Ajustar posición si se sale de la pantalla
+    requestAnimationFrame(() => {
+        const menu = document.querySelector('.quick-stop-menu');
+        if (menu) {
+            const rect = menu.getBoundingClientRect();
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            let adjustedLeft = clientX;
+            let adjustedTop = clientY;
+
+            // Ajustar horizontalmente
+            if (rect.right > windowWidth) {
+                adjustedLeft = windowWidth - rect.width - 10;
+            }
+            if (adjustedLeft < 10) {
+                adjustedLeft = 10;
+            }
+
+            // Ajustar verticalmente
+            if (rect.bottom > windowHeight) {
+                adjustedTop = windowHeight - rect.height - 10;
+            }
+            if (adjustedTop < 10) {
+                adjustedTop = 10;
+            }
+
+            menu.style.left = `${adjustedLeft}px`;
+            menu.style.top = `${adjustedTop}px`;
+        }
+    });
+}
+
+// Asignar parada desde el menú rápido
+function assignQuickStop(coach, num, stopName, isCustomRoute) {
+    // Obtener objeto de parada
+    let stopObj;
+    if (isCustomRoute) {
+        // Para rutas custom: crear objeto dinámicamente
+        const abbr = stopName.substring(0, 3).toUpperCase();
+        stopObj = { full: stopName, abbr: abbr };
+    } else {
+        // Para rutas del sistema: buscar en stops.json
+        stopObj = stops.find(s => s.full === stopName);
+    }
+
+    if (stopObj) {
+        // Capturar scroll ANTES de cualquier operación
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+        // Asignar parada sin abrir modal
+        const key = getSeatKey(coach, num);
+
+        if (!state.seatData[key]) {
+            state.seatData[key] = {};
+        }
+
+        state.seatData[key].stop = stopObj;
+
+        // Guardar datos copiados
+        lastCopiedSeatData = {
+            stop: stopObj,
+            enlace: state.seatData[key].enlace || false,
+            seguir: state.seatData[key].seguir || false,
+            comentarioFlag: state.seatData[key].comentarioFlag || false,
+            comentario: state.seatData[key].comentario || ""
+        };
+        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+
+        saveData();
+
+        if (navigator.vibrate) {
+            navigator.vibrate(30);
+        }
+
+        // Cerrar menú
+        closeQuickStopMenu();
+
+        // Renderizar y restaurar scroll
+        render();
+        requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPosition);
+        });
+    }
+}
+
+// Cerrar menú flotante
+function closeQuickStopMenu() {
+    const menu = document.querySelector('.quick-stop-menu-overlay');
+    if (menu) {
+        menu.remove();
+    }
 }
 
 function handleSeatMove(coach, num, event) {
