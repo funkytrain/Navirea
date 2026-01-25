@@ -65,6 +65,10 @@ async function loadAllData() {
             ? window.ConfigurationManager.getAllTrainModels(trains)
             : trains;
 
+        // Guardar datos originales sin filtrar para uso en UI de restauración
+        window._originalTrainModels = trains;
+        window._originalTrainRoutes = trainRoutes;
+
         return {
             stops: allStops,
             trainNumbers,

@@ -11,7 +11,9 @@ const ConfigurationManager = {
         USER_TRAIN_MODELS: 'userTrainModels',
         USER_ROUTES: 'userRoutes',
         USER_STOPS: 'userStops',
-        CONFIG_VERSION: 'configVersion'
+        CONFIG_VERSION: 'configVersion',
+        HIDDEN_SYSTEM_MODELS: 'hiddenSystemModels',
+        HIDDEN_SYSTEM_ROUTES: 'hiddenSystemRoutes'
     },
 
     // Versión actual del sistema de configuración
@@ -41,6 +43,12 @@ const ConfigurationManager = {
         if (!localStorage.getItem(this.STORAGE_KEYS.CONFIG_VERSION)) {
             localStorage.setItem(this.STORAGE_KEYS.CONFIG_VERSION, this.CURRENT_VERSION);
         }
+        if (!localStorage.getItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_MODELS)) {
+            localStorage.setItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_MODELS, JSON.stringify([]));
+        }
+        if (!localStorage.getItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_ROUTES)) {
+            localStorage.setItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_ROUTES, JSON.stringify([]));
+        }
     },
 
     /**
@@ -60,14 +68,24 @@ const ConfigurationManager = {
     // ========================================================================
 
     /**
-     * Obtiene todos los modelos de tren (sistema + personalizados)
+     * Obtiene todos los modelos de tren (sistema + personalizados, excluyendo ocultos)
      * @param {Object} systemModels - Modelos del sistema
-     * @returns {Object} Todos los modelos
+     * @returns {Object} Todos los modelos visibles
      */
     getAllTrainModels(systemModels = {}) {
         const userModels = this.getUserTrainModels();
+        const hiddenModels = this.getHiddenSystemModels();
+
+        // Filtrar modelos del sistema que están ocultos
+        const visibleSystemModels = {};
+        for (const [id, model] of Object.entries(systemModels)) {
+            if (!hiddenModels.includes(id)) {
+                visibleSystemModels[id] = model;
+            }
+        }
+
         return {
-            ...systemModels,
+            ...visibleSystemModels,
             ...userModels
         };
     },
@@ -87,16 +105,17 @@ const ConfigurationManager = {
     },
 
     /**
-     * Obtiene modelos del sistema (excluye personalizados)
+     * Obtiene modelos del sistema (excluye personalizados y ocultos)
      * @param {Object} allModels - Todos los modelos disponibles
      * @returns {Array} Array de modelos del sistema
      */
     getSystemTrainModels(allModels = {}) {
         const userModels = this.getUserTrainModels();
         const userModelIds = Object.keys(userModels);
+        const hiddenModels = this.getHiddenSystemModels();
 
         return Object.entries(allModels)
-            .filter(([id]) => !userModelIds.includes(id))
+            .filter(([id]) => !userModelIds.includes(id) && !hiddenModels.includes(id))
             .map(([id, model]) => ({ id, ...model }));
     },
 
@@ -282,14 +301,24 @@ const ConfigurationManager = {
     // ========================================================================
 
     /**
-     * Obtiene todas las rutas (sistema + personalizadas)
+     * Obtiene todas las rutas (sistema + personalizadas, excluyendo ocultas)
      * @param {Object} systemRoutes - Rutas del sistema
-     * @returns {Object} Todas las rutas
+     * @returns {Object} Todas las rutas visibles
      */
     getAllRoutes(systemRoutes = {}) {
         const userRoutes = this.getUserRoutes();
+        const hiddenRoutes = this.getHiddenSystemRoutes();
+
+        // Filtrar rutas del sistema que están ocultas
+        const visibleSystemRoutes = {};
+        for (const [trainNumber, route] of Object.entries(systemRoutes)) {
+            if (!hiddenRoutes.includes(trainNumber)) {
+                visibleSystemRoutes[trainNumber] = route;
+            }
+        }
+
         return {
-            ...systemRoutes,
+            ...visibleSystemRoutes,
             ...userRoutes
         };
     },
@@ -309,16 +338,17 @@ const ConfigurationManager = {
     },
 
     /**
-     * Obtiene rutas del sistema (excluye personalizadas)
+     * Obtiene rutas del sistema (excluye personalizadas y ocultas)
      * @param {Object} allRoutes - Todas las rutas disponibles
      * @returns {Array} Array de rutas del sistema
      */
     getSystemRoutes(allRoutes = {}) {
         const userRoutes = this.getUserRoutes();
         const userRouteNumbers = Object.keys(userRoutes);
+        const hiddenRoutes = this.getHiddenSystemRoutes();
 
         return Object.entries(allRoutes)
-            .filter(([trainNumber]) => !userRouteNumbers.includes(trainNumber))
+            .filter(([trainNumber]) => !userRouteNumbers.includes(trainNumber) && !hiddenRoutes.includes(trainNumber))
             .map(([trainNumber, data]) => {
                 // Si data es un array (formato antiguo), convertir a objeto
                 if (Array.isArray(data)) {
@@ -563,6 +593,218 @@ const ConfigurationManager = {
             return { success: true };
         } catch (e) {
             console.error('Error eliminando parada:', e);
+            return {
+                success: false,
+                error: e.message
+            };
+        }
+    },
+
+    // ========================================================================
+    // GESTIÓN DE ELEMENTOS OCULTOS DEL SISTEMA
+    // ========================================================================
+
+    /**
+     * Obtiene la lista de modelos del sistema ocultos
+     * @returns {Array} Array de IDs de modelos ocultos
+     */
+    getHiddenSystemModels() {
+        try {
+            const data = localStorage.getItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_MODELS);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            console.error('Error cargando modelos ocultos:', e);
+            return [];
+        }
+    },
+
+    /**
+     * Obtiene la lista de rutas del sistema ocultas
+     * @returns {Array} Array de números de tren ocultos
+     */
+    getHiddenSystemRoutes() {
+        try {
+            const data = localStorage.getItem(this.STORAGE_KEYS.HIDDEN_SYSTEM_ROUTES);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            console.error('Error cargando rutas ocultas:', e);
+            return [];
+        }
+    },
+
+    /**
+     * Obtiene todos los modelos sin filtrar (incluyendo ocultos)
+     * SOLO para uso en la UI de restauración
+     * @param {Object} systemModels - Modelos del sistema
+     * @returns {Object} Todos los modelos sin filtrar
+     */
+    getAllTrainModelsUnfiltered(systemModels = {}) {
+        const userModels = this.getUserTrainModels();
+        return {
+            ...systemModels,
+            ...userModels
+        };
+    },
+
+    /**
+     * Obtiene todas las rutas sin filtrar (incluyendo ocultas)
+     * SOLO para uso en la UI de restauración
+     * @param {Object} systemRoutes - Rutas del sistema
+     * @returns {Object} Todas las rutas sin filtrar
+     */
+    getAllRoutesUnfiltered(systemRoutes = {}) {
+        const userRoutes = this.getUserRoutes();
+        return {
+            ...systemRoutes,
+            ...userRoutes
+        };
+    },
+
+    /**
+     * Oculta un modelo del sistema
+     * @param {string} modelId - ID del modelo a ocultar
+     * @returns {Object} { success: boolean, error?: string }
+     */
+    hideSystemTrainModel(modelId) {
+        try {
+            if (window.IdGenerator.isCustomId(modelId)) {
+                return {
+                    success: false,
+                    error: 'Solo se pueden ocultar modelos del sistema'
+                };
+            }
+
+            const hiddenModels = this.getHiddenSystemModels();
+
+            if (hiddenModels.includes(modelId)) {
+                return {
+                    success: false,
+                    error: 'El modelo ya está oculto'
+                };
+            }
+
+            hiddenModels.push(modelId);
+            localStorage.setItem(
+                this.STORAGE_KEYS.HIDDEN_SYSTEM_MODELS,
+                JSON.stringify(hiddenModels)
+            );
+
+            console.log(`✅ Modelo "${modelId}" ocultado correctamente`);
+
+            return { success: true };
+        } catch (e) {
+            console.error('Error ocultando modelo:', e);
+            return {
+                success: false,
+                error: e.message
+            };
+        }
+    },
+
+    /**
+     * Oculta una ruta del sistema
+     * @param {string} trainNumber - Número de tren a ocultar
+     * @returns {Object} { success: boolean, error?: string }
+     */
+    hideSystemRoute(trainNumber) {
+        try {
+            if (window.IdGenerator.isCustomRoute(trainNumber)) {
+                return {
+                    success: false,
+                    error: 'Solo se pueden ocultar rutas del sistema'
+                };
+            }
+
+            const hiddenRoutes = this.getHiddenSystemRoutes();
+
+            if (hiddenRoutes.includes(trainNumber)) {
+                return {
+                    success: false,
+                    error: 'La ruta ya está oculta'
+                };
+            }
+
+            hiddenRoutes.push(trainNumber);
+            localStorage.setItem(
+                this.STORAGE_KEYS.HIDDEN_SYSTEM_ROUTES,
+                JSON.stringify(hiddenRoutes)
+            );
+
+            console.log(`✅ Ruta "${trainNumber}" ocultada correctamente`);
+
+            return { success: true };
+        } catch (e) {
+            console.error('Error ocultando ruta:', e);
+            return {
+                success: false,
+                error: e.message
+            };
+        }
+    },
+
+    /**
+     * Muestra un modelo del sistema previamente oculto
+     * @param {string} modelId - ID del modelo a mostrar
+     * @returns {Object} { success: boolean, error?: string }
+     */
+    showSystemTrainModel(modelId) {
+        try {
+            const hiddenModels = this.getHiddenSystemModels();
+            const index = hiddenModels.indexOf(modelId);
+
+            if (index === -1) {
+                return {
+                    success: false,
+                    error: 'El modelo no está oculto'
+                };
+            }
+
+            hiddenModels.splice(index, 1);
+            localStorage.setItem(
+                this.STORAGE_KEYS.HIDDEN_SYSTEM_MODELS,
+                JSON.stringify(hiddenModels)
+            );
+
+            console.log(`✅ Modelo "${modelId}" visible nuevamente`);
+
+            return { success: true };
+        } catch (e) {
+            console.error('Error mostrando modelo:', e);
+            return {
+                success: false,
+                error: e.message
+            };
+        }
+    },
+
+    /**
+     * Muestra una ruta del sistema previamente oculta
+     * @param {string} trainNumber - Número de tren a mostrar
+     * @returns {Object} { success: boolean, error?: string }
+     */
+    showSystemRoute(trainNumber) {
+        try {
+            const hiddenRoutes = this.getHiddenSystemRoutes();
+            const index = hiddenRoutes.indexOf(trainNumber);
+
+            if (index === -1) {
+                return {
+                    success: false,
+                    error: 'La ruta no está oculta'
+                };
+            }
+
+            hiddenRoutes.splice(index, 1);
+            localStorage.setItem(
+                this.STORAGE_KEYS.HIDDEN_SYSTEM_ROUTES,
+                JSON.stringify(hiddenRoutes)
+            );
+
+            console.log(`✅ Ruta "${trainNumber}" visible nuevamente`);
+
+            return { success: true };
+        } catch (e) {
+            console.error('Error mostrando ruta:', e);
             return {
                 success: false,
                 error: e.message

@@ -651,11 +651,94 @@ function showTrainNumberPrompt() {
         return;
     }
 
+    // Verificar si la ruta existe en trainRoutes (rutas visibles)
+    const routeExists = trainRoutes && trainRoutes[trimmed];
+    const isKnown = trainNumbers[trimmed];
+
+    // Si la ruta no está visible, verificar si está oculta
+    if (!routeExists && trimmed !== state.trainNumber) {
+        // Verificar si está en las rutas ocultas
+        const hiddenRoutes = window.ConfigurationManager
+            ? window.ConfigurationManager.getHiddenSystemRoutes()
+            : [];
+        const isHidden = hiddenRoutes.includes(trimmed);
+
+        // Verificar si existe en las rutas originales (sin filtrar)
+        const routeExistsInOriginal = window._originalTrainRoutes && window._originalTrainRoutes[trimmed];
+
+        if (isHidden && routeExistsInOriginal) {
+            // CASO 1: La ruta existe pero está oculta
+            const restoreRoute = confirm(
+                `ℹ️ El trayecto del tren ${trimmed} existe pero está oculto.\n\n` +
+                `¿Deseas restaurar este trayecto para poder usarlo?`
+            );
+
+            if (restoreRoute) {
+                // Restaurar la ruta
+                const result = window.ConfigurationManager.showSystemRoute(trimmed);
+                if (result.success) {
+                    console.log(`✅ Ruta ${trimmed} restaurada`);
+
+                    // Recargar datos para que la ruta aparezca
+                    if (window.loadJSONData) {
+                        window.loadJSONData().then(() => {
+                            // Ahora cambiar al tren con la ruta restaurada
+                            changeTrainNumber(trimmed);
+                        });
+                    } else {
+                        changeTrainNumber(trimmed);
+                    }
+                } else {
+                    alert('Error al restaurar la ruta: ' + result.error);
+                }
+            }
+            return;
+        } else {
+            // CASO 2: La ruta no existe en el sistema
+            const createRoute = confirm(
+                `⚠️ La ruta del tren ${trimmed} no existe en el sistema.\n\n` +
+                `¿Deseas crear un nuevo trayecto personalizado para este tren?`
+            );
+
+            if (createRoute) {
+                // Abrir el wizard de creación de rutas con el número prellenado
+                if (window.RouteWizard) {
+                    window.RouteWizard.open({
+                        routeData: {
+                            trainNumber: trimmed,
+                            stops: [],
+                            destination: ''
+                        },
+                        onComplete: (savedRoute) => {
+                            console.log('Ruta creada:', savedRoute);
+
+                            // Recargar datos para que la nueva ruta aparezca
+                            if (window.loadJSONData) {
+                                window.loadJSONData().then(() => {
+                                    // Ahora sí cambiar al tren con la ruta creada
+                                    changeTrainNumber(trimmed);
+                                });
+                            } else {
+                                changeTrainNumber(trimmed);
+                            }
+                        },
+                        onCancel: () => {
+                            console.log('Creación de ruta cancelada');
+                        }
+                    });
+                } else {
+                    alert('Error: El wizard de rutas no está disponible');
+                }
+                return;
+            } else {
+                // El usuario no quiere crear la ruta, no continuar
+                return;
+            }
+        }
+    }
+
     // Si el número es distinto del actual, mostrar confirmación
     if (trimmed !== state.trainNumber) {
-        // Verificar si está en la lista
-        const isKnown = trainNumbers[trimmed];
-
         let confirmMessage = `¿Cambiar al tren número ${trimmed}?\n\n`;
         confirmMessage += '⚠️ ESTO BORRARÁ:\n';
         confirmMessage += '• Todos los asientos registrados\n';
@@ -693,6 +776,50 @@ function showTrainNumberPrompt() {
     // Actualizar número de tren
     state.trainNumber = trimmed;
     saveTrainNumber();
+
+    // Re-renderizar
+    render();
+}
+
+/**
+ * Función auxiliar para cambiar el número de tren (usado después de crear ruta)
+ */
+function changeTrainNumber(trainNumber) {
+    // Verificar si hay datos que borrar
+    const hasData = Object.keys(state.seatData || {}).length > 0 ||
+                    state.serviceNotes ||
+                    Object.keys(state.incidents || {}).length > 0;
+
+    if (hasData) {
+        let confirmMessage = `¿Cambiar al tren número ${trainNumber}?\n\n`;
+        confirmMessage += '⚠️ ESTO BORRARÁ:\n';
+        confirmMessage += '• Todos los asientos registrados\n';
+        confirmMessage += '• Notas del servicio\n';
+        confirmMessage += '• Incidencias\n';
+        confirmMessage += '• Parada actual\n';
+        confirmMessage += '• Direcciones del tren\n';
+        confirmMessage += '• Backups automáticos\n\n';
+        confirmMessage += '¿Continuar?';
+
+        if (!confirm(confirmMessage)) return;
+    }
+
+    // --- BORRAR TODOS LOS DATOS ---
+    state.seatData = {};
+    state.trainDirection = {};
+    state.serviceNotes = "";
+    state.incidents = {};
+    state.currentStop = null;
+    lastCopiedSeatData = null;
+    state.lastCopiedSeatData = null;
+
+    // Eliminar de localStorage
+    clearCurrentTrainData();
+
+    // Actualizar número de tren
+    state.trainNumber = trainNumber;
+    saveTrainNumber();
+    saveData();
 
     // Re-renderizar
     render();
@@ -3177,6 +3304,17 @@ async function initializeApp() {
 
         if (!jsonLoaded) {
             console.error('⚠️ Error cargando datos JSON, la aplicación podría no funcionar correctamente');
+        }
+
+        // 1.5. Verificar que el tren seleccionado existe, si no, seleccionar el primero disponible
+        if (!trainModels[state.selectedTrain]) {
+            const availableTrains = Object.keys(trainModels);
+            if (availableTrains.length > 0) {
+                state.selectedTrain = availableTrains[0];
+                console.log(`⚠️ Tren por defecto no disponible, seleccionando: ${state.selectedTrain}`);
+            } else {
+                console.error('⚠️ No hay trenes disponibles');
+            }
         }
 
         // 2. Cargar datos guardados en localStorage

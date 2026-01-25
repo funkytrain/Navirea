@@ -207,6 +207,11 @@
     background: white;
 }
 
+.config-item-hidden {
+    background: #fef3c7;
+    border-color: #fbbf24;
+}
+
 .config-item-icon {
     font-size: 1.75rem;
     flex-shrink: 0;
@@ -270,6 +275,30 @@
 .config-action-delete:hover {
     background: #fee2e2;
     color: #dc2626;
+}
+
+/* Botón de eliminación para elementos del sistema (más sutil) */
+.config-item-system .config-action-btn {
+    background: transparent;
+    color: #9ca3af;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.config-item-system .config-action-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Botón de restauración */
+.config-action-restore {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.config-action-restore:hover {
+    background: #10b981;
+    color: white;
 }
 
 /* ============================================
@@ -506,6 +535,11 @@ body.dark-mode .config-item-custom {
     background: #111827;
 }
 
+body.dark-mode .config-item-hidden {
+    background: #422006;
+    border-color: #92400e;
+}
+
 body.dark-mode .config-item-name {
     color: #f9fafb;
 }
@@ -527,6 +561,26 @@ body.dark-mode .config-action-btn:hover {
 body.dark-mode .config-action-delete:hover {
     background: #7f1d1d;
     color: #fca5a5;
+}
+
+body.dark-mode .config-item-system .config-action-btn {
+    background: transparent;
+    color: #6b7280;
+}
+
+body.dark-mode .config-item-system .config-action-btn:hover {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+body.dark-mode .config-action-restore {
+    background: #422006;
+    color: #fbbf24;
+}
+
+body.dark-mode .config-action-restore:hover {
+    background: #065f46;
+    color: #6ee7b7;
 }
 
 body.dark-mode .config-manager-footer {
