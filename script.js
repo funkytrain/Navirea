@@ -830,7 +830,7 @@ function getTrainFinalStops() {
     return trainNumbers[state.trainNumber] || [];
 }
 
-function applyCurrentStopChange(stopName, route, stopIndex) {
+function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
     // Guardar parada actual
     state.currentStop = stopName;
     saveCurrentStop();
@@ -868,6 +868,11 @@ function applyCurrentStopChange(stopName, route, stopIndex) {
     saveData();
     state.currentStopSearch = '';
     render();
+
+    // Restaurar posición del scroll DESPUÉS del render
+    requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPosition);
+    });
 
     alert(`Parada actual: ${stopName}\n${deletedCount} asiento(s) liberado(s)`);
 }
@@ -916,17 +921,24 @@ function setCurrentStop(stopName) {
 
     confirmMessage += '¿Continuar?';
 
+    // Capturar posición del scroll ANTES de abrir el modal
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+
     // Mostrar confirmación SIEMPRE
     showConfirmModal(
         confirmMessage,
         () => {
             // ACEPTAR → aplicar el cambio
-            applyCurrentStopChange(stopName, route, stopIndex);
+            applyCurrentStopChange(stopName, route, stopIndex, scrollPosition);
         },
         () => {
             // CANCELAR → no hacer nada
             state.currentStopSearch = '';
             render();
+            // Restaurar scroll después del render
+            requestAnimationFrame(() => {
+                window.scrollTo(0, scrollPosition);
+            });
         }
     );
 }
