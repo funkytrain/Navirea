@@ -24,6 +24,38 @@
 
 ---
 
+## 📸 Capturas de pantalla
+
+### Vista principal del tren
+![Vista principal](screenshots/chrome_EvVGRQ5Iby.png)
+*Vista principal de la aplicación mostrando el tren 449 con 5 coches. Se puede ver la disposición de asientos con códigos de colores para identificar el estado de ocupación, destinos asignados y espacios especiales (PMR, mesas, etc.)*
+
+### Vista detallada de un coche
+![Vista de coche individual](screenshots/chrome_mpWzrqfVaQ.png)
+*Vista ampliada de un coche individual (Tren 463) mostrando la distribución detallada de asientos con su numeración, estados de ocupación (libre, ocupado, enlace) y espacios especiales como UHA, VIT, ALE y ETX*
+
+### Pantalla de horarios de estación
+![Pantalla de llegadas](screenshots/chrome_hhWkdLzxOI.png)
+*Panel de información de llegadas de la estación mostrando horarios en tiempo real de los trenes, destinos, y estado de los servicios. Útil para consultar conexiones y planificar el servicio*
+
+### Gestor de configuraciones
+![Configuraciones personalizadas](screenshots/chrome_oBsEZXxlRM.png)
+*Interfaz de gestión de configuraciones donde se pueden crear, editar y eliminar modelos de tren personalizados. Incluye opciones para exportar, importar y compartir configuraciones mediante QR*
+
+### Filtro de asientos por destino
+![Filtro por parada](screenshots/chrome_p5oOOte3d6.png)
+*Diálogo de filtrado mostrando todos los asientos con destino a Utebo (20 asientos). Permite identificar rápidamente qué viajeros bajan en una parada específica*
+
+### Confirmación de cambio de parada
+![Confirmación de parada actual](screenshots/chrome_vq2GmqHFoR.png)
+*Diálogo de confirmación al cambiar la parada actual a "Zaragoza Delicias". El sistema notifica cuántos viajeros se liberarán automáticamente al confirmar el cambio*
+
+### Resaltado de tramo
+![Resaltar viajeros en tramo](screenshots/chrome_vZmkPMl9cE.png)
+*Función de resaltado de tramo que permite visualizar rápidamente los 59 viajeros que están en el trayecto entre Zaragoza Goya y Tafalla, facilitando el control de ocupación por sectores*
+
+---
+
 ## 🎯 Público objetivo
 
 Esta aplicación está pensada específicamente para **interventores de**:
