@@ -42,7 +42,7 @@ export function openScreensModal() {
                     <input
                         type="text"
                         class="search-input"
-                        placeholder="Introduce estación..."
+                        placeholder="Buscar por nombre o código ADIF..."
                         oninput="updateScreenSearch(this.value)"
                         autocomplete="off"
                         id="screen-search-input"
@@ -82,7 +82,7 @@ export function closeScreensModal(event) {
 
 /**
  * Actualiza la lista de estaciones filtradas según búsqueda
- * @param {string} query - Texto de búsqueda
+ * @param {string} query - Texto de búsqueda (nombre o código ADIF)
  */
 export function updateScreenSearch(query) {
     const list = document.getElementById("screen-list");
@@ -94,19 +94,94 @@ export function updateScreenSearch(query) {
         return;
     }
 
-    // Obtener datos de paradas desde el estado global
+    // Obtener datos de paradas locales y ADIF
     const stops = window.stops || [];
     const stationScreens = window.stationScreens || {};
-    const stations = stops.map(s => s.full);
+    const adifStations = window.adifStations || {};
+    const trainRoutes = window.trainRoutes || {};
+    const state = window.state || {};
 
-    const filtered = stations.filter(s => s.toLowerCase().includes(query));
+    // Determinar si hay una ruta activa
+    const currentTrainNumber = state.trainNumber;
+    const currentRoute = currentTrainNumber && trainRoutes[currentTrainNumber];
 
-    list.innerHTML = filtered.map(name => {
-        const hasScreen = stationScreens[name];
+    // La ruta puede ser un array directo o un objeto con .stops
+    let routeStops = [];
+    if (currentRoute) {
+        if (Array.isArray(currentRoute)) {
+            routeStops = currentRoute;
+        } else if (currentRoute.stops) {
+            routeStops = currentRoute.stops;
+        }
+    }
+
+    const hasActiveRoute = routeStops.length > 0;
+
+    let availableStations = [];
+
+    if (hasActiveRoute) {
+        // Solo mostrar estaciones de la ruta actual
+        const adifMetadata = (currentRoute && currentRoute.adifStopsMetadata) || {};
+
+        routeStops.forEach(stopIdentifier => {
+            // Verificar si es estación ADIF
+            if (adifMetadata[stopIdentifier]) {
+                availableStations.push({
+                    name: adifMetadata[stopIdentifier].name,
+                    identifier: stopIdentifier,
+                    source: 'adif',
+                    hasScreen: adifMetadata[stopIdentifier].screenCode !== null
+                });
+            } else if (adifStations[stopIdentifier]) {
+                availableStations.push({
+                    name: adifStations[stopIdentifier].name,
+                    identifier: stopIdentifier,
+                    source: 'adif',
+                    hasScreen: adifStations[stopIdentifier].screenCode !== null
+                });
+            } else {
+                // Es parada local
+                availableStations.push({
+                    name: stopIdentifier,
+                    identifier: stopIdentifier,
+                    source: 'local',
+                    hasScreen: stationScreens[stopIdentifier] !== undefined
+                });
+            }
+        });
+    } else {
+        // No hay ruta activa: mostrar todas las estaciones
+        const localStations = stops.map(s => ({
+            name: s.full,
+            identifier: s.full,
+            source: 'local',
+            hasScreen: stationScreens[s.full] !== undefined
+        }));
+
+        const adifStationsList = Object.entries(adifStations).map(([code, data]) => ({
+            name: data.name,
+            identifier: code,
+            source: 'adif',
+            hasScreen: data.screenCode !== null
+        }));
+
+        availableStations = [...localStations, ...adifStationsList];
+    }
+
+    // Filtrar por nombre o código
+    const filtered = availableStations.filter(station => {
+        const nameMatch = station.name.toLowerCase().includes(query);
+        const codeMatch = station.identifier.toLowerCase().includes(query);
+        return nameMatch || codeMatch;
+    });
+
+    list.innerHTML = filtered.slice(0, 20).map(station => {
+        const badge = station.source === 'adif' ? '<span style="font-size:10px; background:#3b82f6; color:white; padding:2px 6px; border-radius:4px; margin-left:8px;">ADIF</span>' : '';
+
         return `
-            <button class="stop-item" onclick="openStationScreen('${name}')">
-                <span class="stop-name" style="${hasScreen ? 'font-weight:700' : 'text-decoration:line-through; opacity:0.6;'}">
-                    ${name}
+            <button class="stop-item" onclick="openStationScreen('${station.identifier.replace(/'/g, "\\'")}')">
+                <span class="stop-name">
+                    ${station.name} ${badge}
                 </span>
             </button>
         `;
@@ -115,12 +190,30 @@ export function updateScreenSearch(query) {
 
 /**
  * Abre la pantalla específica de una estación
- * @param {string} name - Nombre de la estación
+ * @param {string} name - Nombre de la estación o código ADIF
  */
 export function openStationScreen(name) {
     removeAllScreenModals();
     const stationScreens = window.stationScreens || {};
-    const code = stationScreens[name];
+    const adifStations = window.adifStations || {};
+
+    // Intentar obtener código de pantalla desde station-screens.json
+    let code = stationScreens[name];
+
+    // Si no existe, verificar si es código ADIF y obtener screenCode
+    if (!code && adifStations[name]) {
+        code = adifStations[name].screenCode;
+    }
+
+    // Si aún no existe código, buscar por nombre en ADIF
+    if (!code) {
+        const adifStation = Object.values(adifStations).find(
+            station => station.name === name
+        );
+        if (adifStation) {
+            code = adifStation.screenCode;
+        }
+    }
 
     if (!code) {
         alert("No existe pantalla disponible para esta estación.");

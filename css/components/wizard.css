@@ -1261,3 +1261,49 @@ body.dark-mode .tooltip-icon {
 body.dark-mode .tooltip-icon:hover {
     background: #2563eb;
 }
+
+/* ============================================================================
+   BADGES DE ORIGEN Y FEATURES
+   ============================================================================ */
+
+.source-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adif-badge {
+    background: #3b82f6;
+    color: white;
+}
+
+.screen-badge {
+    background: #10b981;
+    color: white;
+    font-size: 11px;
+}
+
+/* Badges en sugerencias de autocomplete */
+.autocomplete-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.autocomplete-suggestion .source-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Dark mode */
+body.dark-mode .adif-badge {
+    background: #2563eb;
+}
+
+body.dark-mode .screen-badge {
+    background: #059669;
+}

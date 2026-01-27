@@ -432,6 +432,11 @@ const ConfigurationManager = {
                 updatedAt: new Date().toISOString()
             };
 
+            // Si tiene metadata de estaciones ADIF, guardarla también
+            if (route.adifStopsMetadata) {
+                routeToSave.adifStopsMetadata = route.adifStopsMetadata;
+            }
+
             // Guardar
             existingRoutes[route.trainNumber] = routeToSave;
             localStorage.setItem(
