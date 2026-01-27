@@ -290,9 +290,13 @@ Las contribuciones son bienvenidas. Por favor:
 
 ---
 
-## 📧 Contacto
+## 📧 Contacto y soporte
 
-Dudas o sugerencias a: [plantillatren@gmail.com](mailto:plantillatren@gmail.com)
+Si tienes dudas, sugerencias o has encontrado algún problema, por favor abre una incidencia (issue) en el repositorio de GitHub:
+
+👉 [Abrir una incidencia en GitHub](https://github.com/funkytrain/Navirea/issues/new)
+
+Allí podrás reportar errores, solicitar nuevas funcionalidades o hacer preguntas sobre el uso de la aplicación.
 
 ---
 

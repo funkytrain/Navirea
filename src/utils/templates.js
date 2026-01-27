@@ -354,7 +354,7 @@ function generateAboutModal() {
                     <p><strong>Navirea v1.0</strong></p>
                     <p>Creado por Adrián Fernández,</p>
 <p>y publicado bajo la licencia MIT.</p>
-                    <p>Dudas o sugerencias a:<br><a href="mailto:plantillatren@gmail.com">plantillatren@gmail.com</a></p>
+                    <p>Repositorio del proyecto:<br><a href="https://github.com/funkytrain/Navirea" target="_blank">github.com/funkytrain/Navirea</a></p>
                     <br>
                     <p><b>Proyecto no oficial ni afiliado con ADIF o RENFE, con propósito educacional. Las pantallas de las estaciones muestran contenido servido directamente por ADIF. Marca, logotipos y datos mostrados en el panel son propiedad de ADIF.</b></p>
                     <p><b>El Manual Técnico Ferroviario es un proyecto creado por José Luis Domínguez y Juan Pablo Romero.</b></p>
