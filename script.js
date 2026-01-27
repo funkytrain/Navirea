@@ -6,6 +6,7 @@ let stops = [];
 let trainNumbers = {};
 let trainRoutes = {};
 let stationScreens = {};
+let adifStations = {};
 
 // Helper para verificar si los datos están cargados
 function isDataLoaded() {
@@ -25,6 +26,7 @@ async function loadJSONData() {
         trainNumbers = data.trainNumbers;
         trainRoutes = data.trainRoutes;
         stationScreens = data.stationScreens;
+        adifStations = data.adifStations;
 
         console.log('✅ Datos cargados correctamente desde JSON');
         console.log('📊 Trenes disponibles:', Object.keys(trainModels));
@@ -836,6 +838,9 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
     saveCurrentStop();
 
     // Obtener todas las paradas hasta la actual (inclusive)
+    const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+    const isCustom = routeData && routeData.custom === true;
+    const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
     const stopsToDelete = route.slice(0, stopIndex + 1);
 
     // Recorrer todos los asientos y borrar los que tengan paradas anteriores
@@ -844,7 +849,21 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
         .forEach(key => {
             const seatInfo = state.seatData[key];
             if (seatInfo && seatInfo.stop) {
-                if (stopsToDelete.includes(seatInfo.stop.full)) {
+                const seatStopName = seatInfo.stop.full;
+
+                // Verificar si la parada del asiento está en la lista de paradas a eliminar
+                const isInDeleteList = stopsToDelete.some(stopId => {
+                    if (isCustom) {
+                        if (adifMetadata[stopId]) {
+                            return adifMetadata[stopId].name === seatStopName;
+                        } else if (window.adifStations && window.adifStations[stopId]) {
+                            return window.adifStations[stopId].name === seatStopName;
+                        }
+                    }
+                    return stopId === seatStopName;
+                });
+
+                if (isInDeleteList) {
                     // Guardar en historial antes de borrar
                     if (!seatInfo.historial) {
                         seatInfo.historial = [];
@@ -883,8 +902,25 @@ function setCurrentStop(stopName) {
         return;
     }
 
-    const route = trainRoutes[state.trainNumber];
-    const stopIndex = route.indexOf(stopName);
+    const routeData = trainRoutes[state.trainNumber];
+    const route = getCurrentRoute();
+    const isCustom = routeData.custom === true;
+    const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
+
+    // Para rutas custom, necesitamos buscar por nombre
+    let stopIndex = -1;
+    if (isCustom) {
+        stopIndex = route.findIndex(stopId => {
+            if (adifMetadata[stopId]) {
+                return adifMetadata[stopId].name === stopName;
+            } else if (window.adifStations && window.adifStations[stopId]) {
+                return window.adifStations[stopId].name === stopName;
+            }
+            return stopId === stopName;
+        });
+    } else {
+        stopIndex = route.indexOf(stopName);
+    }
 
     if (stopIndex === -1) {
         alert('Esta parada no está en la ruta del tren ' + state.trainNumber);
@@ -897,14 +933,43 @@ function setCurrentStop(stopName) {
 
     Object.keys(state.seatData).forEach(key => {
         const seatInfo = state.seatData[key];
-        if (seatInfo && seatInfo.stop && stopsToDelete.includes(seatInfo.stop.full)) {
-            seatsToDelete++;
+        if (seatInfo && seatInfo.stop) {
+            // Verificar si la parada del asiento está en la lista de paradas a eliminar
+            const seatStopName = seatInfo.stop.full;
+            const isInDeleteList = stopsToDelete.some(stopId => {
+                if (isCustom) {
+                    if (adifMetadata[stopId]) {
+                        return adifMetadata[stopId].name === seatStopName;
+                    } else if (window.adifStations && window.adifStations[stopId]) {
+                        return window.adifStations[stopId].name === seatStopName;
+                    }
+                }
+                return stopId === seatStopName;
+            });
+            if (isInDeleteList) {
+                seatsToDelete++;
+            }
         }
     });
 
     // Verificar si estamos yendo hacia una parada anterior
     const previousStop = state.currentStop || null;
-    const isGoingBackwards = previousStop && route.indexOf(previousStop) > stopIndex;
+    let previousStopIndex = -1;
+    if (previousStop) {
+        if (isCustom) {
+            previousStopIndex = route.findIndex(stopId => {
+                if (adifMetadata[stopId]) {
+                    return adifMetadata[stopId].name === previousStop;
+                } else if (window.adifStations && window.adifStations[stopId]) {
+                    return window.adifStations[stopId].name === previousStop;
+                }
+                return stopId === previousStop;
+            });
+        } else {
+            previousStopIndex = route.indexOf(previousStop);
+        }
+    }
+    const isGoingBackwards = previousStopIndex !== -1 && previousStopIndex > stopIndex;
 
     // Construir mensaje de confirmación
     let confirmMessage = `¿Cambiar parada actual a "${stopName}"?\n\n`;
@@ -979,8 +1044,24 @@ function getCurrentRoute() {
 function filterCurrentStops() {
     const query = state.currentStopSearch.toLowerCase();
     const route = getCurrentRoute();
-    return route.filter(stop => stop.toLowerCase()
-        .includes(query));
+    const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+    const isCustom = routeData && routeData.custom === true;
+    const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
+
+    // Crear lista de nombres resueltos para filtrar
+    const resolvedStops = route.map(stopIdentifier => {
+        if (isCustom) {
+            // Resolver código ADIF a nombre
+            if (adifMetadata[stopIdentifier]) {
+                return adifMetadata[stopIdentifier].name;
+            } else if (window.adifStations && window.adifStations[stopIdentifier]) {
+                return window.adifStations[stopIdentifier].name;
+            }
+        }
+        return stopIdentifier;
+    });
+
+    return resolvedStops.filter(stop => stop.toLowerCase().includes(query));
 }
 
 function updateCurrentStopSearch(value) {
@@ -1422,6 +1503,107 @@ function clearAllData() {
     }
 }
 
+/**
+ * Genera una abreviatura única de 3 letras para un nombre de estación
+ * @param {string} name - Nombre de la estación
+ * @param {Set} usedAbbrs - Set de abreviaturas ya usadas
+ * @returns {string} Abreviatura única de 3 letras
+ */
+function generateUniqueAbbr(name, usedAbbrs) {
+    // Limpiar el nombre: eliminar caracteres especiales y convertir a mayúsculas
+    const cleanName = name.toUpperCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
+        .replace(/[^A-Z\s]/g, ''); // Solo letras y espacios
+
+    // Estrategia 1: Primeras 3 letras de palabras significativas
+    const words = cleanName.split(/\s+/).filter(w => w.length > 0);
+
+    // Filtrar palabras no significativas
+    const meaningfulWords = words.filter(w =>
+        !['DE', 'DEL', 'LA', 'EL', 'LOS', 'LAS'].includes(w)
+    );
+
+    // Si hay palabras significativas, usar sus iniciales
+    if (meaningfulWords.length >= 2) {
+        // Tomar primera letra de las primeras 3 palabras significativas
+        let abbr = meaningfulWords.slice(0, 3).map(w => w[0]).join('');
+        if (abbr.length === 3 && !usedAbbrs.has(abbr)) {
+            return abbr;
+        }
+    }
+
+    // Estrategia 2: Primera palabra significativa (3 primeras letras)
+    if (meaningfulWords.length > 0) {
+        const firstWord = meaningfulWords[0];
+        if (firstWord.length >= 3) {
+            let abbr = firstWord.substring(0, 3);
+            if (!usedAbbrs.has(abbr)) {
+                return abbr;
+            }
+
+            // Si está ocupada, probar con variaciones
+            for (let i = 1; i < firstWord.length - 1; i++) {
+                abbr = firstWord[0] + firstWord[i] + firstWord[i + 1];
+                if (!usedAbbrs.has(abbr)) {
+                    return abbr;
+                }
+            }
+        }
+    }
+
+    // Estrategia 3: Combinación de primera y segunda palabra
+    if (meaningfulWords.length >= 2) {
+        const w1 = meaningfulWords[0];
+        const w2 = meaningfulWords[1];
+
+        // Probar: 2 letras primera + 1 letra segunda
+        if (w1.length >= 2 && w2.length >= 1) {
+            let abbr = w1.substring(0, 2) + w2[0];
+            if (!usedAbbrs.has(abbr)) {
+                return abbr;
+            }
+        }
+
+        // Probar: 1 letra primera + 2 letras segunda
+        if (w1.length >= 1 && w2.length >= 2) {
+            let abbr = w1[0] + w2.substring(0, 2);
+            if (!usedAbbrs.has(abbr)) {
+                return abbr;
+            }
+        }
+    }
+
+    // Estrategia 4: Usar todas las letras disponibles (primeras 3)
+    const allLetters = cleanName.replace(/\s/g, '');
+    if (allLetters.length >= 3) {
+        let abbr = allLetters.substring(0, 3);
+        if (!usedAbbrs.has(abbr)) {
+            return abbr;
+        }
+
+        // Probar con diferentes posiciones
+        for (let i = 0; i < allLetters.length - 2; i++) {
+            abbr = allLetters.substring(i, i + 3);
+            if (!usedAbbrs.has(abbr)) {
+                return abbr;
+            }
+        }
+    }
+
+    // Estrategia 5: Agregar números si todo lo demás falla
+    const baseAbbr = allLetters.substring(0, 2);
+    for (let num = 1; num <= 99; num++) {
+        const abbr = baseAbbr + num;
+        if (!usedAbbrs.has(abbr)) {
+            return abbr;
+        }
+    }
+
+    // Último recurso: primeras 3 letras con sufijo aleatorio
+    return cleanName.substring(0, 3);
+}
+
 // Filtrar paradas
 function getFilteredStops() {
     const query = state.searchQuery.toLowerCase();
@@ -1439,14 +1621,31 @@ function getFilteredStops() {
 
         if (isCustomRoute) {
             // Para rutas personalizadas: crear objetos de parada dinámicamente
-            // desde los nombres de las paradas en la ruta custom
+            // desde los nombres/códigos de las paradas en la ruta custom
             console.log('[getFilteredStops] 🟢 Ruta CUSTOM detectada - creando paradas dinámicamente');
 
-            availableStops = routeStops.map(stopName => {
-                // Generar abreviatura: primeras 3 letras en mayúsculas
-                const abbr = stopName.substring(0, 3).toUpperCase();
+            const routeData = trainRoutes[state.trainNumber];
+            const adifMetadata = routeData.adifStopsMetadata || {};
+
+            // Generar abreviaturas únicas para todas las paradas de la ruta
+            const usedAbbrs = new Set();
+
+            availableStops = routeStops.map(stopIdentifier => {
+                let displayName = stopIdentifier;
+
+                // Si es código ADIF, resolver al nombre real
+                if (adifMetadata[stopIdentifier]) {
+                    displayName = adifMetadata[stopIdentifier].name;
+                } else if (window.adifStations && window.adifStations[stopIdentifier]) {
+                    displayName = window.adifStations[stopIdentifier].name;
+                }
+
+                // Generar abreviatura única de 3 letras
+                const abbr = generateUniqueAbbr(displayName, usedAbbrs);
+                usedAbbrs.add(abbr);
+
                 return {
-                    full: stopName,
+                    full: displayName,
                     abbr: abbr
                 };
             });
@@ -1470,8 +1669,39 @@ function getFilteredStops() {
 
     // Ordenar SIEMPRE siguiendo el orden de trainRoutes
     const route = getCurrentRoute();
+    const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+    const isCustom = routeData && routeData.custom === true;
+    const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
+
     filtered.sort((a, b) => {
-        return route.indexOf(a.full) - route.indexOf(b.full);
+        // Para rutas custom con ADIF, necesitamos buscar por nombre o código
+        let indexA, indexB;
+
+        if (isCustom) {
+            // Buscar índice por nombre o por código (en abbr para ADIF)
+            indexA = route.findIndex(stopId => {
+                if (adifMetadata[stopId]) {
+                    return adifMetadata[stopId].name === a.full;
+                } else if (window.adifStations && window.adifStations[stopId]) {
+                    return window.adifStations[stopId].name === a.full;
+                }
+                return stopId === a.full;
+            });
+
+            indexB = route.findIndex(stopId => {
+                if (adifMetadata[stopId]) {
+                    return adifMetadata[stopId].name === b.full;
+                } else if (window.adifStations && window.adifStations[stopId]) {
+                    return window.adifStations[stopId].name === b.full;
+                }
+                return stopId === b.full;
+            });
+        } else {
+            indexA = route.indexOf(a.full);
+            indexB = route.indexOf(b.full);
+        }
+
+        return indexA - indexB;
     });
 
     console.log('[getFilteredStops] filtered:', filtered.length);
@@ -3279,6 +3509,7 @@ Object.assign(window, {
 Object.defineProperty(window, 'state', { get: () => state });
 Object.defineProperty(window, 'stops', { get: () => stops });
 Object.defineProperty(window, 'stationScreens', { get: () => stationScreens });
+Object.defineProperty(window, 'adifStations', { get: () => adifStations });
 Object.defineProperty(window, 'filterState', { get: () => filterState });
 Object.defineProperty(window, 'trainRoutes', { get: () => trainRoutes });
 Object.defineProperty(window, 'trainModels', { get: () => trainModels });

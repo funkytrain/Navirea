@@ -204,7 +204,7 @@ const RouteWizard = {
         addStopInput.type = 'text';
         addStopInput.className = 'form-input';
         addStopInput.id = 'add-stop-input';
-        addStopInput.placeholder = 'Buscar parada o escribir nueva...';
+        addStopInput.placeholder = 'Buscar por nombre, código ADIF o escribir nueva...';
 
         // Contenedor de sugerencias
         const suggestionsContainer = document.createElement('div');
@@ -231,7 +231,7 @@ const RouteWizard = {
         addStopContainer.appendChild(addCustomStopBtn);
         addStopContainer.appendChild(suggestionsContainer);
 
-        // Autocompletado
+        // Autocompletado (búsqueda en stops locales + estaciones ADIF)
         addStopInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
 
@@ -240,25 +240,63 @@ const RouteWizard = {
                 return;
             }
 
+            // Buscar en paradas locales (stops.json)
             const allStops = window.ConfigurationManager.getAllStops(availableStops);
-            const matches = allStops.filter(stop =>
+            const localMatches = allStops.filter(stop =>
                 stop.full.toLowerCase().includes(query) ||
                 stop.abbr.toLowerCase().includes(query)
-            );
+            ).map(stop => ({
+                ...stop,
+                source: 'local'
+            }));
 
-            if (matches.length > 0) {
+            // Buscar en estaciones ADIF (por código o nombre)
+            let adifMatches = [];
+            if (window.adifStations) {
+                const adifArray = Object.values(window.adifStations);
+                adifMatches = adifArray.filter(station => {
+                    const nameMatch = station.name.toLowerCase().includes(query);
+                    const codeMatch = station.code.includes(query);
+                    return nameMatch || codeMatch;
+                }).map(station => ({
+                    full: station.name,
+                    abbr: station.code,
+                    adifCode: station.code,
+                    screenCode: station.screenCode,
+                    source: 'adif'
+                }));
+            }
+
+            // Combinar resultados (primero locales, luego ADIF)
+            const allMatches = [...localMatches, ...adifMatches];
+
+            if (allMatches.length > 0) {
                 suggestionsContainer.innerHTML = '';
                 suggestionsContainer.style.display = 'block';
 
-                matches.slice(0, 8).forEach(stop => {
+                allMatches.slice(0, 8).forEach(stop => {
                     const suggestion = document.createElement('div');
                     suggestion.className = 'autocomplete-suggestion';
+
+                    // Badge para indicar origen
+                    const badge = stop.source === 'adif'
+                        ? `<span class="source-badge adif-badge">ADIF</span>`
+                        : '';
+
+                    // Badge para indicar si tiene pantalla
+                    const screenBadge = stop.screenCode
+                        ? `<span class="source-badge screen-badge">📺</span>`
+                        : '';
+
                     suggestion.innerHTML = `
                         <span class="stop-full">${stop.full}</span>
                         <span class="stop-abbr">${stop.abbr}</span>
+                        ${badge}${screenBadge}
                     `;
                     suggestion.addEventListener('click', () => {
-                        this.addStopToList(data, stop.full, stopsList, false);
+                        // Guardar código ADIF si es una estación ADIF
+                        const stopIdentifier = stop.adifCode || stop.full;
+                        this.addStopToList(data, stopIdentifier, stopsList, false, stop);
                         addStopInput.value = '';
                         suggestionsContainer.style.display = 'none';
                     });
@@ -300,19 +338,33 @@ const RouteWizard = {
     /**
      * Agrega una parada a la lista
      */
-    addStopToList(data, stopName, stopsList, isNew) {
-        if (!stopName) return;
+    addStopToList(data, stopIdentifier, stopsList, isNew, stopData = null) {
+        if (!stopIdentifier) return;
 
-        // Evitar duplicados
-        if (data.stops.includes(stopName)) {
-            alert(`La parada "${stopName}" ya está en la lista`);
+        // Evitar duplicados (comparar por identificador que puede ser nombre o código ADIF)
+        if (data.stops.includes(stopIdentifier)) {
+            const displayName = stopData?.full || stopIdentifier;
+            alert(`La parada "${displayName}" ya está en la lista`);
             return;
         }
 
-        data.stops.push(stopName);
+        data.stops.push(stopIdentifier);
+
+        // Si es estación ADIF, guardar metadata adicional para display
+        if (stopData && stopData.source === 'adif') {
+            if (!data.adifStopsMetadata) {
+                data.adifStopsMetadata = {};
+            }
+            data.adifStopsMetadata[stopIdentifier] = {
+                name: stopData.full,
+                code: stopData.adifCode,
+                screenCode: stopData.screenCode
+            };
+        }
+
         this.renderStopsList(data, stopsList);
 
-        console.log('[RouteWizard] Parada agregada:', stopName, 'Nueva:', isNew);
+        console.log('[RouteWizard] Parada agregada:', stopIdentifier, 'Nueva:', isNew, 'ADIF:', stopData?.source === 'adif');
     },
 
     /**
@@ -329,7 +381,7 @@ const RouteWizard = {
             return;
         }
 
-        data.stops.forEach((stopName, index) => {
+        data.stops.forEach((stopIdentifier, index) => {
             const stopItem = document.createElement('div');
             stopItem.className = 'stop-item';
             stopItem.draggable = true;
@@ -347,10 +399,46 @@ const RouteWizard = {
             dragHandle.innerHTML = '⋮⋮';
             stopItem.appendChild(dragHandle);
 
-            // Nombre de la parada
+            // Nombre de la parada (resolver desde ADIF si es código)
+            let displayName = stopIdentifier;
+            let isAdifStation = false;
+            let hasScreenCode = false;
+
+            // Verificar si es estación ADIF con metadata guardada
+            if (data.adifStopsMetadata && data.adifStopsMetadata[stopIdentifier]) {
+                displayName = data.adifStopsMetadata[stopIdentifier].name;
+                isAdifStation = true;
+                hasScreenCode = data.adifStopsMetadata[stopIdentifier].screenCode !== null;
+            }
+            // Verificar si es código ADIF sin metadata (retrocompatibilidad)
+            else if (window.adifStations && window.adifStations[stopIdentifier]) {
+                displayName = window.adifStations[stopIdentifier].name;
+                isAdifStation = true;
+                hasScreenCode = window.adifStations[stopIdentifier].screenCode !== null;
+            }
+
             const stopNameEl = document.createElement('div');
             stopNameEl.className = 'stop-name';
-            stopNameEl.textContent = stopName;
+            stopNameEl.textContent = displayName;
+
+            // Añadir badge ADIF si corresponde
+            if (isAdifStation) {
+                const adifBadge = document.createElement('span');
+                adifBadge.className = 'source-badge adif-badge';
+                adifBadge.textContent = 'ADIF';
+                adifBadge.style.marginLeft = '8px';
+                stopNameEl.appendChild(adifBadge);
+
+                // Badge de pantalla si tiene
+                if (hasScreenCode) {
+                    const screenBadge = document.createElement('span');
+                    screenBadge.className = 'source-badge screen-badge';
+                    screenBadge.textContent = '📺';
+                    screenBadge.style.marginLeft = '4px';
+                    stopNameEl.appendChild(screenBadge);
+                }
+            }
+
             stopItem.appendChild(stopNameEl);
 
             // Etiqueta de inicio/fin
@@ -543,7 +631,7 @@ const RouteWizard = {
         const stopsList = document.createElement('div');
         stopsList.className = 'preview-stops-list';
 
-        data.stops.forEach((stop, index) => {
+        data.stops.forEach((stopIdentifier, index) => {
             const stopItem = document.createElement('div');
             stopItem.className = 'preview-stop-item';
 
@@ -552,9 +640,17 @@ const RouteWizard = {
             stopNumber.textContent = index + 1;
             stopItem.appendChild(stopNumber);
 
+            // Resolver nombre si es código ADIF
+            let displayName = stopIdentifier;
+            if (data.adifStopsMetadata && data.adifStopsMetadata[stopIdentifier]) {
+                displayName = data.adifStopsMetadata[stopIdentifier].name;
+            } else if (window.adifStations && window.adifStations[stopIdentifier]) {
+                displayName = window.adifStations[stopIdentifier].name;
+            }
+
             const stopName = document.createElement('span');
             stopName.className = 'preview-stop-name';
-            stopName.textContent = stop;
+            stopName.textContent = displayName;
             stopItem.appendChild(stopName);
 
             // Etiquetas especiales
@@ -570,7 +666,7 @@ const RouteWizard = {
                 stopItem.appendChild(badge);
             }
 
-            if (stop === data.destination) {
+            if (displayName === data.destination || stopIdentifier === data.destination) {
                 const badge = document.createElement('span');
                 badge.className = 'preview-badge destination';
                 badge.textContent = 'DESTINO';

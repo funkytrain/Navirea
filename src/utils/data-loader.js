@@ -26,11 +26,12 @@ async function loadJSON(path) {
  */
 async function loadAllData() {
     try {
-        const [stops, trainNumbers, trainRoutes, stationScreens, trains] = await Promise.all([
+        const [stops, trainNumbers, trainRoutes, stationScreens, adifStations, trains] = await Promise.all([
             loadJSON('data/stops.json'),
             loadJSON('data/train-numbers.json'),
             loadJSON('data/train-routes.json'),
             loadJSON('data/station-screens.json'),
+            loadJSON('data/adif-stations.json'),
             loadAllTrains()
         ]);
 
@@ -74,6 +75,7 @@ async function loadAllData() {
             trainNumbers,
             trainRoutes: normalizedRoutes,
             stationScreens,
+            adifStations,
             trainModels: allTrainModels
         };
     } catch (error) {

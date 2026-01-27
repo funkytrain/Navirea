@@ -1,0 +1,18 @@
+# Claude Code Plans
+.claude/
+
+# Logs
+*.log
+server.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
