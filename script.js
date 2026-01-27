@@ -2196,6 +2196,12 @@ function showQuickStopMenu(coach, num) {
         }
     }
 
+    // Si no hay parada importante configurada, asignar directamente la parada final
+    if (!state.importantStop) {
+        assignQuickStop(coach, num, finalStopName, isCustomRoute);
+        return;
+    }
+
     // Crear menú flotante
     const menuHTML = `
         <div class="quick-stop-menu-overlay" onclick="closeQuickStopMenu()">
