@@ -209,7 +209,7 @@ Al crear un modelo de tren, puedes elegir entre:
 ## 📂 Estructura del proyecto
 
 ```
-plantilla_tren-main/
+Navirea/
 ├── index.html                  # Archivo principal
 ├── manifest.json               # Configuración PWA
 ├── sw.js                       # Service Worker
@@ -238,8 +238,8 @@ plantilla_tren-main/
 ### Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/plantilla_tren-main.git
-cd plantilla_tren-main
+git clone https://github.com/funkytrain/Navirea.git
+cd Navirea
 ```
 
 ### Ejecutar localmente
