@@ -68,8 +68,14 @@
       <p><em>Función de resaltado de tramo que permite visualizar rápidamente los 59 viajeros que están en el trayecto entre Zaragoza Goya y Tafalla, facilitando el control de ocupación por sectores</em></p>
     </td>
     <td width="33%" align="center">
+      <img src="screenshots/chrome_XLgie74qxr.png" width="100%"/>
+      <p><strong>Panel de incidencias</strong></p>
+      <p><em>Registro de incidencias del servicio mostrando fallos activos en el tren. En este ejemplo se visualizan 3 incidencias: puerta izquierda del C1, baño PMR del C2 y puerta derecha del C3</em></p>
     </td>
     <td width="33%" align="center">
+      <img src="screenshots/chrome_0ntlGtCmua.png" width="100%"/>
+      <p><strong>Compartir turno por QR</strong></p>
+      <p><em>Sistema de generación de código QR para compartir el estado completo del tren con otro interventor. El código incluye información del modelo, asientos ocupados y destinos, válido por 30 días</em></p>
     </td>
   </tr>
 </table>
@@ -81,7 +87,7 @@
 Esta aplicación está pensada específicamente para **interventores de**:
 
 - ✅ **Cercanías** (servicios de corta distancia)
-- ✅ **Media Distancia** (servicios regionales e intercity)
+- ✅ **Media Distancia** (servicios regionales)
 
 ---
 
