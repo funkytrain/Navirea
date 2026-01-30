@@ -269,8 +269,17 @@ function renderSeatRow(row, coachId, wcCounter) {
             html += renderWC(seatNum, coachId, wcCounter);
             wcCounter.value++;
         } else if (typeof seatNum === 'string') {
-            // Cualquier string (EQ, MIN, MESA, PMR, etc.) se trata como elemento especial no seleccionable
-            html += renderSpecialElement(seatNum);
+            // Identificar elementos especiales NO seleccionables
+            const nonClickableElements = ['EQ', 'MIN', 'MESA', 'BAR', 'CAFETERIA'];
+            const isNonClickable = nonClickableElements.some(elem => String(seatNum).toUpperCase().includes(elem));
+
+            if (isNonClickable) {
+                // Elementos especiales no seleccionables
+                html += renderSpecialElement(seatNum);
+            } else {
+                // Asientos alfanuméricos seleccionables (1A, 1B, S1, S2, etc.)
+                html += renderSeat(seatNum, coachId);
+            }
         } else if (typeof seatNum === 'number') {
             // Solo los números son asientos seleccionables
             html += renderSeat(seatNum, coachId);
