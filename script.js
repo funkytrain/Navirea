@@ -1328,6 +1328,9 @@ function closeServiceNotes(event) {
                 window.scrollTo(0, scrollToRestore);
             });
         }
+
+        // Actualizar el header para mostrar/ocultar el badge de notas
+        render();
     }
 }
 
