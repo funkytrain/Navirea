@@ -373,22 +373,26 @@ function generateAboutModal() {
  */
 function generateManualTecnicoModal() {
     return `
-        <div class="modal-overlay" onclick="closeManualTecnico(event)">
-            <div class="modal fullscreen-modal manual-modal" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 class="modal-title">📘 Manual Técnico Ferroviario</h3>
-                    <button class="close-btn" onclick="closeManualTecnico()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
+        <div class="modal-overlay manual-overlay" onclick="closeManualTecnico(event)">
+            <div class="modal manual-modal" onclick="event.stopPropagation()">
+                <div class="modal-header manual-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">📚 Manual Técnico de Trenes</h3>
+                        <button class="close-btn" onclick="closeManualTecnico()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="modal-body fullscreen-body">
+                <div class="manual-content">
                     <iframe
                         src="https://manualtreneszgz.netlify.app/"
-                        frameborder="0"
-                        style="width: 100%; height: 100%; border: none;">
+                        class="manual-iframe"
+                        title="Manual Técnico de Trenes"
+                        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                        loading="lazy">
                     </iframe>
                 </div>
             </div>
