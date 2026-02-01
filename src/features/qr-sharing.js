@@ -113,7 +113,7 @@ export async function generateQRCode() {
                     <p style="text-align: center; margin-bottom: 1rem; color: #6b7280;">
                         ⏳ Generando código QR...
                     </p>
-                    <div id="qrcode-container" style="display: flex; justify-content: center; align-items: center; min-height: 280px;">
+                    <div id="qrcode-container" style="display: flex; justify-content: center; align-items: center; min-height: 280px; background: #ffffff; padding: 1.5rem; border-radius: 12px; margin: 0 auto; max-width: fit-content;">
                         <div style="text-align: center;">
                             <svg style="animation: spin 1s linear infinite; width: 48px; height: 48px; color: #4f46e5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
