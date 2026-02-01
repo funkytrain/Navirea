@@ -384,11 +384,11 @@ function showConfigSharingModal(state, data = {}) {
         if (container && typeof QRCode !== 'undefined') {
             new QRCode(container, {
                 text: data.binId,
-                width: 280,
-                height: 280,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
+                width: 320,
+                height: 320,
+                colorDark: "#000000",  // Siempre negro (mejor lectura)
+                colorLight: "#ffffff", // Siempre blanco (mejor lectura)
+                correctLevel: QRCode.CorrectLevel.H  // Máxima corrección de errores (30%)
             });
         }
     }

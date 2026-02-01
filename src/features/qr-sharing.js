@@ -143,11 +143,11 @@ export async function generateQRCode() {
 
             new QRCode(container, {
                 text: binId,
-                width: 280,
-                height: 280,
-                colorDark: state.darkMode ? "#f9fafb" : "#000000",
-                colorLight: state.darkMode ? "#1f2937" : "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
+                width: 320,
+                height: 320,
+                colorDark: "#000000",  // Siempre negro (mejor lectura)
+                colorLight: "#ffffff", // Siempre blanco (mejor lectura)
+                correctLevel: QRCode.CorrectLevel.H  // Máxima corrección de errores (30%)
             });
 
             // Actualizar mensaje
