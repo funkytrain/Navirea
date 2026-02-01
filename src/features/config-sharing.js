@@ -3,7 +3,6 @@
 // ============================================
 
 // Constantes
-const QR_SIZE_LIMIT = 2000; // ~2KB límite para QR code
 const JSONBIN_CONFIG_NAME_PREFIX = 'Navirea-Config';
 
 // ============================================
@@ -87,19 +86,11 @@ export async function generateConfigQR() {
     showConfigSharingModal('loading');
 
     try {
-        // Calcular tamaño estimado
-        const jsonSize = JSON.stringify(config).length;
+        // Subir a servidor
+        const binId = await uploadConfigToServer(config);
 
-        if (jsonSize > QR_SIZE_LIMIT) {
-            // Tamaño excede límite -> Solo permitir descarga
-            showConfigSharingModal('too-large', { config, jsonSize });
-        } else {
-            // Subir a servidor
-            const binId = await uploadConfigToServer(config);
-
-            // Generar QR con código corto
-            showConfigSharingModal('qr-ready', { binId, config });
-        }
+        // Generar QR con código corto
+        showConfigSharingModal('qr-ready', { binId, config });
 
     } catch (error) {
         console.error('Error generando QR:', error);
@@ -352,36 +343,6 @@ function showConfigSharingModal(state, data = {}) {
                         </div>
                         <div class="modal-footer">
                             <button class="clear-btn" onclick="closeConfigSharingModal()">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            break;
-
-        case 'too-large':
-            content = `
-                <div class="modal-overlay">
-                    <div class="modal config-sharing-modal">
-                        <div class="modal-header">
-                            <h3 class="modal-title">Configuración Demasiado Grande</h3>
-                            <button class="close-btn" onclick="closeConfigSharingModal()">✕</button>
-                        </div>
-                        <div class="qr-content" style="padding: 2rem; text-align: center;">
-                            <p style="color: #f59e0b; font-size: 3rem; margin-bottom: 1rem;">⚠️</p>
-                            <p style="color: #6b7280; margin-bottom: 1rem;">
-                                Tu configuración es demasiado grande para generar un código QR<br>
-                                <small>(${(data.jsonSize / 1024).toFixed(1)} KB, máximo: ${(QR_SIZE_LIMIT / 1024).toFixed(1)} KB)</small>
-                            </p>
-                            <p style="color: #4b5563; margin-top: 1.5rem;">
-                                Usa <strong>"Exportar Todo"</strong> para descargar un archivo JSON<br>
-                                y compartirlo manualmente.
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="clear-btn" onclick="closeConfigSharingModal()">Cerrar</button>
-                            <button class="btn-primary" onclick="closeConfigSharingModal(); window.currentConfigManagerUI?.exportAll();">
-                                📤 Exportar JSON
-                            </button>
                         </div>
                     </div>
                 </div>
