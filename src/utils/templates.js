@@ -386,7 +386,7 @@ function generateManualTecnicoModal() {
                 </div>
                 <div class="modal-body fullscreen-body">
                     <iframe
-                        src="https://docs.google.com/document/d/e/2PACX-1vTy4XRIZl21F-LIZPxPd6eYkDvDzCd8vZI6j2qFn5h2i1G1FJcZMDlX2Hj8aRYAqpOOZH7njaBP_iCW/pub?embedded=true"
+                        src="https://manualtreneszgz.netlify.app/"
                         frameborder="0"
                         style="width: 100%; height: 100%; border: none;">
                     </iframe>
