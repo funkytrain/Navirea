@@ -86,7 +86,7 @@ export function closeScreensModal(event) {
  */
 export function updateScreenSearch(query) {
     const list = document.getElementById("screen-list");
-    query = query.toLowerCase().trim();
+    query = window.normalizeText(query.trim());
 
     // Si está vacío, no mostrar nada
     if (query === "") {
@@ -170,8 +170,8 @@ export function updateScreenSearch(query) {
 
     // Filtrar por nombre o código
     const filtered = availableStations.filter(station => {
-        const nameMatch = station.name.toLowerCase().includes(query);
-        const codeMatch = station.identifier.toLowerCase().includes(query);
+        const nameMatch = window.normalizeText(station.name).includes(query);
+        const codeMatch = window.normalizeText(station.identifier).includes(query);
         return nameMatch || codeMatch;
     });
 

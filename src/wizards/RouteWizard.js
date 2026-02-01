@@ -233,7 +233,7 @@ const RouteWizard = {
 
         // Autocompletado (búsqueda en stops locales + estaciones ADIF)
         addStopInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
+            const query = window.normalizeText(e.target.value.trim());
 
             if (query.length < 1) {
                 suggestionsContainer.style.display = 'none';
@@ -243,8 +243,8 @@ const RouteWizard = {
             // Buscar en paradas locales (stops.json)
             const allStops = window.ConfigurationManager.getAllStops(availableStops);
             const localMatches = allStops.filter(stop =>
-                stop.full.toLowerCase().includes(query) ||
-                stop.abbr.toLowerCase().includes(query)
+                window.normalizeText(stop.full).includes(query) ||
+                window.normalizeText(stop.abbr).includes(query)
             ).map(stop => ({
                 ...stop,
                 source: 'local'
@@ -255,8 +255,8 @@ const RouteWizard = {
             if (window.adifStations) {
                 const adifArray = Object.values(window.adifStations);
                 adifMatches = adifArray.filter(station => {
-                    const nameMatch = station.name.toLowerCase().includes(query);
-                    const codeMatch = station.code.includes(query);
+                    const nameMatch = window.normalizeText(station.name).includes(query);
+                    const codeMatch = window.normalizeText(station.code).includes(query);
                     return nameMatch || codeMatch;
                 }).map(station => ({
                     full: station.name,

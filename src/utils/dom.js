@@ -75,3 +75,31 @@ function formatTimestamp(timestamp) {
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
+
+/**
+ * Normaliza texto eliminando acentos y diacríticos
+ * Útil para búsquedas insensibles a acentos
+ * @param {string} text - Texto a normalizar
+ * @returns {string} Texto sin acentos en minúsculas
+ */
+function normalizeText(text) {
+    if (!text) return '';
+    return text
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
+
+/* ========================================
+   EXPORTS
+   ======================================== */
+
+// Exportar funciones a window para uso global
+window.lockBodyScroll = lockBodyScroll;
+window.unlockBodyScroll = unlockBodyScroll;
+window.restoreScrollPosition = restoreScrollPosition;
+window.getSavedScrollPosition = getSavedScrollPosition;
+window.capitalize = capitalize;
+window.formatTimestamp = formatTimestamp;
+window.generateId = generateId;
+window.normalizeText = normalizeText;

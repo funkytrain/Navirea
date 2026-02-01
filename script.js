@@ -1042,7 +1042,7 @@ function getCurrentRoute() {
 }
 
 function filterCurrentStops() {
-    const query = state.currentStopSearch.toLowerCase();
+    const query = normalizeText(state.currentStopSearch);
     const route = getCurrentRoute();
     const routeData = state.trainNumber && trainRoutes[state.trainNumber];
     const isCustom = routeData && routeData.custom === true;
@@ -1061,7 +1061,7 @@ function filterCurrentStops() {
         return stopIdentifier;
     });
 
-    return resolvedStops.filter(stop => stop.toLowerCase().includes(query));
+    return resolvedStops.filter(stop => normalizeText(stop).includes(query));
 }
 
 function updateCurrentStopSearch(value) {
@@ -1609,7 +1609,7 @@ function generateUniqueAbbr(name, usedAbbrs) {
 
 // Filtrar paradas
 function getFilteredStops() {
-    const query = state.searchQuery.toLowerCase();
+    const query = normalizeText(state.searchQuery);
 
     // Si hay número de tren, filtrar solo las paradas de esa ruta
     let availableStops = stops;
@@ -1666,8 +1666,8 @@ function getFilteredStops() {
 
     const filtered = availableStops.filter(
         (stop) =>
-            stop.full.toLowerCase().includes(query) ||
-            stop.abbr.toLowerCase().includes(query)
+            normalizeText(stop.full).includes(query) ||
+            normalizeText(stop.abbr).includes(query)
     );
 
     // Ordenar SIEMPRE siguiendo el orden de trainRoutes

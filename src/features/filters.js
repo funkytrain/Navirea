@@ -164,8 +164,9 @@ function openStopFilter() {
 
 function updateStopFilterSuggestions(query) {
     const availableStops = getAvailableStopsForFilter();
+    const normalizedQuery = window.normalizeText(query);
     const suggestions = availableStops.filter(stop =>
-        stop.toLowerCase().includes(query.toLowerCase())
+        window.normalizeText(stop).includes(normalizedQuery)
     );
 
     const container = document.getElementById('stop-suggestions');
@@ -266,8 +267,9 @@ function openRouteFilter() {
 
 function updateRouteFromSuggestions(query) {
     const availableStops = getAvailableStopsForFilter();
+    const normalizedQuery = window.normalizeText(query);
     const suggestions = availableStops.filter(stop =>
-        stop.toLowerCase().includes(query.toLowerCase())
+        window.normalizeText(stop).includes(normalizedQuery)
     );
 
     const container = document.getElementById('route-from-suggestions');
@@ -306,8 +308,9 @@ function selectRouteFromStop(fromStop) {
 
 function updateRouteToSuggestions(query, fromStop) {
     const availableStops = getAvailableStopsForFilter();
+    const normalizedQuery = window.normalizeText(query);
     const suggestions = availableStops.filter(stop =>
-        stop.toLowerCase().includes(query.toLowerCase())
+        window.normalizeText(stop).includes(normalizedQuery)
     );
 
     const container = document.getElementById('route-to-suggestions');
