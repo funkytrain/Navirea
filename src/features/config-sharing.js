@@ -328,7 +328,7 @@ function showConfigSharingModal(state, data = {}) {
                             <p style="text-align: center; color: #22c55e; margin-bottom: 1rem;">
                                 ✅ Código QR generado correctamente
                             </p>
-                            <div id="config-qrcode-container" style="display: flex; justify-content: center; margin-bottom: 1rem;"></div>
+                            <div id="config-qrcode-container" style="display: flex; justify-content: center; margin-bottom: 1rem; background: #ffffff; padding: 1.5rem; border-radius: 12px;"></div>
                             <div style="text-align: center;">
                                 <p style="font-size: 0.9rem; color: #4b5563;">
                                     <strong>${data.config.data.trainModels.length}</strong> modelos •
