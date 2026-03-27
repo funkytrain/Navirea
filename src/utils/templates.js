@@ -310,6 +310,29 @@ function generateMoreOptionsMenu() {
         </svg>
         Manual Técnico de Trenes
     </button>
+
+    <div class="more-options-separator"></div>
+
+    <button class="more-option" onclick="window.open('https://spaintrainradar.com/', '_blank'); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+            <path d="M2 12h4M18 12h4M12 2v4M12 18v4"/>
+        </svg>
+        SpainTrainRadar
+    </button>
+    <button class="more-option" onclick="window.open('https://tiempo-real.largorecorrido.renfe.com/', '_blank'); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            <line x1="12" y1="12" x2="12" y2="16"/>
+            <line x1="10" y1="14" x2="14" y2="14"/>
+        </svg>
+        Estado Trenes Renfe
+    </button>
+
+    <div class="more-options-separator"></div>
+
     <button class="more-option" onclick="openAbout(); toggleMoreOptions();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>

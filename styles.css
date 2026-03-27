@@ -2864,6 +2864,16 @@ body.dark-mode .more-options-dropdown {
     border-bottom: none;
 }
 
+.more-options-separator {
+    height: 1px;
+    background-color: var(--color-gray-300);
+    margin: 0.25rem 0;
+}
+
+body.dark-mode .more-options-separator {
+    background-color: var(--color-gray-600);
+}
+
 .more-option svg {
     width: 1.25rem;
     height: 1.25rem;
