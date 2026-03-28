@@ -3093,9 +3093,13 @@ function show470VariantSelector(coachId, buttonElement) {
                         onclick="select470Variant('${coachId}', 'B')">
                     Variante B
                 </button>
-                <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}" 
+                <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}"
                         onclick="select470Variant('${coachId}', 'C')">
                     Variante C
+                </button>
+                <button class="variant-option ${currentVariant === 'D' ? 'active' : ''}"
+                        onclick="select470Variant('${coachId}', 'D')">
+                    Variante D
                 </button>
             </div>
         </div>
