@@ -175,6 +175,7 @@ let _currentScreen = "arrivals";
 let coachTapTimer = null;
 let coachLastTapTime = 0;
 let coachLastTappedId = null;
+let coachTapSessionToken = 0; // Invalida setTimeouts huérfanos al cerrar el selector
 // Última información copiada (para el modo copiar) - ahora copia TODO
 let lastCopiedSeatData = null;
 
@@ -2893,51 +2894,8 @@ function enableCoachLongPress() {
     buttons.forEach(btn => {
         const coachId = btn.dataset.coachId || btn.textContent.trim().replace(/[ABC]$/, ''); // Extraer ID sin variante
 
-        // 🔴 DOBLE TAP para 470
-        if (state.selectedTrain === "470") {
-            btn.addEventListener("click", (e) => {
-                const now = Date.now();
-
-                // Cerrar selector existente antes de procesar
-                const existingSelector = document.querySelector('.variant-selector-popup');
-                if (existingSelector) {
-                    existingSelector.remove();
-                }
-
-                // Si es doble tap (mismo botón, menos de 300ms)
-                if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
-
-                    // Mostrar selector de variantes
-                    show470VariantSelector(coachId, btn);
-
-                    // Resetear
-                    coachLastTapTime = 0;
-                    coachLastTappedId = null;
-                    return false;
-                }
-
-                // Registrar tap
-                coachLastTapTime = now;
-                coachLastTappedId = coachId;
-
-                // Permitir tap normal después de un pequeño delay para detectar doble tap
-                setTimeout(() => {
-                    // Solo ejecutar si no hubo doble tap
-                    if (coachLastTappedId === coachId) {
-                        selectCoach(coachId);
-                        coachLastTapTime = 0;
-                        coachLastTappedId = null;
-                    }
-                }, COACH_DOUBLE_TAP_DELAY + 10);
-            });
-        } else {
-            // Comportamiento normal para otros trenes
-            btn.addEventListener("click", () => selectCoach(coachId));
-        }
-
         // LONG PRESS (estadísticas) - funciona en todos los trenes
+        // El manejo de click/doble-tap se gestiona en la delegación global de document
         btn.addEventListener("mousedown", startPress);
         btn.addEventListener("touchstart", startPress, { passive: true });
         btn.addEventListener("mouseup", endPress);
@@ -3079,11 +3037,14 @@ function show470VariantSelector(coachId, buttonElement) {
     modal.innerHTML = `
         <div class="variant-selector-popup modal-required">
             <div class="variant-selector-content">
-                <div class="variant-selector-title">
-                    ${coachId} - Seleccionar variante
-                    <small style="display: block; font-size: 0.75rem; font-weight: normal; margin-top: 0.25rem; color: #6b7280;">
-                        Elige una variante para continuar
-                    </small>
+                <div class="variant-selector-title" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
+                    <div>
+                        ${coachId} - Seleccionar variante
+                        <small style="display: block; font-size: 0.75rem; font-weight: normal; margin-top: 0.25rem; color: #6b7280;">
+                            Elige una variante para continuar
+                        </small>
+                    </div>
+                    <button onclick="closeVariantSelector()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0; color: #6b7280; flex-shrink: 0;" aria-label="Cerrar">✕</button>
                 </div>
                 <button class="variant-option ${currentVariant === 'A' ? 'active' : ''}" 
                         onclick="select470Variant('${coachId}', 'A')">
@@ -3120,20 +3081,10 @@ function show470VariantSelector(coachId, buttonElement) {
     }
     lockBodyScroll();
 
-    // Prevenir cierre al hacer click en el overlay
+    // Cerrar al hacer click en el overlay (fuera del popup)
     modal.addEventListener('click', (e) => {
-        // Si el click fue en el overlay (no en el popup), no hacer nada
         if (e.target === modal) {
-            e.preventDefault();
-            e.stopPropagation();
-            // Opcional: pequeña animación de "sacudida" para indicar que no se puede cerrar
-            const popup = modal.querySelector('.variant-selector-popup');
-            if (popup) {
-                popup.style.animation = 'none';
-                setTimeout(() => {
-                    popup.style.animation = 'variantShake 0.3s ease';
-                }, 10);
-            }
+            closeVariantSelector();
         }
     });
 
@@ -3212,18 +3163,18 @@ function select470Variant(coachId, variant) {
 function resetCoachDoubleTap() {
     coachLastTapTime = 0;
     coachLastTappedId = null;
+    coachTapSessionToken++; // Invalida cualquier setTimeout pendiente
 }
 
 // Cerrar selector de variantes
 function closeVariantSelector() {
-    // NO hacer nada si es modal obligatorio
-    const isModalRequired = document.querySelector('.modal-required');
-    if (isModalRequired) return;
+    const overlay = document.querySelector('.variant-modal-overlay');
+    if (overlay) overlay.remove();
 
     const popup = document.querySelector('.variant-selector-popup');
     if (popup) popup.remove();
 
-    // Resetear variables de doble tap al cerrar
+    unlockBodyScroll();
     resetCoachDoubleTap();
 }
 
@@ -3269,7 +3220,7 @@ function getTotalTrainOccupancy() {
 // Delegación de eventos para botones de coche (evita problemas con re-renders)
 document.addEventListener('click', function(e) {
     const coachBtn = e.target.closest('.coach-btn');
-    if (coachBtn && !coachBtn.dataset.longpressLock) {
+    if (coachBtn && coachBtn.dataset.longpressLock !== "1") {
         const coachId = coachBtn.dataset.coachId || coachBtn.textContent.trim();
 
         // Para tren 470: gestionar doble tap
@@ -3278,15 +3229,19 @@ document.addEventListener('click', function(e) {
             if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
                 e.stopPropagation();
                 e.preventDefault();
-                show470VariantSelector(coachId, coachBtn);
                 coachLastTapTime = 0;
                 coachLastTappedId = null;
+                // Solo abrir selector si es el coche actualmente seleccionado
+                if (coachId === state.selectedCoach) {
+                    show470VariantSelector(coachId, coachBtn);
+                }
                 return;
             }
             coachLastTapTime = now;
             coachLastTappedId = coachId;
+            const tapToken = ++coachTapSessionToken;
             setTimeout(() => {
-                if (coachLastTappedId === coachId) {
+                if (coachLastTappedId === coachId && tapToken === coachTapSessionToken) {
                     selectCoach(coachId);
                     coachLastTapTime = 0;
                     coachLastTappedId = null;
