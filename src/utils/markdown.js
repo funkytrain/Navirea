@@ -3,6 +3,9 @@
  * Soporta headers, negrita, cursiva, código inline, links, y reglas horizontales
  */
 
+// Referencia local a escapeHtml (definida en modal-system.js)
+const _escapeHtml = (str) => window.escapeHtml ? window.escapeHtml(str) : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+
 /**
  * Convierte texto Markdown a HTML
  * @param {string} md - Texto en formato Markdown
@@ -25,8 +28,12 @@ function parseMarkdown(md) {
     // Code inline
     html = html.replace(/`(.*?)`/gim, '<code>$1</code>');
 
-    // Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>');
+    // Links (solo se permiten URLs http/https para prevenir javascript: y otros esquemas peligrosos)
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, (match, text, url) => {
+        const trimmed = url.trim();
+        if (!/^https?:\/\//i.test(trimmed)) return _escapeHtml(text);
+        return `<a href="${trimmed}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    });
 
     // Horizontal rule
     html = html.replace(/^\-\-\-$/gim, '<hr>');

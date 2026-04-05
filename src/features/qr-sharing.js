@@ -1,79 +1,15 @@
 // ============================================
-// SISTEMA DE COMPARTIR POR QR CON CÓDIGO CORTO
+// SISTEMA DE COMPARTIR POR QR (LOCAL - SIN SERVIDOR)
 // ============================================
-// Módulo para generar y escanear códigos QR para compartir turnos
-
-// Importar dependencias
-// Nota: lockBodyScroll/unlockBodyScroll están en dom.js pero no son módulos ES6
-// Las usamos directamente desde window ya que dom.js las exporta globalmente
+// Los datos del turno se comprimen con LZ-String y se codifican
+// directamente en el QR, sin necesidad de servidor externo.
 
 // Variable de estado del escáner QR
 let html5QrCode = null;
 
 /**
- * Sube un turno al servidor JSONBin y obtiene código corto
- * @param {Object} turnData - Datos del turno a subir
- * @returns {Promise<string>} ID del bin creado
- */
-export async function uploadTurnToServer(turnData) {
-    const JSONBIN_BASE_URL = window.JSONBIN_BASE_URL;
-    const JSONBIN_API_KEY = window.JSONBIN_API_KEY;
-
-    try {
-        const response = await fetch(`${JSONBIN_BASE_URL}/b`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_API_KEY,
-                'X-Bin-Private': 'false',
-                'X-Bin-Name': `Turno-${turnData.trainName}-${new Date().toISOString()}`
-            },
-            body: JSON.stringify(turnData)
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al subir datos al servidor');
-        }
-
-        const data = await response.json();
-        return data.metadata.id;
-    } catch (error) {
-        console.error('Error uploading turn:', error);
-        throw error;
-    }
-}
-
-/**
- * Descarga un turno desde JSONBin usando código corto
- * @param {string} binId - ID del bin a descargar
- * @returns {Promise<Object>} Datos del turno
- */
-export async function downloadTurnFromServer(binId) {
-    const JSONBIN_BASE_URL = window.JSONBIN_BASE_URL;
-    const JSONBIN_API_KEY = window.JSONBIN_API_KEY;
-
-    try {
-        const response = await fetch(`${JSONBIN_BASE_URL}/b/${binId}/latest`, {
-            method: 'GET',
-            headers: {
-                'X-Master-Key': JSONBIN_API_KEY
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al descargar datos del servidor');
-        }
-
-        const data = await response.json();
-        return data.record;
-    } catch (error) {
-        console.error('Error downloading turn:', error);
-        throw error;
-    }
-}
-
-/**
- * Genera un código QR para compartir el turno actual
+ * Genera un código QR para compartir el turno actual.
+ * Los datos se comprimen con LZ-String para caber en el QR.
  */
 export async function generateQRCode() {
     const state = window.state;
@@ -94,7 +30,6 @@ export async function generateQRCode() {
         })
     };
 
-    // Mostrar modal con loading
     const modal = `
         <div class="modal-overlay" onclick="closeQRModal(event)">
             <div class="modal qr-modal" onclick="event.stopPropagation()">
@@ -114,12 +49,6 @@ export async function generateQRCode() {
                         ⏳ Generando código QR...
                     </p>
                     <div id="qrcode-container" style="display: flex; justify-content: center; align-items: center; min-height: 280px; background: #ffffff; padding: 1.5rem; border-radius: 12px; margin: 0 auto; max-width: fit-content;">
-                        <div style="text-align: center;">
-                            <svg style="animation: spin 1s linear infinite; width: 48px; height: 48px; color: #4f46e5;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-                            </svg>
-                            <p style="margin-top: 1rem; color: #6b7280;">Subiendo datos...</p>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -132,45 +61,57 @@ export async function generateQRCode() {
     document.body.insertAdjacentHTML('beforeend', modal);
     window.lockBodyScroll();
 
-    // Subir datos al servidor
     try {
-        const binId = await uploadTurnToServer(turnData);
+        if (typeof LZString === 'undefined') {
+            throw new Error('Librería de compresión no disponible');
+        }
 
-        // Generar QR con solo el código corto
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(turnData));
+
+        // Los QR tienen un límite práctico de ~2900 bytes en modo alfanumérico
+        if (compressed.length > 2900) {
+            const container = document.getElementById('qrcode-container');
+            if (container) {
+                container.innerHTML = `
+                    <p style="color: #f59e0b; text-align: center; padding: 1rem;">
+                        ⚠️ El turno tiene demasiados datos para un QR.<br><br>
+                        <small style="color: #6b7280;">Usa "Exportar por archivo JSON" para compartir este turno.</small>
+                    </p>
+                `;
+            }
+            const message = document.querySelector('.qr-content > p');
+            if (message) message.remove();
+            return;
+        }
+
         const container = document.getElementById('qrcode-container');
         if (container && typeof QRCode !== 'undefined') {
             container.innerHTML = '';
-
             new QRCode(container, {
-                text: binId,
+                text: compressed,
                 width: 320,
                 height: 320,
-                colorDark: "#000000",  // Siempre negro (mejor lectura)
-                colorLight: "#ffffff", // Siempre blanco (mejor lectura)
-                correctLevel: QRCode.CorrectLevel.H  // Máxima corrección de errores (30%)
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
             });
 
-            // Actualizar mensaje
-            const message = document.querySelector('.qr-content p');
+            const message = document.querySelector('.qr-content > p');
             if (message) {
                 message.innerHTML = `
                     ✅ Código QR generado correctamente<br>
-                    <small style="color: #6b7280;">Válido por 30 días</small>
+                    <small style="color: #6b7280;">Escanéalo con otro dispositivo Navirea</small>
                 `;
             }
 
-            // Añadir info del turno
             container.insertAdjacentHTML('afterend', `
                 <div style="text-align: center; margin-top: 1rem;">
                     <p style="font-size: 0.9rem; color: #4b5563;">
-                        <strong>${turnData.trainName}</strong>
-                        ${turnData.trainNumber ? ` - Nº ${turnData.trainNumber}` : ''}
+                        <strong>${window.escapeHtml(turnData.trainName)}</strong>
+                        ${turnData.trainNumber ? ` - Nº ${window.escapeHtml(String(turnData.trainNumber))}` : ''}
                     </p>
                     <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
                         ${Object.keys(turnData.seatData).length} asientos registrados
-                    </p>
-                    <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">
-                        Código: <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 4px;">${binId}</code>
                     </p>
                 </div>
             `);
@@ -181,7 +122,7 @@ export async function generateQRCode() {
             container.innerHTML = `
                 <p style="color: #ef4444; text-align: center;">
                     ❌ Error al generar código QR<br>
-                    <small>${error.message}</small><br><br>
+                    <small>${window.escapeHtml(error.message)}</small><br><br>
                     <small style="color: #6b7280;">Usa "Exportar por archivo JSON" como alternativa</small>
                 </p>
             `;
@@ -268,12 +209,12 @@ async function startQRScanning() {
         };
 
         const qrCodeSuccessCallback = (decodedText) => {
-            status.textContent = '✅ ¡Código detectado!';
-            status.style.color = '#22c55e';
-
-            if (navigator.vibrate) {
-                navigator.vibrate(200);
+            if (status) {
+                status.textContent = '✅ ¡Código detectado!';
+                status.style.color = '#22c55e';
             }
+
+            if (navigator.vibrate) navigator.vibrate(200);
 
             html5QrCode.stop()
                 .then(() => {
@@ -283,9 +224,7 @@ async function startQRScanning() {
                     setTimeout(() => {
                         const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
                         if (overlay) overlay.remove();
-                        if (!document.querySelector('.modal-overlay')) {
-                            window.unlockBodyScroll();
-                        }
+                        if (!document.querySelector('.modal-overlay')) window.unlockBodyScroll();
                     }, 500);
                 })
                 .catch(err => {
@@ -295,9 +234,7 @@ async function startQRScanning() {
                     setTimeout(() => {
                         const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
                         if (overlay) overlay.remove();
-                        if (!document.querySelector('.modal-overlay')) {
-                            window.unlockBodyScroll();
-                        }
+                        if (!document.querySelector('.modal-overlay')) window.unlockBodyScroll();
                     }, 500);
                 });
         };
@@ -310,58 +247,59 @@ async function startQRScanning() {
             qrCodeSuccessCallback,
             qrCodeErrorCallback
         ).then(() => {
-            status.textContent = '🔍 Buscando código QR...';
-            status.style.color = '#4b5563';
-        }).catch((err) => {
-            status.textContent = '❌ Error al acceder a la cámara';
-            status.style.color = '#ef4444';
-            console.error("Camera error:", err);
-
+            if (status) {
+                status.textContent = '🔍 Buscando código QR...';
+                status.style.color = '#4b5563';
+            }
+        }).catch(() => {
             html5QrCode.start(
                 { facingMode: "user" },
                 config,
                 qrCodeSuccessCallback,
                 qrCodeErrorCallback
             ).catch(err2 => {
-                console.error("Fallback camera error:", err2);
+                if (status) {
+                    status.textContent = '❌ Error al acceder a la cámara';
+                    status.style.color = '#ef4444';
+                }
+                console.error("Camera error:", err2);
                 html5QrCode = null;
             });
         });
 
     } catch (error) {
-        status.textContent = '❌ Error al iniciar escáner';
-        status.style.color = '#ef4444';
+        if (status) {
+            status.textContent = '❌ Error al iniciar escáner';
+            status.style.color = '#ef4444';
+        }
         console.error('Scanner init error:', error);
         html5QrCode = null;
     }
 }
 
 /**
- * Procesa los datos leídos desde un código QR
- * @param {string} dataStr - Datos del QR (código corto o JSON)
+ * Procesa los datos leídos desde un código QR (comprimidos con LZ-String)
+ * @param {string} dataStr - Datos comprimidos del QR
  */
-async function processQRData(dataStr) {
+function processQRData(dataStr) {
     const state = window.state;
     const getAllTrains = window.getAllTrains;
     const saveData = window.saveData;
     const render = window.render;
 
     try {
-        const isShortCode = /^[a-f0-9]{24}$/i.test(dataStr.trim());
-        let turnData;
-
-        if (isShortCode) {
-            const statusEl = document.getElementById('scan-status');
-            if (statusEl) {
-                statusEl.textContent = '📥 Descargando datos del servidor...';
-                statusEl.style.color = '#4f46e5';
-            }
-            turnData = await downloadTurnFromServer(dataStr.trim());
-        } else {
-            turnData = JSON.parse(dataStr);
+        if (typeof LZString === 'undefined') {
+            throw new Error('Librería de descompresión no disponible');
         }
 
+        const decompressed = LZString.decompressFromEncodedURIComponent(dataStr.trim());
+        if (!decompressed) {
+            throw new Error('No se pudo descomprimir el código QR');
+        }
+
+        const turnData = JSON.parse(decompressed);
         const allTrains = getAllTrains();
+
         if (!turnData.trainModel || !allTrains[turnData.trainModel]) {
             alert('❌ Código QR no válido o modelo de tren no reconocido');
             return;
@@ -426,7 +364,6 @@ export function closeScanModal(event) {
         event.target.classList.contains('clear-btn') ||
         event.target.closest('.clear-btn')
     );
-
     const isOverlayClick = event && event.target === event.currentTarget;
 
     if (event && !isButtonClick && !isOverlayClick) return;
@@ -455,15 +392,12 @@ export function closeScanModal(event) {
 }
 
 /**
- * Remueve el modal y desbloquea scroll
+ * Remueve el modal de escaneo y desbloquea scroll
  */
 export function removeModalAndUnlock() {
     const overlay = document.querySelector('.scan-modal')?.closest('.modal-overlay');
     if (overlay) overlay.remove();
-
-    if (!document.querySelector('.modal-overlay')) {
-        window.unlockBodyScroll();
-    }
+    if (!document.querySelector('.modal-overlay')) window.unlockBodyScroll();
 }
 
 // Exportar al objeto window para compatibilidad con HTML inline handlers
@@ -472,7 +406,5 @@ if (typeof window !== 'undefined') {
     window.closeQRModal = closeQRModal;
     window.scanQRCode = scanQRCode;
     window.closeScanModal = closeScanModal;
-    window.uploadTurnToServer = uploadTurnToServer;
-    window.downloadTurnFromServer = downloadTurnFromServer;
     window.removeModalAndUnlock = removeModalAndUnlock;
 }

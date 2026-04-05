@@ -2,10 +2,6 @@
 // CONSTANTS.JS - Constantes de configuración de la aplicación
 // ============================================================================
 
-// API Configuration
-export const JSONBIN_API_KEY = 'REDACTED';
-export const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
-
 // Timing Constants (milliseconds)
 export const TIMINGS = {
     SEAT_LONG_PRESS: 500,
@@ -115,8 +111,3 @@ export const INCIDENT_TYPES = {
     OTHER: 'Otro'
 };
 
-// Exportar constantes críticas a window para acceso desde módulos no-ES6
-if (typeof window !== 'undefined') {
-    window.JSONBIN_API_KEY = JSONBIN_API_KEY;
-    window.JSONBIN_BASE_URL = JSONBIN_BASE_URL;
-}

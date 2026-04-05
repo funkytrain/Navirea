@@ -584,8 +584,9 @@ function openImportantStopSelector() {
                         </button>
                         ${route.map(stop => `
                             <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
-                                    onclick="setImportantStop('${stop}')">
-                                ${stop}
+                                    data-stop="${escapeHtml(stop)}"
+                                    onclick="setImportantStop(this.dataset.stop)">
+                                ${escapeHtml(stop)}
                             </button>
                         `).join('')}
                     </div>
@@ -1084,8 +1085,8 @@ function updateCurrentStopSearch(value) {
         const dropdownHTML = `
             <div class="current-stop-dropdown">
                 ${filtered.slice(0, 5).map(stop => `
-                    <button class="stop-option" onclick="setCurrentStop('${stop}')">
-                        ${stop}
+                    <button class="stop-option" data-stop="${escapeHtml(stop)}" onclick="setCurrentStop(this.dataset.stop)">
+                        ${escapeHtml(stop)}
                     </button>
                 `).join('')}
             </div>
@@ -1776,8 +1777,8 @@ function renderHeader() {
     const currentStopDropdown = state.currentStopSearch && filterCurrentStops().length > 0 ? `
         <div class="current-stop-dropdown">
             ${filterCurrentStops().slice(0, 5).map(stop => `
-                <button class="stop-option" onclick="setCurrentStop('${stop}')">
-                    ${stop}
+                <button class="stop-option" data-stop="${escapeHtml(stop)}" onclick="setCurrentStop(this.dataset.stop)">
+                    ${escapeHtml(stop)}
                 </button>
             `).join('')}
         </div>
@@ -1899,7 +1900,7 @@ function renderModal() {
         state.seatData[key]?.historial && state.seatData[key].historial.length > 0
             ? `
                         <div class="seat-history">
-                            Asiento liberado en: ${state.seatData[key].historial.join(' → ')}
+                            Asiento liberado en: ${state.seatData[key].historial.map(h => escapeHtml(h)).join(' → ')}
                         </div>`
             : ""
     }
@@ -1912,7 +1913,7 @@ function renderModal() {
                 </div>
                 ${
         currentStop
-            ? `<div class="current-stop">Se baja en: ${currentStop.full}</div>`
+            ? `<div class="current-stop">Se baja en: ${escapeHtml(currentStop.full)}</div>`
             : ""
     }
                 <div class="checkbox-group">
@@ -1988,10 +1989,11 @@ function renderModal() {
                 <button
                     class="stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''}"
                     ${isCurrent ? 'id="current-stop-item"' : ''}
-                    onclick="updateSeatFromList('${stop.abbr}')"
+                    data-abbr="${escapeHtml(stop.abbr)}"
+                    onclick="updateSeatFromList(this.dataset.abbr)"
                 >
-                    <span class="stop-name">${stop.full}</span>
-                    <span class="stop-abbr">${stop.abbr}</span>
+                    <span class="stop-name">${escapeHtml(stop.full)}</span>
+                    <span class="stop-abbr">${escapeHtml(stop.abbr)}</span>
                 </button>
             `;
         })
@@ -2002,7 +2004,7 @@ function renderModal() {
         currentStop
             ? `
                 <div class="modal-footer">
-                    <button class="clear-btn" onclick="clearSeat('${state.selectedSeat.coach}', '${state.selectedSeat.num}')">
+                    <button class="clear-btn" data-coach="${escapeHtml(state.selectedSeat.coach)}" data-num="${escapeHtml(String(state.selectedSeat.num))}" onclick="clearSeat(this.dataset.coach, this.dataset.num)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="3" y1="6" x2="21" y2="6"/>
                             <line x1="10" y1="11" x2="10" y2="17"/>
@@ -2452,14 +2454,20 @@ function showQuickStopMenu(coach, num) {
     const menuHTML = `
         <div class="quick-stop-menu-overlay" onclick="closeQuickStopMenu()">
             <div class="quick-stop-menu" style="left: ${clientX}px; top: ${clientY}px;" onclick="event.stopPropagation();">
-                <button class="quick-stop-option final-stop" onclick="assignQuickStop('${coach}', '${num}', '${finalStopName}', ${isCustomRoute})">
+                <button class="quick-stop-option final-stop"
+                        data-coach="${escapeHtml(coach)}" data-num="${escapeHtml(String(num))}"
+                        data-stop="${escapeHtml(finalStopName)}" data-custom="${isCustomRoute}"
+                        onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
                     <span class="stop-icon">🏁</span>
-                    <span class="stop-name">${finalStopName}</span>
+                    <span class="stop-name">${escapeHtml(finalStopName)}</span>
                 </button>
                 ${state.importantStop ? `
-                    <button class="quick-stop-option important-stop" onclick="assignQuickStop('${coach}', '${num}', '${state.importantStop}', ${isCustomRoute})">
+                    <button class="quick-stop-option important-stop"
+                            data-coach="${escapeHtml(coach)}" data-num="${escapeHtml(String(num))}"
+                            data-stop="${escapeHtml(state.importantStop)}" data-custom="${isCustomRoute}"
+                            onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
                         <span class="stop-icon">⭐</span>
-                        <span class="stop-name">${state.importantStop}</span>
+                        <span class="stop-name">${escapeHtml(state.importantStop)}</span>
                     </button>
                 ` : ''}
             </div>
@@ -2802,10 +2810,11 @@ function updateSearch(value) {
                 (stop) => `
             <button
                 class="stop-item"
-                onclick="updateSeatFromList('${stop.abbr}')"
+                data-abbr="${escapeHtml(stop.abbr)}"
+                onclick="updateSeatFromList(this.dataset.abbr)"
             >
-                <span class="stop-name">${stop.full}</span>
-                <span class="stop-abbr">${stop.abbr}</span>
+                <span class="stop-name">${escapeHtml(stop.full)}</span>
+                <span class="stop-abbr">${escapeHtml(stop.abbr)}</span>
             </button>
         `
             )

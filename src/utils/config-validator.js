@@ -356,7 +356,7 @@ function validateExportedConfig(config) {
  */
 function sanitizeName(name) {
     if (!name) return '';
-    return name.trim().replace(/[<>]/g, '');
+    return name.trim().replace(/[<>"'&]/g, '');
 }
 
 /**

@@ -1,80 +1,24 @@
 // ============================================
-// SISTEMA DE COMPARTICIÓN DE CONFIGURACIONES
+// SISTEMA DE COMPARTICIÓN DE CONFIGURACIONES (LOCAL - SIN SERVIDOR)
 // ============================================
+// Las configuraciones se comprimen con LZ-String directamente en el QR,
+// sin necesidad de servidor externo.
 
-// Constantes
-const JSONBIN_CONFIG_NAME_PREFIX = 'Navirea-Config';
-
-// ============================================
-// FUNCIONES DE SERVIDOR (JSONBin.io)
-// ============================================
-
-/**
- * Sube configuración a JSONBin y retorna código corto
- * @param {Object} config - Configuración exportada
- * @returns {Promise<string>} ID del bin (código corto)
- */
-async function uploadConfigToServer(config) {
-    const JSONBIN_BASE_URL = window.JSONBIN_BASE_URL;
-    const JSONBIN_API_KEY = window.JSONBIN_API_KEY;
-
-    const response = await fetch(`${JSONBIN_BASE_URL}/b`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_API_KEY,
-            'X-Bin-Private': 'false',
-            'X-Bin-Name': `${JSONBIN_CONFIG_NAME_PREFIX}-${new Date().toISOString()}`
-        },
-        body: JSON.stringify(config)
-    });
-
-    if (!response.ok) {
-        throw new Error('Error al subir configuración al servidor');
-    }
-
-    const data = await response.json();
-    return data.metadata.id;
-}
-
-/**
- * Descarga configuración desde JSONBin usando código corto
- * @param {string} binId - ID del bin
- * @returns {Promise<Object>} Configuración
- */
-async function downloadConfigFromServer(binId) {
-    const JSONBIN_BASE_URL = window.JSONBIN_BASE_URL;
-    const JSONBIN_API_KEY = window.JSONBIN_API_KEY;
-
-    const response = await fetch(`${JSONBIN_BASE_URL}/b/${binId}/latest`, {
-        method: 'GET',
-        headers: {
-            'X-Master-Key': JSONBIN_API_KEY
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error('Error al descargar configuración del servidor');
-    }
-
-    const data = await response.json();
-    return data.record;
-}
+// Referencia local a escapeHtml (definida en modal-system.js y exportada a window)
+const escapeHtml = (str) => window.escapeHtml(str);
 
 // ============================================
 // GENERACIÓN DE QR CODE
 // ============================================
 
 /**
- * Genera QR code para compartir configuraciones
- * Maneja dos estrategias según tamaño:
- * 1. Si < 2KB: QR con código corto de JSONBin
- * 2. Si >= 2KB: Solo descarga JSON (QR no viable)
+ * Genera QR code para compartir configuraciones.
+ * Los datos se comprimen con LZ-String para caber en el QR.
+ * Si la configuración es demasiado grande, ofrece solo descarga JSON.
  */
 export async function generateConfigQR() {
     const config = window.ConfigurationManager.exportConfiguration();
 
-    // Verificar si hay algo que compartir
     if (config.data.trainModels.length === 0 &&
         config.data.routes.length === 0 &&
         config.data.stops.length === 0) {
@@ -82,20 +26,19 @@ export async function generateConfigQR() {
         return;
     }
 
-    // Crear modal de loading
-    showConfigSharingModal('loading');
-
-    try {
-        // Subir a servidor
-        const binId = await uploadConfigToServer(config);
-
-        // Generar QR con código corto
-        showConfigSharingModal('qr-ready', { binId, config });
-
-    } catch (error) {
-        console.error('Error generando QR:', error);
-        showConfigSharingModal('error', { error: error.message });
+    if (typeof LZString === 'undefined') {
+        alert('❌ Librería de compresión no disponible.');
+        return;
     }
+
+    const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(config));
+
+    if (compressed.length > 2900) {
+        showConfigSharingModal('too-large', { config });
+        return;
+    }
+
+    showConfigSharingModal('qr-ready', { compressed, config });
 }
 
 // ============================================
@@ -143,9 +86,7 @@ async function startConfigQRScanning() {
                 status.style.color = '#22c55e';
             }
 
-            if (navigator.vibrate) {
-                navigator.vibrate(200);
-            }
+            if (navigator.vibrate) navigator.vibrate(200);
 
             html5QrCodeScanner.stop()
                 .then(() => {
@@ -162,7 +103,7 @@ async function startConfigQRScanning() {
                 });
         };
 
-        const qrCodeErrorCallback = () => {}; // Silent errors durante escaneo
+        const qrCodeErrorCallback = () => {};
 
         html5QrCodeScanner.start(
             { facingMode: "environment" },
@@ -174,8 +115,7 @@ async function startConfigQRScanning() {
                 status.textContent = '🔍 Buscando código QR...';
                 status.style.color = '#4b5563';
             }
-        }).catch((err) => {
-            // Fallback a cámara frontal
+        }).catch(() => {
             html5QrCodeScanner.start(
                 { facingMode: "user" },
                 config,
@@ -202,33 +142,25 @@ async function startConfigQRScanning() {
 }
 
 /**
- * Procesa datos leídos desde QR
- * @param {string} dataStr - Código corto de JSONBin
+ * Procesa datos leídos desde QR (comprimidos con LZ-String)
+ * @param {string} dataStr - Datos comprimidos del QR
  */
-async function processConfigQRData(dataStr) {
+function processConfigQRData(dataStr) {
     try {
-        // Validar formato de código corto (24 hex chars)
-        const isShortCode = /^[a-f0-9]{24}$/i.test(dataStr.trim());
+        if (typeof LZString === 'undefined') {
+            throw new Error('Librería de descompresión no disponible');
+        }
 
-        if (!isShortCode) {
-            alert('❌ Código QR no válido.\n\nEl código debe ser un identificador de configuración.');
+        const decompressed = LZString.decompressFromEncodedURIComponent(dataStr.trim());
+        if (!decompressed) {
+            alert('❌ Código QR no válido.\n\nEl código no contiene una configuración Navirea.');
             return;
         }
 
-        // Mostrar loading
-        showProcessingModal();
-
-        // Descargar configuración desde servidor
-        const config = await downloadConfigFromServer(dataStr.trim());
-
-        // Cerrar modal de loading
-        closeProcessingModal();
-
-        // Confirmar importación
+        const config = JSON.parse(decompressed);
         showImportConfirmation(config);
 
     } catch (error) {
-        closeProcessingModal();
         alert('❌ Error al procesar código QR: ' + error.message);
         console.error('QR processing error:', error);
     }
@@ -268,7 +200,6 @@ function showImportConfirmation(config) {
                 `   • ${result.imported.stops} paradas`
             );
 
-            // Refrescar UI si está abierta
             if (window.currentConfigManagerUI) {
                 window.currentConfigManagerUI.renderModelsView();
                 window.currentConfigManagerUI.renderRoutesView();
@@ -287,35 +218,12 @@ function showImportConfirmation(config) {
  * Muestra modal de compartición en diferentes estados
  */
 function showConfigSharingModal(state, data = {}) {
-    // Cerrar modal existente si hay
     const existing = document.querySelector('.config-sharing-modal');
     if (existing) existing.closest('.modal-overlay').remove();
 
     let content = '';
 
     switch(state) {
-        case 'loading':
-            content = `
-                <div class="modal-overlay">
-                    <div class="modal config-sharing-modal">
-                        <div class="modal-header">
-                            <h3 class="modal-title">Compartir Configuraciones</h3>
-                            <button class="close-btn" onclick="closeConfigSharingModal()">✕</button>
-                        </div>
-                        <div class="qr-content" style="padding: 2rem; text-align: center;">
-                            <p style="color: #6b7280; margin-bottom: 1rem;">⏳ Generando código QR...</p>
-                            <div style="display: flex; justify-content: center; min-height: 200px; align-items: center;">
-                                <div class="spinner"></div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="clear-btn" onclick="closeConfigSharingModal()">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            break;
-
         case 'qr-ready':
             content = `
                 <div class="modal-overlay">
@@ -336,9 +244,8 @@ function showConfigSharingModal(state, data = {}) {
                                     <strong>${data.config.data.stops.length}</strong> paradas
                                 </p>
                                 <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem;">
-                                    Código: <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 4px;">${data.binId}</code>
+                                    Escanéalo con otro dispositivo Navirea
                                 </p>
-                                <p style="font-size: 0.75rem; color: #9ca3af;">Válido por 30 días</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -349,21 +256,21 @@ function showConfigSharingModal(state, data = {}) {
             `;
             break;
 
-        case 'error':
+        case 'too-large':
             content = `
                 <div class="modal-overlay">
                     <div class="modal config-sharing-modal">
                         <div class="modal-header">
-                            <h3 class="modal-title">Error al Generar QR</h3>
+                            <h3 class="modal-title">Configuración demasiado grande</h3>
                             <button class="close-btn" onclick="closeConfigSharingModal()">✕</button>
                         </div>
                         <div class="qr-content" style="padding: 2rem; text-align: center;">
-                            <p style="color: #ef4444; font-size: 3rem; margin-bottom: 1rem;">❌</p>
+                            <p style="color: #f59e0b; font-size: 2rem; margin-bottom: 1rem;">⚠️</p>
                             <p style="color: #6b7280;">
-                                ${data.error}
+                                La configuración es demasiado grande para un código QR.
                             </p>
                             <p style="color: #9ca3af; margin-top: 1rem; font-size: 0.875rem;">
-                                Usa "Exportar Todo" como alternativa
+                                Usa "Exportar Todo" para compartir como archivo JSON.
                             </p>
                         </div>
                         <div class="modal-footer">
@@ -378,17 +285,16 @@ function showConfigSharingModal(state, data = {}) {
     document.body.insertAdjacentHTML('beforeend', content);
     window.lockBodyScroll();
 
-    // Generar QR si estado es 'qr-ready'
     if (state === 'qr-ready') {
         const container = document.getElementById('config-qrcode-container');
         if (container && typeof QRCode !== 'undefined') {
             new QRCode(container, {
-                text: data.binId,
+                text: data.compressed,
                 width: 320,
                 height: 320,
-                colorDark: "#000000",  // Siempre negro (mejor lectura)
-                colorLight: "#ffffff", // Siempre blanco (mejor lectura)
-                correctLevel: QRCode.CorrectLevel.H  // Máxima corrección de errores (30%)
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
             });
         }
     }
@@ -471,40 +377,10 @@ function removeConfigScanModal() {
     }
 }
 
-/**
- * Muestra modal de procesamiento
- */
-function showProcessingModal() {
-    const modal = `
-        <div class="modal-overlay config-processing-overlay">
-            <div class="modal">
-                <div style="padding: 2rem; text-align: center;">
-                    <div class="spinner" style="margin: 0 auto 1rem;"></div>
-                    <p style="color: #6b7280;">📥 Descargando configuración...</p>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modal);
-    window.lockBodyScroll();
-}
-
-/**
- * Cierra modal de procesamiento
- */
-function closeProcessingModal() {
-    const modal = document.querySelector('.config-processing-overlay');
-    if (modal) {
-        modal.remove();
-        window.unlockBodyScroll();
-    }
-}
-
 // Exportar a window para compatibilidad con HTML inline handlers
 if (typeof window !== 'undefined') {
     window.generateConfigQR = generateConfigQR;
     window.scanConfigQR = scanConfigQR;
     window.closeConfigSharingModal = closeConfigSharingModal;
     window.closeConfigScanModal = closeConfigScanModal;
-    window.downloadConfigFromServer = downloadConfigFromServer;
 }
