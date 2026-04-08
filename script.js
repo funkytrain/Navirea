@@ -2247,14 +2247,51 @@ function handleSeatPress(coach, num, event) {
                     historial: seatInfo.historial ? [...seatInfo.historial] : []
                 };
 
-                // 🔴 NUEVO: Añadir parada actual al historial antes de borrar
+                // Añadir parada al historial solo si es anterior o igual a la parada actual del tren
                 if (seatInfo.stop && seatInfo.stop.full) {
-                    if (!seatInfo.historial) {
-                        seatInfo.historial = [];
+                    const route = getCurrentRoute();
+                    const routeData = state.trainNumber && trainRoutes[state.trainNumber];
+                    const isCustom = routeData && routeData.custom === true;
+                    const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
+                    const currentRouteStop = state.currentStop || null;
+
+                    // Obtener índice de la parada del asiento
+                    let seatStopIndex = -1;
+                    if (isCustom) {
+                        seatStopIndex = route.findIndex(stopId => {
+                            if (adifMetadata[stopId]) return adifMetadata[stopId].name === seatInfo.stop.full;
+                            if (window.adifStations && window.adifStations[stopId]) return window.adifStations[stopId].name === seatInfo.stop.full;
+                            return stopId === seatInfo.stop.full;
+                        });
+                    } else {
+                        seatStopIndex = route.indexOf(seatInfo.stop.full);
                     }
-                    // Evitar duplicados en el historial
-                    if (!seatInfo.historial.includes(seatInfo.stop.full)) {
-                        seatInfo.historial.push(seatInfo.stop.full);
+
+                    // Obtener índice de la parada actual del tren
+                    let currentRouteIndex = -1;
+                    if (currentRouteStop) {
+                        if (isCustom) {
+                            currentRouteIndex = route.findIndex(stopId => {
+                                if (adifMetadata[stopId]) return adifMetadata[stopId].name === currentRouteStop;
+                                if (window.adifStations && window.adifStations[stopId]) return window.adifStations[stopId].name === currentRouteStop;
+                                return stopId === currentRouteStop;
+                            });
+                        } else {
+                            currentRouteIndex = route.indexOf(currentRouteStop);
+                        }
+                    }
+
+                    // Solo guardar en historial si la parada del asiento es anterior o igual a la actual
+                    // (o si no hay parada actual definida, tampoco guardar)
+                    const shouldAddToHistory = currentRouteIndex !== -1 && seatStopIndex !== -1 && seatStopIndex <= currentRouteIndex;
+
+                    if (shouldAddToHistory) {
+                        if (!seatInfo.historial) {
+                            seatInfo.historial = [];
+                        }
+                        if (!seatInfo.historial.includes(seatInfo.stop.full)) {
+                            seatInfo.historial.push(seatInfo.stop.full);
+                        }
                     }
                 }
 
@@ -3071,6 +3108,10 @@ function show470VariantSelector(coachId, buttonElement) {
                 <button class="variant-option ${currentVariant === 'D' ? 'active' : ''}"
                         onclick="select470Variant('${coachId}', 'D')">
                     Variante D
+                </button>
+                <button class="variant-option ${currentVariant === 'E' ? 'active' : ''}"
+                        onclick="select470Variant('${coachId}', 'E')">
+                    Variante E
                 </button>` : ''}
                 ${['C2', 'C3'].includes(coachId) ? `
                 <button class="variant-option ${currentVariant === 'D' ? 'active' : ''}"
