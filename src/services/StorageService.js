@@ -148,6 +148,14 @@ function loadData() {
         state.importantStop = savedImportantStop;
     }
 
+    // Cargar segunda parada importante
+    const savedImportantStop2 = localStorage.getItem(
+        `train${state.selectedTrain}ImportantStop2`
+    );
+    if (savedImportantStop2) {
+        state.importantStop2 = savedImportantStop2;
+    }
+
     // Cargar notas de servicio
     const savedServiceNotes = localStorage.getItem(
         `train${state.selectedTrain}ServiceNotes`
@@ -228,6 +236,16 @@ function saveData() {
     } else {
         // Eliminar si se borra la parada importante
         localStorage.removeItem(`train${state.selectedTrain}ImportantStop`);
+    }
+
+    // Guardar segunda parada importante
+    if (state.importantStop2) {
+        localStorage.setItem(
+            `train${state.selectedTrain}ImportantStop2`,
+            state.importantStop2
+        );
+    } else {
+        localStorage.removeItem(`train${state.selectedTrain}ImportantStop2`);
     }
 
     // Guardar notas de servicio

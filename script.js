@@ -160,7 +160,8 @@ let state = {
         "C2": "A",
         "C3": "A"
     },
-    importantStop: null // Parada importante para marcado rápido
+    importantStop: null, // Parada importante para marcado rápido
+    importantStop2: null // Segunda parada importante para marcado rápido
 };
 
 let isModalOpen = false;
@@ -445,6 +446,8 @@ function selectTrain(trainId) {
         state.searchQuery = "";
         state.coachPositions = {};
         state.incidents = {};
+        state.importantStop = localStorage.getItem(`train${trainId}ImportantStop`) || null;
+        state.importantStop2 = localStorage.getItem(`train${trainId}ImportantStop2`) || null;
 
         localStorage.setItem("selectedTrain", trainId);
 
@@ -565,30 +568,46 @@ function openImportantStopSelector() {
         return;
     }
 
-    // Crear modal para seleccionar parada importante
+    // Crear modal para seleccionar paradas importantes
     const modalHTML = `
         <div class="modal-overlay" onclick="closeImportantStopSelector(event)">
             <div class="modal important-stop-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
-                    <h2>⭐ Configurar Parada Importante</h2>
+                    <h2>⭐ Configurar Paradas Importantes</h2>
                     <button class="modal-close-btn" onclick="closeImportantStopSelector()">×</button>
                 </div>
                 <div class="modal-body">
-                    <p style="margin-bottom: 1rem; opacity: 0.8;">
-                        Selecciona una parada importante para marcado rápido con long press en los asientos.
-                    </p>
-                    <div class="important-stop-list">
-                        <button class="stop-option ${!state.importantStop ? 'active' : ''}"
-                                onclick="setImportantStop(null)">
-                            <span style="opacity: 0.6;">Sin parada importante</span>
-                        </button>
-                        ${route.map(stop => `
-                            <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
-                                    data-stop="${escapeHtml(stop)}"
-                                    onclick="setImportantStop(this.dataset.stop)">
-                                ${escapeHtml(stop)}
+                    <div class="important-stop-section">
+                        <p class="important-stop-section-label">⭐ Parada importante 1</p>
+                        <div class="important-stop-list">
+                            <button class="stop-option ${!state.importantStop ? 'active' : ''}"
+                                    onclick="setImportantStop(null, 1)">
+                                <span style="opacity: 0.6;">Sin parada importante 1</span>
                             </button>
-                        `).join('')}
+                            ${route.map(stop => `
+                                <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
+                                        data-stop="${escapeHtml(stop)}"
+                                        onclick="setImportantStop(this.dataset.stop, 1)">
+                                    ${escapeHtml(stop)}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="important-stop-section" style="margin-top: 1.5rem;">
+                        <p class="important-stop-section-label">⭐⭐ Parada importante 2</p>
+                        <div class="important-stop-list">
+                            <button class="stop-option ${!state.importantStop2 ? 'active' : ''}"
+                                    onclick="setImportantStop(null, 2)">
+                                <span style="opacity: 0.6;">Sin parada importante 2</span>
+                            </button>
+                            ${route.map(stop => `
+                                <button class="stop-option stop-option-2 ${state.importantStop2 === stop ? 'active active-2' : ''}"
+                                        data-stop="${escapeHtml(stop)}"
+                                        onclick="setImportantStop(this.dataset.stop, 2)">
+                                    ${escapeHtml(stop)}
+                                </button>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -602,11 +621,27 @@ function openImportantStopSelector() {
     lockBodyScroll();
 }
 
-function setImportantStop(stopName) {
-    state.importantStop = stopName;
+function setImportantStop(stopName, slot) {
+    if (slot === 2) {
+        state.importantStop2 = stopName;
+    } else {
+        state.importantStop = stopName;
+    }
     saveData();
-    closeImportantStopSelector();
-    render(); // Refrescar para mostrar el cambio
+
+    // Actualizar visualmente las opciones activas sin cerrar el modal
+    const listIndex = slot === 2 ? 1 : 0;
+    const lists = document.querySelectorAll('.important-stop-list');
+    if (lists[listIndex]) {
+        lists[listIndex].querySelectorAll('.stop-option').forEach(btn => {
+            const isNoneBtn = !btn.dataset.stop;
+            const isSelected = stopName === null ? isNoneBtn : btn.dataset.stop === stopName;
+            btn.classList.toggle('active', isSelected);
+            if (slot === 2) {
+                btn.classList.toggle('active-2', isSelected && !isNoneBtn);
+            }
+        });
+    }
 }
 
 function closeImportantStopSelector(event) {
@@ -2482,7 +2517,7 @@ function showQuickStopMenu(coach, num) {
     }
 
     // Si no hay parada importante configurada, asignar directamente la parada final
-    if (!state.importantStop) {
+    if (!state.importantStop && !state.importantStop2) {
         assignQuickStop(coach, num, finalStopName, isCustomRoute);
         return;
     }
@@ -2505,6 +2540,15 @@ function showQuickStopMenu(coach, num) {
                             onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
                         <span class="stop-icon">⭐</span>
                         <span class="stop-name">${escapeHtml(state.importantStop)}</span>
+                    </button>
+                ` : ''}
+                ${state.importantStop2 ? `
+                    <button class="quick-stop-option important-stop-2"
+                            data-coach="${escapeHtml(coach)}" data-num="${escapeHtml(String(num))}"
+                            data-stop="${escapeHtml(state.importantStop2)}" data-custom="${isCustomRoute}"
+                            onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
+                        <span class="stop-icon">⭐⭐</span>
+                        <span class="stop-name">${escapeHtml(state.importantStop2)}</span>
                     </button>
                 ` : ''}
             </div>

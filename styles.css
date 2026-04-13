@@ -3289,6 +3289,10 @@ body.dark-mode #qr-video {
     color: #f59e0b;
 }
 
+.quick-stop-option.important-stop-2 {
+    color: #8b5cf6;
+}
+
 .quick-stop-option .stop-icon {
     font-size: 1.25rem;
     flex-shrink: 0;
@@ -3316,8 +3320,17 @@ body.dark-mode #qr-video {
    ======================================== */
 
 .important-stop-modal .modal-body {
-    max-height: 60vh;
+    max-height: 70vh;
     overflow-y: auto;
+}
+
+.important-stop-section-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
 }
 
 .important-stop-list {
@@ -3349,6 +3362,13 @@ body.dark-mode #qr-video {
 .important-stop-list .stop-option.active {
     border-color: var(--color-primary);
     background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.important-stop-list .stop-option.active-2 {
+    border-color: #8b5cf6;
+    background: #8b5cf6;
     color: white;
     font-weight: 600;
 }
@@ -3385,5 +3405,11 @@ body.dark-mode #qr-video {
 .dark-mode .important-stop-list .stop-option.active {
     background: var(--color-primary);
     border-color: var(--color-primary);
+    color: white;
+}
+
+.dark-mode .important-stop-list .stop-option.active-2 {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
     color: white;
 }
