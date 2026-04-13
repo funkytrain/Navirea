@@ -577,37 +577,25 @@ function openImportantStopSelector() {
                     <button class="modal-close-btn" onclick="closeImportantStopSelector()">×</button>
                 </div>
                 <div class="modal-body">
-                    <div class="important-stop-section">
-                        <p class="important-stop-section-label">⭐ Parada importante 1</p>
-                        <div class="important-stop-list">
-                            <button class="stop-option ${!state.importantStop ? 'active' : ''}"
-                                    onclick="setImportantStop(null, 1)">
-                                <span style="opacity: 0.6;">Sin parada importante 1</span>
-                            </button>
-                            ${route.map(stop => `
-                                <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
-                                        data-stop="${escapeHtml(stop)}"
-                                        onclick="setImportantStop(this.dataset.stop, 1)">
-                                    ${escapeHtml(stop)}
-                                </button>
-                            `).join('')}
-                        </div>
+                    <div class="important-stop-legend">
+                        <span class="important-stop-legend-item"><span class="legend-badge badge-1">⭐</span> Parada 1</span>
+                        <span class="important-stop-legend-item"><span class="legend-badge badge-2">⭐⭐</span> Parada 2</span>
                     </div>
-                    <div class="important-stop-section" style="margin-top: 1.5rem;">
-                        <p class="important-stop-section-label">⭐⭐ Parada importante 2</p>
-                        <div class="important-stop-list">
-                            <button class="stop-option ${!state.importantStop2 ? 'active' : ''}"
-                                    onclick="setImportantStop(null, 2)">
-                                <span style="opacity: 0.6;">Sin parada importante 2</span>
-                            </button>
-                            ${route.map(stop => `
-                                <button class="stop-option stop-option-2 ${state.importantStop2 === stop ? 'active active-2' : ''}"
-                                        data-stop="${escapeHtml(stop)}"
-                                        onclick="setImportantStop(this.dataset.stop, 2)">
-                                    ${escapeHtml(stop)}
-                                </button>
-                            `).join('')}
-                        </div>
+                    <div class="important-stop-list">
+                        ${route.map(stop => `
+                            <div class="stop-row ${state.importantStop === stop ? 'selected-1' : ''} ${state.importantStop2 === stop ? 'selected-2' : ''}"
+                                 data-stop="${escapeHtml(stop)}">
+                                <span class="stop-row-name">${escapeHtml(stop)}</span>
+                                <div class="stop-row-badges">
+                                    <button class="stop-badge-btn badge-1 ${state.importantStop === stop ? 'active' : ''}"
+                                            data-stop="${escapeHtml(stop)}"
+                                            onclick="toggleImportantStop(this.dataset.stop, 1)">⭐</button>
+                                    <button class="stop-badge-btn badge-2 ${state.importantStop2 === stop ? 'active' : ''}"
+                                            data-stop="${escapeHtml(stop)}"
+                                            onclick="toggleImportantStop(this.dataset.stop, 2)">⭐⭐</button>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 </div>
             </div>
@@ -629,19 +617,24 @@ function setImportantStop(stopName, slot) {
     }
     saveData();
 
-    // Actualizar visualmente las opciones activas sin cerrar el modal
-    const listIndex = slot === 2 ? 1 : 0;
-    const lists = document.querySelectorAll('.important-stop-list');
-    if (lists[listIndex]) {
-        lists[listIndex].querySelectorAll('.stop-option').forEach(btn => {
-            const isNoneBtn = !btn.dataset.stop;
-            const isSelected = stopName === null ? isNoneBtn : btn.dataset.stop === stopName;
-            btn.classList.toggle('active', isSelected);
-            if (slot === 2) {
-                btn.classList.toggle('active-2', isSelected && !isNoneBtn);
-            }
-        });
-    }
+    // Actualizar visualmente sin cerrar el modal
+    document.querySelectorAll('.stop-row').forEach(row => {
+        const stop = row.dataset.stop;
+        row.classList.toggle('selected-1', state.importantStop === stop);
+        row.classList.toggle('selected-2', state.importantStop2 === stop);
+    });
+    document.querySelectorAll('.stop-badge-btn.badge-1').forEach(btn => {
+        btn.classList.toggle('active', state.importantStop === btn.dataset.stop);
+    });
+    document.querySelectorAll('.stop-badge-btn.badge-2').forEach(btn => {
+        btn.classList.toggle('active', state.importantStop2 === btn.dataset.stop);
+    });
+}
+
+function toggleImportantStop(stopName, slot) {
+    // Si ya está seleccionada esa parada en ese slot, la deselecciona
+    const current = slot === 2 ? state.importantStop2 : state.importantStop;
+    setImportantStop(current === stopName ? null : stopName, slot);
 }
 
 function closeImportantStopSelector(event) {
