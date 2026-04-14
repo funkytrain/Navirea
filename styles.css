@@ -3398,6 +3398,15 @@ body.dark-mode #qr-video {
     text-overflow: ellipsis;
 }
 
+.stop-row.stop-passed {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.stop-row.stop-passed .stop-row-name {
+    text-decoration: line-through;
+}
+
 .stop-row-badges {
     display: flex;
     gap: 0.35rem;

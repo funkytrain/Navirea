@@ -553,6 +553,16 @@ function openConfigurationManager() {
     }
 }
 
+// Devuelve true si la parada ya ha sido superada por la parada actual
+function isStopPassed(stopName) {
+    if (!stopName || !state.currentStop) return false;
+    const route = getCurrentRoute();
+    const currentIdx = route.indexOf(state.currentStop);
+    const stopIdx = route.indexOf(stopName);
+    if (currentIdx === -1 || stopIdx === -1) return false;
+    return stopIdx <= currentIdx;
+}
+
 function openImportantStopSelector() {
     // Cerrar el selector de trenes
     const selector = document.getElementById("train-selector");
@@ -582,20 +592,24 @@ function openImportantStopSelector() {
                         <span class="important-stop-legend-item"><span class="legend-badge badge-2">⭐⭐</span> Parada 2</span>
                     </div>
                     <div class="important-stop-list">
-                        ${route.map(stop => `
-                            <div class="stop-row ${state.importantStop === stop ? 'selected-1' : ''} ${state.importantStop2 === stop ? 'selected-2' : ''}"
+                        ${route.map(stop => {
+                            const passed = isStopPassed(stop);
+                            return `
+                            <div class="stop-row ${state.importantStop === stop ? 'selected-1' : ''} ${state.importantStop2 === stop ? 'selected-2' : ''} ${passed ? 'stop-passed' : ''}"
                                  data-stop="${escapeHtml(stop)}">
                                 <span class="stop-row-name">${escapeHtml(stop)}</span>
                                 <div class="stop-row-badges">
                                     <button class="stop-badge-btn badge-1 ${state.importantStop === stop ? 'active' : ''}"
                                             data-stop="${escapeHtml(stop)}"
-                                            onclick="toggleImportantStop(this.dataset.stop, 1)">⭐</button>
+                                            onclick="toggleImportantStop(this.dataset.stop, 1)"
+                                            ${passed ? 'disabled' : ''}>⭐</button>
                                     <button class="stop-badge-btn badge-2 ${state.importantStop2 === stop ? 'active' : ''}"
                                             data-stop="${escapeHtml(stop)}"
-                                            onclick="toggleImportantStop(this.dataset.stop, 2)">⭐⭐</button>
+                                            onclick="toggleImportantStop(this.dataset.stop, 2)"
+                                            ${passed ? 'disabled' : ''}>⭐⭐</button>
                                 </div>
-                            </div>
-                        `).join('')}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
             </div>
@@ -2509,8 +2523,12 @@ function showQuickStopMenu(coach, num) {
         }
     }
 
-    // Si no hay parada importante configurada, asignar directamente la parada final
-    if (!state.importantStop && !state.importantStop2) {
+    // Filtrar paradas importantes que ya han sido superadas por la parada actual
+    const activeStop1 = state.importantStop && !isStopPassed(state.importantStop) ? state.importantStop : null;
+    const activeStop2 = state.importantStop2 && !isStopPassed(state.importantStop2) ? state.importantStop2 : null;
+
+    // Si no hay parada importante activa, asignar directamente la parada final
+    if (!activeStop1 && !activeStop2) {
         assignQuickStop(coach, num, finalStopName, isCustomRoute);
         return;
     }
@@ -2526,22 +2544,22 @@ function showQuickStopMenu(coach, num) {
                     <span class="stop-icon">🏁</span>
                     <span class="stop-name">${escapeHtml(finalStopName)}</span>
                 </button>
-                ${state.importantStop ? `
+                ${activeStop1 ? `
                     <button class="quick-stop-option important-stop"
                             data-coach="${escapeHtml(coach)}" data-num="${escapeHtml(String(num))}"
-                            data-stop="${escapeHtml(state.importantStop)}" data-custom="${isCustomRoute}"
+                            data-stop="${escapeHtml(activeStop1)}" data-custom="${isCustomRoute}"
                             onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
                         <span class="stop-icon">⭐</span>
-                        <span class="stop-name">${escapeHtml(state.importantStop)}</span>
+                        <span class="stop-name">${escapeHtml(activeStop1)}</span>
                     </button>
                 ` : ''}
-                ${state.importantStop2 ? `
+                ${activeStop2 ? `
                     <button class="quick-stop-option important-stop-2"
                             data-coach="${escapeHtml(coach)}" data-num="${escapeHtml(String(num))}"
-                            data-stop="${escapeHtml(state.importantStop2)}" data-custom="${isCustomRoute}"
+                            data-stop="${escapeHtml(activeStop2)}" data-custom="${isCustomRoute}"
                             onclick="assignQuickStop(this.dataset.coach, this.dataset.num, this.dataset.stop, this.dataset.custom === 'true')">
                         <span class="stop-icon">⭐⭐</span>
-                        <span class="stop-name">${escapeHtml(state.importantStop2)}</span>
+                        <span class="stop-name">${escapeHtml(activeStop2)}</span>
                     </button>
                 ` : ''}
             </div>
