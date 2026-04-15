@@ -146,6 +146,38 @@
             {"type": "seats", "positions": [[55, 56, null, 54, 53]]},
             {"type": "seats", "positions": [[59, 60, null, 58, 57]]}
           ]
+        },
+        "F": {
+          "layout": [
+            {"type": "space", "height": 60},
+            {"type": "seats", "positions": [[null, null, null, 2, 1]]},
+            {"type": "seats", "positions": [[3, 4, null, 6, 5]]},
+            {"type": "seats", "positions": [[7, 8, null, 10, 9]]},
+            {"type": "seats", "positions": [[11, 12, null, 14, 13]]},
+            {"type": "space", "height": 80},
+            {"type": "seats", "positions": [[null, null, null, null, "S1"]]},
+            {"type": "seats", "positions": [[15, 16, null, 18, 17]]},
+            {"type": "seats", "positions": [[19, 20, null, 22, 21]]},
+            {"type": "seats", "positions": [[23, 24, null, 26, 25]]},
+            {"type": "seats", "positions": [[27, 28, null, 30, 29]]},
+            {"type": "seats", "positions": [[31, 32, null, 34, 33]]},
+            {"type": "seats", "positions": [[35, 36, null, 38, 37]]},
+            {"type": "seats", "positions": [[39, 40, null, 42, 41]]},
+            {"type": "seats", "positions": [[43, 44, null, 46, 45]]},
+            {"type": "seats", "positions": [[47, 48, null, 50, 49]]},
+            {"type": "seats", "positions": [[51, 52, null, 54, 53]]},
+            {"type": "seats", "positions": [[null, null, null, null, "S2"]]},
+            {"type": "space", "height": 80},
+            {"type": "seats", "positions": [["S3", null, null, null, "S4"]]},
+            {"type": "seats", "positions": [[55, 56, null, 58, 57]]},
+            {"type": "seats", "positions": [[59, 60, null, 62, 61]]},
+            {"type": "seats", "positions": [[63, 64, null, 66, 65]]},
+            {"type": "seats", "positions": [[67, 68, null, 70, 69]]},
+            {"type": "seats", "positions": [[71, 72, null, 74, 73]]},
+            {"type": "seats", "positions": [[75, 76, null, 78, 77]]},
+            {"type": "seats", "positions": [[79, 80, null, 82, 81]]},
+            {"type": "seats", "positions": [[83, 84, null, 86, 85]]}
+          ]
         }
       }
     },
