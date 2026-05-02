@@ -1,0 +1,8402 @@
+{
+  "10000": {
+    "code": "10000",
+    "name": "MADRID-PRÍNCIPE PÍO",
+    "screenCode": 10000
+  },
+  "10001": {
+    "code": "10001",
+    "name": "ARAVACA",
+    "screenCode": null
+  },
+  "10002": {
+    "code": "10002",
+    "name": "POZUELO",
+    "screenCode": null
+  },
+  "10005": {
+    "code": "10005",
+    "name": "LAS ROZAS",
+    "screenCode": null
+  },
+  "10100": {
+    "code": "10100",
+    "name": "PINAR DE LAS ROZAS",
+    "screenCode": null
+  },
+  "10101": {
+    "code": "10101",
+    "name": "LAS MATAS",
+    "screenCode": null
+  },
+  "10103": {
+    "code": "10103",
+    "name": "TORRELODONES",
+    "screenCode": null
+  },
+  "10104": {
+    "code": "10104",
+    "name": "GALAPAGAR-LA NAVATA",
+    "screenCode": null
+  },
+  "10200": {
+    "code": "10200",
+    "name": "VILLALBA DE GUADARRAMA",
+    "screenCode": null
+  },
+  "10201": {
+    "code": "10201",
+    "name": "SAN YAGO",
+    "screenCode": null
+  },
+  "10202": {
+    "code": "10202",
+    "name": "LAS ZORRERAS-NAVALQUEJIGO",
+    "screenCode": null
+  },
+  "10203": {
+    "code": "10203",
+    "name": "EL ESCORIAL",
+    "screenCode": null
+  },
+  "10204": {
+    "code": "10204",
+    "name": "ZARZALEJO",
+    "screenCode": null
+  },
+  "10205": {
+    "code": "10205",
+    "name": "ROBLEDO DE CHAVELA",
+    "screenCode": null
+  },
+  "10206": {
+    "code": "10206",
+    "name": "SANTA MARÍA DE LA ALAMEDA-PEGUERINOS",
+    "screenCode": null
+  },
+  "10207": {
+    "code": "10207",
+    "name": "LAS NAVAS DEL MARQUÉS",
+    "screenCode": null
+  },
+  "10208": {
+    "code": "10208",
+    "name": "NAVALPERAL",
+    "screenCode": null
+  },
+  "10209": {
+    "code": "10209",
+    "name": "EL PIMPOLLAR",
+    "screenCode": null
+  },
+  "10300": {
+    "code": "10300",
+    "name": "HERRADÓN-LA CAÑADA",
+    "screenCode": null
+  },
+  "10302": {
+    "code": "10302",
+    "name": "GUIMORCONDO",
+    "screenCode": null
+  },
+  "10400": {
+    "code": "10400",
+    "name": "ÁVILA",
+    "screenCode": null
+  },
+  "10409": {
+    "code": "10409",
+    "name": "ARÉVALO",
+    "screenCode": null
+  },
+  "10500": {
+    "code": "10500",
+    "name": "MEDINA DEL CAMPO",
+    "screenCode": 10500
+  },
+  "10501": {
+    "code": "10501",
+    "name": "POZALDEZ",
+    "screenCode": null
+  },
+  "10502": {
+    "code": "10502",
+    "name": "MATAPOZUELOS",
+    "screenCode": null
+  },
+  "10503": {
+    "code": "10503",
+    "name": "VALDESTILLAS",
+    "screenCode": null
+  },
+  "10504": {
+    "code": "10504",
+    "name": "VIANA",
+    "screenCode": null
+  },
+  "10600": {
+    "code": "10600",
+    "name": "VALLADOLID-CAMPO GRANDE",
+    "screenCode": 10600
+  },
+  "10602": {
+    "code": "10602",
+    "name": "CABEZÓN DEL PISUERGA",
+    "screenCode": null
+  },
+  "10603": {
+    "code": "10603",
+    "name": "CORCOS-AGUILAREJO",
+    "screenCode": null
+  },
+  "10604": {
+    "code": "10604",
+    "name": "CUBILLAS DE SANTA MARTA",
+    "screenCode": null
+  },
+  "10605": {
+    "code": "10605",
+    "name": "DUEÑAS",
+    "screenCode": null
+  },
+  "10610": {
+    "code": "10610",
+    "name": "VALLADOLID UNIVERSIDAD",
+    "screenCode": null
+  },
+  "11000": {
+    "code": "11000",
+    "name": "VENTA DE BAÑOS",
+    "screenCode": null
+  },
+  "11004": {
+    "code": "11004",
+    "name": "MAGAZ",
+    "screenCode": null
+  },
+  "11006": {
+    "code": "11006",
+    "name": "QUINTANA DEL PUENTE",
+    "screenCode": null
+  },
+  "11009": {
+    "code": "11009",
+    "name": "VILLAQUIRÁN",
+    "screenCode": null
+  },
+  "11014": {
+    "code": "11014",
+    "name": "BURGOS-ROSA MANZANO",
+    "screenCode": 11014
+  },
+  "11109": {
+    "code": "11109",
+    "name": "BRIVIESCA",
+    "screenCode": null
+  },
+  "11111": {
+    "code": "11111",
+    "name": "PANCORBO",
+    "screenCode": null
+  },
+  "11200": {
+    "code": "11200",
+    "name": "MIRANDA DE EBRO",
+    "screenCode": 11200
+  },
+  "11203": {
+    "code": "11203",
+    "name": "MANZANOS",
+    "screenCode": 11203
+  },
+  "11204": {
+    "code": "11204",
+    "name": "LA PUEBLA DE ARGANZÓN",
+    "screenCode": 11204
+  },
+  "11205": {
+    "code": "11205",
+    "name": "NANCLARES-LANGRAIZ",
+    "screenCode": 11205
+  },
+  "11208": {
+    "code": "11208",
+    "name": "VITORIA-GASTEIZ",
+    "screenCode": 11208
+  },
+  "11209": {
+    "code": "11209",
+    "name": "ESTÍBALIZ-OREITIA",
+    "screenCode": null
+  },
+  "11210": {
+    "code": "11210",
+    "name": "ALEGRÍA-DULANTZI",
+    "screenCode": 11210
+  },
+  "11212": {
+    "code": "11212",
+    "name": "AGURAIN-SALVATIERRA DE ÁLAVA",
+    "screenCode": 11212
+  },
+  "11213": {
+    "code": "11213",
+    "name": "ARAIA",
+    "screenCode": 11213
+  },
+  "11300": {
+    "code": "11300",
+    "name": "ALTSASU",
+    "screenCode": null
+  },
+  "11303": {
+    "code": "11303",
+    "name": "ZEGAMA-OTZAURTE (APT)",
+    "screenCode": null
+  },
+  "11305": {
+    "code": "11305",
+    "name": "BRINKOLA",
+    "screenCode": null
+  },
+  "11306": {
+    "code": "11306",
+    "name": "LEGAZPI",
+    "screenCode": null
+  },
+  "11400": {
+    "code": "11400",
+    "name": "ZUMARRAGA",
+    "screenCode": null
+  },
+  "11402": {
+    "code": "11402",
+    "name": "ORMÁIZTEGUI",
+    "screenCode": null
+  },
+  "11404": {
+    "code": "11404",
+    "name": "BEASAIN",
+    "screenCode": null
+  },
+  "11405": {
+    "code": "11405",
+    "name": "ORDIZIA",
+    "screenCode": null
+  },
+  "11500": {
+    "code": "11500",
+    "name": "TOLOSA",
+    "screenCode": null
+  },
+  "11501": {
+    "code": "11501",
+    "name": "TOLOSA-CENTRO",
+    "screenCode": null
+  },
+  "11503": {
+    "code": "11503",
+    "name": "BILLABONA-ZIZURKIL",
+    "screenCode": null
+  },
+  "11504": {
+    "code": "11504",
+    "name": "ANDOAIN-CENTRO",
+    "screenCode": null
+  },
+  "11505": {
+    "code": "11505",
+    "name": "ANDOAIN",
+    "screenCode": null
+  },
+  "11507": {
+    "code": "11507",
+    "name": "HERNANI-ERDIA",
+    "screenCode": null
+  },
+  "11511": {
+    "code": "11511",
+    "name": "SAN SEBASTIÁN-DONOSTIA",
+    "screenCode": null
+  },
+  "11512": {
+    "code": "11512",
+    "name": "GROS",
+    "screenCode": null
+  },
+  "11513": {
+    "code": "11513",
+    "name": "ATEGORRIETA",
+    "screenCode": null
+  },
+  "11514": {
+    "code": "11514",
+    "name": "HERRERA",
+    "screenCode": null
+  },
+  "11515": {
+    "code": "11515",
+    "name": "PASAIA",
+    "screenCode": null
+  },
+  "11516": {
+    "code": "11516",
+    "name": "LEZO-RENTERÍA",
+    "screenCode": null
+  },
+  "11522": {
+    "code": "11522",
+    "name": "INTXAURRONDO",
+    "screenCode": null
+  },
+  "11600": {
+    "code": "11600",
+    "name": "IRUN",
+    "screenCode": null
+  },
+  "11602": {
+    "code": "11602",
+    "name": "HENDAYA",
+    "screenCode": null
+  },
+  "12001": {
+    "code": "12001",
+    "name": "LOS NEGRALES",
+    "screenCode": null
+  },
+  "12002": {
+    "code": "12002",
+    "name": "ALPEDRETE",
+    "screenCode": null
+  },
+  "12004": {
+    "code": "12004",
+    "name": "COLLADO MEDIANO",
+    "screenCode": null
+  },
+  "12005": {
+    "code": "12005",
+    "name": "LOS MOLINOS-GUADARRAMA",
+    "screenCode": null
+  },
+  "12006": {
+    "code": "12006",
+    "name": "CERCEDILLA",
+    "screenCode": null
+  },
+  "12007": {
+    "code": "12007",
+    "name": "TABLADA",
+    "screenCode": null
+  },
+  "12008": {
+    "code": "12008",
+    "name": "GUDILLOS",
+    "screenCode": null
+  },
+  "12009": {
+    "code": "12009",
+    "name": "SAN RAFAEL",
+    "screenCode": null
+  },
+  "12010": {
+    "code": "12010",
+    "name": "EL ESPINAR",
+    "screenCode": null
+  },
+  "12011": {
+    "code": "12011",
+    "name": "LOS ÁNGELES DE SAN RAFAEL",
+    "screenCode": null
+  },
+  "12012": {
+    "code": "12012",
+    "name": "OTERO-HERREROS",
+    "screenCode": null
+  },
+  "12013": {
+    "code": "12013",
+    "name": "ORTIGOSA DEL MONTE",
+    "screenCode": null
+  },
+  "12014": {
+    "code": "12014",
+    "name": "NAVAS DE RIOFRÍO-LA LOSA",
+    "screenCode": null
+  },
+  "12020": {
+    "code": "12020",
+    "name": "PUERTO DE NAVACERRADA",
+    "screenCode": null
+  },
+  "12023": {
+    "code": "12023",
+    "name": "LOS COTOS",
+    "screenCode": null
+  },
+  "12100": {
+    "code": "12100",
+    "name": "SEGOVIA",
+    "screenCode": 8004
+  },
+  "13003": {
+    "code": "13003",
+    "name": "IZARRA",
+    "screenCode": null
+  },
+  "13106": {
+    "code": "13106",
+    "name": "LLODIO",
+    "screenCode": null
+  },
+  "13119": {
+    "code": "13119",
+    "name": "LA PEÑA DE BILBAO",
+    "screenCode": null
+  },
+  "13120": {
+    "code": "13120",
+    "name": "MIRIBILLA",
+    "screenCode": null
+  },
+  "13200": {
+    "code": "13200",
+    "name": "BILBAO-INTERMOD. ABANDO INDALECIO PRIETO",
+    "screenCode": 13200
+  },
+  "13206": {
+    "code": "13206",
+    "name": "AMETZOLA",
+    "screenCode": null
+  },
+  "14100": {
+    "code": "14100",
+    "name": "PALENCIA",
+    "screenCode": 14100
+  },
+  "14101": {
+    "code": "14101",
+    "name": "MONZÓN DE CAMPOS",
+    "screenCode": null
+  },
+  "14102": {
+    "code": "14102",
+    "name": "AMUSCO",
+    "screenCode": null
+  },
+  "14103": {
+    "code": "14103",
+    "name": "PIÑA",
+    "screenCode": null
+  },
+  "14104": {
+    "code": "14104",
+    "name": "FRÓMISTA",
+    "screenCode": null
+  },
+  "14105": {
+    "code": "14105",
+    "name": "MARCILLA DE CAMPOS",
+    "screenCode": null
+  },
+  "14107": {
+    "code": "14107",
+    "name": "OSORNO",
+    "screenCode": null
+  },
+  "14108": {
+    "code": "14108",
+    "name": "ESPINOSA DE VILLAGONZALO",
+    "screenCode": null
+  },
+  "14111": {
+    "code": "14111",
+    "name": "HERRERA DE PISUERGA",
+    "screenCode": null
+  },
+  "14112": {
+    "code": "14112",
+    "name": "ALAR DEL REY",
+    "screenCode": null
+  },
+  "14113": {
+    "code": "14113",
+    "name": "MAVE",
+    "screenCode": null
+  },
+  "14114": {
+    "code": "14114",
+    "name": "AGUILAR DE CAMPOO",
+    "screenCode": null
+  },
+  "14115": {
+    "code": "14115",
+    "name": "QUINTANILLA DE LAS TORRES",
+    "screenCode": null
+  },
+  "14116": {
+    "code": "14116",
+    "name": "EL CARRIÓN (APD)",
+    "screenCode": null
+  },
+  "14117": {
+    "code": "14117",
+    "name": "EL CARRIÓN",
+    "screenCode": null
+  },
+  "14200": {
+    "code": "14200",
+    "name": "MATAPORQUERA",
+    "screenCode": null
+  },
+  "14202": {
+    "code": "14202",
+    "name": "REINOSA",
+    "screenCode": null
+  },
+  "14203": {
+    "code": "14203",
+    "name": "LANTUENO-SANTIURDE",
+    "screenCode": null
+  },
+  "14204": {
+    "code": "14204",
+    "name": "PESQUERA",
+    "screenCode": null
+  },
+  "14206": {
+    "code": "14206",
+    "name": "BÁRCENA",
+    "screenCode": null
+  },
+  "14207": {
+    "code": "14207",
+    "name": "MOLLEDO-PORTOLÍN",
+    "screenCode": null
+  },
+  "14208": {
+    "code": "14208",
+    "name": "SANTA CRUZ DE IGUÑA",
+    "screenCode": null
+  },
+  "14209": {
+    "code": "14209",
+    "name": "LAS FRAGUAS",
+    "screenCode": null
+  },
+  "14210": {
+    "code": "14210",
+    "name": "LOS CORRALES DE BUELNA",
+    "screenCode": null
+  },
+  "14211": {
+    "code": "14211",
+    "name": "LAS CALDAS DE BESAYA",
+    "screenCode": null
+  },
+  "14212": {
+    "code": "14212",
+    "name": "VIÉRNOLES",
+    "screenCode": null
+  },
+  "14213": {
+    "code": "14213",
+    "name": "TORRELAVEGA",
+    "screenCode": null
+  },
+  "14214": {
+    "code": "14214",
+    "name": "SIERRAPANDO",
+    "screenCode": null
+  },
+  "14216": {
+    "code": "14216",
+    "name": "RENEDO",
+    "screenCode": null
+  },
+  "14217": {
+    "code": "14217",
+    "name": "PARBAYÓN",
+    "screenCode": null
+  },
+  "14218": {
+    "code": "14218",
+    "name": "GUARNIZO",
+    "screenCode": null
+  },
+  "14219": {
+    "code": "14219",
+    "name": "BOO",
+    "screenCode": null
+  },
+  "14220": {
+    "code": "14220",
+    "name": "MALIAÑO",
+    "screenCode": null
+  },
+  "14223": {
+    "code": "14223",
+    "name": "SANTANDER",
+    "screenCode": 14223
+  },
+  "14229": {
+    "code": "14229",
+    "name": "ZURITA",
+    "screenCode": null
+  },
+  "14230": {
+    "code": "14230",
+    "name": "VALDECILLA",
+    "screenCode": null
+  },
+  "14231": {
+    "code": "14231",
+    "name": "NUEVA MONTAÑA",
+    "screenCode": null
+  },
+  "14232": {
+    "code": "14232",
+    "name": "LOMBERA",
+    "screenCode": null
+  },
+  "14233": {
+    "code": "14233",
+    "name": "RÍO EBRO",
+    "screenCode": null
+  },
+  "14234": {
+    "code": "14234",
+    "name": "PUJAYO",
+    "screenCode": null
+  },
+  "14235": {
+    "code": "14235",
+    "name": "ARENAS DE IGUÑA",
+    "screenCode": null
+  },
+  "14236": {
+    "code": "14236",
+    "name": "VIOÑO",
+    "screenCode": null
+  },
+  "14237": {
+    "code": "14237",
+    "name": "MURIEDAS-BAHÍA",
+    "screenCode": null
+  },
+  "15001": {
+    "code": "15001",
+    "name": "GRIJOTA",
+    "screenCode": null
+  },
+  "15003": {
+    "code": "15003",
+    "name": "BECERRIL",
+    "screenCode": null
+  },
+  "15004": {
+    "code": "15004",
+    "name": "PAREDES DE NAVA",
+    "screenCode": null
+  },
+  "15006": {
+    "code": "15006",
+    "name": "CISNEROS",
+    "screenCode": null
+  },
+  "15007": {
+    "code": "15007",
+    "name": "VILLADA",
+    "screenCode": null
+  },
+  "15008": {
+    "code": "15008",
+    "name": "GRAJAL",
+    "screenCode": null
+  },
+  "15009": {
+    "code": "15009",
+    "name": "SAHAGÚN",
+    "screenCode": null
+  },
+  "15012": {
+    "code": "15012",
+    "name": "EL BURGO RANERO",
+    "screenCode": null
+  },
+  "15014": {
+    "code": "15014",
+    "name": "SANTAS MARTAS",
+    "screenCode": null
+  },
+  "15015": {
+    "code": "15015",
+    "name": "PALANQUINOS",
+    "screenCode": null
+  },
+  "15017": {
+    "code": "15017",
+    "name": "TORNEROS (APT)",
+    "screenCode": null
+  },
+  "15100": {
+    "code": "15100",
+    "name": "LEÓN",
+    "screenCode": 15100
+  },
+  "15104": {
+    "code": "15104",
+    "name": "CUADROS",
+    "screenCode": null
+  },
+  "15106": {
+    "code": "15106",
+    "name": "LA ROBLA",
+    "screenCode": null
+  },
+  "15108": {
+    "code": "15108",
+    "name": "LA POLA DE GORDÓN",
+    "screenCode": null
+  },
+  "15109": {
+    "code": "15109",
+    "name": "SANTA LUCÍA",
+    "screenCode": null
+  },
+  "15110": {
+    "code": "15110",
+    "name": "CIÑERA",
+    "screenCode": null
+  },
+  "15112": {
+    "code": "15112",
+    "name": "VILLAMANÍN",
+    "screenCode": null
+  },
+  "15113": {
+    "code": "15113",
+    "name": "BUSDONGO",
+    "screenCode": null
+  },
+  "15116": {
+    "code": "15116",
+    "name": "LINARES-CONGOSTINAS",
+    "screenCode": null
+  },
+  "15118": {
+    "code": "15118",
+    "name": "PUENTE DE LOS FIERROS",
+    "screenCode": null
+  },
+  "15119": {
+    "code": "15119",
+    "name": "LA FRECHA",
+    "screenCode": null
+  },
+  "15120": {
+    "code": "15120",
+    "name": "CAMPOMANES",
+    "screenCode": null
+  },
+  "15121": {
+    "code": "15121",
+    "name": "LA COBERTORIA",
+    "screenCode": null
+  },
+  "15122": {
+    "code": "15122",
+    "name": "POLA DE LENA",
+    "screenCode": null
+  },
+  "15123": {
+    "code": "15123",
+    "name": "VILLALLANA",
+    "screenCode": null
+  },
+  "15200": {
+    "code": "15200",
+    "name": "UJO",
+    "screenCode": null
+  },
+  "15202": {
+    "code": "15202",
+    "name": "SANTULLANO",
+    "screenCode": null
+  },
+  "15203": {
+    "code": "15203",
+    "name": "MIERES-PUENTE",
+    "screenCode": null
+  },
+  "15205": {
+    "code": "15205",
+    "name": "ABLAÑA",
+    "screenCode": null
+  },
+  "15206": {
+    "code": "15206",
+    "name": "LA PEREDA-RIOSA",
+    "screenCode": null
+  },
+  "15207": {
+    "code": "15207",
+    "name": "OLLONIEGO",
+    "screenCode": null
+  },
+  "15208": {
+    "code": "15208",
+    "name": "SOTO DE REY",
+    "screenCode": null
+  },
+  "15209": {
+    "code": "15209",
+    "name": "LAS SEGADAS",
+    "screenCode": null
+  },
+  "15210": {
+    "code": "15210",
+    "name": "EL CALEYO",
+    "screenCode": null
+  },
+  "15211": {
+    "code": "15211",
+    "name": "OVIEDO",
+    "screenCode": 15211
+  },
+  "15212": {
+    "code": "15212",
+    "name": "LUGONES",
+    "screenCode": null
+  },
+  "15217": {
+    "code": "15217",
+    "name": "LA CORREDORIA",
+    "screenCode": null
+  },
+  "15218": {
+    "code": "15218",
+    "name": "LLAMAQUIQUE",
+    "screenCode": null
+  },
+  "15300": {
+    "code": "15300",
+    "name": "LUGO DE LLANERA",
+    "screenCode": null
+  },
+  "15301": {
+    "code": "15301",
+    "name": "VILLABONA DE ASTURIAS",
+    "screenCode": null
+  },
+  "15302": {
+    "code": "15302",
+    "name": "SERÍN",
+    "screenCode": null
+  },
+  "15303": {
+    "code": "15303",
+    "name": "MONTEANA",
+    "screenCode": null
+  },
+  "15305": {
+    "code": "15305",
+    "name": "VILLABONA-TABLADIELLO",
+    "screenCode": null
+  },
+  "15400": {
+    "code": "15400",
+    "name": "VERIÑA",
+    "screenCode": null
+  },
+  "15401": {
+    "code": "15401",
+    "name": "CALZADA DE ASTURIAS",
+    "screenCode": null
+  },
+  "15410": {
+    "code": "15410",
+    "name": "GIJÓN-SANZ CRESPO",
+    "screenCode": null
+  },
+  "16301": {
+    "code": "16301",
+    "name": "FERROÑES",
+    "screenCode": null
+  },
+  "16302": {
+    "code": "16302",
+    "name": "CANCIENES",
+    "screenCode": null
+  },
+  "16400": {
+    "code": "16400",
+    "name": "NUBLEDO",
+    "screenCode": null
+  },
+  "16401": {
+    "code": "16401",
+    "name": "VILLALEGRE",
+    "screenCode": null
+  },
+  "16402": {
+    "code": "16402",
+    "name": "LA ROCICA",
+    "screenCode": null
+  },
+  "16403": {
+    "code": "16403",
+    "name": "AVILÉS",
+    "screenCode": null
+  },
+  "16408": {
+    "code": "16408",
+    "name": "LOS CAMPOS",
+    "screenCode": null
+  },
+  "17000": {
+    "code": "17000",
+    "name": "MADRID-CHAMARTÍN-CLARA CAMPOAMOR",
+    "screenCode": 17000
+  },
+  "17200": {
+    "code": "17200",
+    "name": "ARANDA DE DUERO-MONTECILLO",
+    "screenCode": null
+  },
+  "18000": {
+    "code": "18000",
+    "name": "MADRID-ATOCHA CERCANÍAS",
+    "screenCode": 18000
+  },
+  "18001": {
+    "code": "18001",
+    "name": "MADRID-RECOLETOS",
+    "screenCode": 18001
+  },
+  "18002": {
+    "code": "18002",
+    "name": "MADRID-NUEVOS MINISTERIOS",
+    "screenCode": 18002
+  },
+  "18003": {
+    "code": "18003",
+    "name": "MÉNDEZ ÁLVARO P.V.",
+    "screenCode": null
+  },
+  "18004": {
+    "code": "18004",
+    "name": "DELICIAS",
+    "screenCode": null
+  },
+  "18005": {
+    "code": "18005",
+    "name": "PIRÁMIDES",
+    "screenCode": null
+  },
+  "18101": {
+    "code": "18101",
+    "name": "SOL",
+    "screenCode": 18101
+  },
+  "20002": {
+    "code": "20002",
+    "name": "QUINTANA-RANEROS",
+    "screenCode": null
+  },
+  "20003": {
+    "code": "20003",
+    "name": "VILLADANGOS",
+    "screenCode": null
+  },
+  "20005": {
+    "code": "20005",
+    "name": "VEGUELLINA",
+    "screenCode": null
+  },
+  "20006": {
+    "code": "20006",
+    "name": "BARRIENTOS",
+    "screenCode": null
+  },
+  "20007": {
+    "code": "20007",
+    "name": "NISTAL",
+    "screenCode": null
+  },
+  "20008": {
+    "code": "20008",
+    "name": "VILLAVANTE",
+    "screenCode": null
+  },
+  "20100": {
+    "code": "20100",
+    "name": "ASTORGA",
+    "screenCode": null
+  },
+  "20101": {
+    "code": "20101",
+    "name": "OTERO DE ESCARPIZO",
+    "screenCode": null
+  },
+  "20102": {
+    "code": "20102",
+    "name": "VEGA-MAGAZ",
+    "screenCode": null
+  },
+  "20103": {
+    "code": "20103",
+    "name": "PORQUEROS",
+    "screenCode": null
+  },
+  "20104": {
+    "code": "20104",
+    "name": "BRAÑUELAS",
+    "screenCode": null
+  },
+  "20106": {
+    "code": "20106",
+    "name": "LA GRANJA",
+    "screenCode": null
+  },
+  "20109": {
+    "code": "20109",
+    "name": "TORRE DEL BIERZO",
+    "screenCode": null
+  },
+  "20111": {
+    "code": "20111",
+    "name": "BEMBIBRE",
+    "screenCode": null
+  },
+  "20112": {
+    "code": "20112",
+    "name": "VILLAVERDE DE LOS CESTOS",
+    "screenCode": null
+  },
+  "20113": {
+    "code": "20113",
+    "name": "SAN MIGUEL DE LAS DUEÑAS",
+    "screenCode": null
+  },
+  "20200": {
+    "code": "20200",
+    "name": "PONFERRADA",
+    "screenCode": null
+  },
+  "20202": {
+    "code": "20202",
+    "name": "POSADA DEL BIERZO",
+    "screenCode": null
+  },
+  "20203": {
+    "code": "20203",
+    "name": "VILLADEPALOS",
+    "screenCode": null
+  },
+  "20204": {
+    "code": "20204",
+    "name": "TORAL DE LOS VADOS",
+    "screenCode": null
+  },
+  "20206": {
+    "code": "20206",
+    "name": "LA BAROSA",
+    "screenCode": null
+  },
+  "20207": {
+    "code": "20207",
+    "name": "COVAS",
+    "screenCode": null
+  },
+  "20208": {
+    "code": "20208",
+    "name": "QUEREÑO",
+    "screenCode": null
+  },
+  "20209": {
+    "code": "20209",
+    "name": "PUMARES",
+    "screenCode": null
+  },
+  "20210": {
+    "code": "20210",
+    "name": "SOBRADELO",
+    "screenCode": null
+  },
+  "20211": {
+    "code": "20211",
+    "name": "O BARCO DE VALDEORRAS",
+    "screenCode": null
+  },
+  "20212": {
+    "code": "20212",
+    "name": "VILAMARTÍN DE VALDEORRAS",
+    "screenCode": null
+  },
+  "20213": {
+    "code": "20213",
+    "name": "A RÚA-PETÍN",
+    "screenCode": null
+  },
+  "20214": {
+    "code": "20214",
+    "name": "MONTEFURADO",
+    "screenCode": null
+  },
+  "20216": {
+    "code": "20216",
+    "name": "SAN CLODIO-QUIROGA",
+    "screenCode": null
+  },
+  "20218": {
+    "code": "20218",
+    "name": "A POBRA DO BROLLÓN",
+    "screenCode": null
+  },
+  "20300": {
+    "code": "20300",
+    "name": "MONFORTE DE LEMOS",
+    "screenCode": null
+  },
+  "20305": {
+    "code": "20305",
+    "name": "SARRIA",
+    "screenCode": null
+  },
+  "20306": {
+    "code": "20306",
+    "name": "PEDRELO-CÉLTIGOS",
+    "screenCode": null
+  },
+  "20309": {
+    "code": "20309",
+    "name": "LUGO",
+    "screenCode": null
+  },
+  "20310": {
+    "code": "20310",
+    "name": "RÁBADE",
+    "screenCode": null
+  },
+  "20311": {
+    "code": "20311",
+    "name": "BEGONTE",
+    "screenCode": null
+  },
+  "20312": {
+    "code": "20312",
+    "name": "BAAMONDE",
+    "screenCode": null
+  },
+  "20313": {
+    "code": "20313",
+    "name": "PARGA",
+    "screenCode": null
+  },
+  "20314": {
+    "code": "20314",
+    "name": "GUITIRIZ",
+    "screenCode": null
+  },
+  "20316": {
+    "code": "20316",
+    "name": "TEIXEIRO",
+    "screenCode": null
+  },
+  "20317": {
+    "code": "20317",
+    "name": "CURTIS",
+    "screenCode": null
+  },
+  "20318": {
+    "code": "20318",
+    "name": "PIÑOI",
+    "screenCode": null
+  },
+  "20319": {
+    "code": "20319",
+    "name": "CESURAS",
+    "screenCode": null
+  },
+  "20320": {
+    "code": "20320",
+    "name": "OZA DOS RÍOS",
+    "screenCode": null
+  },
+  "20400": {
+    "code": "20400",
+    "name": "BETANZOS-INFESTA",
+    "screenCode": null
+  },
+  "20402": {
+    "code": "20402",
+    "name": "CECEBRE",
+    "screenCode": null
+  },
+  "20403": {
+    "code": "20403",
+    "name": "CAMBRE",
+    "screenCode": null
+  },
+  "20404": {
+    "code": "20404",
+    "name": "O BURGO-SANTIAGO",
+    "screenCode": null
+  },
+  "20410": {
+    "code": "20410",
+    "name": "ELVIÑA-UNIVERSIDADE",
+    "screenCode": null
+  },
+  "21001": {
+    "code": "21001",
+    "name": "BETANZOS-CIDADE",
+    "screenCode": null
+  },
+  "21002": {
+    "code": "21002",
+    "name": "MIÑO",
+    "screenCode": null
+  },
+  "21003": {
+    "code": "21003",
+    "name": "PERBES",
+    "screenCode": null
+  },
+  "21004": {
+    "code": "21004",
+    "name": "PONTEDEUME",
+    "screenCode": null
+  },
+  "21005": {
+    "code": "21005",
+    "name": "CABANAS",
+    "screenCode": null
+  },
+  "21006": {
+    "code": "21006",
+    "name": "FRANZA",
+    "screenCode": null
+  },
+  "21007": {
+    "code": "21007",
+    "name": "BARALLOBRE",
+    "screenCode": null
+  },
+  "21008": {
+    "code": "21008",
+    "name": "PERLÍO",
+    "screenCode": null
+  },
+  "21009": {
+    "code": "21009",
+    "name": "NEDA",
+    "screenCode": null
+  },
+  "21010": {
+    "code": "21010",
+    "name": "FERROL",
+    "screenCode": 21010
+  },
+  "21913": {
+    "code": "21913",
+    "name": "POLIGON INDUSTRIAL DEL SEGRE",
+    "screenCode": null
+  },
+  "22001": {
+    "code": "22001",
+    "name": "CANAVAL",
+    "screenCode": null
+  },
+  "22002": {
+    "code": "22002",
+    "name": "AREAS",
+    "screenCode": null
+  },
+  "22003": {
+    "code": "22003",
+    "name": "SANTO ESTEVO DO SIL",
+    "screenCode": null
+  },
+  "22004": {
+    "code": "22004",
+    "name": "SAN PEDRO DO SIL",
+    "screenCode": null
+  },
+  "22005": {
+    "code": "22005",
+    "name": "OS PEARES",
+    "screenCode": null
+  },
+  "22006": {
+    "code": "22006",
+    "name": "BARRA DE MIÑO",
+    "screenCode": null
+  },
+  "22100": {
+    "code": "22100",
+    "name": "OURENSE",
+    "screenCode": 22100
+  },
+  "22101": {
+    "code": "22101",
+    "name": "BARBANTES",
+    "screenCode": null
+  },
+  "22102": {
+    "code": "22102",
+    "name": "RIBADAVIA",
+    "screenCode": null
+  },
+  "22103": {
+    "code": "22103",
+    "name": "FILGUEIRA",
+    "screenCode": null
+  },
+  "22104": {
+    "code": "22104",
+    "name": "FRIEIRA",
+    "screenCode": null
+  },
+  "22105": {
+    "code": "22105",
+    "name": "POUSA-CRECENTE",
+    "screenCode": null
+  },
+  "22106": {
+    "code": "22106",
+    "name": "ARBO",
+    "screenCode": null
+  },
+  "22107": {
+    "code": "22107",
+    "name": "SELA",
+    "screenCode": null
+  },
+  "22108": {
+    "code": "22108",
+    "name": "AS NEVES",
+    "screenCode": null
+  },
+  "22109": {
+    "code": "22109",
+    "name": "SALVATERRA",
+    "screenCode": null
+  },
+  "22110": {
+    "code": "22110",
+    "name": "CALDELAS",
+    "screenCode": null
+  },
+  "22200": {
+    "code": "22200",
+    "name": "GUILLAREI",
+    "screenCode": null
+  },
+  "22201": {
+    "code": "22201",
+    "name": "O PORRIÑO",
+    "screenCode": null
+  },
+  "22202": {
+    "code": "22202",
+    "name": "LOUREDO-VALOS",
+    "screenCode": null
+  },
+  "22300": {
+    "code": "22300",
+    "name": "REDONDELA",
+    "screenCode": null
+  },
+  "22302": {
+    "code": "22302",
+    "name": "CHAPELA",
+    "screenCode": null
+  },
+  "22308": {
+    "code": "22308",
+    "name": "VIGO-GUIXAR",
+    "screenCode": 22308
+  },
+  "22401": {
+    "code": "22401",
+    "name": "TUI",
+    "screenCode": null
+  },
+  "22402": {
+    "code": "22402",
+    "name": "VALENÇA DO MINHO",
+    "screenCode": null
+  },
+  "23000": {
+    "code": "23000",
+    "name": "REDONDELA-PICOTA",
+    "screenCode": null
+  },
+  "23001": {
+    "code": "23001",
+    "name": "CESANTES",
+    "screenCode": null
+  },
+  "23002": {
+    "code": "23002",
+    "name": "ARCADE",
+    "screenCode": null
+  },
+  "23004": {
+    "code": "23004",
+    "name": "PONTEVEDRA",
+    "screenCode": 23004
+  },
+  "23005": {
+    "code": "23005",
+    "name": "PORTELA",
+    "screenCode": null
+  },
+  "23008": {
+    "code": "23008",
+    "name": "VILAGARCÍA DE AROUSA",
+    "screenCode": null
+  },
+  "23009": {
+    "code": "23009",
+    "name": "CATOIRA",
+    "screenCode": null
+  },
+  "23010": {
+    "code": "23010",
+    "name": "PONTECESURES",
+    "screenCode": null
+  },
+  "23011": {
+    "code": "23011",
+    "name": "PADRÓN",
+    "screenCode": null
+  },
+  "23012": {
+    "code": "23012",
+    "name": "A ESCRAVITUDE/LA ESCLAVITUD",
+    "screenCode": 81202
+  },
+  "23013": {
+    "code": "23013",
+    "name": "OSEBE",
+    "screenCode": null
+  },
+  "23018": {
+    "code": "23018",
+    "name": "PONTEVEDRA UNIVERSIDAD",
+    "screenCode": null
+  },
+  "23021": {
+    "code": "23021",
+    "name": "PADRÓN BARBANZA",
+    "screenCode": null
+  },
+  "30000": {
+    "code": "30000",
+    "name": "MONFRAGÜE",
+    "screenCode": null
+  },
+  "30002": {
+    "code": "30002",
+    "name": "PLASENCIA",
+    "screenCode": null
+  },
+  "30100": {
+    "code": "30100",
+    "name": "SALAMANCA",
+    "screenCode": 30100
+  },
+  "30110": {
+    "code": "30110",
+    "name": "SALAMANCA-LA ALAMEDILLA",
+    "screenCode": 30100
+  },
+  "30200": {
+    "code": "30200",
+    "name": "ZAMORA",
+    "screenCode": 30200
+  },
+  "31002": {
+    "code": "31002",
+    "name": "NAVA DEL REY",
+    "screenCode": null
+  },
+  "31006": {
+    "code": "31006",
+    "name": "TORO",
+    "screenCode": null
+  },
+  "31104": {
+    "code": "31104",
+    "name": "CARBAJALES DE ALBA",
+    "screenCode": null
+  },
+  "31106": {
+    "code": "31106",
+    "name": "FERRERUELA DE TÁBARA",
+    "screenCode": null
+  },
+  "31107": {
+    "code": "31107",
+    "name": "ABEJERA",
+    "screenCode": null
+  },
+  "31108": {
+    "code": "31108",
+    "name": "SARRACÍN DE ALISTE",
+    "screenCode": null
+  },
+  "31109": {
+    "code": "31109",
+    "name": "CABAÑAS DE ALISTE",
+    "screenCode": null
+  },
+  "31112": {
+    "code": "31112",
+    "name": "LINAREJOS-PEDROSO",
+    "screenCode": null
+  },
+  "31200": {
+    "code": "31200",
+    "name": "PUEBLA DE SANABRIA",
+    "screenCode": 31200
+  },
+  "31201": {
+    "code": "31201",
+    "name": "PEDRALBA",
+    "screenCode": null
+  },
+  "31203": {
+    "code": "31203",
+    "name": "LUBIÁN",
+    "screenCode": null
+  },
+  "31204": {
+    "code": "31204",
+    "name": "A MEZQUITA-VILAVELLA",
+    "screenCode": null
+  },
+  "31205": {
+    "code": "31205",
+    "name": "A GUDIÑA",
+    "screenCode": null
+  },
+  "31206": {
+    "code": "31206",
+    "name": "VILARIÑO DE CONSO.-A CAPELA",
+    "screenCode": null
+  },
+  "31207": {
+    "code": "31207",
+    "name": "CASTRELO DO VAL-VERÍN-CAMPOBECERROS",
+    "screenCode": null
+  },
+  "31208": {
+    "code": "31208",
+    "name": "LAZA-CERDEDELO",
+    "screenCode": null
+  },
+  "31209": {
+    "code": "31209",
+    "name": "A ALBERGUERÍA-PRADO",
+    "screenCode": null
+  },
+  "31210": {
+    "code": "31210",
+    "name": "VILAR DE BARRIO/VILLAR DE BARRIO",
+    "screenCode": null
+  },
+  "31211": {
+    "code": "31211",
+    "name": "BAÑOS DE MOLGAS",
+    "screenCode": null
+  },
+  "31212": {
+    "code": "31212",
+    "name": "PONTEAMBIA",
+    "screenCode": null
+  },
+  "31213": {
+    "code": "31213",
+    "name": "PADERNE-CANTOÑA",
+    "screenCode": null
+  },
+  "31214": {
+    "code": "31214",
+    "name": "TABOADELA",
+    "screenCode": null
+  },
+  "31215": {
+    "code": "31215",
+    "name": "OURENSE-SAN FRANCISCO",
+    "screenCode": null
+  },
+  "31303": {
+    "code": "31303",
+    "name": "A FRIELA-MASIDE",
+    "screenCode": null
+  },
+  "31304": {
+    "code": "31304",
+    "name": "O CARBALLIÑO",
+    "screenCode": null
+  },
+  "31306": {
+    "code": "31306",
+    "name": "O IRIXO",
+    "screenCode": null
+  },
+  "31308": {
+    "code": "31308",
+    "name": "LALÍN",
+    "screenCode": null
+  },
+  "31309": {
+    "code": "31309",
+    "name": "PONTE TABOADA",
+    "screenCode": null
+  },
+  "31311": {
+    "code": "31311",
+    "name": "A BANDEIRA",
+    "screenCode": null
+  },
+  "31312": {
+    "code": "31312",
+    "name": "VEDRA-RIBADULLA",
+    "screenCode": null
+  },
+  "31400": {
+    "code": "31400",
+    "name": "SANTIAGO DE COMPOSTELA-DANIEL CASTELAO",
+    "screenCode": 31400
+  },
+  "31411": {
+    "code": "31411",
+    "name": "UXES",
+    "screenCode": null
+  },
+  "31412": {
+    "code": "31412",
+    "name": "A CORUÑA",
+    "screenCode": 31412
+  },
+  "31415": {
+    "code": "31415",
+    "name": "ORDES",
+    "screenCode": null
+  },
+  "31416": {
+    "code": "31416",
+    "name": "CERCEDA-MEIRAMA",
+    "screenCode": null
+  },
+  "32001": {
+    "code": "32001",
+    "name": "CAMPILLO",
+    "screenCode": null
+  },
+  "32002": {
+    "code": "32002",
+    "name": "EL CARPIO",
+    "screenCode": null
+  },
+  "32003": {
+    "code": "32003",
+    "name": "FRESNO EL VIEJO",
+    "screenCode": null
+  },
+  "32004": {
+    "code": "32004",
+    "name": "CANTALAPIEDRA",
+    "screenCode": null
+  },
+  "32006": {
+    "code": "32006",
+    "name": "EL PEDROSO DE LA ARMUÑA",
+    "screenCode": null
+  },
+  "32007": {
+    "code": "32007",
+    "name": "PITIEGUA",
+    "screenCode": null
+  },
+  "32008": {
+    "code": "32008",
+    "name": "GOMECELLO",
+    "screenCode": null
+  },
+  "32009": {
+    "code": "32009",
+    "name": "MORISCOS",
+    "screenCode": null
+  },
+  "33008": {
+    "code": "33008",
+    "name": "FUENTE DE SAN ESTEBAN-BOADILLA",
+    "screenCode": null
+  },
+  "33013": {
+    "code": "33013",
+    "name": "CIUDAD RODRIGO",
+    "screenCode": null
+  },
+  "33016": {
+    "code": "33016",
+    "name": "FUENTES DE OÑORO",
+    "screenCode": null
+  },
+  "34002": {
+    "code": "34002",
+    "name": "CARDEÑOSA DE ÁVILA",
+    "screenCode": null
+  },
+  "34005": {
+    "code": "34005",
+    "name": "SAN PEDRO DEL ARROYO",
+    "screenCode": null
+  },
+  "34007": {
+    "code": "34007",
+    "name": "CRESPOS",
+    "screenCode": null
+  },
+  "34008": {
+    "code": "34008",
+    "name": "NARROS DEL CASTILLO",
+    "screenCode": null
+  },
+  "34010": {
+    "code": "34010",
+    "name": "PEÑARANDA DE BRACAMONTE",
+    "screenCode": null
+  },
+  "34011": {
+    "code": "34011",
+    "name": "VILLAR DE GALLIMAZO",
+    "screenCode": null
+  },
+  "34012": {
+    "code": "34012",
+    "name": "BABILAFUENTE",
+    "screenCode": null
+  },
+  "34013": {
+    "code": "34013",
+    "name": "SAN MORALES",
+    "screenCode": null
+  },
+  "34014": {
+    "code": "34014",
+    "name": "ALDEALENGUA",
+    "screenCode": null
+  },
+  "35001": {
+    "code": "35001",
+    "name": "LEGANÉS",
+    "screenCode": null
+  },
+  "35002": {
+    "code": "35002",
+    "name": "FUENLABRADA",
+    "screenCode": null
+  },
+  "35003": {
+    "code": "35003",
+    "name": "HUMANES DE MADRID",
+    "screenCode": null
+  },
+  "35005": {
+    "code": "35005",
+    "name": "ILLESCAS",
+    "screenCode": null
+  },
+  "35012": {
+    "code": "35012",
+    "name": "HUMANES",
+    "screenCode": null
+  },
+  "35105": {
+    "code": "35105",
+    "name": "TORRIJOS",
+    "screenCode": null
+  },
+  "35107": {
+    "code": "35107",
+    "name": "ERUSTES",
+    "screenCode": null
+  },
+  "35109": {
+    "code": "35109",
+    "name": "MONTEARAGÓN",
+    "screenCode": null
+  },
+  "35200": {
+    "code": "35200",
+    "name": "TALAVERA DE LA REINA",
+    "screenCode": null
+  },
+  "35203": {
+    "code": "35203",
+    "name": "OROPESA DE TOLEDO",
+    "screenCode": null
+  },
+  "35206": {
+    "code": "35206",
+    "name": "NAVALMORAL DE LA MATA",
+    "screenCode": null
+  },
+  "35207": {
+    "code": "35207",
+    "name": "CASATEJADA",
+    "screenCode": null
+  },
+  "35301": {
+    "code": "35301",
+    "name": "MIRABEL",
+    "screenCode": null
+  },
+  "35302": {
+    "code": "35302",
+    "name": "CASAS DE MILLÁN",
+    "screenCode": null
+  },
+  "35303": {
+    "code": "35303",
+    "name": "CAÑAVERAL",
+    "screenCode": null
+  },
+  "35400": {
+    "code": "35400",
+    "name": "CÁCERES",
+    "screenCode": 35400
+  },
+  "35402": {
+    "code": "35402",
+    "name": "ARROYO DE MALPARTIDA",
+    "screenCode": null
+  },
+  "35405": {
+    "code": "35405",
+    "name": "SAN VICENTE DE ALCÁNTARA",
+    "screenCode": null
+  },
+  "35406": {
+    "code": "35406",
+    "name": "VALENCIA DE ALCÁNTARA",
+    "screenCode": null
+  },
+  "36002": {
+    "code": "36002",
+    "name": "ALDEA DEL CANO",
+    "screenCode": null
+  },
+  "37001": {
+    "code": "37001",
+    "name": "MADRID-VILLAVERDE ALTO",
+    "screenCode": null
+  },
+  "37200": {
+    "code": "37200",
+    "name": "CIUDAD REAL",
+    "screenCode": null
+  },
+  "37300": {
+    "code": "37300",
+    "name": "PUERTOLLANO",
+    "screenCode": null
+  },
+  "37302": {
+    "code": "37302",
+    "name": "BRAZATORTAS-VEREDAS",
+    "screenCode": null
+  },
+  "37305": {
+    "code": "37305",
+    "name": "ALMADENEJOS-ALMADÉN",
+    "screenCode": null
+  },
+  "37308": {
+    "code": "37308",
+    "name": "GUADALMEZ-LOS PEDROCHES",
+    "screenCode": null
+  },
+  "37311": {
+    "code": "37311",
+    "name": "CABEZA DEL BUEY",
+    "screenCode": null
+  },
+  "37400": {
+    "code": "37400",
+    "name": "ALMORCHÓN",
+    "screenCode": null
+  },
+  "37402": {
+    "code": "37402",
+    "name": "CASTUERA",
+    "screenCode": null
+  },
+  "37404": {
+    "code": "37404",
+    "name": "CAMPANARIO",
+    "screenCode": null
+  },
+  "37406": {
+    "code": "37406",
+    "name": "VILLANUEVA DE LA SERENA",
+    "screenCode": null
+  },
+  "37407": {
+    "code": "37407",
+    "name": "DON BENITO",
+    "screenCode": null
+  },
+  "37409": {
+    "code": "37409",
+    "name": "VALDETORRES",
+    "screenCode": null
+  },
+  "37410": {
+    "code": "37410",
+    "name": "GUAREÑA",
+    "screenCode": null
+  },
+  "37500": {
+    "code": "37500",
+    "name": "MÉRIDA",
+    "screenCode": 37500
+  },
+  "37600": {
+    "code": "37600",
+    "name": "ALJUCÉN",
+    "screenCode": null
+  },
+  "37601": {
+    "code": "37601",
+    "name": "LA GARROVILLA",
+    "screenCode": null
+  },
+  "37603": {
+    "code": "37603",
+    "name": "MONTIJO",
+    "screenCode": null
+  },
+  "37604": {
+    "code": "37604",
+    "name": "GUADIANA",
+    "screenCode": null
+  },
+  "37606": {
+    "code": "37606",
+    "name": "BADAJOZ",
+    "screenCode": 37606
+  },
+  "37608": {
+    "code": "37608",
+    "name": "MONTIJO-EL MOLINO",
+    "screenCode": null
+  },
+  "37611": {
+    "code": "37611",
+    "name": "GARROVILLA-LAS VEGAS",
+    "screenCode": null
+  },
+  "37704": {
+    "code": "37704",
+    "name": "VILLANUEVA DE CÓRDOBA",
+    "screenCode": null
+  },
+  "40002": {
+    "code": "40002",
+    "name": "CALAMONTE",
+    "screenCode": null
+  },
+  "40004": {
+    "code": "40004",
+    "name": "ALMENDRALEJO",
+    "screenCode": null
+  },
+  "40005": {
+    "code": "40005",
+    "name": "VILLAFRANCA DE LOS BARROS",
+    "screenCode": null
+  },
+  "40006": {
+    "code": "40006",
+    "name": "LOS SANTOS DE MAIMONA",
+    "screenCode": null
+  },
+  "40008": {
+    "code": "40008",
+    "name": "ZAFRA FERIA",
+    "screenCode": null
+  },
+  "40100": {
+    "code": "40100",
+    "name": "ZAFRA",
+    "screenCode": null
+  },
+  "40105": {
+    "code": "40105",
+    "name": "LLERENA",
+    "screenCode": null
+  },
+  "40107": {
+    "code": "40107",
+    "name": "FUENTE DEL ARCO",
+    "screenCode": null
+  },
+  "40108": {
+    "code": "40108",
+    "name": "GUADALCANAL",
+    "screenCode": null
+  },
+  "40113": {
+    "code": "40113",
+    "name": "CAZALLA-CONSTANTINA",
+    "screenCode": null
+  },
+  "40115": {
+    "code": "40115",
+    "name": "PEDROSO",
+    "screenCode": null
+  },
+  "40119": {
+    "code": "40119",
+    "name": "VILLANUEVA DEL RÍO-MINAS",
+    "screenCode": null
+  },
+  "40121": {
+    "code": "40121",
+    "name": "ALCOLEA DEL RÍO",
+    "screenCode": null
+  },
+  "40122": {
+    "code": "40122",
+    "name": "TOCINA",
+    "screenCode": null
+  },
+  "42002": {
+    "code": "42002",
+    "name": "MEDINA DE LAS TORRES",
+    "screenCode": null
+  },
+  "42003": {
+    "code": "42003",
+    "name": "VALENCIA DEL VENTOSO",
+    "screenCode": null
+  },
+  "42005": {
+    "code": "42005",
+    "name": "FREGENAL DE LA SIERRA",
+    "screenCode": null
+  },
+  "42006": {
+    "code": "42006",
+    "name": "CUMBRES MAYORES",
+    "screenCode": null
+  },
+  "42008": {
+    "code": "42008",
+    "name": "JABUGO-GALAROZA",
+    "screenCode": null
+  },
+  "42009": {
+    "code": "42009",
+    "name": "ALMONASTER-CORTEGANA",
+    "screenCode": null
+  },
+  "42010": {
+    "code": "42010",
+    "name": "GIL MÁRQUEZ",
+    "screenCode": null
+  },
+  "42012": {
+    "code": "42012",
+    "name": "VALDELAMUSA",
+    "screenCode": null
+  },
+  "42013": {
+    "code": "42013",
+    "name": "EL TAMUJOSO",
+    "screenCode": null
+  },
+  "42015": {
+    "code": "42015",
+    "name": "CALAÑAS",
+    "screenCode": null
+  },
+  "42016": {
+    "code": "42016",
+    "name": "LOS MILANOS",
+    "screenCode": null
+  },
+  "42018": {
+    "code": "42018",
+    "name": "EL COBUJÓN",
+    "screenCode": null
+  },
+  "42019": {
+    "code": "42019",
+    "name": "BELMONTE",
+    "screenCode": null
+  },
+  "42020": {
+    "code": "42020",
+    "name": "GIBRALEÓN",
+    "screenCode": null
+  },
+  "43005": {
+    "code": "43005",
+    "name": "BENACAZÓN",
+    "screenCode": null
+  },
+  "43008": {
+    "code": "43008",
+    "name": "CARRIÓN DE LOS CÉSPEDES",
+    "screenCode": null
+  },
+  "43009": {
+    "code": "43009",
+    "name": "ESCACENA",
+    "screenCode": null
+  },
+  "43011": {
+    "code": "43011",
+    "name": "LA PALMA DEL CONDADO",
+    "screenCode": null
+  },
+  "43012": {
+    "code": "43012",
+    "name": "VILLARRASA",
+    "screenCode": null
+  },
+  "43015": {
+    "code": "43015",
+    "name": "NIEBLA-PUERTA DEL BUEY",
+    "screenCode": null
+  },
+  "43019": {
+    "code": "43019",
+    "name": "HUELVA",
+    "screenCode": null
+  },
+  "43021": {
+    "code": "43021",
+    "name": "SAN JUAN DEL PUERTO",
+    "screenCode": null
+  },
+  "43027": {
+    "code": "43027",
+    "name": "SALTERAS",
+    "screenCode": null
+  },
+  "50002": {
+    "code": "50002",
+    "name": "CINCO CASAS",
+    "screenCode": null
+  },
+  "50100": {
+    "code": "50100",
+    "name": "MANZANARES",
+    "screenCode": null
+  },
+  "50102": {
+    "code": "50102",
+    "name": "VALDEPEÑAS",
+    "screenCode": null
+  },
+  "50200": {
+    "code": "50200",
+    "name": "SANTA CRUZ DE MUDELA",
+    "screenCode": null
+  },
+  "50202": {
+    "code": "50202",
+    "name": "ALMURADIEL-VISO DEL MARQUÉS",
+    "screenCode": null
+  },
+  "50207": {
+    "code": "50207",
+    "name": "VILCHES",
+    "screenCode": null
+  },
+  "50300": {
+    "code": "50300",
+    "name": "LINARES-BAEZA",
+    "screenCode": null
+  },
+  "50400": {
+    "code": "50400",
+    "name": "ESPELÚY",
+    "screenCode": null
+  },
+  "50403": {
+    "code": "50403",
+    "name": "ANDÚJAR",
+    "screenCode": null
+  },
+  "50407": {
+    "code": "50407",
+    "name": "VILLA DEL RÍO",
+    "screenCode": null
+  },
+  "50413": {
+    "code": "50413",
+    "name": "ALCOLEA DE CÓRDOBA",
+    "screenCode": null
+  },
+  "50417": {
+    "code": "50417",
+    "name": "CAMPUS UNIVERSITARIO DE RABANALES",
+    "screenCode": null
+  },
+  "50500": {
+    "code": "50500",
+    "name": "CÓRDOBA-JULIO ANGUITA",
+    "screenCode": 50500
+  },
+  "50501": {
+    "code": "50501",
+    "name": "EL HIGUERÓN",
+    "screenCode": null
+  },
+  "50502": {
+    "code": "50502",
+    "name": "VILLARRUBIA DE CÓRDOBA",
+    "screenCode": null
+  },
+  "50504": {
+    "code": "50504",
+    "name": "POSADAS",
+    "screenCode": null
+  },
+  "50506": {
+    "code": "50506",
+    "name": "PALMA DEL RÍO",
+    "screenCode": null
+  },
+  "50507": {
+    "code": "50507",
+    "name": "PEÑAFLOR",
+    "screenCode": null
+  },
+  "50600": {
+    "code": "50600",
+    "name": "LORA DEL RÍO",
+    "screenCode": null
+  },
+  "50700": {
+    "code": "50700",
+    "name": "LOS ROSALES",
+    "screenCode": null
+  },
+  "50701": {
+    "code": "50701",
+    "name": "CANTILLANA",
+    "screenCode": null
+  },
+  "50702": {
+    "code": "50702",
+    "name": "BRENES",
+    "screenCode": null
+  },
+  "50703": {
+    "code": "50703",
+    "name": "LA RINCONADA",
+    "screenCode": null
+  },
+  "51003": {
+    "code": "51003",
+    "name": "SEVILLA-SANTA JUSTA",
+    "screenCode": 51003
+  },
+  "51050": {
+    "code": "51050",
+    "name": "CARTUJA",
+    "screenCode": null
+  },
+  "51100": {
+    "code": "51100",
+    "name": "SAN BERNARDO",
+    "screenCode": null
+  },
+  "51103": {
+    "code": "51103",
+    "name": "DOS HERMANAS",
+    "screenCode": null
+  },
+  "51110": {
+    "code": "51110",
+    "name": "VIRGEN DEL ROCÍO",
+    "screenCode": null
+  },
+  "51111": {
+    "code": "51111",
+    "name": "BELLAVISTA",
+    "screenCode": null
+  },
+  "51113": {
+    "code": "51113",
+    "name": "JARDINES DE HÉRCULES",
+    "screenCode": null
+  },
+  "51200": {
+    "code": "51200",
+    "name": "UTRERA",
+    "screenCode": null
+  },
+  "51202": {
+    "code": "51202",
+    "name": "LAS CABEZAS DE SAN JUAN",
+    "screenCode": null
+  },
+  "51203": {
+    "code": "51203",
+    "name": "LEBRIJA",
+    "screenCode": null
+  },
+  "51205": {
+    "code": "51205",
+    "name": "AEROPUERTO DE JEREZ",
+    "screenCode": null
+  },
+  "51300": {
+    "code": "51300",
+    "name": "JEREZ DE LA FRONTERA",
+    "screenCode": null
+  },
+  "51400": {
+    "code": "51400",
+    "name": "PUERTO DE SANTA MARÍA",
+    "screenCode": null
+  },
+  "51401": {
+    "code": "51401",
+    "name": "PUERTO REAL",
+    "screenCode": null
+  },
+  "51402": {
+    "code": "51402",
+    "name": "SAN FERNANDO-CENTRO",
+    "screenCode": null
+  },
+  "51404": {
+    "code": "51404",
+    "name": "SEGUNDA AGUADA",
+    "screenCode": null
+  },
+  "51405": {
+    "code": "51405",
+    "name": "CÁDIZ",
+    "screenCode": null
+  },
+  "51406": {
+    "code": "51406",
+    "name": "SAN FERNANDO-BAHÍA SUR",
+    "screenCode": null
+  },
+  "51409": {
+    "code": "51409",
+    "name": "CÁDIZ-ESTADIO",
+    "screenCode": null
+  },
+  "51414": {
+    "code": "51414",
+    "name": "SAN SEVERIANO",
+    "screenCode": null
+  },
+  "51415": {
+    "code": "51415",
+    "name": "LAS ALETAS",
+    "screenCode": null
+  },
+  "51417": {
+    "code": "51417",
+    "name": "VALDELAGRANA",
+    "screenCode": null
+  },
+  "51419": {
+    "code": "51419",
+    "name": "RÍO ARILLO",
+    "screenCode": null
+  },
+  "51450": {
+    "code": "51450",
+    "name": "PELAGATOS",
+    "screenCode": null
+  },
+  "51451": {
+    "code": "51451",
+    "name": "LA HOYA",
+    "screenCode": null
+  },
+  "51452": {
+    "code": "51452",
+    "name": "REYES CATÓLICOS",
+    "screenCode": null
+  },
+  "51453": {
+    "code": "51453",
+    "name": "NUESTRA SEÑORA DE LOS REMEDIOS",
+    "screenCode": null
+  },
+  "51454": {
+    "code": "51454",
+    "name": "ALAMEDA SOLANO",
+    "screenCode": null
+  },
+  "51455": {
+    "code": "51455",
+    "name": "MARQUESADO",
+    "screenCode": null
+  },
+  "51456": {
+    "code": "51456",
+    "name": "PINAR DE LOS FRANCESES",
+    "screenCode": null
+  },
+  "51457": {
+    "code": "51457",
+    "name": "TRES CAMINOS",
+    "screenCode": null
+  },
+  "51458": {
+    "code": "51458",
+    "name": "VENTA DE VARGAS",
+    "screenCode": null
+  },
+  "51459": {
+    "code": "51459",
+    "name": "PLAZA DE LA IGLESIA",
+    "screenCode": null
+  },
+  "51460": {
+    "code": "51460",
+    "name": "PLAZA DEL REY",
+    "screenCode": null
+  },
+  "51461": {
+    "code": "51461",
+    "name": "COMPAÑÍA DE MARÍA",
+    "screenCode": null
+  },
+  "51462": {
+    "code": "51462",
+    "name": "PLAZA DEL CARMEN",
+    "screenCode": null
+  },
+  "51463": {
+    "code": "51463",
+    "name": "SANTO ENTIERRO",
+    "screenCode": null
+  },
+  "51464": {
+    "code": "51464",
+    "name": "LA ARDILA",
+    "screenCode": null
+  },
+  "54105": {
+    "code": "54105",
+    "name": "MONTILLA",
+    "screenCode": null
+  },
+  "54106": {
+    "code": "54106",
+    "name": "AGUILAR DE LA FRONTERA",
+    "screenCode": null
+  },
+  "54201": {
+    "code": "54201",
+    "name": "PUENTE GENIL",
+    "screenCode": null
+  },
+  "54202": {
+    "code": "54202",
+    "name": "CASARICHE",
+    "screenCode": null
+  },
+  "54300": {
+    "code": "54300",
+    "name": "LA RODA DE ANDALUCÍA",
+    "screenCode": null
+  },
+  "54301": {
+    "code": "54301",
+    "name": "FUENTE DE PIEDRA",
+    "screenCode": null
+  },
+  "54400": {
+    "code": "54400",
+    "name": "BOBADILLA",
+    "screenCode": null
+  },
+  "54403": {
+    "code": "54403",
+    "name": "EL CHORRO-CAMINITO DEL REY",
+    "screenCode": null
+  },
+  "54404": {
+    "code": "54404",
+    "name": "LAS MELLIZAS",
+    "screenCode": null
+  },
+  "54405": {
+    "code": "54405",
+    "name": "ÁLORA",
+    "screenCode": null
+  },
+  "54406": {
+    "code": "54406",
+    "name": "PIZARRA",
+    "screenCode": null
+  },
+  "54407": {
+    "code": "54407",
+    "name": "ALJAIMA",
+    "screenCode": null
+  },
+  "54408": {
+    "code": "54408",
+    "name": "CÁRTAMA",
+    "screenCode": null
+  },
+  "54410": {
+    "code": "54410",
+    "name": "CAMPANILLAS",
+    "screenCode": null
+  },
+  "54412": {
+    "code": "54412",
+    "name": "MÁLAGA-LOS PRADOS",
+    "screenCode": null
+  },
+  "54413": {
+    "code": "54413",
+    "name": "MÁLAGA MARÍA ZAMBRANO",
+    "screenCode": 54413
+  },
+  "54500": {
+    "code": "54500",
+    "name": "MÁLAGA M.Z. CERCANÍAS",
+    "screenCode": 54500
+  },
+  "54501": {
+    "code": "54501",
+    "name": "VICTORIA KENT",
+    "screenCode": null
+  },
+  "54505": {
+    "code": "54505",
+    "name": "MÁLAGA-AEROPUERTO",
+    "screenCode": null
+  },
+  "54509": {
+    "code": "54509",
+    "name": "TORREMOLINOS",
+    "screenCode": null
+  },
+  "54511": {
+    "code": "54511",
+    "name": "BENALMÁDENA-ARROYO DE LA MIEL",
+    "screenCode": null
+  },
+  "54516": {
+    "code": "54516",
+    "name": "FUENGIROLA",
+    "screenCode": null
+  },
+  "54517": {
+    "code": "54517",
+    "name": "MÁLAGA-CENTRO ALAMEDA",
+    "screenCode": null
+  },
+  "55001": {
+    "code": "55001",
+    "name": "CAMPILLOS",
+    "screenCode": null
+  },
+  "55002": {
+    "code": "55002",
+    "name": "TEBA",
+    "screenCode": null
+  },
+  "55003": {
+    "code": "55003",
+    "name": "ALMARGEN-CAÑETE LA REAL",
+    "screenCode": null
+  },
+  "55005": {
+    "code": "55005",
+    "name": "SETENIL",
+    "screenCode": null
+  },
+  "55007": {
+    "code": "55007",
+    "name": "RONDA",
+    "screenCode": null
+  },
+  "55008": {
+    "code": "55008",
+    "name": "ARRIATE",
+    "screenCode": null
+  },
+  "55010": {
+    "code": "55010",
+    "name": "BENAOJÁN-MONTEJAQUE",
+    "screenCode": null
+  },
+  "55011": {
+    "code": "55011",
+    "name": "JIMERA DE LÍBAR",
+    "screenCode": null
+  },
+  "55012": {
+    "code": "55012",
+    "name": "CORTES DE LA FRONTERA",
+    "screenCode": null
+  },
+  "55013": {
+    "code": "55013",
+    "name": "GAUCÍN",
+    "screenCode": null
+  },
+  "55014": {
+    "code": "55014",
+    "name": "SAN PABLO",
+    "screenCode": null
+  },
+  "55015": {
+    "code": "55015",
+    "name": "JIMENA DE LA FRONTERA",
+    "screenCode": null
+  },
+  "55017": {
+    "code": "55017",
+    "name": "ALMORAIMA",
+    "screenCode": null
+  },
+  "55018": {
+    "code": "55018",
+    "name": "SAN ROQUE-LA LÍNEA",
+    "screenCode": null
+  },
+  "55019": {
+    "code": "55019",
+    "name": "LOS BARRIOS",
+    "screenCode": null
+  },
+  "55020": {
+    "code": "55020",
+    "name": "ALGECIRAS",
+    "screenCode": null
+  },
+  "56004": {
+    "code": "56004",
+    "name": "JÓDAR-ÚBEDA",
+    "screenCode": null
+  },
+  "56005": {
+    "code": "56005",
+    "name": "LOS PROPIOS-CAZORLA",
+    "screenCode": null
+  },
+  "56007": {
+    "code": "56007",
+    "name": "LARVA",
+    "screenCode": null
+  },
+  "56008": {
+    "code": "56008",
+    "name": "HUESA",
+    "screenCode": null
+  },
+  "56009": {
+    "code": "56009",
+    "name": "CABRA DEL SANTO CRISTO Y ALICÚN",
+    "screenCode": null
+  },
+  "56011": {
+    "code": "56011",
+    "name": "ALAMEDILLA-GUADAHORTUNA",
+    "screenCode": null
+  },
+  "56100": {
+    "code": "56100",
+    "name": "MOREDA",
+    "screenCode": null
+  },
+  "56103": {
+    "code": "56103",
+    "name": "BENALÚA DE GUADIX",
+    "screenCode": null
+  },
+  "56200": {
+    "code": "56200",
+    "name": "GUADIX",
+    "screenCode": null
+  },
+  "56301": {
+    "code": "56301",
+    "name": "FIÑANA",
+    "screenCode": null
+  },
+  "56305": {
+    "code": "56305",
+    "name": "GÉRGAL",
+    "screenCode": null
+  },
+  "56308": {
+    "code": "56308",
+    "name": "GÁDOR",
+    "screenCode": null
+  },
+  "56310": {
+    "code": "56310",
+    "name": "HUERCAL-VIATOR",
+    "screenCode": null
+  },
+  "56312": {
+    "code": "56312",
+    "name": "ALMERÍA",
+    "screenCode": null
+  },
+  "57003": {
+    "code": "57003",
+    "name": "IZNALLOZ",
+    "screenCode": null
+  },
+  "60000": {
+    "code": "60000",
+    "name": "MADRID-PUERTA DE ATOCHA-ALMUDENA GRANDES",
+    "screenCode": null
+  },
+  "60100": {
+    "code": "60100",
+    "name": "MADRID-VILLAVERDE BAJO",
+    "screenCode": null
+  },
+  "60101": {
+    "code": "60101",
+    "name": "SAN CRISTÓBAL INDUSTRIAL",
+    "screenCode": null
+  },
+  "60103": {
+    "code": "60103",
+    "name": "PINTO",
+    "screenCode": null
+  },
+  "60200": {
+    "code": "60200",
+    "name": "ARANJUEZ",
+    "screenCode": null
+  },
+  "60202": {
+    "code": "60202",
+    "name": "CASTILLEJO-AÑOVER",
+    "screenCode": null
+  },
+  "60203": {
+    "code": "60203",
+    "name": "VILLASEQUILLA",
+    "screenCode": null
+  },
+  "60206": {
+    "code": "60206",
+    "name": "TEMBLEQUE",
+    "screenCode": null
+  },
+  "60207": {
+    "code": "60207",
+    "name": "EL ROMERAL",
+    "screenCode": null
+  },
+  "60300": {
+    "code": "60300",
+    "name": "VILLACAÑAS",
+    "screenCode": null
+  },
+  "60301": {
+    "code": "60301",
+    "name": "QUERO",
+    "screenCode": null
+  },
+  "60400": {
+    "code": "60400",
+    "name": "ALCÁZAR DE SAN JUAN",
+    "screenCode": null
+  },
+  "60402": {
+    "code": "60402",
+    "name": "CAMPO DE CRIPTANA",
+    "screenCode": null
+  },
+  "60406": {
+    "code": "60406",
+    "name": "SOCUÉLLAMOS",
+    "screenCode": null
+  },
+  "60500": {
+    "code": "60500",
+    "name": "VILLARROBLEDO",
+    "screenCode": null
+  },
+  "60503": {
+    "code": "60503",
+    "name": "MINAYA",
+    "screenCode": null
+  },
+  "60505": {
+    "code": "60505",
+    "name": "LA RODA DE ALBACETE",
+    "screenCode": null
+  },
+  "60507": {
+    "code": "60507",
+    "name": "LA GINETA",
+    "screenCode": null
+  },
+  "60600": {
+    "code": "60600",
+    "name": "ALBACETE-LOS LLANOS",
+    "screenCode": 60600
+  },
+  "60800": {
+    "code": "60800",
+    "name": "ALMANSA",
+    "screenCode": null
+  },
+  "60900": {
+    "code": "60900",
+    "name": "LA ENCINA",
+    "screenCode": null
+  },
+  "60901": {
+    "code": "60901",
+    "name": "CAUDETE",
+    "screenCode": null
+  },
+  "60902": {
+    "code": "60902",
+    "name": "VILLENA",
+    "screenCode": null
+  },
+  "60904": {
+    "code": "60904",
+    "name": "SAX",
+    "screenCode": null
+  },
+  "60905": {
+    "code": "60905",
+    "name": "ELDA-PETRER",
+    "screenCode": null
+  },
+  "60907": {
+    "code": "60907",
+    "name": "NOVELDA-ASPE",
+    "screenCode": null
+  },
+  "60911": {
+    "code": "60911",
+    "name": "ALICANTE/ALACANT-TERMINAL",
+    "screenCode": 60911
+  },
+  "60913": {
+    "code": "60913",
+    "name": "SANT VICENT CENTRE",
+    "screenCode": null
+  },
+  "60914": {
+    "code": "60914",
+    "name": "UNIVERSIDAD DE ALICANTE",
+    "screenCode": null
+  },
+  "61005": {
+    "code": "61005",
+    "name": "HELLÍN",
+    "screenCode": null
+  },
+  "61009": {
+    "code": "61009",
+    "name": "CALASPARRA",
+    "screenCode": null
+  },
+  "61012": {
+    "code": "61012",
+    "name": "CIEZA",
+    "screenCode": null
+  },
+  "61015": {
+    "code": "61015",
+    "name": "ARCHENA-FORTUNA",
+    "screenCode": null
+  },
+  "61100": {
+    "code": "61100",
+    "name": "ALCANTARILLA",
+    "screenCode": null
+  },
+  "61200": {
+    "code": "61200",
+    "name": "MURCIA DEL CARMEN",
+    "screenCode": 61200
+  },
+  "61303": {
+    "code": "61303",
+    "name": "BALSICAS-MAR MENOR",
+    "screenCode": null
+  },
+  "61304": {
+    "code": "61304",
+    "name": "TORRE-PACHECO",
+    "screenCode": null
+  },
+  "61307": {
+    "code": "61307",
+    "name": "CARTAGENA",
+    "screenCode": null
+  },
+  "62001": {
+    "code": "62001",
+    "name": "BENIEL",
+    "screenCode": null
+  },
+  "62002": {
+    "code": "62002",
+    "name": "ORIHUELA-MIGUEL HERNÁNDEZ",
+    "screenCode": null
+  },
+  "62003": {
+    "code": "62003",
+    "name": "CALLOSA DE SEGURA",
+    "screenCode": null
+  },
+  "62100": {
+    "code": "62100",
+    "name": "SAN ISIDRO-ALBATERA-CATRAL",
+    "screenCode": null
+  },
+  "62101": {
+    "code": "62101",
+    "name": "CREVILLENTE",
+    "screenCode": null
+  },
+  "62102": {
+    "code": "62102",
+    "name": "ELCHE/ELX-CARRÚS",
+    "screenCode": null
+  },
+  "62103": {
+    "code": "62103",
+    "name": "ELCHE/ELX-PARC",
+    "screenCode": null
+  },
+  "62104": {
+    "code": "62104",
+    "name": "TORRELLANO",
+    "screenCode": null
+  },
+  "62109": {
+    "code": "62109",
+    "name": "SANT GABRIEL",
+    "screenCode": null
+  },
+  "64003": {
+    "code": "64003",
+    "name": "MOIXENT",
+    "screenCode": null
+  },
+  "64007": {
+    "code": "64007",
+    "name": "LENOVA-MANUEL",
+    "screenCode": null
+  },
+  "64100": {
+    "code": "64100",
+    "name": "XÀTIVA",
+    "screenCode": null
+  },
+  "64101": {
+    "code": "64101",
+    "name": "MANUEL-L'ENOVA",
+    "screenCode": null
+  },
+  "64102": {
+    "code": "64102",
+    "name": "LA POBLA LLARGA",
+    "screenCode": null
+  },
+  "64103": {
+    "code": "64103",
+    "name": "CARCAIXENT",
+    "screenCode": null
+  },
+  "64104": {
+    "code": "64104",
+    "name": "ALZIRA",
+    "screenCode": null
+  },
+  "64105": {
+    "code": "64105",
+    "name": "ALGEMESÍ",
+    "screenCode": null
+  },
+  "64107": {
+    "code": "64107",
+    "name": "BENIFAIÓ",
+    "screenCode": null
+  },
+  "64200": {
+    "code": "64200",
+    "name": "SILLA",
+    "screenCode": null
+  },
+  "64201": {
+    "code": "64201",
+    "name": "CATARROJA",
+    "screenCode": null
+  },
+  "64202": {
+    "code": "64202",
+    "name": "MASSANASSA",
+    "screenCode": null
+  },
+  "64203": {
+    "code": "64203",
+    "name": "ALFAFAR-BENETÚSSER",
+    "screenCode": null
+  },
+  "64210": {
+    "code": "64210",
+    "name": "ALBAL",
+    "screenCode": null
+  },
+  "65000": {
+    "code": "65000",
+    "name": "VALÈNCIA-ESTACIÓ DEL NORD",
+    "screenCode": null
+  },
+  "65001": {
+    "code": "65001",
+    "name": "ROCA-CÚPER",
+    "screenCode": null
+  },
+  "65002": {
+    "code": "65002",
+    "name": "VALÈNCIA-LA FONT DE SANT LLUÍS",
+    "screenCode": null
+  },
+  "65003": {
+    "code": "65003",
+    "name": "VALÈNCIA-CABANYAL",
+    "screenCode": null
+  },
+  "65005": {
+    "code": "65005",
+    "name": "ALBUIXECH",
+    "screenCode": null
+  },
+  "65006": {
+    "code": "65006",
+    "name": "MASSALFASSAR",
+    "screenCode": null
+  },
+  "65007": {
+    "code": "65007",
+    "name": "EL PUIG",
+    "screenCode": null
+  },
+  "65008": {
+    "code": "65008",
+    "name": "PUÇOL",
+    "screenCode": null
+  },
+  "65200": {
+    "code": "65200",
+    "name": "SAGUNT",
+    "screenCode": null
+  },
+  "65201": {
+    "code": "65201",
+    "name": "LES VALLS",
+    "screenCode": null
+  },
+  "65202": {
+    "code": "65202",
+    "name": "ALMENARA",
+    "screenCode": null
+  },
+  "65203": {
+    "code": "65203",
+    "name": "LA LLOSA",
+    "screenCode": null
+  },
+  "65204": {
+    "code": "65204",
+    "name": "CHILCHES/XILXES",
+    "screenCode": null
+  },
+  "65205": {
+    "code": "65205",
+    "name": "MONCOFA",
+    "screenCode": null
+  },
+  "65206": {
+    "code": "65206",
+    "name": "NULES LA VILLAVELLA",
+    "screenCode": null
+  },
+  "65207": {
+    "code": "65207",
+    "name": "BURRIANA-ALQUERÍAS NIÑO PERDIDO",
+    "screenCode": null
+  },
+  "65208": {
+    "code": "65208",
+    "name": "VILA-REAL",
+    "screenCode": null
+  },
+  "65209": {
+    "code": "65209",
+    "name": "ALMASSORA",
+    "screenCode": null
+  },
+  "65300": {
+    "code": "65300",
+    "name": "CASTELLÓ DE LA PLANA",
+    "screenCode": 65300
+  },
+  "65301": {
+    "code": "65301",
+    "name": "LES PALMES",
+    "screenCode": null
+  },
+  "65304": {
+    "code": "65304",
+    "name": "ORPESA",
+    "screenCode": null
+  },
+  "65306": {
+    "code": "65306",
+    "name": "TORREBLANCA",
+    "screenCode": null
+  },
+  "65308": {
+    "code": "65308",
+    "name": "ALCALÁ DE CHIVERT",
+    "screenCode": null
+  },
+  "65311": {
+    "code": "65311",
+    "name": "BENICARLÓ-PEÑÍSCOLA",
+    "screenCode": null
+  },
+  "65312": {
+    "code": "65312",
+    "name": "VINARÒS",
+    "screenCode": null
+  },
+  "65314": {
+    "code": "65314",
+    "name": "ULLDECONA-ALCANAR-LA SÉNIA",
+    "screenCode": null
+  },
+  "65318": {
+    "code": "65318",
+    "name": "BENICÀSSIM",
+    "screenCode": null
+  },
+  "65400": {
+    "code": "65400",
+    "name": "TORTOSA",
+    "screenCode": 65400
+  },
+  "65401": {
+    "code": "65401",
+    "name": "CAMP-REDÓ",
+    "screenCode": null
+  },
+  "65402": {
+    "code": "65402",
+    "name": "L'ALDEA-AMPOSTA-TORTOSA",
+    "screenCode": null
+  },
+  "65403": {
+    "code": "65403",
+    "name": "CAMARLES-DELTEBRE",
+    "screenCode": null
+  },
+  "65404": {
+    "code": "65404",
+    "name": "L'AMPOLLA-EL PERELLÓ-DELTEBRE",
+    "screenCode": null
+  },
+  "65405": {
+    "code": "65405",
+    "name": "L'AMETLLA DE MAR",
+    "screenCode": null
+  },
+  "65408": {
+    "code": "65408",
+    "name": "MONT-ROIG DEL CAMP",
+    "screenCode": null
+  },
+  "65410": {
+    "code": "65410",
+    "name": "SALOU",
+    "screenCode": null
+  },
+  "65411": {
+    "code": "65411",
+    "name": "SALOU-PORT AVENTURA",
+    "screenCode": null
+  },
+  "65420": {
+    "code": "65420",
+    "name": "L'HOSPITALET DE L'INFANT",
+    "screenCode": null
+  },
+  "65422": {
+    "code": "65422",
+    "name": "CAMBRILS",
+    "screenCode": null
+  },
+  "65555": {
+    "code": "65555",
+    "name": "VALENCIA ENLACE",
+    "screenCode": null
+  },
+  "66001": {
+    "code": "66001",
+    "name": "ONTÍGOLA",
+    "screenCode": null
+  },
+  "66002": {
+    "code": "66002",
+    "name": "OCAÑA",
+    "screenCode": null
+  },
+  "66003": {
+    "code": "66003",
+    "name": "NOBLEJAS",
+    "screenCode": null
+  },
+  "66004": {
+    "code": "66004",
+    "name": "VILLARRUBIA DE SANTIAGO",
+    "screenCode": null
+  },
+  "66005": {
+    "code": "66005",
+    "name": "SANTA CRUZ DE LA ZARZA",
+    "screenCode": null
+  },
+  "66006": {
+    "code": "66006",
+    "name": "TARANCÓN",
+    "screenCode": null
+  },
+  "66008": {
+    "code": "66008",
+    "name": "HUELVES",
+    "screenCode": null
+  },
+  "66009": {
+    "code": "66009",
+    "name": "PAREDES DE MELO",
+    "screenCode": null
+  },
+  "66010": {
+    "code": "66010",
+    "name": "VELLISCA",
+    "screenCode": null
+  },
+  "66011": {
+    "code": "66011",
+    "name": "HUETE",
+    "screenCode": null
+  },
+  "66012": {
+    "code": "66012",
+    "name": "CARACENILLA",
+    "screenCode": null
+  },
+  "66013": {
+    "code": "66013",
+    "name": "CASTILLEJO DEL ROMERAL",
+    "screenCode": null
+  },
+  "66014": {
+    "code": "66014",
+    "name": "CUEVAS DE VELASCO",
+    "screenCode": null
+  },
+  "66015": {
+    "code": "66015",
+    "name": "VILLAR DEL SAZ DE NAVALÓN",
+    "screenCode": null
+  },
+  "66016": {
+    "code": "66016",
+    "name": "CHILLARÓN",
+    "screenCode": null
+  },
+  "66100": {
+    "code": "66100",
+    "name": "CUENCA",
+    "screenCode": null
+  },
+  "66103": {
+    "code": "66103",
+    "name": "CAÑADA DEL HOYO",
+    "screenCode": null
+  },
+  "66104": {
+    "code": "66104",
+    "name": "CARBONERAS DE GUADAZAÓN",
+    "screenCode": null
+  },
+  "66105": {
+    "code": "66105",
+    "name": "ARGUISUELAS",
+    "screenCode": null
+  },
+  "66108": {
+    "code": "66108",
+    "name": "YÉMEDA-CARDENETE",
+    "screenCode": null
+  },
+  "66109": {
+    "code": "66109",
+    "name": "VÍLLORA",
+    "screenCode": null
+  },
+  "66112": {
+    "code": "66112",
+    "name": "CAMPORROBLES",
+    "screenCode": null
+  },
+  "66113": {
+    "code": "66113",
+    "name": "LAS CUEVAS",
+    "screenCode": null
+  },
+  "66200": {
+    "code": "66200",
+    "name": "UTIEL",
+    "screenCode": null
+  },
+  "66201": {
+    "code": "66201",
+    "name": "SAN ANTONIO DE REQUENA",
+    "screenCode": null
+  },
+  "66202": {
+    "code": "66202",
+    "name": "REQUENA",
+    "screenCode": null
+  },
+  "66203": {
+    "code": "66203",
+    "name": "EL REBOLLAR",
+    "screenCode": null
+  },
+  "66204": {
+    "code": "66204",
+    "name": "SIETE AGUAS",
+    "screenCode": null
+  },
+  "66205": {
+    "code": "66205",
+    "name": "VENTA MINA-SIETE AGUAS",
+    "screenCode": null
+  },
+  "66206": {
+    "code": "66206",
+    "name": "BUÑOL",
+    "screenCode": null
+  },
+  "66207": {
+    "code": "66207",
+    "name": "CHIVA",
+    "screenCode": null
+  },
+  "66208": {
+    "code": "66208",
+    "name": "CHESTE",
+    "screenCode": null
+  },
+  "66209": {
+    "code": "66209",
+    "name": "LORIGUILLA-REVA",
+    "screenCode": null
+  },
+  "66210": {
+    "code": "66210",
+    "name": "CIRCUIT RICARDO TORMO",
+    "screenCode": null
+  },
+  "66211": {
+    "code": "66211",
+    "name": "ALDAIA",
+    "screenCode": null
+  },
+  "66212": {
+    "code": "66212",
+    "name": "VALÈNCIA-SANT ISIDRE",
+    "screenCode": null
+  },
+  "66214": {
+    "code": "66214",
+    "name": "XIRIVELLA-ALQUERIES",
+    "screenCode": null
+  },
+  "67004": {
+    "code": "67004",
+    "name": "MARÍA DE HUERVA",
+    "screenCode": null
+  },
+  "67007": {
+    "code": "67007",
+    "name": "ARAÑALES DE MUEL",
+    "screenCode": null
+  },
+  "67009": {
+    "code": "67009",
+    "name": "LONGARES",
+    "screenCode": null
+  },
+  "67010": {
+    "code": "67010",
+    "name": "CARIÑENA",
+    "screenCode": null
+  },
+  "67011": {
+    "code": "67011",
+    "name": "ENCINACORBA",
+    "screenCode": null
+  },
+  "67013": {
+    "code": "67013",
+    "name": "VILLARREAL DE HUERVA",
+    "screenCode": null
+  },
+  "67014": {
+    "code": "67014",
+    "name": "VILLADOZ",
+    "screenCode": null
+  },
+  "67015": {
+    "code": "67015",
+    "name": "BADULES",
+    "screenCode": null
+  },
+  "67016": {
+    "code": "67016",
+    "name": "VILLAHERMOSA",
+    "screenCode": null
+  },
+  "67017": {
+    "code": "67017",
+    "name": "FERRERUELA",
+    "screenCode": null
+  },
+  "67018": {
+    "code": "67018",
+    "name": "CUENCABUENA",
+    "screenCode": null
+  },
+  "67019": {
+    "code": "67019",
+    "name": "LECHAGO",
+    "screenCode": null
+  },
+  "67020": {
+    "code": "67020",
+    "name": "NAVARRETE",
+    "screenCode": null
+  },
+  "67021": {
+    "code": "67021",
+    "name": "CALAMOCHA",
+    "screenCode": null
+  },
+  "67100": {
+    "code": "67100",
+    "name": "CAMINREAL-FUENTES CLARAS",
+    "screenCode": null
+  },
+  "67101": {
+    "code": "67101",
+    "name": "TORRIJO DEL CAMPO",
+    "screenCode": null
+  },
+  "67103": {
+    "code": "67103",
+    "name": "VILLAFRANCA DEL CAMPO",
+    "screenCode": null
+  },
+  "67105": {
+    "code": "67105",
+    "name": "SANTA EULALIA DEL CAMPO",
+    "screenCode": null
+  },
+  "67107": {
+    "code": "67107",
+    "name": "CELLA",
+    "screenCode": null
+  },
+  "67113": {
+    "code": "67113",
+    "name": "MONREAL DEL CAMPO",
+    "screenCode": null
+  },
+  "67200": {
+    "code": "67200",
+    "name": "TERUEL",
+    "screenCode": 67200
+  },
+  "67202": {
+    "code": "67202",
+    "name": "PUERTO ESCANDÓN",
+    "screenCode": null
+  },
+  "67203": {
+    "code": "67203",
+    "name": "PUEBLA DE VALVERDE",
+    "screenCode": null
+  },
+  "67205": {
+    "code": "67205",
+    "name": "SARRIÓN",
+    "screenCode": null
+  },
+  "67206": {
+    "code": "67206",
+    "name": "MORA DE RUBIELOS",
+    "screenCode": null
+  },
+  "67207": {
+    "code": "67207",
+    "name": "RUBIELOS DE MORA",
+    "screenCode": null
+  },
+  "67208": {
+    "code": "67208",
+    "name": "BARRACAS",
+    "screenCode": null
+  },
+  "67210": {
+    "code": "67210",
+    "name": "MASADAS BLANCAS (APT)",
+    "screenCode": null
+  },
+  "67211": {
+    "code": "67211",
+    "name": "CAUDIEL",
+    "screenCode": null
+  },
+  "67212": {
+    "code": "67212",
+    "name": "JÉRICA-VIVER",
+    "screenCode": null
+  },
+  "67213": {
+    "code": "67213",
+    "name": "NAVAJAS",
+    "screenCode": null
+  },
+  "67214": {
+    "code": "67214",
+    "name": "SEGORBE-ARRABAL",
+    "screenCode": null
+  },
+  "67215": {
+    "code": "67215",
+    "name": "SEGORBE-CIUDAD",
+    "screenCode": null
+  },
+  "67216": {
+    "code": "67216",
+    "name": "ALGIMIA-CIUDAD",
+    "screenCode": null
+  },
+  "67217": {
+    "code": "67217",
+    "name": "SONEJA",
+    "screenCode": null
+  },
+  "67221": {
+    "code": "67221",
+    "name": "ESTIVELLA-ALBALAT DELS TARONGERS",
+    "screenCode": null
+  },
+  "67223": {
+    "code": "67223",
+    "name": "GILET",
+    "screenCode": null
+  },
+  "69001": {
+    "code": "69001",
+    "name": "GENOVÉS",
+    "screenCode": null
+  },
+  "69002": {
+    "code": "69002",
+    "name": "BENIGÀNIM",
+    "screenCode": null
+  },
+  "69003": {
+    "code": "69003",
+    "name": "LA POBLA DEL DUC",
+    "screenCode": null
+  },
+  "69004": {
+    "code": "69004",
+    "name": "MONTABERNER",
+    "screenCode": null
+  },
+  "69005": {
+    "code": "69005",
+    "name": "BUFALÍ",
+    "screenCode": null
+  },
+  "69006": {
+    "code": "69006",
+    "name": "ALBAIDA",
+    "screenCode": null
+  },
+  "69007": {
+    "code": "69007",
+    "name": "AGULLENT",
+    "screenCode": null
+  },
+  "69008": {
+    "code": "69008",
+    "name": "ONTINYENT",
+    "screenCode": null
+  },
+  "69009": {
+    "code": "69009",
+    "name": "AGRES",
+    "screenCode": null
+  },
+  "69010": {
+    "code": "69010",
+    "name": "COCENTAINA",
+    "screenCode": null
+  },
+  "69011": {
+    "code": "69011",
+    "name": "ALCOI",
+    "screenCode": null
+  },
+  "69103": {
+    "code": "69103",
+    "name": "SUECA",
+    "screenCode": null
+  },
+  "69104": {
+    "code": "69104",
+    "name": "CULLERA",
+    "screenCode": null
+  },
+  "69105": {
+    "code": "69105",
+    "name": "TAVERNES DE LA VALLDIGNA",
+    "screenCode": null
+  },
+  "69110": {
+    "code": "69110",
+    "name": "GANDIA",
+    "screenCode": null
+  },
+  "70002": {
+    "code": "70002",
+    "name": "ASAMBLEA DE MADRID-ENTREVÍAS",
+    "screenCode": null
+  },
+  "70003": {
+    "code": "70003",
+    "name": "EL POZO",
+    "screenCode": null
+  },
+  "70005": {
+    "code": "70005",
+    "name": "VALLECAS",
+    "screenCode": null
+  },
+  "70100": {
+    "code": "70100",
+    "name": "VICÁLVARO",
+    "screenCode": null
+  },
+  "70101": {
+    "code": "70101",
+    "name": "SAN FERNANDO DE HENARES",
+    "screenCode": null
+  },
+  "70102": {
+    "code": "70102",
+    "name": "TORREJÓN DE ARDOZ",
+    "screenCode": null
+  },
+  "70103": {
+    "code": "70103",
+    "name": "ALCALÁ DE HENARES",
+    "screenCode": null
+  },
+  "70104": {
+    "code": "70104",
+    "name": "MECO",
+    "screenCode": null
+  },
+  "70105": {
+    "code": "70105",
+    "name": "AZUQUECA",
+    "screenCode": null
+  },
+  "70107": {
+    "code": "70107",
+    "name": "ALCALÁ DE HENARES-UNIVERSIDAD",
+    "screenCode": null
+  },
+  "70108": {
+    "code": "70108",
+    "name": "COSLADA",
+    "screenCode": null
+  },
+  "70109": {
+    "code": "70109",
+    "name": "SANTA EUGENIA",
+    "screenCode": null
+  },
+  "70111": {
+    "code": "70111",
+    "name": "LA GARENA",
+    "screenCode": null
+  },
+  "70112": {
+    "code": "70112",
+    "name": "SOTO DEL HENARES",
+    "screenCode": null
+  },
+  "70200": {
+    "code": "70200",
+    "name": "GUADALAJARA",
+    "screenCode": null
+  },
+  "70202": {
+    "code": "70202",
+    "name": "YUNQUERA DE HENARES",
+    "screenCode": null
+  },
+  "70204": {
+    "code": "70204",
+    "name": "HUMANES DE MOHERNANDO",
+    "screenCode": null
+  },
+  "70207": {
+    "code": "70207",
+    "name": "ESPINOSA DE HENARES",
+    "screenCode": null
+  },
+  "70208": {
+    "code": "70208",
+    "name": "CARRASCOSA DE HENARES",
+    "screenCode": null
+  },
+  "70209": {
+    "code": "70209",
+    "name": "JADRAQUE",
+    "screenCode": null
+  },
+  "70210": {
+    "code": "70210",
+    "name": "MATILLAS",
+    "screenCode": null
+  },
+  "70300": {
+    "code": "70300",
+    "name": "BAIDES",
+    "screenCode": null
+  },
+  "70302": {
+    "code": "70302",
+    "name": "SIGÜENZA",
+    "screenCode": null
+  },
+  "70400": {
+    "code": "70400",
+    "name": "TORRALBA",
+    "screenCode": null
+  },
+  "70401": {
+    "code": "70401",
+    "name": "MEDINACELI",
+    "screenCode": null
+  },
+  "70403": {
+    "code": "70403",
+    "name": "ARCOS DE JALÓN",
+    "screenCode": null
+  },
+  "70404": {
+    "code": "70404",
+    "name": "SANTA MARÍA DE HUERTA",
+    "screenCode": null
+  },
+  "70405": {
+    "code": "70405",
+    "name": "MONREAL DE ARIZA",
+    "screenCode": null
+  },
+  "70500": {
+    "code": "70500",
+    "name": "ARIZA",
+    "screenCode": null
+  },
+  "70501": {
+    "code": "70501",
+    "name": "CETINA",
+    "screenCode": null
+  },
+  "70502": {
+    "code": "70502",
+    "name": "ALHAMA DE ARAGÓN",
+    "screenCode": null
+  },
+  "70503": {
+    "code": "70503",
+    "name": "BUBIERCA",
+    "screenCode": null
+  },
+  "70504": {
+    "code": "70504",
+    "name": "ATECA",
+    "screenCode": null
+  },
+  "70505": {
+    "code": "70505",
+    "name": "TERRER",
+    "screenCode": null
+  },
+  "70600": {
+    "code": "70600",
+    "name": "CALATAYUD",
+    "screenCode": null
+  },
+  "70602": {
+    "code": "70602",
+    "name": "EMBID DE JALÓN",
+    "screenCode": null
+  },
+  "70603": {
+    "code": "70603",
+    "name": "PARACUELLOS-SABIÑÁN",
+    "screenCode": null
+  },
+  "70604": {
+    "code": "70604",
+    "name": "SABIÑÁN",
+    "screenCode": null
+  },
+  "70605": {
+    "code": "70605",
+    "name": "MORÉS",
+    "screenCode": null
+  },
+  "70606": {
+    "code": "70606",
+    "name": "PURROY",
+    "screenCode": null
+  },
+  "70607": {
+    "code": "70607",
+    "name": "MORATA DE JALÓN",
+    "screenCode": null
+  },
+  "70700": {
+    "code": "70700",
+    "name": "RICLA-LA ALMUNIA",
+    "screenCode": null
+  },
+  "70701": {
+    "code": "70701",
+    "name": "CALATORAO",
+    "screenCode": null
+  },
+  "70702": {
+    "code": "70702",
+    "name": "SALILLAS DE JALÓN",
+    "screenCode": null
+  },
+  "70703": {
+    "code": "70703",
+    "name": "ÉPILA",
+    "screenCode": null
+  },
+  "70704": {
+    "code": "70704",
+    "name": "RUEDA DE JALÓN-LUMPIAQUE",
+    "screenCode": null
+  },
+  "70705": {
+    "code": "70705",
+    "name": "PLASENCIA DE JALÓN",
+    "screenCode": null
+  },
+  "70706": {
+    "code": "70706",
+    "name": "GRISÉN",
+    "screenCode": null
+  },
+  "70800": {
+    "code": "70800",
+    "name": "CASETAS",
+    "screenCode": null
+  },
+  "70801": {
+    "code": "70801",
+    "name": "UTEBO",
+    "screenCode": null
+  },
+  "70806": {
+    "code": "70806",
+    "name": "ZARAGOZA-PORTILLO",
+    "screenCode": null
+  },
+  "70807": {
+    "code": "70807",
+    "name": "ZARAGOZA-GOYA",
+    "screenCode": null
+  },
+  "71100": {
+    "code": "71100",
+    "name": "ZARAGOZA-MIRAFLORES",
+    "screenCode": null
+  },
+  "71102": {
+    "code": "71102",
+    "name": "EL BURGO DE EBRO",
+    "screenCode": null
+  },
+  "71103": {
+    "code": "71103",
+    "name": "FUENTES DE EBRO",
+    "screenCode": null
+  },
+  "71104": {
+    "code": "71104",
+    "name": "PINA DE EBRO",
+    "screenCode": null
+  },
+  "71105": {
+    "code": "71105",
+    "name": "QUINTO",
+    "screenCode": null
+  },
+  "71108": {
+    "code": "71108",
+    "name": "LA ZAIDA-SÁSTAGO",
+    "screenCode": null
+  },
+  "71109": {
+    "code": "71109",
+    "name": "AZAILA",
+    "screenCode": null
+  },
+  "71200": {
+    "code": "71200",
+    "name": "LA PUEBLA DE HÍJAR",
+    "screenCode": null
+  },
+  "71201": {
+    "code": "71201",
+    "name": "SAMPER",
+    "screenCode": null
+  },
+  "71202": {
+    "code": "71202",
+    "name": "ESCATRÓN",
+    "screenCode": null
+  },
+  "71203": {
+    "code": "71203",
+    "name": "CHIPRANA",
+    "screenCode": null
+  },
+  "71204": {
+    "code": "71204",
+    "name": "CASPE",
+    "screenCode": null
+  },
+  "71205": {
+    "code": "71205",
+    "name": "VAL DE PILAS",
+    "screenCode": null
+  },
+  "71206": {
+    "code": "71206",
+    "name": "FABARA",
+    "screenCode": null
+  },
+  "71207": {
+    "code": "71207",
+    "name": "NONASPE",
+    "screenCode": null
+  },
+  "71208": {
+    "code": "71208",
+    "name": "FAIÓ-LA POBLA DE MASSALUCA",
+    "screenCode": null
+  },
+  "71209": {
+    "code": "71209",
+    "name": "RIBA-ROJA D'EBRE",
+    "screenCode": null
+  },
+  "71210": {
+    "code": "71210",
+    "name": "FLIX",
+    "screenCode": null
+  },
+  "71211": {
+    "code": "71211",
+    "name": "ASCÓ",
+    "screenCode": null
+  },
+  "71300": {
+    "code": "71300",
+    "name": "MÓRA LA NOVA",
+    "screenCode": null
+  },
+  "71301": {
+    "code": "71301",
+    "name": "ELS GUIAMETS",
+    "screenCode": null
+  },
+  "71302": {
+    "code": "71302",
+    "name": "CAPÇANES",
+    "screenCode": null
+  },
+  "71303": {
+    "code": "71303",
+    "name": "MARÇÀ-FALSET",
+    "screenCode": null
+  },
+  "71304": {
+    "code": "71304",
+    "name": "PRADELL",
+    "screenCode": null
+  },
+  "71305": {
+    "code": "71305",
+    "name": "DUESAIGÜES-L'ARGENTERA",
+    "screenCode": null
+  },
+  "71306": {
+    "code": "71306",
+    "name": "RIUDECANYES-BOTARELL",
+    "screenCode": null
+  },
+  "71307": {
+    "code": "71307",
+    "name": "LES BORGES DEL CAMP",
+    "screenCode": null
+  },
+  "71400": {
+    "code": "71400",
+    "name": "REUS",
+    "screenCode": 71400
+  },
+  "71401": {
+    "code": "71401",
+    "name": "VILA-SECA",
+    "screenCode": null
+  },
+  "71500": {
+    "code": "71500",
+    "name": "TARRAGONA",
+    "screenCode": null
+  },
+  "71502": {
+    "code": "71502",
+    "name": "ALTAFULLA-TAMARIT",
+    "screenCode": null
+  },
+  "71503": {
+    "code": "71503",
+    "name": "TORREDEMBARRA",
+    "screenCode": null
+  },
+  "71600": {
+    "code": "71600",
+    "name": "SANT VICENÇ DE CALDERS",
+    "screenCode": null
+  },
+  "71601": {
+    "code": "71601",
+    "name": "CALAFELL",
+    "screenCode": null
+  },
+  "71602": {
+    "code": "71602",
+    "name": "SEGUR DE CALAFELL",
+    "screenCode": null
+  },
+  "71603": {
+    "code": "71603",
+    "name": "CUNIT",
+    "screenCode": null
+  },
+  "71604": {
+    "code": "71604",
+    "name": "CUBELLES",
+    "screenCode": null
+  },
+  "71700": {
+    "code": "71700",
+    "name": "VILANOVA I LA GELTRÚ",
+    "screenCode": null
+  },
+  "71701": {
+    "code": "71701",
+    "name": "SITGES",
+    "screenCode": null
+  },
+  "71703": {
+    "code": "71703",
+    "name": "GARRAF",
+    "screenCode": null
+  },
+  "71704": {
+    "code": "71704",
+    "name": "PLATJA DE CASTELLDEFELS",
+    "screenCode": null
+  },
+  "71705": {
+    "code": "71705",
+    "name": "CASTELLDEFELS",
+    "screenCode": null
+  },
+  "71706": {
+    "code": "71706",
+    "name": "GAVÀ",
+    "screenCode": null
+  },
+  "71707": {
+    "code": "71707",
+    "name": "EL PRAT DE LLOBREGAT",
+    "screenCode": null
+  },
+  "71708": {
+    "code": "71708",
+    "name": "BELLVITGE-GORNAL",
+    "screenCode": null
+  },
+  "71709": {
+    "code": "71709",
+    "name": "VILADECANS",
+    "screenCode": null
+  },
+  "71801": {
+    "code": "71801",
+    "name": "BARCELONA-SANTS",
+    "screenCode": 71801
+  },
+  "71802": {
+    "code": "71802",
+    "name": "BARCELONA-PASSEIG DE GRÀCIA",
+    "screenCode": 71802
+  },
+  "72100": {
+    "code": "72100",
+    "name": "RODA DE BARÀ",
+    "screenCode": null
+  },
+  "72101": {
+    "code": "72101",
+    "name": "RODA DE MAR",
+    "screenCode": null
+  },
+  "72201": {
+    "code": "72201",
+    "name": "EL VENDRELL",
+    "screenCode": null
+  },
+  "72202": {
+    "code": "72202",
+    "name": "L'ARBOÇ",
+    "screenCode": null
+  },
+  "72305": {
+    "code": "72305",
+    "name": "L'HOSPITALET DE LLOBREGAT",
+    "screenCode": null
+  },
+  "72400": {
+    "code": "72400",
+    "name": "EL PRAT AEROPORT",
+    "screenCode": 72400
+  },
+  "72508": {
+    "code": "72508",
+    "name": "SANTA PERPÈTUA DE MOGODA-RIERA DE CALDES",
+    "screenCode": null
+  },
+  "73001": {
+    "code": "73001",
+    "name": "PUIGVERD DE LLEIDA-ARTESA",
+    "screenCode": null
+  },
+  "73002": {
+    "code": "73002",
+    "name": "JUNEDA",
+    "screenCode": null
+  },
+  "73003": {
+    "code": "73003",
+    "name": "LES BORGES BLANQUES",
+    "screenCode": null
+  },
+  "73004": {
+    "code": "73004",
+    "name": "LA FLORESTA",
+    "screenCode": null
+  },
+  "73005": {
+    "code": "73005",
+    "name": "VINAIXA",
+    "screenCode": null
+  },
+  "73006": {
+    "code": "73006",
+    "name": "VIMBODÍ I POBLET",
+    "screenCode": null
+  },
+  "73007": {
+    "code": "73007",
+    "name": "L'ESPLUGA DE FRANCOLÍ",
+    "screenCode": null
+  },
+  "73008": {
+    "code": "73008",
+    "name": "MONTBLANC",
+    "screenCode": null
+  },
+  "73009": {
+    "code": "73009",
+    "name": "VILAVERD",
+    "screenCode": null
+  },
+  "73010": {
+    "code": "73010",
+    "name": "LA RIBA",
+    "screenCode": null
+  },
+  "73100": {
+    "code": "73100",
+    "name": "LA PLANA-PICAMOIXONS",
+    "screenCode": null
+  },
+  "73101": {
+    "code": "73101",
+    "name": "ALCOVER",
+    "screenCode": null
+  },
+  "73102": {
+    "code": "73102",
+    "name": "LA SELVA DEL CAMP",
+    "screenCode": null
+  },
+  "74200": {
+    "code": "74200",
+    "name": "HUESCA",
+    "screenCode": 74200
+  },
+  "74202": {
+    "code": "74202",
+    "name": "PLASENCIA DEL MONTE",
+    "screenCode": null
+  },
+  "74204": {
+    "code": "74204",
+    "name": "AYERBE",
+    "screenCode": null
+  },
+  "74205": {
+    "code": "74205",
+    "name": "RIGLOS-CONCILIO",
+    "screenCode": null
+  },
+  "74206": {
+    "code": "74206",
+    "name": "RIGLOS",
+    "screenCode": null
+  },
+  "74207": {
+    "code": "74207",
+    "name": "SANTA MARÍA Y LA PEÑA",
+    "screenCode": null
+  },
+  "74208": {
+    "code": "74208",
+    "name": "ANZÁNIGO",
+    "screenCode": null
+  },
+  "74209": {
+    "code": "74209",
+    "name": "CALDEARENAS-AQUILUÉ",
+    "screenCode": null
+  },
+  "74211": {
+    "code": "74211",
+    "name": "SABIÑÁNIGO",
+    "screenCode": null
+  },
+  "74213": {
+    "code": "74213",
+    "name": "JACA",
+    "screenCode": null
+  },
+  "74214": {
+    "code": "74214",
+    "name": "CASTIELLO-PUEBLO",
+    "screenCode": null
+  },
+  "74215": {
+    "code": "74215",
+    "name": "CASTIELLO",
+    "screenCode": null
+  },
+  "74216": {
+    "code": "74216",
+    "name": "VILLANÚA",
+    "screenCode": null
+  },
+  "74217": {
+    "code": "74217",
+    "name": "CANFRANC",
+    "screenCode": null
+  },
+  "75101": {
+    "code": "75101",
+    "name": "ALCOLETGE",
+    "screenCode": null
+  },
+  "75102": {
+    "code": "75102",
+    "name": "VILANOVA DE LA BARCA",
+    "screenCode": null
+  },
+  "75103": {
+    "code": "75103",
+    "name": "TÉRMENS",
+    "screenCode": null
+  },
+  "75104": {
+    "code": "75104",
+    "name": "VALLFOGONA DE BALAGUER",
+    "screenCode": null
+  },
+  "75105": {
+    "code": "75105",
+    "name": "BALAGUER",
+    "screenCode": null
+  },
+  "75106": {
+    "code": "75106",
+    "name": "GERB",
+    "screenCode": null
+  },
+  "75107": {
+    "code": "75107",
+    "name": "SANT LLORENÇ DE MONTGAI",
+    "screenCode": null
+  },
+  "75108": {
+    "code": "75108",
+    "name": "VILANOVA DE LA SAL",
+    "screenCode": null
+  },
+  "75109": {
+    "code": "75109",
+    "name": "SANTA LIÑA",
+    "screenCode": null
+  },
+  "75110": {
+    "code": "75110",
+    "name": "AGER",
+    "screenCode": null
+  },
+  "75111": {
+    "code": "75111",
+    "name": "CELLERS-LLIMIANA",
+    "screenCode": null
+  },
+  "75112": {
+    "code": "75112",
+    "name": "GUARDIA DE TREMP",
+    "screenCode": null
+  },
+  "75113": {
+    "code": "75113",
+    "name": "PALAU-PUIGCERCOS",
+    "screenCode": null
+  },
+  "75114": {
+    "code": "75114",
+    "name": "TREMP",
+    "screenCode": null
+  },
+  "75115": {
+    "code": "75115",
+    "name": "SALAS DE PALLARS",
+    "screenCode": null
+  },
+  "75116": {
+    "code": "75116",
+    "name": "LA POBLA DE SEGUR",
+    "screenCode": null
+  },
+  "76001": {
+    "code": "76001",
+    "name": "SALOMÓ",
+    "screenCode": null
+  },
+  "76002": {
+    "code": "76002",
+    "name": "VILABELLA",
+    "screenCode": null
+  },
+  "76003": {
+    "code": "76003",
+    "name": "NULLES-BRÀFIM",
+    "screenCode": null
+  },
+  "76004": {
+    "code": "76004",
+    "name": "VALLS",
+    "screenCode": null
+  },
+  "77002": {
+    "code": "77002",
+    "name": "MONTCADA-RIPOLLET",
+    "screenCode": null
+  },
+  "77003": {
+    "code": "77003",
+    "name": "SANTA PERPÈTUA DE MOGODA LA FLORIDA",
+    "screenCode": null
+  },
+  "77004": {
+    "code": "77004",
+    "name": "MOLLET-SANTA ROSA",
+    "screenCode": null
+  },
+  "77005": {
+    "code": "77005",
+    "name": "PARETS DEL VALLÈS",
+    "screenCode": null
+  },
+  "77006": {
+    "code": "77006",
+    "name": "GRANOLLERS-CANOVELLES",
+    "screenCode": null
+  },
+  "77100": {
+    "code": "77100",
+    "name": "LES FRANQUESES DEL VALLÈS",
+    "screenCode": null
+  },
+  "77102": {
+    "code": "77102",
+    "name": "LA GARRIGA",
+    "screenCode": null
+  },
+  "77103": {
+    "code": "77103",
+    "name": "FIGARÓ",
+    "screenCode": null
+  },
+  "77104": {
+    "code": "77104",
+    "name": "SANT MARTÍ DE CENTELLES",
+    "screenCode": null
+  },
+  "77105": {
+    "code": "77105",
+    "name": "CENTELLES",
+    "screenCode": null
+  },
+  "77106": {
+    "code": "77106",
+    "name": "BALENYÀ-ELS HOSTALETS",
+    "screenCode": null
+  },
+  "77107": {
+    "code": "77107",
+    "name": "BALENYÀ-TONA-SEVA",
+    "screenCode": null
+  },
+  "77109": {
+    "code": "77109",
+    "name": "VIC",
+    "screenCode": null
+  },
+  "77110": {
+    "code": "77110",
+    "name": "MANLLEU",
+    "screenCode": null
+  },
+  "77111": {
+    "code": "77111",
+    "name": "TORELLÓ",
+    "screenCode": null
+  },
+  "77112": {
+    "code": "77112",
+    "name": "BORGONYÀ",
+    "screenCode": null
+  },
+  "77113": {
+    "code": "77113",
+    "name": "SANT QUIRZE DE BESORA-MONTESQUIU",
+    "screenCode": null
+  },
+  "77114": {
+    "code": "77114",
+    "name": "LA FARGA DE BEBIÉ",
+    "screenCode": null
+  },
+  "77200": {
+    "code": "77200",
+    "name": "RIPOLL",
+    "screenCode": null
+  },
+  "77301": {
+    "code": "77301",
+    "name": "CAMPDEVÀNOL",
+    "screenCode": null
+  },
+  "77303": {
+    "code": "77303",
+    "name": "RIBES DE FRESER",
+    "screenCode": null
+  },
+  "77304": {
+    "code": "77304",
+    "name": "PLANOLES",
+    "screenCode": null
+  },
+  "77305": {
+    "code": "77305",
+    "name": "TOSES",
+    "screenCode": null
+  },
+  "77306": {
+    "code": "77306",
+    "name": "LA MOLINA",
+    "screenCode": null
+  },
+  "77307": {
+    "code": "77307",
+    "name": "URTX-ALP",
+    "screenCode": null
+  },
+  "77309": {
+    "code": "77309",
+    "name": "PUIGCERDÀ",
+    "screenCode": null
+  },
+  "77310": {
+    "code": "77310",
+    "name": "LA TOUR DE CAROL",
+    "screenCode": null
+  },
+  "78005": {
+    "code": "78005",
+    "name": "VILLANUEVA DE GÁLLEGO",
+    "screenCode": null
+  },
+  "78100": {
+    "code": "78100",
+    "name": "ZUERA",
+    "screenCode": null
+  },
+  "78102": {
+    "code": "78102",
+    "name": "ALMUDÉVAR",
+    "screenCode": null
+  },
+  "78200": {
+    "code": "78200",
+    "name": "TARDIENTA",
+    "screenCode": null
+  },
+  "78201": {
+    "code": "78201",
+    "name": "GRAÑÉN",
+    "screenCode": null
+  },
+  "78202": {
+    "code": "78202",
+    "name": "MARCEN-POLEÑINO",
+    "screenCode": null
+  },
+  "78203": {
+    "code": "78203",
+    "name": "SARIÑENA",
+    "screenCode": null
+  },
+  "78300": {
+    "code": "78300",
+    "name": "SELGUA",
+    "screenCode": null
+  },
+  "78301": {
+    "code": "78301",
+    "name": "MONZÓN-RÍO CINCA",
+    "screenCode": null
+  },
+  "78302": {
+    "code": "78302",
+    "name": "BINÉFAR",
+    "screenCode": null
+  },
+  "78400": {
+    "code": "78400",
+    "name": "LLEIDA-PIRINEUS",
+    "screenCode": 78400
+  },
+  "78402": {
+    "code": "78402",
+    "name": "BELL-LLOC D'URGELL",
+    "screenCode": null
+  },
+  "78403": {
+    "code": "78403",
+    "name": "MOLLERUSSA",
+    "screenCode": null
+  },
+  "78404": {
+    "code": "78404",
+    "name": "GOLMÉS",
+    "screenCode": null
+  },
+  "78405": {
+    "code": "78405",
+    "name": "CASTELLNOU DE SEANA",
+    "screenCode": null
+  },
+  "78406": {
+    "code": "78406",
+    "name": "BELLPUIG",
+    "screenCode": null
+  },
+  "78407": {
+    "code": "78407",
+    "name": "ANGLESOLA",
+    "screenCode": null
+  },
+  "78408": {
+    "code": "78408",
+    "name": "TÀRREGA",
+    "screenCode": null
+  },
+  "78500": {
+    "code": "78500",
+    "name": "CERVERA",
+    "screenCode": null
+  },
+  "78501": {
+    "code": "78501",
+    "name": "SANT GUIM DE FREIXENET",
+    "screenCode": null
+  },
+  "78502": {
+    "code": "78502",
+    "name": "SANT MARTÍ SESGUEIOLES",
+    "screenCode": null
+  },
+  "78503": {
+    "code": "78503",
+    "name": "CALAF",
+    "screenCode": null
+  },
+  "78504": {
+    "code": "78504",
+    "name": "SEGUERS-SANT PERE SALLAVINERA",
+    "screenCode": null
+  },
+  "78505": {
+    "code": "78505",
+    "name": "AGUILAR DE SEGARRA",
+    "screenCode": null
+  },
+  "78506": {
+    "code": "78506",
+    "name": "RAJADELL",
+    "screenCode": null
+  },
+  "78600": {
+    "code": "78600",
+    "name": "MANRESA",
+    "screenCode": null
+  },
+  "78604": {
+    "code": "78604",
+    "name": "SANT VICENÇ DE CASTELLET",
+    "screenCode": null
+  },
+  "78605": {
+    "code": "78605",
+    "name": "CASTELLBELL I EL VILAR-MONIST MONTSERRAT",
+    "screenCode": null
+  },
+  "78606": {
+    "code": "78606",
+    "name": "VACARISSES",
+    "screenCode": null
+  },
+  "78607": {
+    "code": "78607",
+    "name": "VACARISSES-TORREBLANCA",
+    "screenCode": null
+  },
+  "78609": {
+    "code": "78609",
+    "name": "VILADECAVALLS",
+    "screenCode": null
+  },
+  "78610": {
+    "code": "78610",
+    "name": "SANT MIQUEL DE GONTERES",
+    "screenCode": null
+  },
+  "78700": {
+    "code": "78700",
+    "name": "TERRASSA ESTACIÓ DEL NORD",
+    "screenCode": null
+  },
+  "78703": {
+    "code": "78703",
+    "name": "SABADELL SUD",
+    "screenCode": null
+  },
+  "78704": {
+    "code": "78704",
+    "name": "SABADELL CENTRE",
+    "screenCode": null
+  },
+  "78705": {
+    "code": "78705",
+    "name": "BARBERÀ DEL VALLÈS",
+    "screenCode": null
+  },
+  "78706": {
+    "code": "78706",
+    "name": "CERDANYOLA DEL VALLÈS",
+    "screenCode": null
+  },
+  "78707": {
+    "code": "78707",
+    "name": "MONTCADA I REIXAC-SANTA MARÍA",
+    "screenCode": null
+  },
+  "78708": {
+    "code": "78708",
+    "name": "MONTCADA I REIXAC-MANRESA",
+    "screenCode": null
+  },
+  "78709": {
+    "code": "78709",
+    "name": "SABADELL NORD",
+    "screenCode": null
+  },
+  "78710": {
+    "code": "78710",
+    "name": "TERRASSA EST",
+    "screenCode": null
+  },
+  "78800": {
+    "code": "78800",
+    "name": "MONTCADA-BIFURCACIÓ",
+    "screenCode": null
+  },
+  "78801": {
+    "code": "78801",
+    "name": "TORRE DEL BARÓ-VALLBONA",
+    "screenCode": null
+  },
+  "78802": {
+    "code": "78802",
+    "name": "FABRA I PUIG",
+    "screenCode": null
+  },
+  "78804": {
+    "code": "78804",
+    "name": "BARCELONA-ARC DE TRIOMF",
+    "screenCode": null
+  },
+  "78805": {
+    "code": "78805",
+    "name": "BARCELONA-PLAÇA DE CATALUNYA",
+    "screenCode": null
+  },
+  "78806": {
+    "code": "78806",
+    "name": "BARCELONA-LA SAGRERA-MERIDIANA",
+    "screenCode": null
+  },
+  "79004": {
+    "code": "79004",
+    "name": "BARCELONA-SANT ANDREU",
+    "screenCode": null
+  },
+  "79005": {
+    "code": "79005",
+    "name": "MONTCADA I REIXAC",
+    "screenCode": null
+  },
+  "79006": {
+    "code": "79006",
+    "name": "MOLLET-SANT FOST",
+    "screenCode": null
+  },
+  "79007": {
+    "code": "79007",
+    "name": "MONTMELÓ",
+    "screenCode": null
+  },
+  "79009": {
+    "code": "79009",
+    "name": "BARCELONA-EL CLOT",
+    "screenCode": null
+  },
+  "79011": {
+    "code": "79011",
+    "name": "LA LLAGOSTA",
+    "screenCode": null
+  },
+  "79100": {
+    "code": "79100",
+    "name": "GRANOLLERS-CENTRE",
+    "screenCode": null
+  },
+  "79101": {
+    "code": "79101",
+    "name": "CARDEDEU",
+    "screenCode": null
+  },
+  "79102": {
+    "code": "79102",
+    "name": "LLINARS DEL VALLÈS",
+    "screenCode": null
+  },
+  "79103": {
+    "code": "79103",
+    "name": "PALAUTORDERA",
+    "screenCode": null
+  },
+  "79104": {
+    "code": "79104",
+    "name": "SANT CELONI",
+    "screenCode": null
+  },
+  "79105": {
+    "code": "79105",
+    "name": "GUALBA",
+    "screenCode": null
+  },
+  "79106": {
+    "code": "79106",
+    "name": "RIELLS I VIABREA-BREDA",
+    "screenCode": null
+  },
+  "79107": {
+    "code": "79107",
+    "name": "HOSTALRIC",
+    "screenCode": null
+  },
+  "79109": {
+    "code": "79109",
+    "name": "LES FRANQUESES-GRANOLLERS NORD",
+    "screenCode": null
+  },
+  "79200": {
+    "code": "79200",
+    "name": "MAÇANET-MASSANES",
+    "screenCode": null
+  },
+  "79202": {
+    "code": "79202",
+    "name": "SILS",
+    "screenCode": null
+  },
+  "79203": {
+    "code": "79203",
+    "name": "CALDES DE MALAVELLA",
+    "screenCode": null
+  },
+  "79204": {
+    "code": "79204",
+    "name": "RIUDELLOTS",
+    "screenCode": null
+  },
+  "79205": {
+    "code": "79205",
+    "name": "FORNELLS DE LA SELVA",
+    "screenCode": null
+  },
+  "79300": {
+    "code": "79300",
+    "name": "GIRONA",
+    "screenCode": 79300
+  },
+  "79301": {
+    "code": "79301",
+    "name": "CELRÀ",
+    "screenCode": null
+  },
+  "79302": {
+    "code": "79302",
+    "name": "BORDILS-JUIÀ",
+    "screenCode": null
+  },
+  "79303": {
+    "code": "79303",
+    "name": "FLAÇÀ",
+    "screenCode": null
+  },
+  "79304": {
+    "code": "79304",
+    "name": "SANT JORDI DESVALLS",
+    "screenCode": null
+  },
+  "79305": {
+    "code": "79305",
+    "name": "CAMALLERA",
+    "screenCode": null
+  },
+  "79306": {
+    "code": "79306",
+    "name": "SANT MIQUEL DE FLUVIÀ",
+    "screenCode": null
+  },
+  "79308": {
+    "code": "79308",
+    "name": "VILAMALLA",
+    "screenCode": null
+  },
+  "79309": {
+    "code": "79309",
+    "name": "FIGUERES",
+    "screenCode": null
+  },
+  "79311": {
+    "code": "79311",
+    "name": "VILAJUÏGA",
+    "screenCode": null
+  },
+  "79312": {
+    "code": "79312",
+    "name": "LLANÇÀ",
+    "screenCode": null
+  },
+  "79314": {
+    "code": "79314",
+    "name": "COLERA",
+    "screenCode": null
+  },
+  "79315": {
+    "code": "79315",
+    "name": "PORTBOU",
+    "screenCode": null
+  },
+  "79316": {
+    "code": "79316",
+    "name": "CERBÈRE",
+    "screenCode": null
+  },
+  "79333": {
+    "code": "79333",
+    "name": "FIGUERES.BUS",
+    "screenCode": null
+  },
+  "79400": {
+    "code": "79400",
+    "name": "BARCELONA ESTACIÓ DE FRANÇA",
+    "screenCode": null
+  },
+  "79403": {
+    "code": "79403",
+    "name": "SANT ADRIÀ DE BESÒS",
+    "screenCode": null
+  },
+  "79404": {
+    "code": "79404",
+    "name": "BADALONA",
+    "screenCode": null
+  },
+  "79405": {
+    "code": "79405",
+    "name": "MONTGAT",
+    "screenCode": null
+  },
+  "79406": {
+    "code": "79406",
+    "name": "MONTGAT-NORD",
+    "screenCode": null
+  },
+  "79407": {
+    "code": "79407",
+    "name": "EL MASNOU",
+    "screenCode": null
+  },
+  "79408": {
+    "code": "79408",
+    "name": "OCATA",
+    "screenCode": null
+  },
+  "79409": {
+    "code": "79409",
+    "name": "PREMIÀ DE MAR",
+    "screenCode": null
+  },
+  "79410": {
+    "code": "79410",
+    "name": "VILASSAR DE MAR",
+    "screenCode": null
+  },
+  "79412": {
+    "code": "79412",
+    "name": "CABRERA DE MAR-VILASSAR DE MAR",
+    "screenCode": null
+  },
+  "79500": {
+    "code": "79500",
+    "name": "MATARÓ",
+    "screenCode": null
+  },
+  "79501": {
+    "code": "79501",
+    "name": "SANT ANDREU DE LLAVANERES",
+    "screenCode": null
+  },
+  "79502": {
+    "code": "79502",
+    "name": "CALDES D'ESTRAC",
+    "screenCode": null
+  },
+  "79600": {
+    "code": "79600",
+    "name": "ARENYS DE MAR",
+    "screenCode": null
+  },
+  "79601": {
+    "code": "79601",
+    "name": "CANET DE MAR",
+    "screenCode": null
+  },
+  "79602": {
+    "code": "79602",
+    "name": "SANT POL DE MAR",
+    "screenCode": null
+  },
+  "79603": {
+    "code": "79603",
+    "name": "CALELLA",
+    "screenCode": null
+  },
+  "79604": {
+    "code": "79604",
+    "name": "PINEDA DE MAR",
+    "screenCode": null
+  },
+  "79605": {
+    "code": "79605",
+    "name": "MALGRAT DE MAR",
+    "screenCode": null
+  },
+  "79606": {
+    "code": "79606",
+    "name": "BLANES",
+    "screenCode": null
+  },
+  "79607": {
+    "code": "79607",
+    "name": "TORDERA",
+    "screenCode": null
+  },
+  "79608": {
+    "code": "79608",
+    "name": "SANTA SUSANA",
+    "screenCode": null
+  },
+  "80001": {
+    "code": "80001",
+    "name": "ALTSASU-PUEBLO",
+    "screenCode": 80001
+  },
+  "80003": {
+    "code": "80003",
+    "name": "ETXARRI-ARANATZ",
+    "screenCode": null
+  },
+  "80005": {
+    "code": "80005",
+    "name": "UHARTE-ARAKIL",
+    "screenCode": null
+  },
+  "80100": {
+    "code": "80100",
+    "name": "PAMPLONA/IRUÑA",
+    "screenCode": 80100
+  },
+  "80102": {
+    "code": "80102",
+    "name": "CIZURMAYOR",
+    "screenCode": null
+  },
+  "80103": {
+    "code": "80103",
+    "name": "NOAIN",
+    "screenCode": null
+  },
+  "80104": {
+    "code": "80104",
+    "name": "BIURRUN-CAMPANAS",
+    "screenCode": null
+  },
+  "80105": {
+    "code": "80105",
+    "name": "CARRASCAL",
+    "screenCode": null
+  },
+  "80106": {
+    "code": "80106",
+    "name": "GARINOAIN",
+    "screenCode": null
+  },
+  "80108": {
+    "code": "80108",
+    "name": "TAFALLA",
+    "screenCode": null
+  },
+  "80109": {
+    "code": "80109",
+    "name": "OLITE-ERRIBERRI",
+    "screenCode": null
+  },
+  "80111": {
+    "code": "80111",
+    "name": "PITILLAS",
+    "screenCode": null
+  },
+  "80113": {
+    "code": "80113",
+    "name": "CAPARROSO",
+    "screenCode": null
+  },
+  "80114": {
+    "code": "80114",
+    "name": "MARCILLA DE NAVARRA",
+    "screenCode": null
+  },
+  "80115": {
+    "code": "80115",
+    "name": "VILLAFRANCA DE NAVARRA",
+    "screenCode": null
+  },
+  "80116": {
+    "code": "80116",
+    "name": "MILAGRO",
+    "screenCode": null
+  },
+  "81002": {
+    "code": "81002",
+    "name": "HARO",
+    "screenCode": null
+  },
+  "81010": {
+    "code": "81010",
+    "name": "CENICERO SAN ISIDRO",
+    "screenCode": null
+  },
+  "81011": {
+    "code": "81011",
+    "name": "HARO EL PARDO",
+    "screenCode": null
+  },
+  "81100": {
+    "code": "81100",
+    "name": "LOGROÑO",
+    "screenCode": 81100
+  },
+  "81101": {
+    "code": "81101",
+    "name": "RECAJO",
+    "screenCode": null
+  },
+  "81102": {
+    "code": "81102",
+    "name": "AGONCILLO",
+    "screenCode": null
+  },
+  "81103": {
+    "code": "81103",
+    "name": "ARRÚBAL",
+    "screenCode": null
+  },
+  "81105": {
+    "code": "81105",
+    "name": "ALCANADRE",
+    "screenCode": null
+  },
+  "81106": {
+    "code": "81106",
+    "name": "FÉCULAS-NAVARRA",
+    "screenCode": null
+  },
+  "81108": {
+    "code": "81108",
+    "name": "CALAHORRA",
+    "screenCode": null
+  },
+  "81109": {
+    "code": "81109",
+    "name": "RINCÓN DE SOTO",
+    "screenCode": null
+  },
+  "81110": {
+    "code": "81110",
+    "name": "ALFARO",
+    "screenCode": null
+  },
+  "81200": {
+    "code": "81200",
+    "name": "CASTEJÓN DE EBRO",
+    "screenCode": null
+  },
+  "81202": {
+    "code": "81202",
+    "name": "TUDELA DE NAVARRA",
+    "screenCode": 81202
+  },
+  "81203": {
+    "code": "81203",
+    "name": "RIBAFORADA",
+    "screenCode": null
+  },
+  "81205": {
+    "code": "81205",
+    "name": "CORTES DE NAVARRA",
+    "screenCode": null
+  },
+  "81206": {
+    "code": "81206",
+    "name": "GALLUR",
+    "screenCode": null
+  },
+  "81207": {
+    "code": "81207",
+    "name": "LUCENI",
+    "screenCode": null
+  },
+  "81208": {
+    "code": "81208",
+    "name": "PEDROLA",
+    "screenCode": null
+  },
+  "81209": {
+    "code": "81209",
+    "name": "CABAÑAS DE EBRO",
+    "screenCode": null
+  },
+  "81210": {
+    "code": "81210",
+    "name": "ALAGÓN",
+    "screenCode": null
+  },
+  "82100": {
+    "code": "82100",
+    "name": "SORIA",
+    "screenCode": null
+  },
+  "83002": {
+    "code": "83002",
+    "name": "TURÍN P.S.",
+    "screenCode": null
+  },
+  "83005": {
+    "code": "83005",
+    "name": "BARDONECCHIA",
+    "screenCode": null
+  },
+  "83008": {
+    "code": "83008",
+    "name": "NOVARA",
+    "screenCode": null
+  },
+  "83111": {
+    "code": "83111",
+    "name": "MILÁN C.",
+    "screenCode": null
+  },
+  "84100": {
+    "code": "84100",
+    "name": "COSCURITA",
+    "screenCode": null
+  },
+  "84101": {
+    "code": "84101",
+    "name": "ALMAZÁN-VILLA",
+    "screenCode": null
+  },
+  "84103": {
+    "code": "84103",
+    "name": "TARDELCUENDE",
+    "screenCode": null
+  },
+  "84104": {
+    "code": "84104",
+    "name": "QUINTANA REDONDA",
+    "screenCode": null
+  },
+  "85031": {
+    "code": "85031",
+    "name": "BERN",
+    "screenCode": null
+  },
+  "85200": {
+    "code": "85200",
+    "name": "ZURICH HB",
+    "screenCode": null
+  },
+  "85410": {
+    "code": "85410",
+    "name": "FRIBOURG",
+    "screenCode": null
+  },
+  "85444": {
+    "code": "85444",
+    "name": "GENEVE",
+    "screenCode": null
+  },
+  "85550": {
+    "code": "85550",
+    "name": "LAUSANNE",
+    "screenCode": null
+  },
+  "87004": {
+    "code": "87004",
+    "name": "ORLEANS-LES.AUBRAIS",
+    "screenCode": null
+  },
+  "87011": {
+    "code": "87011",
+    "name": "PARIS-AUSTERLITZ",
+    "screenCode": null
+  },
+  "87034": {
+    "code": "87034",
+    "name": "LIMOGES",
+    "screenCode": null
+  },
+  "87049": {
+    "code": "87049",
+    "name": "LYON PERRACHE",
+    "screenCode": null
+  },
+  "87067": {
+    "code": "87067",
+    "name": "VALENCE VILLE",
+    "screenCode": null
+  },
+  "87078": {
+    "code": "87078",
+    "name": "BEZIERS",
+    "screenCode": null
+  },
+  "87081": {
+    "code": "87081",
+    "name": "POITIERS",
+    "screenCode": null
+  },
+  "87088": {
+    "code": "87088",
+    "name": "NARBONNE",
+    "screenCode": null
+  },
+  "87089": {
+    "code": "87089",
+    "name": "MARSEILLE ST CHARLES",
+    "screenCode": null
+  },
+  "87100": {
+    "code": "87100",
+    "name": "MONTPELLIER SUD DE FRANCE",
+    "screenCode": null
+  },
+  "87101": {
+    "code": "87101",
+    "name": "NIMES PONT DU GARD",
+    "screenCode": null
+  },
+  "87173": {
+    "code": "87173",
+    "name": "MONTPELLIER SAINT-ROCH",
+    "screenCode": null
+  },
+  "87175": {
+    "code": "87175",
+    "name": "SETE",
+    "screenCode": null
+  },
+  "87287": {
+    "code": "87287",
+    "name": "AGDE",
+    "screenCode": null
+  },
+  "87302": {
+    "code": "87302",
+    "name": "NIMES",
+    "screenCode": null
+  },
+  "87303": {
+    "code": "87303",
+    "name": "LYON PART DIEU",
+    "screenCode": null
+  },
+  "87374": {
+    "code": "87374",
+    "name": "PERPIGNAN",
+    "screenCode": null
+  },
+  "87546": {
+    "code": "87546",
+    "name": "BLOIS(FR)",
+    "screenCode": null
+  },
+  "87635": {
+    "code": "87635",
+    "name": "MARNEE CHESSY",
+    "screenCode": null
+  },
+  "87720": {
+    "code": "87720",
+    "name": "LYON SAINT-EXUPERY TGV",
+    "screenCode": null
+  },
+  "87810": {
+    "code": "87810",
+    "name": "VALENCE TGV",
+    "screenCode": null
+  },
+  "87814": {
+    "code": "87814",
+    "name": "AVIGNON TGV",
+    "screenCode": null
+  },
+  "87912": {
+    "code": "87912",
+    "name": "AIX EN PROVENCE TGV",
+    "screenCode": null
+  },
+  "91696": {
+    "code": "91696",
+    "name": "GANDÍA-BUS",
+    "screenCode": null
+  },
+  "92102": {
+    "code": "92102",
+    "name": "TOLEDO",
+    "screenCode": null
+  },
+  "92124": {
+    "code": "92124",
+    "name": "MARBELLA-BUS",
+    "screenCode": null
+  },
+  "92157": {
+    "code": "92157",
+    "name": "ESTEPONA-BUS",
+    "screenCode": null
+  },
+  "92201": {
+    "code": "92201",
+    "name": "DENIA-BUS",
+    "screenCode": null
+  },
+  "94002": {
+    "code": "94002",
+    "name": "DAIMIEL",
+    "screenCode": null
+  },
+  "94004": {
+    "code": "94004",
+    "name": "ALMAGRO",
+    "screenCode": null
+  },
+  "94007": {
+    "code": "94007",
+    "name": "ERMENSINDE",
+    "screenCode": null
+  },
+  "94014": {
+    "code": "94014",
+    "name": "TROFA",
+    "screenCode": null
+  },
+  "94018": {
+    "code": "94018",
+    "name": "FARMALICAO",
+    "screenCode": null
+  },
+  "94021": {
+    "code": "94021",
+    "name": "NINE",
+    "screenCode": null
+  },
+  "94024": {
+    "code": "94024",
+    "name": "BARCELOS",
+    "screenCode": null
+  },
+  "94029": {
+    "code": "94029",
+    "name": "BARROSELAS",
+    "screenCode": null
+  },
+  "94033": {
+    "code": "94033",
+    "name": "VIANA DA CASTELO",
+    "screenCode": null
+  },
+  "94038": {
+    "code": "94038",
+    "name": "ANCORA PRAIA",
+    "screenCode": null
+  },
+  "94042": {
+    "code": "94042",
+    "name": "CAMINHA",
+    "screenCode": null
+  },
+  "94048": {
+    "code": "94048",
+    "name": "VILA NOVA DE CERVEIRA",
+    "screenCode": null
+  },
+  "94346": {
+    "code": "94346",
+    "name": "PORTO CAMPANHA - O PORTO CAMPAÑA",
+    "screenCode": null
+  },
+  "94401": {
+    "code": "94401",
+    "name": "LISBOA-SANTA APOLONIA",
+    "screenCode": null
+  },
+  "94404": {
+    "code": "94404",
+    "name": "LISBOA-ESTACIÓN ORIENTE",
+    "screenCode": null
+  },
+  "94428": {
+    "code": "94428",
+    "name": "ENTRONCAMT",
+    "screenCode": null
+  },
+  "94432": {
+    "code": "94432",
+    "name": "FÁTIMA",
+    "screenCode": null
+  },
+  "94438": {
+    "code": "94438",
+    "name": "POMBAL",
+    "screenCode": null
+  },
+  "94452": {
+    "code": "94452",
+    "name": "COÍMBRA-B",
+    "screenCode": null
+  },
+  "94456": {
+    "code": "94456",
+    "name": "PAMPILHOSA",
+    "screenCode": null
+  },
+  "94524": {
+    "code": "94524",
+    "name": "STA.COMBA",
+    "screenCode": null
+  },
+  "94534": {
+    "code": "94534",
+    "name": "NELAS",
+    "screenCode": null
+  },
+  "94536": {
+    "code": "94536",
+    "name": "MANGUALDE",
+    "screenCode": null
+  },
+  "94543": {
+    "code": "94543",
+    "name": "CELORICO-BEIRA",
+    "screenCode": null
+  },
+  "94546": {
+    "code": "94546",
+    "name": "VILA FRANCA DAS NAVES",
+    "screenCode": null
+  },
+  "94551": {
+    "code": "94551",
+    "name": "GUARDA",
+    "screenCode": null
+  },
+  "94563": {
+    "code": "94563",
+    "name": "VILAR FORMOSO",
+    "screenCode": null
+  },
+  "94707": {
+    "code": "94707",
+    "name": "ABRANTES",
+    "screenCode": null
+  },
+  "94757": {
+    "code": "94757",
+    "name": "MARVAO",
+    "screenCode": null
+  },
+  "95100": {
+    "code": "95100",
+    "name": "MUSEO-FERROCAR.",
+    "screenCode": null
+  },
+  "96122": {
+    "code": "96122",
+    "name": "BARCELOS",
+    "screenCode": null
+  },
+  "97001": {
+    "code": "97001",
+    "name": "LA MOLINA - SKITREN",
+    "screenCode": null
+  },
+  "97002": {
+    "code": "97002",
+    "name": "SARA BARAS",
+    "screenCode": null
+  },
+  "97003": {
+    "code": "97003",
+    "name": "TERRACOTA",
+    "screenCode": null
+  },
+  "97004": {
+    "code": "97004",
+    "name": "PORTAVE.FERRARI",
+    "screenCode": null
+  },
+  "97005": {
+    "code": "97005",
+    "name": "VILAFRANCA DEL PENEDÉS",
+    "screenCode": null
+  },
+  "97009": {
+    "code": "97009",
+    "name": "PLAÇA CATALUNYA",
+    "screenCode": null
+  },
+  "97011": {
+    "code": "97011",
+    "name": "PLAÇA CATALUNYA / BCN. SANTS",
+    "screenCode": null
+  },
+  "97013": {
+    "code": "97013",
+    "name": "CALDES DE MALAVELLA-VICHY CATALÁN",
+    "screenCode": null
+  },
+  "97015": {
+    "code": "97015",
+    "name": "PORTAVENTURA",
+    "screenCode": null
+  },
+  "97016": {
+    "code": "97016",
+    "name": "FERRARYLAND",
+    "screenCode": null
+  },
+  "97017": {
+    "code": "97017",
+    "name": "SANT SADURNÍ D'ANOIA",
+    "screenCode": null
+  },
+  "97018": {
+    "code": "97018",
+    "name": "CARIBE PARK",
+    "screenCode": null
+  },
+  "97100": {
+    "code": "97100",
+    "name": "PITIS",
+    "screenCode": null
+  },
+  "97103": {
+    "code": "97103",
+    "name": "EL TEJAR",
+    "screenCode": null
+  },
+  "97200": {
+    "code": "97200",
+    "name": "MIRASIERRA-PACO DE LUCÍA",
+    "screenCode": null
+  },
+  "97201": {
+    "code": "97201",
+    "name": "MADRID-RAMÓN Y CAJAL",
+    "screenCode": null
+  },
+  "97639": {
+    "code": "97639",
+    "name": "JÁVEA-BUS",
+    "screenCode": null
+  },
+  "98000": {
+    "code": "98000",
+    "name": "MADRID - ATOCHA CERCANÍAS",
+    "screenCode": null
+  },
+  "98003": {
+    "code": "98003",
+    "name": "FUENTE DE LA MORA",
+    "screenCode": null
+  },
+  "98103": {
+    "code": "98103",
+    "name": "ALCALÁ DE HENARES",
+    "screenCode": null
+  },
+  "98147": {
+    "code": "98147",
+    "name": "MONZÓN-BUS",
+    "screenCode": null
+  },
+  "98148": {
+    "code": "98148",
+    "name": "BINÉFAR-BUS",
+    "screenCode": null
+  },
+  "98304": {
+    "code": "98304",
+    "name": "VALDEBEBAS",
+    "screenCode": null
+  },
+  "98305": {
+    "code": "98305",
+    "name": "MADRID-AEROPUERTO T4",
+    "screenCode": null
+  },
+  "99000": {
+    "code": "99000",
+    "name": "MADRID CERCANÍAS",
+    "screenCode": null
+  },
+  "99001": {
+    "code": "99001",
+    "name": "SANTA POLA-BUS",
+    "screenCode": null
+  },
+  "99002": {
+    "code": "99002",
+    "name": "LOS ARENALES-BUS",
+    "screenCode": null
+  },
+  "99003": {
+    "code": "99003",
+    "name": "ALTET-BUS",
+    "screenCode": null
+  },
+  "99004": {
+    "code": "99004",
+    "name": "GRAN ALACANT-BUS",
+    "screenCode": null
+  },
+  "99100": {
+    "code": "99100",
+    "name": "BARBASTRO-BUS",
+    "screenCode": null
+  },
+  "99101": {
+    "code": "99101",
+    "name": "GRAUS-BUS",
+    "screenCode": null
+  },
+  "99102": {
+    "code": "99102",
+    "name": "BENASQUE-BUS",
+    "screenCode": null
+  },
+  "99103": {
+    "code": "99103",
+    "name": "JACA-BUS",
+    "screenCode": null
+  },
+  "99104": {
+    "code": "99104",
+    "name": "CANDANCHÚ-BUS",
+    "screenCode": null
+  },
+  "99105": {
+    "code": "99105",
+    "name": "ASTÚN-BUS",
+    "screenCode": null
+  },
+  "99106": {
+    "code": "99106",
+    "name": "BIESCAS-BUS",
+    "screenCode": null
+  },
+  "99107": {
+    "code": "99107",
+    "name": "PANTICOSA-BUS",
+    "screenCode": null
+  },
+  "99108": {
+    "code": "99108",
+    "name": "FORMIGAL-BUS",
+    "screenCode": null
+  },
+  "99109": {
+    "code": "99109",
+    "name": "SANXENXO-BUS",
+    "screenCode": null
+  },
+  "99110": {
+    "code": "99110",
+    "name": "OGROVE-BUS",
+    "screenCode": null
+  },
+  "99111": {
+    "code": "99111",
+    "name": "CANGAS-BUS",
+    "screenCode": null
+  },
+  "99112": {
+    "code": "99112",
+    "name": "BUEU-BUS",
+    "screenCode": null
+  },
+  "99113": {
+    "code": "99113",
+    "name": "SABIÑÁNIGO-BUS",
+    "screenCode": null
+  },
+  "99114": {
+    "code": "99114",
+    "name": "ANDORRA-BUS",
+    "screenCode": null
+  },
+  "99115": {
+    "code": "99115",
+    "name": "AGUADULCE-BUS",
+    "screenCode": null
+  },
+  "99116": {
+    "code": "99116",
+    "name": "ROQUETAS-BUS",
+    "screenCode": null
+  },
+  "99117": {
+    "code": "99117",
+    "name": "OURENSE TURÍSTICO",
+    "screenCode": null
+  },
+  "99118": {
+    "code": "99118",
+    "name": "MUROS-BUS",
+    "screenCode": null
+  },
+  "99119": {
+    "code": "99119",
+    "name": "FISTERRA-BUS",
+    "screenCode": null
+  },
+  "99120": {
+    "code": "99120",
+    "name": "TORREVIEJA-BUS",
+    "screenCode": null
+  },
+  "99121": {
+    "code": "99121",
+    "name": "BENIDORM-BUS",
+    "screenCode": null
+  },
+  "99122": {
+    "code": "99122",
+    "name": "TORREVIEJA-PLAYA-BUS",
+    "screenCode": null
+  },
+  "99123": {
+    "code": "99123",
+    "name": "BENIDORM- PLAYA-BUS",
+    "screenCode": null
+  },
+  "99124": {
+    "code": "99124",
+    "name": "TÁNGER MED-BARCO",
+    "screenCode": null
+  },
+  "99125": {
+    "code": "99125",
+    "name": "TÁNGER VILLE-BARCO",
+    "screenCode": null
+  },
+  "99126": {
+    "code": "99126",
+    "name": "CEUTA-BARCO",
+    "screenCode": null
+  },
+  "99127": {
+    "code": "99127",
+    "name": "CÁCERES.",
+    "screenCode": null
+  },
+  "99128": {
+    "code": "99128",
+    "name": "MÉRIDA.",
+    "screenCode": null
+  },
+  "99129": {
+    "code": "99129",
+    "name": "MUSEO FERROCARRIL",
+    "screenCode": null
+  },
+  "99130": {
+    "code": "99130",
+    "name": "ANTEQUERA SANTA ANA",
+    "screenCode": null
+  },
+  "99131": {
+    "code": "99131",
+    "name": "PONFERRADA-BUS",
+    "screenCode": null
+  },
+  "99132": {
+    "code": "99132",
+    "name": "MADRID-PRÍNCIPE PÍO TURÍSTICO",
+    "screenCode": null
+  },
+  "99133": {
+    "code": "99133",
+    "name": "MORALES DEL VINO-BUS",
+    "screenCode": null
+  },
+  "99134": {
+    "code": "99134",
+    "name": "CORRALES DEL VINO-BUS",
+    "screenCode": null
+  },
+  "99135": {
+    "code": "99135",
+    "name": "PELEAS DE ARRIBA-BUS",
+    "screenCode": null
+  },
+  "99136": {
+    "code": "99136",
+    "name": "CUBO DE LA TIERRA DEL VINO-BUS",
+    "screenCode": null
+  },
+  "99137": {
+    "code": "99137",
+    "name": "C.P.TOPAS-BUS",
+    "screenCode": null
+  },
+  "99138": {
+    "code": "99138",
+    "name": "CALZADA DE VALDUNCIEL-BUS",
+    "screenCode": null
+  },
+  "99139": {
+    "code": "99139",
+    "name": "ALDEASECA DE LA ARMUÑA-BUS",
+    "screenCode": null
+  },
+  "99141": {
+    "code": "99141",
+    "name": "TORO-BUS",
+    "screenCode": null
+  },
+  "99142": {
+    "code": "99142",
+    "name": "GUARDAMAR-BUS",
+    "screenCode": null
+  },
+  "99143": {
+    "code": "99143",
+    "name": "A CORUÑA-TURÍSTICO",
+    "screenCode": null
+  },
+  "99144": {
+    "code": "99144",
+    "name": "PUERTOLLANO-TURÍSTICO",
+    "screenCode": null
+  },
+  "99145": {
+    "code": "99145",
+    "name": "PLASENCIA-TURÍSTICO",
+    "screenCode": null
+  },
+  "99146": {
+    "code": "99146",
+    "name": "BADAJOZ-TURÍSTICO",
+    "screenCode": null
+  },
+  "99149": {
+    "code": "99149",
+    "name": "SEVILLA-TURISTICO",
+    "screenCode": null
+  },
+  "99150": {
+    "code": "99150",
+    "name": "FARO-BUS",
+    "screenCode": null
+  },
+  "99151": {
+    "code": "99151",
+    "name": "FARO AEROPUERTO-BUS",
+    "screenCode": null
+  },
+  "99152": {
+    "code": "99152",
+    "name": "ALBUFEIRA-BUS",
+    "screenCode": null
+  },
+  "99153": {
+    "code": "99153",
+    "name": "PORTIMAO-BUS",
+    "screenCode": null
+  },
+  "99154": {
+    "code": "99154",
+    "name": "LAGOS-BUS",
+    "screenCode": null
+  },
+  "99155": {
+    "code": "99155",
+    "name": "TAVIRA-BUS",
+    "screenCode": null
+  },
+  "99156": {
+    "code": "99156",
+    "name": "VILA REAL DE SAN ANTONIO-BUS",
+    "screenCode": null
+  },
+  "99157": {
+    "code": "99157",
+    "name": "VILLAJOYOSA-BUS",
+    "screenCode": null
+  },
+  "99158": {
+    "code": "99158",
+    "name": "CUÉLLAR-BUS",
+    "screenCode": null
+  },
+  "99159": {
+    "code": "99159",
+    "name": "SANTIAGO-TURÍSTICO",
+    "screenCode": null
+  },
+  "99160": {
+    "code": "99160",
+    "name": "VALLE DEL RUPESTRE VALDERREDIBLE",
+    "screenCode": null
+  },
+  "99161": {
+    "code": "99161",
+    "name": "PONTEVEDRA-TURÍSTICO",
+    "screenCode": null
+  },
+  "99162": {
+    "code": "99162",
+    "name": "HUESCA-BUS",
+    "screenCode": null
+  },
+  "99163": {
+    "code": "99163",
+    "name": "TARRAGONA-BUS",
+    "screenCode": null
+  },
+  "99164": {
+    "code": "99164",
+    "name": "SALOU-BUS",
+    "screenCode": null
+  },
+  "99165": {
+    "code": "99165",
+    "name": "REUS-BUS",
+    "screenCode": null
+  },
+  "99166": {
+    "code": "99166",
+    "name": "PINTO-TUR",
+    "screenCode": null
+  },
+  "99171": {
+    "code": "99171",
+    "name": "SALAMANCA-BUS",
+    "screenCode": null
+  },
+  "99172": {
+    "code": "99172",
+    "name": "GIJÓN-TURÍSTICO",
+    "screenCode": null
+  },
+  "99173": {
+    "code": "99173",
+    "name": "OVIEDO-TUR",
+    "screenCode": null
+  },
+  "99174": {
+    "code": "99174",
+    "name": "FERROL-TUR",
+    "screenCode": null
+  },
+  "99176": {
+    "code": "99176",
+    "name": "MIRA",
+    "screenCode": null
+  },
+  "99177": {
+    "code": "99177",
+    "name": "LEON TURISTICO",
+    "screenCode": null
+  },
+  "99178": {
+    "code": "99178",
+    "name": "VIGO GUIXAR TURÍSTICO",
+    "screenCode": null
+  },
+  "99179": {
+    "code": "99179",
+    "name": "BARCELONA FRANÇA TURÍSTICO",
+    "screenCode": null
+  },
+  "99180": {
+    "code": "99180",
+    "name": "SORIA ENLACE AVE",
+    "screenCode": null
+  },
+  "99181": {
+    "code": "99181",
+    "name": "CALPE-BUS",
+    "screenCode": null
+  },
+  "99182": {
+    "code": "99182",
+    "name": "ALTEA-BUS",
+    "screenCode": null
+  },
+  "99183": {
+    "code": "99183",
+    "name": "MADRID EMBAJADORES MuF",
+    "screenCode": null
+  },
+  "99184": {
+    "code": "99184",
+    "name": "NAVALMORAL DE LA MATA TURÍSTICO",
+    "screenCode": null
+  },
+  "99203": {
+    "code": "99203",
+    "name": "PINTO",
+    "screenCode": null
+  },
+  "99204": {
+    "code": "99204",
+    "name": "VICÁLVARO",
+    "screenCode": null
+  },
+  "99207": {
+    "code": "99207",
+    "name": "EL ESCORIAL",
+    "screenCode": null
+  },
+  "99208": {
+    "code": "99208",
+    "name": "CERCED.TUR",
+    "screenCode": null
+  },
+  "99209": {
+    "code": "99209",
+    "name": "ARANJUEZ-MOTÍN",
+    "screenCode": null
+  },
+  "99210": {
+    "code": "99210",
+    "name": "ARANJUEZ-FRESA",
+    "screenCode": null
+  },
+  "99211": {
+    "code": "99211",
+    "name": "ALCALÁ DE HENARES MONUMENTAL",
+    "screenCode": null
+  },
+  "99213": {
+    "code": "99213",
+    "name": "WILDLIFE",
+    "screenCode": null
+  },
+  "99214": {
+    "code": "99214",
+    "name": "SOL-FAMILIA ADDAMS",
+    "screenCode": null
+  },
+  "99215": {
+    "code": "99215",
+    "name": "EMBAJADORES-FESTIVAL MAGIA",
+    "screenCode": null
+  },
+  "99216": {
+    "code": "99216",
+    "name": "SOL - KING OF POP",
+    "screenCode": null
+  },
+  "99501": {
+    "code": "99501",
+    "name": "ANDORRA",
+    "screenCode": null
+  },
+  "99800": {
+    "code": "99800",
+    "name": "CERCEDILLA TURÍSTICO",
+    "screenCode": null
+  },
+  "99801": {
+    "code": "99801",
+    "name": "PUERTO NAVACERRADA",
+    "screenCode": null
+  },
+  "99802": {
+    "code": "99802",
+    "name": "COTOS",
+    "screenCode": null
+  },
+  "99853": {
+    "code": "99853",
+    "name": "VIELHA-BUS",
+    "screenCode": null
+  },
+  "01003": {
+    "code": "01003",
+    "name": "ARAHAL",
+    "screenCode": null
+  },
+  "01005": {
+    "code": "01005",
+    "name": "MARCHENA",
+    "screenCode": null
+  },
+  "01007": {
+    "code": "01007",
+    "name": "OSUNA",
+    "screenCode": null
+  },
+  "01009": {
+    "code": "01009",
+    "name": "PEDRERA",
+    "screenCode": null
+  },
+  "02002": {
+    "code": "02002",
+    "name": "PUENTE GENIL-HERRERA",
+    "screenCode": null
+  },
+  "02003": {
+    "code": "02003",
+    "name": "ANTEQUERA-SANTA ANA",
+    "screenCode": null
+  },
+  "02030": {
+    "code": "02030",
+    "name": "ANTEQUERA AV",
+    "screenCode": 2030
+  },
+  "03001": {
+    "code": "03001",
+    "name": "MENGÍBAR-ARTICHUELA",
+    "screenCode": null
+  },
+  "03003": {
+    "code": "03003",
+    "name": "GRANENA (APD-CGD)",
+    "screenCode": null
+  },
+  "03100": {
+    "code": "03100",
+    "name": "JAÉN",
+    "screenCode": null
+  },
+  "03208": {
+    "code": "03208",
+    "name": "CUENCA-FERNANDO ZÓBEL",
+    "screenCode": 3208
+  },
+  "03213": {
+    "code": "03213",
+    "name": "REQUENA-UTIEL",
+    "screenCode": null
+  },
+  "03216": {
+    "code": "03216",
+    "name": "VALÈNCIA-JOAQUÍN SOROLLA",
+    "screenCode": 3216
+  },
+  "03309": {
+    "code": "03309",
+    "name": "VILLENA ALTA VELOCIDAD",
+    "screenCode": null
+  },
+  "03410": {
+    "code": "03410",
+    "name": "ELCHE/ELX AV",
+    "screenCode": 3410
+  },
+  "03412": {
+    "code": "03412",
+    "name": "CALLOSA DE SEGURA-COX",
+    "screenCode": null
+  },
+  "04007": {
+    "code": "04007",
+    "name": "GUADALAJARA-YEBES",
+    "screenCode": 4007
+  },
+  "04040": {
+    "code": "04040",
+    "name": "ZARAGOZA DELICIAS",
+    "screenCode": 4040
+  },
+  "04104": {
+    "code": "04104",
+    "name": "CAMP DE TARRAGONA",
+    "screenCode": 4104
+  },
+  "04307": {
+    "code": "04307",
+    "name": "FIGUERES-VILAFANT",
+    "screenCode": 4307
+  },
+  "05000": {
+    "code": "05000",
+    "name": "GRANADA",
+    "screenCode": 5000
+  },
+  "05012": {
+    "code": "05012",
+    "name": "LOJA",
+    "screenCode": null
+  },
+  "05013": {
+    "code": "05013",
+    "name": "LOJA-SAN FRANCISCO",
+    "screenCode": null
+  },
+  "05019": {
+    "code": "05019",
+    "name": "ANTEQUERA-CIUDAD",
+    "screenCode": null
+  },
+  "05102": {
+    "code": "05102",
+    "name": "SAN XOÁN",
+    "screenCode": null
+  },
+  "05103": {
+    "code": "05103",
+    "name": "SANTA ICÍA",
+    "screenCode": null
+  },
+  "05104": {
+    "code": "05104",
+    "name": "VIRXE DO MAR",
+    "screenCode": null
+  },
+  "05105": {
+    "code": "05105",
+    "name": "PIÑEIROS",
+    "screenCode": null
+  },
+  "05106": {
+    "code": "05106",
+    "name": "O PONTO",
+    "screenCode": null
+  },
+  "05107": {
+    "code": "05107",
+    "name": "XUVIA",
+    "screenCode": null
+  },
+  "05108": {
+    "code": "05108",
+    "name": "O ALTO DO CASTIÑEIRO",
+    "screenCode": null
+  },
+  "05109": {
+    "code": "05109",
+    "name": "FERRERÍAS",
+    "screenCode": null
+  },
+  "05110": {
+    "code": "05110",
+    "name": "SANTANDER-FEVE",
+    "screenCode": null
+  },
+  "05111": {
+    "code": "05111",
+    "name": "SEDES",
+    "screenCode": null
+  },
+  "05113": {
+    "code": "05113",
+    "name": "PEDROSO DE NARÓN",
+    "screenCode": null
+  },
+  "05115": {
+    "code": "05115",
+    "name": "SAN SADURNIÑO",
+    "screenCode": null
+  },
+  "05117": {
+    "code": "05117",
+    "name": "LAMAS",
+    "screenCode": null
+  },
+  "05119": {
+    "code": "05119",
+    "name": "APALLA",
+    "screenCode": null
+  },
+  "05121": {
+    "code": "05121",
+    "name": "MOECHE",
+    "screenCode": null
+  },
+  "05123": {
+    "code": "05123",
+    "name": "LABACENGOS",
+    "screenCode": null
+  },
+  "05125": {
+    "code": "05125",
+    "name": "ENTRAMBARRÍAS",
+    "screenCode": null
+  },
+  "05127": {
+    "code": "05127",
+    "name": "CERDIDO",
+    "screenCode": null
+  },
+  "05129": {
+    "code": "05129",
+    "name": "A CUQUEIRA",
+    "screenCode": null
+  },
+  "05131": {
+    "code": "05131",
+    "name": "SANTA MARÍA DE MERA",
+    "screenCode": null
+  },
+  "05133": {
+    "code": "05133",
+    "name": "PONTE MERA",
+    "screenCode": null
+  },
+  "05135": {
+    "code": "05135",
+    "name": "SAN CLODIO",
+    "screenCode": null
+  },
+  "05137": {
+    "code": "05137",
+    "name": "SENRA",
+    "screenCode": null
+  },
+  "05139": {
+    "code": "05139",
+    "name": "ORTIGUEIRA",
+    "screenCode": null
+  },
+  "05141": {
+    "code": "05141",
+    "name": "ESPASANTE",
+    "screenCode": null
+  },
+  "05143": {
+    "code": "05143",
+    "name": "LOIBA",
+    "screenCode": null
+  },
+  "05145": {
+    "code": "05145",
+    "name": "O BARQUEIRO",
+    "screenCode": null
+  },
+  "05147": {
+    "code": "05147",
+    "name": "O VICEDO",
+    "screenCode": null
+  },
+  "05149": {
+    "code": "05149",
+    "name": "MOSENDE",
+    "screenCode": null
+  },
+  "05151": {
+    "code": "05151",
+    "name": "FOLGUEIRO",
+    "screenCode": null
+  },
+  "05153": {
+    "code": "05153",
+    "name": "COVAS DE VIVEIRO",
+    "screenCode": null
+  },
+  "05155": {
+    "code": "05155",
+    "name": "VIVEIRO",
+    "screenCode": null
+  },
+  "05156": {
+    "code": "05156",
+    "name": "VIVEIRO APEADERO",
+    "screenCode": null
+  },
+  "05157": {
+    "code": "05157",
+    "name": "XUANCES",
+    "screenCode": null
+  },
+  "05159": {
+    "code": "05159",
+    "name": "XOVE POBO",
+    "screenCode": null
+  },
+  "05161": {
+    "code": "05161",
+    "name": "XOVE",
+    "screenCode": null
+  },
+  "05163": {
+    "code": "05163",
+    "name": "LAGO",
+    "screenCode": null
+  },
+  "05165": {
+    "code": "05165",
+    "name": "BIDUEIROS",
+    "screenCode": null
+  },
+  "05167": {
+    "code": "05167",
+    "name": "SAN CIBRAO",
+    "screenCode": null
+  },
+  "05169": {
+    "code": "05169",
+    "name": "MADEIRO",
+    "screenCode": null
+  },
+  "05171": {
+    "code": "05171",
+    "name": "BURELA",
+    "screenCode": null
+  },
+  "05173": {
+    "code": "05173",
+    "name": "CANGAS DE FOZ",
+    "screenCode": null
+  },
+  "05175": {
+    "code": "05175",
+    "name": "NOIS",
+    "screenCode": null
+  },
+  "05177": {
+    "code": "05177",
+    "name": "FAZOURO",
+    "screenCode": null
+  },
+  "05179": {
+    "code": "05179",
+    "name": "MARZÁN",
+    "screenCode": null
+  },
+  "05181": {
+    "code": "05181",
+    "name": "FOZ",
+    "screenCode": null
+  },
+  "05183": {
+    "code": "05183",
+    "name": "BARREIROS",
+    "screenCode": null
+  },
+  "05185": {
+    "code": "05185",
+    "name": "REINANTE",
+    "screenCode": null
+  },
+  "05187": {
+    "code": "05187",
+    "name": "ESTEIRO",
+    "screenCode": null
+  },
+  "05189": {
+    "code": "05189",
+    "name": "OS CASTROS",
+    "screenCode": null
+  },
+  "05191": {
+    "code": "05191",
+    "name": "RINLO",
+    "screenCode": null
+  },
+  "05193": {
+    "code": "05193",
+    "name": "RIBADEO",
+    "screenCode": null
+  },
+  "05195": {
+    "code": "05195",
+    "name": "VEGADEO",
+    "screenCode": null
+  },
+  "05197": {
+    "code": "05197",
+    "name": "VEGADEO PUEBLO",
+    "screenCode": null
+  },
+  "05199": {
+    "code": "05199",
+    "name": "VILAVEDELLE",
+    "screenCode": null
+  },
+  "05201": {
+    "code": "05201",
+    "name": "GIJÓN RAM",
+    "screenCode": null
+  },
+  "05203": {
+    "code": "05203",
+    "name": "TREMAÑES CARREÑO",
+    "screenCode": null
+  },
+  "05204": {
+    "code": "05204",
+    "name": "CENTRO DE TRANSPORTES",
+    "screenCode": null
+  },
+  "05207": {
+    "code": "05207",
+    "name": "ABOÑO APEADERO",
+    "screenCode": null
+  },
+  "05208": {
+    "code": "05208",
+    "name": "XIVARES",
+    "screenCode": null
+  },
+  "05209": {
+    "code": "05209",
+    "name": "PERLORA",
+    "screenCode": null
+  },
+  "05210": {
+    "code": "05210",
+    "name": "CANDÁS-APEADERO",
+    "screenCode": null
+  },
+  "05211": {
+    "code": "05211",
+    "name": "CANDÁS",
+    "screenCode": null
+  },
+  "05213": {
+    "code": "05213",
+    "name": "REGUERAL",
+    "screenCode": null
+  },
+  "05215": {
+    "code": "05215",
+    "name": "ZANZABORNÍN",
+    "screenCode": null
+  },
+  "05216": {
+    "code": "05216",
+    "name": "GUDÍN LAMINACIÓN",
+    "screenCode": null
+  },
+  "05217": {
+    "code": "05217",
+    "name": "TRASONA",
+    "screenCode": null
+  },
+  "05218": {
+    "code": "05218",
+    "name": "OFICINES",
+    "screenCode": null
+  },
+  "05219": {
+    "code": "05219",
+    "name": "LLARANES",
+    "screenCode": null
+  },
+  "05220": {
+    "code": "05220",
+    "name": "CRISTALERÍA",
+    "screenCode": null
+  },
+  "05221": {
+    "code": "05221",
+    "name": "AVILÉS-APEADERO",
+    "screenCode": null
+  },
+  "05224": {
+    "code": "05224",
+    "name": "RAÍCES",
+    "screenCode": null
+  },
+  "05225": {
+    "code": "05225",
+    "name": "SALINAS",
+    "screenCode": null
+  },
+  "05227": {
+    "code": "05227",
+    "name": "PIEDRAS BLANCAS",
+    "screenCode": null
+  },
+  "05229": {
+    "code": "05229",
+    "name": "VEGARROZADAS",
+    "screenCode": null
+  },
+  "05231": {
+    "code": "05231",
+    "name": "SANTIAGO DEL MONTE",
+    "screenCode": null
+  },
+  "05232": {
+    "code": "05232",
+    "name": "EL PARADOR",
+    "screenCode": null
+  },
+  "05233": {
+    "code": "05233",
+    "name": "SOTO DEL BARCO",
+    "screenCode": null
+  },
+  "05235": {
+    "code": "05235",
+    "name": "RIBERAS",
+    "screenCode": null
+  },
+  "05237": {
+    "code": "05237",
+    "name": "PEÑAULLÁN",
+    "screenCode": null
+  },
+  "05239": {
+    "code": "05239",
+    "name": "SANTIANES",
+    "screenCode": null
+  },
+  "05241": {
+    "code": "05241",
+    "name": "LOS CABOS",
+    "screenCode": null
+  },
+  "05243": {
+    "code": "05243",
+    "name": "MUROS DEL NALÓN",
+    "screenCode": null
+  },
+  "05244": {
+    "code": "05244",
+    "name": "EL PITO PIÑERA",
+    "screenCode": null
+  },
+  "05245": {
+    "code": "05245",
+    "name": "CUDILLERO",
+    "screenCode": null
+  },
+  "05247": {
+    "code": "05247",
+    "name": "VILLADEMAR",
+    "screenCode": null
+  },
+  "05249": {
+    "code": "05249",
+    "name": "LA MAGDALENA",
+    "screenCode": null
+  },
+  "05251": {
+    "code": "05251",
+    "name": "SAN MARTÍN DE LUIÑA",
+    "screenCode": null
+  },
+  "05253": {
+    "code": "05253",
+    "name": "SAN COSME",
+    "screenCode": null
+  },
+  "05255": {
+    "code": "05255",
+    "name": "SOTO DE LUIÑA",
+    "screenCode": null
+  },
+  "05257": {
+    "code": "05257",
+    "name": "VALDREDO",
+    "screenCode": null
+  },
+  "05259": {
+    "code": "05259",
+    "name": "NOVELLANA",
+    "screenCode": null
+  },
+  "05261": {
+    "code": "05261",
+    "name": "SANTA MARINA",
+    "screenCode": null
+  },
+  "05263": {
+    "code": "05263",
+    "name": "BALLOTA",
+    "screenCode": null
+  },
+  "05265": {
+    "code": "05265",
+    "name": "TABLIZO",
+    "screenCode": null
+  },
+  "05267": {
+    "code": "05267",
+    "name": "CADAVEDO",
+    "screenCode": null
+  },
+  "05269": {
+    "code": "05269",
+    "name": "SAN CRISTÓBAL",
+    "screenCode": null
+  },
+  "05271": {
+    "code": "05271",
+    "name": "CANERO",
+    "screenCode": null
+  },
+  "05273": {
+    "code": "05273",
+    "name": "BARCIA",
+    "screenCode": null
+  },
+  "05275": {
+    "code": "05275",
+    "name": "LUARCA",
+    "screenCode": null
+  },
+  "05277": {
+    "code": "05277",
+    "name": "OTUR",
+    "screenCode": null
+  },
+  "05279": {
+    "code": "05279",
+    "name": "VILLAPEDRE",
+    "screenCode": null
+  },
+  "05281": {
+    "code": "05281",
+    "name": "PIÑERA-VILLAORIL",
+    "screenCode": null
+  },
+  "05283": {
+    "code": "05283",
+    "name": "NAVIA",
+    "screenCode": null
+  },
+  "05285": {
+    "code": "05285",
+    "name": "MEDAL",
+    "screenCode": null
+  },
+  "05287": {
+    "code": "05287",
+    "name": "LOZA",
+    "screenCode": null
+  },
+  "05289": {
+    "code": "05289",
+    "name": "CARTAVIO",
+    "screenCode": null
+  },
+  "05291": {
+    "code": "05291",
+    "name": "LA CARIDAD",
+    "screenCode": null
+  },
+  "05293": {
+    "code": "05293",
+    "name": "TAPIA",
+    "screenCode": null
+  },
+  "05295": {
+    "code": "05295",
+    "name": "TOL",
+    "screenCode": null
+  },
+  "05297": {
+    "code": "05297",
+    "name": "LAS CAMPAS DE CASTROPOL",
+    "screenCode": null
+  },
+  "05299": {
+    "code": "05299",
+    "name": "CASTROPOL",
+    "screenCode": null
+  },
+  "05300": {
+    "code": "05300",
+    "name": "VALLOBÍN",
+    "screenCode": null
+  },
+  "05301": {
+    "code": "05301",
+    "name": "ARGAÑOSA-LAVAPIÉS",
+    "screenCode": null
+  },
+  "05302": {
+    "code": "05302",
+    "name": "LAS CAMPAS",
+    "screenCode": null
+  },
+  "05303": {
+    "code": "05303",
+    "name": "LAS MAZAS",
+    "screenCode": null
+  },
+  "05304": {
+    "code": "05304",
+    "name": "SAN CLAUDIO",
+    "screenCode": null
+  },
+  "05305": {
+    "code": "05305",
+    "name": "FUSO DE LA REINA",
+    "screenCode": null
+  },
+  "05306": {
+    "code": "05306",
+    "name": "SAN PEDRO DE NORA",
+    "screenCode": null
+  },
+  "05308": {
+    "code": "05308",
+    "name": "SOTO UDRIÓN",
+    "screenCode": null
+  },
+  "05309": {
+    "code": "05309",
+    "name": "CACES",
+    "screenCode": null
+  },
+  "05311": {
+    "code": "05311",
+    "name": "TRUBIA",
+    "screenCode": null
+  },
+  "05313": {
+    "code": "05313",
+    "name": "SANTA MARÍA DE GRADO",
+    "screenCode": null
+  },
+  "05315": {
+    "code": "05315",
+    "name": "VEGA DE ANZO",
+    "screenCode": null
+  },
+  "05316": {
+    "code": "05316",
+    "name": "PEÑAFLOR DE GRADO",
+    "screenCode": null
+  },
+  "05317": {
+    "code": "05317",
+    "name": "GRADO",
+    "screenCode": null
+  },
+  "05319": {
+    "code": "05319",
+    "name": "SANDICHE",
+    "screenCode": null
+  },
+  "05320": {
+    "code": "05320",
+    "name": "ACES",
+    "screenCode": null
+  },
+  "05321": {
+    "code": "05321",
+    "name": "SAN ROMÁN",
+    "screenCode": null
+  },
+  "05323": {
+    "code": "05323",
+    "name": "BEIFAR",
+    "screenCode": null
+  },
+  "05325": {
+    "code": "05325",
+    "name": "PRAVIA",
+    "screenCode": null
+  },
+  "05327": {
+    "code": "05327",
+    "name": "SAN RANÓN",
+    "screenCode": null
+  },
+  "05329": {
+    "code": "05329",
+    "name": "SAN ESTEBAN",
+    "screenCode": null
+  },
+  "05351": {
+    "code": "05351",
+    "name": "PALOMAR",
+    "screenCode": null
+  },
+  "05353": {
+    "code": "05353",
+    "name": "SOTO DE RIBERA",
+    "screenCode": null
+  },
+  "05355": {
+    "code": "05355",
+    "name": "PARTEAYER",
+    "screenCode": null
+  },
+  "05361": {
+    "code": "05361",
+    "name": "BAIÑA",
+    "screenCode": null
+  },
+  "05369": {
+    "code": "05369",
+    "name": "MIERES VASCO",
+    "screenCode": null
+  },
+  "05371": {
+    "code": "05371",
+    "name": "CAUDALIA",
+    "screenCode": null
+  },
+  "05373": {
+    "code": "05373",
+    "name": "FIGAREDO",
+    "screenCode": null
+  },
+  "05375": {
+    "code": "05375",
+    "name": "UJO TARUELO",
+    "screenCode": null
+  },
+  "05376": {
+    "code": "05376",
+    "name": "SANTA CRUZ",
+    "screenCode": null
+  },
+  "05377": {
+    "code": "05377",
+    "name": "CABORANA",
+    "screenCode": null
+  },
+  "05379": {
+    "code": "05379",
+    "name": "MOREDA DE ALLER",
+    "screenCode": null
+  },
+  "05380": {
+    "code": "05380",
+    "name": "SAN ANTONIO",
+    "screenCode": null
+  },
+  "05381": {
+    "code": "05381",
+    "name": "OYANCO",
+    "screenCode": null
+  },
+  "05382": {
+    "code": "05382",
+    "name": "CORIGOS",
+    "screenCode": null
+  },
+  "05383": {
+    "code": "05383",
+    "name": "PIÑERES",
+    "screenCode": null
+  },
+  "05384": {
+    "code": "05384",
+    "name": "SANTA ANA-SOTO",
+    "screenCode": null
+  },
+  "05385": {
+    "code": "05385",
+    "name": "CABAÑAQUINTA",
+    "screenCode": null
+  },
+  "05387": {
+    "code": "05387",
+    "name": "LEVINCO",
+    "screenCode": null
+  },
+  "05389": {
+    "code": "05389",
+    "name": "COLLANZO",
+    "screenCode": null
+  },
+  "05401": {
+    "code": "05401",
+    "name": "LA BRAÑA",
+    "screenCode": null
+  },
+  "05403": {
+    "code": "05403",
+    "name": "TREMAÑES-LANGREO",
+    "screenCode": null
+  },
+  "05405": {
+    "code": "05405",
+    "name": "SOTIELLO",
+    "screenCode": null
+  },
+  "05407": {
+    "code": "05407",
+    "name": "PINZALES",
+    "screenCode": null
+  },
+  "05409": {
+    "code": "05409",
+    "name": "AGUDA",
+    "screenCode": null
+  },
+  "05410": {
+    "code": "05410",
+    "name": "XIXÚN",
+    "screenCode": null
+  },
+  "05411": {
+    "code": "05411",
+    "name": "LA FLORIDA",
+    "screenCode": null
+  },
+  "05412": {
+    "code": "05412",
+    "name": "PUENTE BURACOS",
+    "screenCode": null
+  },
+  "05413": {
+    "code": "05413",
+    "name": "NOREÑA",
+    "screenCode": null
+  },
+  "05415": {
+    "code": "05415",
+    "name": "BENDICIÓN",
+    "screenCode": null
+  },
+  "05416": {
+    "code": "05416",
+    "name": "VALDESOTO",
+    "screenCode": null
+  },
+  "05417": {
+    "code": "05417",
+    "name": "CARBAYÍN",
+    "screenCode": null
+  },
+  "05420": {
+    "code": "05420",
+    "name": "CURUXONA",
+    "screenCode": null
+  },
+  "05421": {
+    "code": "05421",
+    "name": "TUILLA",
+    "screenCode": null
+  },
+  "05426": {
+    "code": "05426",
+    "name": "LA FELGUERA N. LANGREO-N. LLANGRÉU",
+    "screenCode": null
+  },
+  "05427": {
+    "code": "05427",
+    "name": "SAMA LOS LLERONES",
+    "screenCode": null
+  },
+  "05431": {
+    "code": "05431",
+    "name": "CIAÑO ESCOBIO",
+    "screenCode": null
+  },
+  "05432": {
+    "code": "05432",
+    "name": "SAN VICENTE",
+    "screenCode": null
+  },
+  "05433": {
+    "code": "05433",
+    "name": "EL ENTREGO LA OSCURA",
+    "screenCode": null
+  },
+  "05435": {
+    "code": "05435",
+    "name": "CARROCERA",
+    "screenCode": null
+  },
+  "05436": {
+    "code": "05436",
+    "name": "SAN MARTÍN",
+    "screenCode": null
+  },
+  "05437": {
+    "code": "05437",
+    "name": "SOTRONDIO",
+    "screenCode": null
+  },
+  "05439": {
+    "code": "05439",
+    "name": "BLIMEA",
+    "screenCode": null
+  },
+  "05441": {
+    "code": "05441",
+    "name": "BARREDOS",
+    "screenCode": null
+  },
+  "05443": {
+    "code": "05443",
+    "name": "LAVIANA",
+    "screenCode": null
+  },
+  "05451": {
+    "code": "05451",
+    "name": "BILBAO LA CONCORDIA",
+    "screenCode": 13200
+  },
+  "05455": {
+    "code": "05455",
+    "name": "BASURTO HOSPITAL",
+    "screenCode": null
+  },
+  "05457": {
+    "code": "05457",
+    "name": "ZORROTZA ZORROZGOITI",
+    "screenCode": null
+  },
+  "05459": {
+    "code": "05459",
+    "name": "SANTA ÁGUEDA",
+    "screenCode": null
+  },
+  "05460": {
+    "code": "05460",
+    "name": "KASTREXANA",
+    "screenCode": null
+  },
+  "05461": {
+    "code": "05461",
+    "name": "IRAUREGUI",
+    "screenCode": null
+  },
+  "05463": {
+    "code": "05463",
+    "name": "ZARAMILLO",
+    "screenCode": null
+  },
+  "05465": {
+    "code": "05465",
+    "name": "LA QUADRA",
+    "screenCode": null
+  },
+  "05467": {
+    "code": "05467",
+    "name": "SODUPE",
+    "screenCode": null
+  },
+  "05469": {
+    "code": "05469",
+    "name": "ARTXUBE",
+    "screenCode": null
+  },
+  "05470": {
+    "code": "05470",
+    "name": "LAMBARRI",
+    "screenCode": null
+  },
+  "05471": {
+    "code": "05471",
+    "name": "GÜEÑES",
+    "screenCode": null
+  },
+  "05473": {
+    "code": "05473",
+    "name": "ARANGUREN",
+    "screenCode": null
+  },
+  "05474": {
+    "code": "05474",
+    "name": "ARANGUREN-APEADERO",
+    "screenCode": null
+  },
+  "05475": {
+    "code": "05475",
+    "name": "ZALLA",
+    "screenCode": null
+  },
+  "05477": {
+    "code": "05477",
+    "name": "COLEGIO",
+    "screenCode": null
+  },
+  "05479": {
+    "code": "05479",
+    "name": "IBARRA",
+    "screenCode": null
+  },
+  "05481": {
+    "code": "05481",
+    "name": "LA HERRERA",
+    "screenCode": null
+  },
+  "05483": {
+    "code": "05483",
+    "name": "BALMASEDA",
+    "screenCode": null
+  },
+  "05484": {
+    "code": "05484",
+    "name": "MIMETIZ",
+    "screenCode": null
+  },
+  "05485": {
+    "code": "05485",
+    "name": "LA CALZADA",
+    "screenCode": null
+  },
+  "05487": {
+    "code": "05487",
+    "name": "TRASLAVIÑA",
+    "screenCode": null
+  },
+  "05489": {
+    "code": "05489",
+    "name": "ARTZENTALES",
+    "screenCode": null
+  },
+  "05493": {
+    "code": "05493",
+    "name": "VILLAVERDE DE TRUCIOS",
+    "screenCode": null
+  },
+  "05497": {
+    "code": "05497",
+    "name": "KARRANTZA",
+    "screenCode": null
+  },
+  "05504": {
+    "code": "05504",
+    "name": "PARQUE PRINCIPADO",
+    "screenCode": null
+  },
+  "05505": {
+    "code": "05505",
+    "name": "COLLOTO",
+    "screenCode": null
+  },
+  "05507": {
+    "code": "05507",
+    "name": "MERES",
+    "screenCode": null
+  },
+  "05508": {
+    "code": "05508",
+    "name": "FONCIELLO",
+    "screenCode": null
+  },
+  "05509": {
+    "code": "05509",
+    "name": "EL BERRÓN",
+    "screenCode": null
+  },
+  "05511": {
+    "code": "05511",
+    "name": "LA CARRERA DE SIERO",
+    "screenCode": null
+  },
+  "05513": {
+    "code": "05513",
+    "name": "POLA DE SIERO",
+    "screenCode": null
+  },
+  "05515": {
+    "code": "05515",
+    "name": "LOS CORROS",
+    "screenCode": null
+  },
+  "05517": {
+    "code": "05517",
+    "name": "LIERES",
+    "screenCode": null
+  },
+  "05519": {
+    "code": "05519",
+    "name": "RIANES",
+    "screenCode": null
+  },
+  "05521": {
+    "code": "05521",
+    "name": "EL REMEDIO",
+    "screenCode": null
+  },
+  "05522": {
+    "code": "05522",
+    "name": "LLAMES",
+    "screenCode": null
+  },
+  "05523": {
+    "code": "05523",
+    "name": "NAVA",
+    "screenCode": null
+  },
+  "05525": {
+    "code": "05525",
+    "name": "FUENTE SANTA DE NAVA",
+    "screenCode": null
+  },
+  "05527": {
+    "code": "05527",
+    "name": "CECEDA",
+    "screenCode": null
+  },
+  "05529": {
+    "code": "05529",
+    "name": "CARANCOS",
+    "screenCode": null
+  },
+  "05531": {
+    "code": "05531",
+    "name": "PINTUELES",
+    "screenCode": null
+  },
+  "05533": {
+    "code": "05533",
+    "name": "INFIESTO",
+    "screenCode": null
+  },
+  "05534": {
+    "code": "05534",
+    "name": "INFIESTO APEADERO",
+    "screenCode": null
+  },
+  "05535": {
+    "code": "05535",
+    "name": "VILLAMAYOR",
+    "screenCode": null
+  },
+  "05537": {
+    "code": "05537",
+    "name": "SEBARES",
+    "screenCode": null
+  },
+  "05539": {
+    "code": "05539",
+    "name": "SOTO DE DUEÑAS",
+    "screenCode": null
+  },
+  "05541": {
+    "code": "05541",
+    "name": "OZANES",
+    "screenCode": null
+  },
+  "05542": {
+    "code": "05542",
+    "name": "POLICLÍNICO",
+    "screenCode": null
+  },
+  "05543": {
+    "code": "05543",
+    "name": "ARRIONDAS",
+    "screenCode": null
+  },
+  "05545": {
+    "code": "05545",
+    "name": "FUENTES",
+    "screenCode": null
+  },
+  "05547": {
+    "code": "05547",
+    "name": "TORAÑO",
+    "screenCode": null
+  },
+  "05549": {
+    "code": "05549",
+    "name": "CUEVAS",
+    "screenCode": null
+  },
+  "05551": {
+    "code": "05551",
+    "name": "LLOVIO",
+    "screenCode": null
+  },
+  "05552": {
+    "code": "05552",
+    "name": "RIBADESELLA PUERTO",
+    "screenCode": null
+  },
+  "05553": {
+    "code": "05553",
+    "name": "RIBADESELLA",
+    "screenCode": null
+  },
+  "05555": {
+    "code": "05555",
+    "name": "CAMANGO",
+    "screenCode": null
+  },
+  "05557": {
+    "code": "05557",
+    "name": "BELMONTE DE PRÍA",
+    "screenCode": null
+  },
+  "05559": {
+    "code": "05559",
+    "name": "NUEVA",
+    "screenCode": null
+  },
+  "05561": {
+    "code": "05561",
+    "name": "VILLAHORMES",
+    "screenCode": null
+  },
+  "05563": {
+    "code": "05563",
+    "name": "POSADA",
+    "screenCode": null
+  },
+  "05565": {
+    "code": "05565",
+    "name": "BALMORI",
+    "screenCode": null
+  },
+  "05567": {
+    "code": "05567",
+    "name": "CELORIO",
+    "screenCode": null
+  },
+  "05569": {
+    "code": "05569",
+    "name": "POO",
+    "screenCode": null
+  },
+  "05571": {
+    "code": "05571",
+    "name": "LLANES",
+    "screenCode": null
+  },
+  "05573": {
+    "code": "05573",
+    "name": "SAN ROQUE DEL ACEBAL",
+    "screenCode": null
+  },
+  "05575": {
+    "code": "05575",
+    "name": "VIDIAGO",
+    "screenCode": null
+  },
+  "05577": {
+    "code": "05577",
+    "name": "PENDUELES",
+    "screenCode": null
+  },
+  "05579": {
+    "code": "05579",
+    "name": "COLOMBRES",
+    "screenCode": null
+  },
+  "05601": {
+    "code": "05601",
+    "name": "SANTANDER RAM",
+    "screenCode": 14223
+  },
+  "05602": {
+    "code": "05602",
+    "name": "VALDECILLA LA MARGA",
+    "screenCode": null
+  },
+  "05603": {
+    "code": "05603",
+    "name": "CAZOÑA",
+    "screenCode": null
+  },
+  "05604": {
+    "code": "05604",
+    "name": "ADARZO",
+    "screenCode": null
+  },
+  "05605": {
+    "code": "05605",
+    "name": "BEZANA",
+    "screenCode": null
+  },
+  "05607": {
+    "code": "05607",
+    "name": "MORTERA",
+    "screenCode": null
+  },
+  "05609": {
+    "code": "05609",
+    "name": "BOO DE PIÉLAGOS",
+    "screenCode": null
+  },
+  "05611": {
+    "code": "05611",
+    "name": "MOGRO",
+    "screenCode": null
+  },
+  "05613": {
+    "code": "05613",
+    "name": "GORNAZO",
+    "screenCode": null
+  },
+  "05615": {
+    "code": "05615",
+    "name": "MAR",
+    "screenCode": null
+  },
+  "05617": {
+    "code": "05617",
+    "name": "REQUEJADA",
+    "screenCode": null
+  },
+  "05619": {
+    "code": "05619",
+    "name": "BARREDA",
+    "screenCode": null
+  },
+  "05620": {
+    "code": "05620",
+    "name": "ALTAMIRA",
+    "screenCode": null
+  },
+  "05621": {
+    "code": "05621",
+    "name": "TORRELAVEGA-CENTRO",
+    "screenCode": null
+  },
+  "05622": {
+    "code": "05622",
+    "name": "GANZO",
+    "screenCode": null
+  },
+  "05623": {
+    "code": "05623",
+    "name": "PUENTE SAN MIGUEL",
+    "screenCode": null
+  },
+  "05625": {
+    "code": "05625",
+    "name": "SANTA ISABEL DE QUIJAS",
+    "screenCode": null
+  },
+  "05627": {
+    "code": "05627",
+    "name": "SAN PEDRO DE RUDAGÜERA",
+    "screenCode": null
+  },
+  "05629": {
+    "code": "05629",
+    "name": "GOLBARDO",
+    "screenCode": null
+  },
+  "05631": {
+    "code": "05631",
+    "name": "CASAR DE PERIEDO",
+    "screenCode": null
+  },
+  "05633": {
+    "code": "05633",
+    "name": "VIRGEN DE LA PEÑA",
+    "screenCode": null
+  },
+  "05635": {
+    "code": "05635",
+    "name": "ONTORIA",
+    "screenCode": null
+  },
+  "05637": {
+    "code": "05637",
+    "name": "CABEZÓN DE LA SAL",
+    "screenCode": null
+  },
+  "05641": {
+    "code": "05641",
+    "name": "TRECEÑO",
+    "screenCode": null
+  },
+  "05643": {
+    "code": "05643",
+    "name": "ROIZ",
+    "screenCode": null
+  },
+  "05644": {
+    "code": "05644",
+    "name": "EL BARCENAL",
+    "screenCode": null
+  },
+  "05645": {
+    "code": "05645",
+    "name": "SAN VICENTE DE LA BARQUERA",
+    "screenCode": null
+  },
+  "05647": {
+    "code": "05647",
+    "name": "PESUÉS",
+    "screenCode": null
+  },
+  "05649": {
+    "code": "05649",
+    "name": "UNQUERA",
+    "screenCode": null
+  },
+  "05651": {
+    "code": "05651",
+    "name": "NUEVA MONTAÑA",
+    "screenCode": null
+  },
+  "05652": {
+    "code": "05652",
+    "name": "VALLE REAL",
+    "screenCode": null
+  },
+  "05655": {
+    "code": "05655",
+    "name": "MALIAÑO VIDRIERA",
+    "screenCode": null
+  },
+  "05657": {
+    "code": "05657",
+    "name": "ASTILLERO",
+    "screenCode": null
+  },
+  "05658": {
+    "code": "05658",
+    "name": "LA CANTÁBRICA",
+    "screenCode": null
+  },
+  "05659": {
+    "code": "05659",
+    "name": "SAN SALVADOR",
+    "screenCode": null
+  },
+  "05661": {
+    "code": "05661",
+    "name": "HERAS",
+    "screenCode": null
+  },
+  "05663": {
+    "code": "05663",
+    "name": "OREJO",
+    "screenCode": null
+  },
+  "05665": {
+    "code": "05665",
+    "name": "SOLARES",
+    "screenCode": null
+  },
+  "05667": {
+    "code": "05667",
+    "name": "CECEÑAS",
+    "screenCode": null
+  },
+  "05669": {
+    "code": "05669",
+    "name": "LA CAVADA",
+    "screenCode": null
+  },
+  "05671": {
+    "code": "05671",
+    "name": "LIÉRGANES",
+    "screenCode": null
+  },
+  "05672": {
+    "code": "05672",
+    "name": "PUENTE AGÜERO",
+    "screenCode": null
+  },
+  "05673": {
+    "code": "05673",
+    "name": "VILLAVERDE DE PONTONES",
+    "screenCode": null
+  },
+  "05675": {
+    "code": "05675",
+    "name": "HOZ DE ANERO",
+    "screenCode": null
+  },
+  "05677": {
+    "code": "05677",
+    "name": "BERANGA",
+    "screenCode": null
+  },
+  "05679": {
+    "code": "05679",
+    "name": "GAMA",
+    "screenCode": null
+  },
+  "05681": {
+    "code": "05681",
+    "name": "CICERO",
+    "screenCode": null
+  },
+  "05683": {
+    "code": "05683",
+    "name": "TRETO",
+    "screenCode": null
+  },
+  "05685": {
+    "code": "05685",
+    "name": "LIMPIAS",
+    "screenCode": null
+  },
+  "05687": {
+    "code": "05687",
+    "name": "MARRÓN",
+    "screenCode": null
+  },
+  "05689": {
+    "code": "05689",
+    "name": "UDALLA",
+    "screenCode": null
+  },
+  "05691": {
+    "code": "05691",
+    "name": "GIBAJA",
+    "screenCode": null
+  },
+  "05721": {
+    "code": "05721",
+    "name": "ARLA BERRÓN",
+    "screenCode": null
+  },
+  "05722": {
+    "code": "05722",
+    "name": "UNGO NAVA",
+    "screenCode": null
+  },
+  "05724": {
+    "code": "05724",
+    "name": "MERCADILLO VILLASANA",
+    "screenCode": null
+  },
+  "05727": {
+    "code": "05727",
+    "name": "CADAGUA",
+    "screenCode": null
+  },
+  "05730": {
+    "code": "05730",
+    "name": "BERCEDO-MONTIJA",
+    "screenCode": null
+  },
+  "05731": {
+    "code": "05731",
+    "name": "QUINTANA DE LOS PRADOS",
+    "screenCode": null
+  },
+  "05732": {
+    "code": "05732",
+    "name": "ESPINOSA DE LOS MONTEROS",
+    "screenCode": null
+  },
+  "05733": {
+    "code": "05733",
+    "name": "REDONDO",
+    "screenCode": null
+  },
+  "05734": {
+    "code": "05734",
+    "name": "SOTOSCUEVA",
+    "screenCode": null
+  },
+  "05735": {
+    "code": "05735",
+    "name": "PEDROSA",
+    "screenCode": null
+  },
+  "05736": {
+    "code": "05736",
+    "name": "DOSANTE CIDAD",
+    "screenCode": null
+  },
+  "05737": {
+    "code": "05737",
+    "name": "ROBREDO AHEDO",
+    "screenCode": null
+  },
+  "05738": {
+    "code": "05738",
+    "name": "SONCILLO",
+    "screenCode": null
+  },
+  "05739": {
+    "code": "05739",
+    "name": "CABAÑAS DE VIRTUS",
+    "screenCode": null
+  },
+  "05740": {
+    "code": "05740",
+    "name": "ARIJA",
+    "screenCode": null
+  },
+  "05741": {
+    "code": "05741",
+    "name": "LLANO",
+    "screenCode": null
+  },
+  "05742": {
+    "code": "05742",
+    "name": "LAS ROZAS DE VALDEARROYO",
+    "screenCode": null
+  },
+  "05743": {
+    "code": "05743",
+    "name": "MONTES CLAROS",
+    "screenCode": null
+  },
+  "05744": {
+    "code": "05744",
+    "name": "LOS CARABEOS",
+    "screenCode": null
+  },
+  "05747": {
+    "code": "05747",
+    "name": "CILLAMAYOR",
+    "screenCode": null
+  },
+  "05748": {
+    "code": "05748",
+    "name": "SALINAS DE PISUERGA",
+    "screenCode": null
+  },
+  "05749": {
+    "code": "05749",
+    "name": "VADO-CERVERA",
+    "screenCode": null
+  },
+  "05750": {
+    "code": "05750",
+    "name": "CASTREJÓN DE LA PEÑA",
+    "screenCode": null
+  },
+  "05751": {
+    "code": "05751",
+    "name": "VILLAVERDE TARILONTE",
+    "screenCode": null
+  },
+  "05752": {
+    "code": "05752",
+    "name": "SANTIBÁÑEZ DE LA PEÑA",
+    "screenCode": null
+  },
+  "05753": {
+    "code": "05753",
+    "name": "GUARDO APEADERO",
+    "screenCode": null
+  },
+  "05754": {
+    "code": "05754",
+    "name": "GUARDO",
+    "screenCode": null
+  },
+  "05755": {
+    "code": "05755",
+    "name": "LA LLAMA DE LA GUZPEÑA",
+    "screenCode": null
+  },
+  "05756": {
+    "code": "05756",
+    "name": "LA ESPINA",
+    "screenCode": null
+  },
+  "05757": {
+    "code": "05757",
+    "name": "VALCUENDE",
+    "screenCode": null
+  },
+  "05758": {
+    "code": "05758",
+    "name": "PUENTE ALMUHEY",
+    "screenCode": null
+  },
+  "05759": {
+    "code": "05759",
+    "name": "PRADO DE LA GUZPEÑA",
+    "screenCode": null
+  },
+  "05760": {
+    "code": "05760",
+    "name": "VALLE DE LAS CASAS",
+    "screenCode": null
+  },
+  "05761": {
+    "code": "05761",
+    "name": "CISTIERNA",
+    "screenCode": null
+  },
+  "05762": {
+    "code": "05762",
+    "name": "YUGUEROS",
+    "screenCode": null
+  },
+  "05763": {
+    "code": "05763",
+    "name": "LA ERCINA",
+    "screenCode": null
+  },
+  "05764": {
+    "code": "05764",
+    "name": "BARRILLOS",
+    "screenCode": null
+  },
+  "05765": {
+    "code": "05765",
+    "name": "LA LOSILLA",
+    "screenCode": null
+  },
+  "05766": {
+    "code": "05766",
+    "name": "BOÑAR",
+    "screenCode": null
+  },
+  "05767": {
+    "code": "05767",
+    "name": "LA VECILLA",
+    "screenCode": null
+  },
+  "05768": {
+    "code": "05768",
+    "name": "AVIADOS",
+    "screenCode": null
+  },
+  "05769": {
+    "code": "05769",
+    "name": "LA VALCUEVA",
+    "screenCode": null
+  },
+  "05770": {
+    "code": "05770",
+    "name": "MATALLANA",
+    "screenCode": null
+  },
+  "05771": {
+    "code": "05771",
+    "name": "PARDAVÉ",
+    "screenCode": null
+  },
+  "05772": {
+    "code": "05772",
+    "name": "PEDRÚN",
+    "screenCode": null
+  },
+  "05773": {
+    "code": "05773",
+    "name": "MANZANEDA",
+    "screenCode": null
+  },
+  "05774": {
+    "code": "05774",
+    "name": "GARRAFE",
+    "screenCode": null
+  },
+  "05775": {
+    "code": "05775",
+    "name": "PALAZUELO",
+    "screenCode": null
+  },
+  "05776": {
+    "code": "05776",
+    "name": "SAN FELIZ",
+    "screenCode": null
+  },
+  "05777": {
+    "code": "05777",
+    "name": "VILLAQUILAMBRE",
+    "screenCode": null
+  },
+  "05778": {
+    "code": "05778",
+    "name": "FEVE-LEÓN",
+    "screenCode": null
+  },
+  "05784": {
+    "code": "05784",
+    "name": "HOSPITALES",
+    "screenCode": null
+  },
+  "05785": {
+    "code": "05785",
+    "name": "VILLASINTA",
+    "screenCode": null
+  },
+  "05786": {
+    "code": "05786",
+    "name": "MATUECA",
+    "screenCode": null
+  },
+  "05787": {
+    "code": "05787",
+    "name": "NAREDO",
+    "screenCode": null
+  },
+  "05788": {
+    "code": "05788",
+    "name": "ROBLES",
+    "screenCode": null
+  },
+  "05789": {
+    "code": "05789",
+    "name": "CAMPOHERMOSO",
+    "screenCode": null
+  },
+  "05790": {
+    "code": "05790",
+    "name": "SORRIBA",
+    "screenCode": null
+  },
+  "05793": {
+    "code": "05793",
+    "name": "LA MATA DE LA RIBA",
+    "screenCode": null
+  },
+  "05794": {
+    "code": "05794",
+    "name": "LA RAYA",
+    "screenCode": null
+  },
+  "05795": {
+    "code": "05795",
+    "name": "OTERO",
+    "screenCode": null
+  },
+  "05796": {
+    "code": "05796",
+    "name": "VILLA ROMANA",
+    "screenCode": null
+  },
+  "05797": {
+    "code": "05797",
+    "name": "VALDEPIÉLAGO",
+    "screenCode": null
+  },
+  "05798": {
+    "code": "05798",
+    "name": "LA DEVESA",
+    "screenCode": null
+  },
+  "05799": {
+    "code": "05799",
+    "name": "CEREZAL DE LA GUZPEÑA",
+    "screenCode": null
+  },
+  "05801": {
+    "code": "05801",
+    "name": "VENTAS/S.MAMÉS",
+    "screenCode": null
+  },
+  "05803": {
+    "code": "05803",
+    "name": "LA ASUNCIÓN UNIVERSIDAD",
+    "screenCode": null
+  },
+  "05805": {
+    "code": "05805",
+    "name": "BARRIO DE LAS OLLAS",
+    "screenCode": null
+  },
+  "05807": {
+    "code": "05807",
+    "name": "VALDERILLA",
+    "screenCode": null
+  },
+  "05951": {
+    "code": "05951",
+    "name": "CARTAGENA-PLAZA BASTARRECHE",
+    "screenCode": null
+  },
+  "05952": {
+    "code": "05952",
+    "name": "HOSPITAL",
+    "screenCode": null
+  },
+  "05953": {
+    "code": "05953",
+    "name": "MEDIA LEGUA",
+    "screenCode": null
+  },
+  "05955": {
+    "code": "05955",
+    "name": "VISTA ALEGRE",
+    "screenCode": null
+  },
+  "05957": {
+    "code": "05957",
+    "name": "ABREVADERO",
+    "screenCode": null
+  },
+  "05959": {
+    "code": "05959",
+    "name": "ALUMBRES",
+    "screenCode": null
+  },
+  "05961": {
+    "code": "05961",
+    "name": "LA ESPERANZA",
+    "screenCode": null
+  },
+  "05963": {
+    "code": "05963",
+    "name": "LA UNIÓN VIEJA",
+    "screenCode": null
+  },
+  "05965": {
+    "code": "05965",
+    "name": "LA UNIÓN",
+    "screenCode": null
+  },
+  "05967": {
+    "code": "05967",
+    "name": "SIERRA MINERA",
+    "screenCode": null
+  },
+  "05969": {
+    "code": "05969",
+    "name": "LLANO DEL BEAL",
+    "screenCode": null
+  },
+  "05971": {
+    "code": "05971",
+    "name": "EL ESTRECHO",
+    "screenCode": null
+  },
+  "05973": {
+    "code": "05973",
+    "name": "NIETOS VIEJOS",
+    "screenCode": null
+  },
+  "05975": {
+    "code": "05975",
+    "name": "LOS NIETOS PESCADERÍA",
+    "screenCode": null
+  },
+  "05977": {
+    "code": "05977",
+    "name": "LOS NIETOS",
+    "screenCode": null
+  },
+  "06001": {
+    "code": "06001",
+    "name": "LIBRILLA",
+    "screenCode": null
+  },
+  "06002": {
+    "code": "06002",
+    "name": "ALHAMA DE MURCIA",
+    "screenCode": null
+  },
+  "06003": {
+    "code": "06003",
+    "name": "TOTANA",
+    "screenCode": null
+  },
+  "06004": {
+    "code": "06004",
+    "name": "LA HOYA",
+    "screenCode": null
+  },
+  "06005": {
+    "code": "06005",
+    "name": "LORCA-SAN DIEGO",
+    "screenCode": null
+  },
+  "06006": {
+    "code": "06006",
+    "name": "LORCA-SUTULLENA",
+    "screenCode": null
+  },
+  "06008": {
+    "code": "06008",
+    "name": "ALCANTARILLA-LOS ROMANOS",
+    "screenCode": null
+  },
+  "07004": {
+    "code": "07004",
+    "name": "ÁGUILAS",
+    "screenCode": null
+  },
+  "08004": {
+    "code": "08004",
+    "name": "SEGOVIA-GUIOMAR",
+    "screenCode": 8004
+  },
+  "08223": {
+    "code": "08223",
+    "name": "VIGO URZAIZ",
+    "screenCode": 8223
+  },
+  "08224": {
+    "code": "08224",
+    "name": "REDONDELA AV",
+    "screenCode": null
+  },
+  "08240": {
+    "code": "08240",
+    "name": "MEDINA DEL CAMPO AV",
+    "screenCode": 10500
+  },
+  "08247": {
+    "code": "08247",
+    "name": "SANABRIA AV",
+    "screenCode": 31200
+  },
+  "08251": {
+    "code": "08251",
+    "name": "A GUDIÑA-PORTA DE GALICIA",
+    "screenCode": null
+  }
+}

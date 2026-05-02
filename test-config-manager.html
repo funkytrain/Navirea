@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Configuration Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #4f46e5;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 10px;
+        }
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #4338ca;
+        }
+        button.danger {
+            background: #dc2626;
+        }
+        button.danger:hover {
+            background: #b91c1c;
+        }
+        .result {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #059669;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .info {
+            color: #0284c7;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .stat-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            color: #0284c7;
+        }
+        .stat-card p {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test - Configuration Manager</h1>
+    <p>Panel de pruebas para el sistema de configuraciones personalizadas</p>
+
+    <!-- Estadísticas -->
+    <div class="test-section">
+        <h2>📊 Estadísticas</h2>
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <h3>Modelos Sistema</h3>
+                <p id="stat-system-models">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Modelos Custom</h3>
+                <p id="stat-custom-models">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Rutas Custom</h3>
+                <p id="stat-custom-routes">-</p>
+            </div>
+            <div class="stat-card">
+                <h3>Paradas Custom</h3>
+                <p id="stat-custom-stops">-</p>
+            </div>
+        </div>
+        <button onclick="updateStats()">🔄 Actualizar</button>
+    </div>
+
+    <!-- Test Generador de IDs -->
+    <div class="test-section">
+        <h2>🔑 Generador de IDs</h2>
+        <button onclick="testIdGenerator()">Generar IDs de prueba</button>
+        <div class="result" id="id-result"></div>
+    </div>
+
+    <!-- Test Validador -->
+    <div class="test-section">
+        <h2>✅ Validador</h2>
+        <button onclick="testValidator()">Ejecutar validaciones</button>
+        <div class="result" id="validator-result"></div>
+    </div>
+
+    <!-- Test Modelo de Tren -->
+    <div class="test-section">
+        <h2>🚂 Modelos de Tren</h2>
+        <button onclick="createTestTrainModel()">Crear modelo de prueba</button>
+        <button onclick="listTrainModels()">Listar modelos</button>
+        <button class="danger" onclick="deleteLastCustomModel()">Eliminar último modelo custom</button>
+        <div class="result" id="train-result"></div>
+    </div>
+
+    <!-- Test Rutas -->
+    <div class="test-section">
+        <h2>🛤️ Rutas</h2>
+        <button onclick="createTestRoute()">Crear ruta de prueba</button>
+        <button onclick="listRoutes()">Listar rutas</button>
+        <button class="danger" onclick="deleteLastCustomRoute()">Eliminar última ruta custom</button>
+        <div class="result" id="route-result"></div>
+    </div>
+
+    <!-- Test Paradas -->
+    <div class="test-section">
+        <h2>🚉 Paradas</h2>
+        <button onclick="createTestStop()">Crear parada de prueba</button>
+        <button onclick="listStops()">Listar paradas</button>
+        <button class="danger" onclick="deleteLastCustomStop()">Eliminar última parada custom</button>
+        <div class="result" id="stop-result"></div>
+    </div>
+
+    <!-- Test Exportación/Importación -->
+    <div class="test-section">
+        <h2>📦 Exportación/Importación</h2>
+        <button onclick="exportConfig()">Exportar configuración</button>
+        <button onclick="testImport()">Test de importación</button>
+        <button class="danger" onclick="clearAllConfig()">⚠️ Borrar todo (custom)</button>
+        <div class="result" id="export-result"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+
+    <script>
+        // Actualizar estadísticas
+        function updateStats() {
+            const userModels = window.ConfigurationManager.getUserTrainModels();
+            const userRoutes = window.ConfigurationManager.getUserRoutes();
+            const userStops = window.ConfigurationManager.getUserStops();
+
+            document.getElementById('stat-system-models').textContent = '5'; // Hardcoded: 470, 449, 463, 464, 465
+            document.getElementById('stat-custom-models').textContent = Object.keys(userModels).length;
+            document.getElementById('stat-custom-routes').textContent = Object.keys(userRoutes).length;
+            document.getElementById('stat-custom-stops').textContent = userStops.length;
+        }
+
+        // Test Generador de IDs
+        function testIdGenerator() {
+            const result = [];
+            result.push('=== GENERADOR DE IDs ===\n');
+
+            const trainId = window.IdGenerator.generateTrainModelId();
+            result.push(`Modelo de tren: ${trainId}`);
+            result.push(`¿Es custom? ${window.IdGenerator.isCustomId(trainId)}\n`);
+
+            const routeId = window.IdGenerator.generateRouteId();
+            result.push(`Número de ruta: ${routeId}`);
+            result.push(`¿Es custom? ${window.IdGenerator.isCustomRoute(routeId)}\n`);
+
+            const customId = window.IdGenerator.generateCustomId('test');
+            result.push(`Custom genérico: ${customId}`);
+
+            document.getElementById('id-result').innerHTML =
+                `<span class="success">✓ IDs generados correctamente</span>\n\n${result.join('\n')}`;
+        }
+
+        // Test Validador
+        function testValidator() {
+            const result = [];
+            result.push('=== VALIDADOR ===\n');
+
+            // Validar modelo válido
+            const validModel = {
+                id: 'test_001',
+                name: 'Tren Test',
+                coaches: [{
+                    id: 'C1',
+                    name: 'Coche 1',
+                    layout: [
+                        {type: 'seats', positions: [[1, 2, null, 3, 4]]},
+                        {type: 'space', height: 80}
+                    ]
+                }]
+            };
+
+            const validation1 = window.ConfigValidator.validateTrainModel(validModel, []);
+            result.push('Modelo válido:');
+            result.push(`  Valid: ${validation1.valid}`);
+            result.push(`  Errors: ${validation1.errors.length}\n`);
+
+            // Validar modelo inválido
+            const invalidModel = {
+                id: '',
+                name: 'AB',
+                coaches: []
+            };
+
+            const validation2 = window.ConfigValidator.validateTrainModel(invalidModel, []);
+            result.push('Modelo inválido:');
+            result.push(`  Valid: ${validation2.valid}`);
+            result.push(`  Errors: ${validation2.errors.length}`);
+            result.push(`  ${validation2.errors.join('\n  ')}`);
+
+            document.getElementById('validator-result').innerHTML =
+                `<span class="info">Validaciones ejecutadas</span>\n\n${result.join('\n')}`;
+        }
+
+        // Crear modelo de prueba
+        function createTestTrainModel() {
+            const id = window.IdGenerator.generateTrainModelId();
+            const testModel = {
+                id: id,
+                name: `Tren Prueba ${new Date().toLocaleTimeString()}`,
+                coaches: [{
+                    id: 'C1',
+                    name: 'Coche 1',
+                    layout: [
+                        {type: 'space', height: 60},
+                        {type: 'seats', positions: [[1, 2, null, 3, 4]]},
+                        {type: 'seats', positions: [[5, 6, null, 7, 8]]},
+                        {type: 'seats', positions: [[9, 10, null, 11, 12]]},
+                        {type: 'space', height: 80},
+                        {type: 'seats', positions: [[13, 14, null, 15, 16]]},
+                        {type: 'seats', positions: [[17, 18, null, 19, 20]]}
+                    ]
+                }]
+            };
+
+            const result = window.ConfigurationManager.saveCustomTrainModel(testModel);
+
+            if (result.success) {
+                document.getElementById('train-result').innerHTML =
+                    `<span class="success">✓ Modelo creado: ${testModel.name}</span>\n\nID: ${id}`;
+                updateStats();
+            } else {
+                document.getElementById('train-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Listar modelos
+        function listTrainModels() {
+            const models = window.ConfigurationManager.getUserTrainModels();
+            const result = [];
+            result.push('=== MODELOS PERSONALIZADOS ===\n');
+
+            const modelList = Object.values(models);
+            if (modelList.length === 0) {
+                result.push('(ninguno)');
+            } else {
+                modelList.forEach((model, idx) => {
+                    result.push(`${idx + 1}. ${model.name} (${model.id})`);
+                    result.push(`   Coches: ${model.coaches.length}`);
+                    result.push(`   Creado: ${new Date(model.createdAt).toLocaleString()}\n`);
+                });
+            }
+
+            document.getElementById('train-result').textContent = result.join('\n');
+        }
+
+        // Eliminar último modelo custom
+        function deleteLastCustomModel() {
+            const models = window.ConfigurationManager.getUserTrainModels();
+            const ids = Object.keys(models);
+
+            if (ids.length === 0) {
+                document.getElementById('train-result').innerHTML =
+                    `<span class="error">No hay modelos custom para eliminar</span>`;
+                return;
+            }
+
+            const lastId = ids[ids.length - 1];
+            const result = window.ConfigurationManager.deleteCustomTrainModel(lastId);
+
+            if (result.success) {
+                document.getElementById('train-result').innerHTML =
+                    `<span class="success">✓ Modelo eliminado: ${lastId}</span>`;
+                updateStats();
+            } else {
+                document.getElementById('train-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Crear ruta de prueba
+        function createTestRoute() {
+            const routeNumber = window.IdGenerator.generateRouteId();
+            const testRoute = {
+                trainNumber: routeNumber,
+                stops: ['Huesca', 'Tardienta', 'Zaragoza Delicias', 'Madrid Chamartín'],
+                destination: 'Madrid Chamartín'
+            };
+
+            const result = window.ConfigurationManager.saveCustomRoute(testRoute);
+
+            if (result.success) {
+                document.getElementById('route-result').innerHTML =
+                    `<span class="success">✓ Ruta creada: ${routeNumber}</span>\n\nParadas: ${testRoute.stops.join(' → ')}`;
+                updateStats();
+            } else {
+                document.getElementById('route-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Listar rutas
+        function listRoutes() {
+            const routes = window.ConfigurationManager.getUserRoutes();
+            const result = [];
+            result.push('=== RUTAS PERSONALIZADAS ===\n');
+
+            const routeList = Object.values(routes);
+            if (routeList.length === 0) {
+                result.push('(ninguna)');
+            } else {
+                routeList.forEach((route, idx) => {
+                    result.push(`${idx + 1}. Tren ${route.trainNumber}`);
+                    result.push(`   ${route.stops[0]} → ${route.destination}`);
+                    result.push(`   ${route.stops.length} paradas\n`);
+                });
+            }
+
+            document.getElementById('route-result').textContent = result.join('\n');
+        }
+
+        // Eliminar última ruta custom
+        function deleteLastCustomRoute() {
+            const routes = window.ConfigurationManager.getUserRoutes();
+            const numbers = Object.keys(routes);
+
+            if (numbers.length === 0) {
+                document.getElementById('route-result').innerHTML =
+                    `<span class="error">No hay rutas custom para eliminar</span>`;
+                return;
+            }
+
+            const lastNumber = numbers[numbers.length - 1];
+            const result = window.ConfigurationManager.deleteCustomRoute(lastNumber);
+
+            if (result.success) {
+                document.getElementById('route-result').innerHTML =
+                    `<span class="success">✓ Ruta eliminada: ${lastNumber}</span>`;
+                updateStats();
+            } else {
+                document.getElementById('route-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Crear parada de prueba
+        function createTestStop() {
+            // Generar abreviatura aleatoria solo con letras
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const randomLetter1 = letters[Math.floor(Math.random() * letters.length)];
+            const randomLetter2 = letters[Math.floor(Math.random() * letters.length)];
+
+            const testStop = {
+                full: `Parada Test ${Math.floor(Math.random() * 1000)}`,
+                abbr: `PT${randomLetter1}${randomLetter2}`
+            };
+
+            const result = window.ConfigurationManager.saveCustomStop(testStop);
+
+            if (result.success) {
+                document.getElementById('stop-result').innerHTML =
+                    `<span class="success">✓ Parada creada: ${testStop.full} (${testStop.abbr})</span>`;
+                updateStats();
+            } else {
+                document.getElementById('stop-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Listar paradas
+        function listStops() {
+            const stops = window.ConfigurationManager.getUserStops();
+            const result = [];
+            result.push('=== PARADAS PERSONALIZADAS ===\n');
+
+            if (stops.length === 0) {
+                result.push('(ninguna)');
+            } else {
+                stops.forEach((stop, idx) => {
+                    result.push(`${idx + 1}. ${stop.full} (${stop.abbr})`);
+                });
+            }
+
+            document.getElementById('stop-result').textContent = result.join('\n');
+        }
+
+        // Eliminar última parada custom
+        function deleteLastCustomStop() {
+            const stops = window.ConfigurationManager.getUserStops();
+
+            if (stops.length === 0) {
+                document.getElementById('stop-result').innerHTML =
+                    `<span class="error">No hay paradas custom para eliminar</span>`;
+                return;
+            }
+
+            const lastStop = stops[stops.length - 1];
+            const result = window.ConfigurationManager.deleteCustomStop(lastStop.abbr);
+
+            if (result.success) {
+                document.getElementById('stop-result').innerHTML =
+                    `<span class="success">✓ Parada eliminada: ${lastStop.full}</span>`;
+                updateStats();
+            } else {
+                document.getElementById('stop-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Exportar configuración
+        function exportConfig() {
+            const config = window.ConfigurationManager.exportConfiguration();
+            const json = JSON.stringify(config, null, 2);
+
+            document.getElementById('export-result').textContent = json;
+        }
+
+        // Test de importación
+        function testImport() {
+            const testConfig = {
+                version: '1.0',
+                type: 'train-config-export',
+                timestamp: new Date().toISOString(),
+                data: {
+                    trainModels: [{
+                        id: 'imported_001',
+                        name: 'Tren Importado',
+                        custom: true,
+                        coaches: [{
+                            id: 'C1',
+                            name: 'Coche 1',
+                            layout: [
+                                {type: 'seats', positions: [[1, 2, null, 3, 4]]}
+                            ]
+                        }]
+                    }],
+                    routes: [{
+                        trainNumber: '99999',
+                        stops: ['Estación A', 'Estación B'],
+                        destination: 'Estación B',
+                        custom: true
+                    }],
+                    stops: []
+                }
+            };
+
+            const result = window.ConfigurationManager.importConfiguration(testConfig, true);
+
+            if (result.success) {
+                document.getElementById('export-result').innerHTML =
+                    `<span class="success">✓ Importación exitosa</span>\n\nModelos: ${result.imported.trainModels}\nRutas: ${result.imported.routes}\nParadas: ${result.imported.stops}`;
+                updateStats();
+            } else {
+                document.getElementById('export-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Borrar todas las configuraciones custom
+        function clearAllConfig() {
+            if (!confirm('⚠️ ¿Estás seguro? Esto borrará TODAS las configuraciones personalizadas.')) {
+                return;
+            }
+
+            const result = window.ConfigurationManager.clearAllCustomConfigurations();
+
+            if (result.success) {
+                document.getElementById('export-result').innerHTML =
+                    `<span class="success">✓ Configuraciones borradas</span>`;
+                updateStats();
+            } else {
+                document.getElementById('export-result').innerHTML =
+                    `<span class="error">✗ Error: ${result.error}</span>`;
+            }
+        }
+
+        // Cargar estadísticas al inicio
+        window.addEventListener('load', updateStats);
+    </script>
+</body>
+</html>

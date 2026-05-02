@@ -1,0 +1,81 @@
+{
+  "id": "463",
+  "name": "Tren 463",
+  "coaches": [
+    {
+      "id": "C1",
+      "name": "Coche 1",
+      "layout": [
+        {"type": "seats", "positions": [[1, 2, null, 3, 4]]},
+        {"type": "seats", "positions": [[5, 6, null, 7, 8]]},
+        {"type": "seats", "positions": [[9, 10, null, 11, 12]]},
+        {"type": "seats", "positions": [[13, 14, null, 15, 16]]},
+        {"type": "seats", "positions": [[17, 18, null, 19, 20]]},
+        {"type": "seats", "positions": [[21, 22, null, 23, 24]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [[25, 26, null, 27, 28]]},
+        {"type": "seats", "positions": [[29, 30, null, 31, 32]]},
+        {"type": "seats", "positions": [[33, 34, null, 35, 36]]},
+        {"type": "seats", "positions": [[37, 38, null, 39, 40]]},
+        {"type": "seats", "positions": [[41, 42, null, 43, 44]]},
+        {"type": "seats", "positions": [[45, 46, null, 47, 48]]},
+        {"type": "seats", "positions": [[49, 50, null, 51, 52]]},
+        {"type": "seats", "positions": [[53, 54, null, 55, 56]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [[57, 58, null, 59, 60]]},
+        {"type": "seats", "positions": [[61, 62, null, 63, 64]]},
+        {"type": "seats", "positions": [[65, 66, null, 67, 68]]},
+        {"type": "seats", "positions": [[69, null, null, null, 70]]}
+      ]
+    },
+    {
+      "id": "C2",
+      "name": "Coche 2",
+      "layout": [
+        {"type": "seats", "positions": [[71, null, null, null, 72]]},
+        {"type": "seats", "positions": [[73, 74, null, 75, 76]]},
+        {"type": "seats", "positions": [[77, 78, null, 79, 80]]},
+        {"type": "seats", "positions": [[81, 82, null, 83, 84]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [[85, null, null, 86, 87]]},
+        {"type": "seats", "positions": [[88, null, null, null, null]]},
+        {"type": "seats", "positions": [[89, null, null, 90, 91]]},
+        {"type": "seats", "positions": [[92, 93, null, null, 95]]},
+        {"type": "seats", "positions": [[null, null, null, null, 96]]},
+        {"type": "pmr-bathroom", "height": 160},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [["PMR-97", null, null, null, "PMR-98"]]},
+        {"type": "seats", "positions": [[99, 100, null, 101, 102]]},
+        {"type": "space", "height": 40},
+        {"type": "seats", "positions": [[103, null, null, null, 104]]},
+        {"type": "seats", "positions": [[105, null, null, null, 106]]}
+      ]
+    },
+    {
+      "id": "C3",
+      "name": "Coche 3",
+      "layout": [
+        {"type": "seats", "positions": [[107, null, null, null, 108]]},
+        {"type": "seats", "positions": [[109, 110, null, 111, 112]]},
+        {"type": "seats", "positions": [[113, 114, null, 115, 116]]},
+        {"type": "seats", "positions": [[117, 118, null, 119, 120]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [[121, 122, null, 123, 124]]},
+        {"type": "seats", "positions": [[125, 126, null, 127, 128]]},
+        {"type": "seats", "positions": [[129, 130, null, 131, 132]]},
+        {"type": "seats", "positions": [[133, 134, null, 135, 136]]},
+        {"type": "seats", "positions": [[137, 138, null, 139, 140]]},
+        {"type": "seats", "positions": [[141, 142, null, 143, 144]]},
+        {"type": "seats", "positions": [[145, 146, null, 147, 148]]},
+        {"type": "seats", "positions": [[149, 150, null, 151, 152]]},
+        {"type": "space", "height": 80},
+        {"type": "seats", "positions": [[153, 154, null, 155, 156]]},
+        {"type": "seats", "positions": [[157, 158, null, 159, 160]]},
+        {"type": "seats", "positions": [[161, 162, null, 163, 164]]},
+        {"type": "seats", "positions": [[165, 166, null, 167, 168]]},
+        {"type": "seats", "positions": [[169, 170, null, 171, 172]]},
+        {"type": "seats", "positions": [[173, 174, null, 175, 176]]}
+      ]
+    }
+  ]
+}

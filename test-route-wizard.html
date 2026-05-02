@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Route Wizard</title>
+
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="css/components/wizard.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .test-header h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .test-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .test-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .test-card h2 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-card p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .test-btn {
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+
+        .test-btn.primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .test-btn.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .test-btn.warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .test-btn:active {
+            transform: translateY(0);
+        }
+
+        .storage-info {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .storage-info h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .storage-section {
+            margin-bottom: 24px;
+        }
+
+        .storage-section h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        .route-item strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .route-item .stops {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .route-item .metadata {
+            color: #95a5a6;
+            font-size: 12px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+
+        .badge.custom {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        .badge.system {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🚂 Route Wizard - Testing</h1>
+            <p>Prueba el asistente de creación de rutas personalizadas</p>
+        </div>
+
+        <div class="test-grid">
+            <div class="test-card">
+                <h2>✨ Crear Nueva Ruta</h2>
+                <p>Abre el wizard para crear una ruta personalizada desde cero con paradas y destino.</p>
+                <button class="test-btn primary" onclick="testCreateRoute()">
+                    Crear Ruta Nueva
+                </button>
+            </div>
+
+            <div class="test-card">
+                <h2>📝 Editar Ruta Existente</h2>
+                <p>Prueba la edición de una ruta ya guardada. Primero crea una ruta si no existe.</p>
+                <button class="test-btn warning" onclick="testEditRoute()">
+                    Editar Primera Ruta
+                </button>
+            </div>
+
+            <div class="test-card">
+                <h2>🔄 Recargar Vista</h2>
+                <p>Recarga la vista del localStorage para ver los cambios actualizados.</p>
+                <button class="test-btn success" onclick="loadStorageInfo()">
+                    Refrescar Datos
+                </button>
+            </div>
+        </div>
+
+        <div class="storage-info">
+            <h2>💾 Rutas en LocalStorage</h2>
+            <div id="storage-content">
+                <div class="empty-state">Cargando datos...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de la aplicación -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/RouteWizard.js"></script>
+
+    <script>
+        // Mock de datos de la aplicación
+        window.appData = {
+            stops: [
+                { "full": "Zaragoza Miraflores", "abbr": "ZMI" },
+                { "full": "Zaragoza Goya", "abbr": "ZGO" },
+                { "full": "Zaragoza Portillo", "abbr": "ZPO" },
+                { "full": "Zaragoza Delicias", "abbr": "ZDE" },
+                { "full": "Utebo", "abbr": "UTE" },
+                { "full": "Casetas", "abbr": "CAS" },
+                { "full": "Alagón", "abbr": "ALA" },
+                { "full": "Cabañas", "abbr": "CAB" },
+                { "full": "Pedrola", "abbr": "PED" },
+                { "full": "Tudela", "abbr": "TUD" },
+                { "full": "Castejón", "abbr": "CTJ" },
+                { "full": "Pamplona Iruña", "abbr": "PAM" },
+                { "full": "Vitoria Gasteiz", "abbr": "VIT" },
+                { "full": "Logroño", "abbr": "LOG" },
+                { "full": "Huesca", "abbr": "HUE" }
+            ],
+            trainRoutes: {
+                "18048": ["Castejón", "Tudela", "Zaragoza Delicias", "Zaragoza Miraflores"],
+                "18023": ["Zaragoza Miraflores", "Zaragoza Delicias", "Tudela", "Pamplona Iruña"]
+            }
+        };
+
+        // ====================================================================
+        // TEST: CREAR RUTA NUEVA
+        // ====================================================================
+        function testCreateRoute() {
+            console.log('[TEST] Abriendo wizard para crear nueva ruta');
+
+            window.RouteWizard.open({
+                mode: 'create',
+                availableStops: window.appData.stops,
+                onComplete: (data) => {
+                    console.log('✅ Ruta creada:', data);
+                    alert(`Ruta "${data.trainNumber}" creada correctamente`);
+                    loadStorageInfo();
+                },
+                onCancel: () => {
+                    console.log('❌ Creación cancelada');
+                }
+            });
+        }
+
+        // ====================================================================
+        // TEST: EDITAR RUTA EXISTENTE
+        // ====================================================================
+        function testEditRoute() {
+            const routes = window.ConfigurationManager.getUserRoutes();
+            const routeKeys = Object.keys(routes);
+
+            if (routeKeys.length === 0) {
+                alert('No hay rutas personalizadas para editar. Crea una primero.');
+                return;
+            }
+
+            const firstRouteKey = routeKeys[0];
+            const route = routes[firstRouteKey];
+
+            console.log('[TEST] Abriendo wizard para editar ruta:', route);
+
+            window.RouteWizard.open({
+                mode: 'edit',
+                route: route,
+                availableStops: window.appData.stops,
+                onComplete: (data) => {
+                    console.log('✅ Ruta editada:', data);
+                    alert(`Ruta "${data.trainNumber}" editada correctamente`);
+                    loadStorageInfo();
+                },
+                onCancel: () => {
+                    console.log('❌ Edición cancelada');
+                }
+            });
+        }
+
+        // ====================================================================
+        // CARGAR INFORMACIÓN DEL LOCALSTORAGE
+        // ====================================================================
+        function loadStorageInfo() {
+            const container = document.getElementById('storage-content');
+            const routes = window.ConfigurationManager.getUserRoutes();
+            const stops = window.ConfigurationManager.getUserStops();
+
+            if (Object.keys(routes).length === 0 && stops.length === 0) {
+                container.innerHTML = '<div class="empty-state">No hay rutas ni paradas personalizadas guardadas</div>';
+                return;
+            }
+
+            let html = '';
+
+            // Mostrar rutas
+            if (Object.keys(routes).length > 0) {
+                html += '<div class="storage-section">';
+                html += '<h3>🚂 Rutas Personalizadas (' + Object.keys(routes).length + ')</h3>';
+
+                Object.values(routes).forEach(route => {
+                    const createdDate = new Date(route.createdAt).toLocaleString('es-ES');
+                    const updatedDate = route.updatedAt ? new Date(route.updatedAt).toLocaleString('es-ES') : null;
+
+                    html += '<div class="route-item">';
+                    html += '<strong>Tren ' + route.trainNumber + '<span class="badge custom">CUSTOM</span></strong>';
+                    html += '<div class="stops">';
+                    html += '<strong>Paradas:</strong> ' + route.stops.join(' → ');
+                    html += '</div>';
+                    html += '<div class="stops">';
+                    html += '<strong>Destino:</strong> ' + route.destination;
+                    html += '</div>';
+                    html += '<div class="metadata">';
+                    html += 'Creado: ' + createdDate;
+                    if (updatedDate) {
+                        html += ' | Actualizado: ' + updatedDate;
+                    }
+                    html += '</div>';
+                    html += '</div>';
+                });
+
+                html += '</div>';
+            }
+
+            // Mostrar paradas personalizadas
+            if (stops.length > 0) {
+                html += '<div class="storage-section">';
+                html += '<h3>🚉 Paradas Personalizadas (' + stops.length + ')</h3>';
+
+                stops.forEach(stop => {
+                    html += '<div class="route-item">';
+                    html += '<strong>' + stop.full + ' <span class="badge custom">' + stop.abbr + '</span></strong>';
+                    html += '</div>';
+                });
+
+                html += '</div>';
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ====================================================================
+        // INICIALIZACIÓN
+        // ====================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[TEST] Página cargada');
+            console.log('[TEST] RouteWizard disponible:', typeof window.RouteWizard);
+            console.log('[TEST] WizardCore disponible:', typeof window.WizardCore);
+            console.log('[TEST] ConfigurationManager disponible:', typeof window.ConfigurationManager);
+
+            loadStorageInfo();
+        });
+    </script>
+</body>
+</html>

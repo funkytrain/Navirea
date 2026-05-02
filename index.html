@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; manifest-src 'self';">
+    <title>Control de Billetes</title>
+    <!-- CSS Variables (debe cargarse primero) -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Component styles -->
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+    <link rel="stylesheet" href="css/components/wizard.css">
+    <link rel="stylesheet" href="css/components/config-manager.css">
+    <link rel="stylesheet" href="css/components/config-sharing.css">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="stylesheet" href="css/splash.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Navirea">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Error al registrar Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!-- SPLASH (inserta antes de #app) -->
+    <div id="splash" class="splash">
+        <img src="icons/navirea-maskable.png" alt="Navirea" class="splash-logo" />
+        <h1 class="splash-title">NAVIREA</h1>
+        <p class="splash-tag">Visualiza. Gestiona. Avanza.</p>
+    </div>
+
+    <div id="app"></div>
+
+    <script src="js/splash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+            integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"
+            integrity="sha384-c9d8RFSL+u3exBOJ4Yp3HUJXS4znl9f+z66d1y54ig+ea249SpqR+w1wyvXz/lk+"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"
+            integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7"
+            crossorigin="anonymous"></script>
+
+    <!-- Load configuration and data utilities -->
+    <script type="module" src="src/config/constants.js"></script>
+    <script src="src/config/ui-constants.js"></script>
+
+    <!-- Configuration management (load before data-loader) -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+
+    <script src="src/utils/data-loader.js"></script>
+    <script src="src/utils/dom.js"></script>
+    <script src="src/utils/modal-system.js"></script>
+    <script src="src/utils/modal-helpers.js"></script>
+    <script src="src/utils/markdown.js"></script>
+    <script src="src/utils/templates.js"></script>
+    <script src="src/services/StorageService.js"></script>
+
+    <!-- Feature modules -->
+    <script type="module" src="src/features/station-screens.js"></script>
+    <script type="module" src="src/features/qr-sharing.js"></script>
+    <script type="module" src="src/features/config-sharing.js"></script>
+    <script type="module" src="src/features/incidents.js"></script>
+    <script type="module" src="src/features/filters.js"></script>
+
+    <!-- Renderer modules -->
+    <script src="src/renderers/seats-renderer.js"></script>
+
+    <!-- Editor components -->
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <!-- Templates -->
+    <script src="src/utils/train-templates.js"></script>
+
+    <!-- Wizard components -->
+    <script src="src/wizards/WizardCore.js"></script>
+    <script src="src/wizards/TrainModelWizard.js"></script>
+    <script src="src/wizards/RouteWizard.js"></script>
+
+    <!-- Configuration Manager UI -->
+    <script src="src/components/ConfigurationManagerUI.js"></script>
+
+    <!-- Main application script -->
+    <script src="script.js"></script>
+</body>
+
+</html>

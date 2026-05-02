@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple - Parada Importante</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid var(--color-gray-300);
+            border-radius: 8px;
+            background: white;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: var(--color-primary);
+        }
+        .test-button {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            opacity: 0.9;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .mock-seat {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--color-gray-400);
+            border-radius: 8px;
+            margin: 10px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 60px;
+            font-weight: bold;
+            background: white;
+            user-select: none;
+            font-size: 20px;
+        }
+        .mock-seat.occupied {
+            background: #22c55e;
+            color: white;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Simple - Sistema de Parada Importante</h1>
+
+    <div class="info-box">
+        <strong>ℹ️ Instrucciones:</strong> Este test carga solo las funciones necesarias para probar la funcionalidad de parada importante.
+    </div>
+
+    <div class="test-section">
+        <h2>Estado Actual</h2>
+        <p><strong>Tren:</strong> <span id="trainInfo">463</span></p>
+        <p><strong>Número de tren:</strong> <span id="trainNumberInfo">18021</span></p>
+        <p><strong>Parada importante:</strong> <span id="importantStopInfo" style="color: #f59e0b; font-weight: bold;">No configurada</span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Configurar Parada Importante</h2>
+        <p>Abre el selector y elige una parada de la lista</p>
+        <button class="test-button" onclick="testOpenSelector()">
+            ⭐ Abrir Selector de Parada Importante
+        </button>
+        <div id="status1" class="status info">
+            Esperando acción...
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Menú Flotante (Long Press)</h2>
+        <p><strong>Instrucción:</strong> Mantén presionado el asiento durante ~500ms</p>
+        <div class="mock-seat" id="testSeat">42</div>
+        <div id="status2" class="status info">
+            Esperando long press...
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Verificar Funcionalidad</h2>
+        <p>Prueba las diferentes opciones del menú flotante</p>
+        <button class="test-button" onclick="testShowMenu()">
+            🔍 Mostrar Menú Manualmente
+        </button>
+        <button class="test-button" onclick="clearTestSeat()">
+            🗑️ Limpiar Asiento
+        </button>
+        <div id="status3" class="status info">
+            Listo para pruebas
+        </div>
+    </div>
+
+    <!-- COPIAR SOLO LAS FUNCIONES NECESARIAS DE script.js -->
+    <script>
+        // ============= ESTADO Y DATOS =============
+        let state = {
+            selectedTrain: "463",
+            trainNumber: "18021",
+            importantStop: null,
+            seatData: {}
+        };
+
+        const trainRoutes = {
+            "18021": [
+                "Zaragoza Miraflores",
+                "Zaragoza Goya",
+                "Zaragoza Portillo",
+                "Zaragoza Delicias",
+                "Tudela",
+                "Castejón",
+                "Pamplona Iruña",
+                "Vitoria Gasteiz",
+                "Miranda"
+            ]
+        };
+
+        const stops = [
+            { full: "Zaragoza Miraflores", abbr: "ZMI" },
+            { full: "Zaragoza Goya", abbr: "ZGO" },
+            { full: "Tudela", abbr: "TUD" },
+            { full: "Castejón", abbr: "CAS" },
+            { full: "Pamplona Iruña", abbr: "PAM" },
+            { full: "Vitoria Gasteiz", abbr: "VIT" },
+            { full: "Miranda", abbr: "MIR" }
+        ];
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let lastCopiedSeatData = null;
+
+        // ============= FUNCIONES AUXILIARES =============
+        function getCurrentRoute() {
+            return trainRoutes[state.trainNumber] || [];
+        }
+
+        function getSeatKey(coach, num) {
+            return `${coach}-${num}`;
+        }
+
+        function saveData() {
+            console.log('💾 Datos guardados:', state);
+            if (state.importantStop) {
+                localStorage.setItem(`train${state.trainNumber}ImportantStop`, state.importantStop);
+            } else {
+                localStorage.removeItem(`train${state.trainNumber}ImportantStop`);
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('importantStopInfo').textContent = state.importantStop || 'No configurada';
+            document.getElementById('importantStopInfo').style.color = state.importantStop ? '#059669' : '#f59e0b';
+        }
+
+        // ============= COPIAR FUNCIONES DE script.js =============
+
+        // Función openImportantStopSelector
+        function openImportantStopSelector() {
+            const route = getCurrentRoute();
+            if (!route || route.length === 0) {
+                alert('No hay un trayecto configurado para este tren');
+                return;
+            }
+
+            const modalHTML = `
+                <div class="modal-overlay" onclick="closeImportantStopSelector(event)">
+                    <div class="modal important-stop-modal" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <h2>⭐ Configurar Parada Importante</h2>
+                            <button class="modal-close-btn" onclick="closeImportantStopSelector()">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="margin-bottom: 1rem; opacity: 0.8;">
+                                Selecciona una parada importante para marcado rápido con long press.
+                            </p>
+                            <div class="important-stop-list">
+                                <button class="stop-option ${!state.importantStop ? 'active' : ''}"
+                                        onclick="setImportantStop(null)">
+                                    <span style="opacity: 0.6;">Sin parada importante</span>
+                                </button>
+                                ${route.map(stop => `
+                                    <button class="stop-option ${state.importantStop === stop ? 'active' : ''}"
+                                            onclick="setImportantStop('${stop}')">
+                                        ${stop}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function setImportantStop(stopName) {
+            state.importantStop = stopName;
+            saveData();
+            closeImportantStopSelector();
+            updateUI();
+            document.getElementById('status1').className = 'status success';
+            document.getElementById('status1').textContent =
+                `✅ Parada importante configurada: ${stopName || 'ninguna'}`;
+        }
+
+        function closeImportantStopSelector(event) {
+            if (!event || event.target === event.currentTarget || event.target.classList.contains('modal-close-btn')) {
+                const modal = document.querySelector('.important-stop-modal');
+                if (modal) {
+                    modal.closest('.modal-overlay').remove();
+                }
+            }
+        }
+
+        // Función showQuickStopMenu
+        function showQuickStopMenu(coach, num) {
+            let clientX = touchStartX || 200;
+            let clientY = touchStartY || 200;
+
+            const route = getCurrentRoute();
+            if (!route || route.length === 0) {
+                return;
+            }
+
+            let finalStopName = 'Vitoria Gasteiz'; // Ajustado para 18021
+
+            const menuHTML = `
+                <div class="quick-stop-menu-overlay" onclick="closeQuickStopMenu()">
+                    <div class="quick-stop-menu" style="left: ${clientX}px; top: ${clientY}px;" onclick="event.stopPropagation();">
+                        <button class="quick-stop-option final-stop" onclick="assignQuickStop('${coach}', '${num}', '${finalStopName}', false)">
+                            <span class="stop-icon">🏁</span>
+                            <span class="stop-name">${finalStopName}</span>
+                        </button>
+                        ${state.importantStop ? `
+                            <button class="quick-stop-option important-stop" onclick="assignQuickStop('${coach}', '${num}', '${state.importantStop}', false)">
+                                <span class="stop-icon">⭐</span>
+                                <span class="stop-name">${state.importantStop}</span>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            const existingMenu = document.querySelector('.quick-stop-menu-overlay');
+            if (existingMenu) {
+                existingMenu.remove();
+            }
+
+            document.body.insertAdjacentHTML('beforeend', menuHTML);
+
+            requestAnimationFrame(() => {
+                const menu = document.querySelector('.quick-stop-menu');
+                if (menu) {
+                    const rect = menu.getBoundingClientRect();
+                    const windowWidth = window.innerWidth;
+                    const windowHeight = window.innerHeight;
+
+                    let adjustedLeft = clientX;
+                    let adjustedTop = clientY;
+
+                    if (rect.right > windowWidth) {
+                        adjustedLeft = windowWidth - rect.width - 10;
+                    }
+                    if (adjustedLeft < 10) {
+                        adjustedLeft = 10;
+                    }
+
+                    if (rect.bottom > windowHeight) {
+                        adjustedTop = windowHeight - rect.height - 10;
+                    }
+                    if (adjustedTop < 10) {
+                        adjustedTop = 10;
+                    }
+
+                    menu.style.left = `${adjustedLeft}px`;
+                    menu.style.top = `${adjustedTop}px`;
+                }
+            });
+        }
+
+        function assignQuickStop(coach, num, stopName, isCustomRoute) {
+            const stopObj = stops.find(s => s.full === stopName);
+
+            if (stopObj) {
+                const key = getSeatKey(coach, num);
+
+                if (!state.seatData[key]) {
+                    state.seatData[key] = {};
+                }
+
+                state.seatData[key].stop = stopObj;
+                lastCopiedSeatData = {
+                    stop: stopObj,
+                    enlace: false,
+                    seguir: false,
+                    comentarioFlag: false,
+                    comentario: ""
+                };
+
+                saveData();
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(30);
+                }
+
+                closeQuickStopMenu();
+
+                // Marcar asiento visualmente
+                document.getElementById('testSeat').classList.add('occupied');
+                document.getElementById('testSeat').title = `Parada: ${stopName}`;
+
+                document.getElementById('status2').className = 'status success';
+                document.getElementById('status2').textContent =
+                    `✅ Asiento ${num} marcado con parada: ${stopName}`;
+            }
+        }
+
+        function closeQuickStopMenu() {
+            const menu = document.querySelector('.quick-stop-menu-overlay');
+            if (menu) {
+                menu.remove();
+            }
+        }
+
+        // ============= FUNCIONES DE TEST =============
+        function testOpenSelector() {
+            openImportantStopSelector();
+            document.getElementById('status1').className = 'status info';
+            document.getElementById('status1').textContent = 'Modal abierto. Selecciona una parada.';
+        }
+
+        function testShowMenu() {
+            touchStartX = 200;
+            touchStartY = 300;
+            showQuickStopMenu('C1', '42');
+            document.getElementById('status3').className = 'status success';
+            document.getElementById('status3').textContent = '✅ Menú flotante mostrado';
+        }
+
+        function clearTestSeat() {
+            const key = getSeatKey('C1', '42');
+            delete state.seatData[key];
+            saveData();
+            document.getElementById('testSeat').classList.remove('occupied');
+            document.getElementById('testSeat').title = '';
+            document.getElementById('status3').className = 'status info';
+            document.getElementById('status3').textContent = 'Asiento limpiado';
+        }
+
+        // ============= LONG PRESS EN ASIENTO =============
+        let testHoldTimer = null;
+        let testHoldTriggered = false;
+
+        document.getElementById('testSeat').addEventListener('mousedown', function(event) {
+            event.preventDefault();
+            testHoldTriggered = false;
+            clearTimeout(testHoldTimer);
+
+            touchStartX = event.clientX;
+            touchStartY = event.clientY;
+
+            testHoldTimer = setTimeout(() => {
+                testHoldTriggered = true;
+                if (navigator.vibrate) navigator.vibrate(40);
+
+                const key = getSeatKey('C1', '42');
+                const hasStop = state.seatData[key] && state.seatData[key].stop;
+
+                if (hasStop) {
+                    // Borrar
+                    delete state.seatData[key];
+                    saveData();
+                    document.getElementById('testSeat').classList.remove('occupied');
+                    document.getElementById('testSeat').title = '';
+                    document.getElementById('status2').className = 'status info';
+                    document.getElementById('status2').textContent = '🗑️ Asiento borrado con long press';
+                } else {
+                    // Mostrar menú
+                    showQuickStopMenu('C1', '42');
+                    document.getElementById('status2').className = 'status success';
+                    document.getElementById('status2').textContent = '✅ Menú flotante mostrado. Selecciona una opción.';
+                }
+            }, 500);
+        });
+
+        document.getElementById('testSeat').addEventListener('mouseup', function(event) {
+            clearTimeout(testHoldTimer);
+            if (!testHoldTriggered) {
+                document.getElementById('status2').className = 'status info';
+                document.getElementById('status2').textContent = 'ℹ️ Long press cancelado. Mantén presionado más tiempo.';
+            }
+        });
+
+        // ============= INICIALIZACIÓN =============
+        console.log('🧪 Test inicializado');
+        console.log('State:', state);
+        console.log('Rutas:', trainRoutes);
+        updateUI();
+
+        // Cargar parada importante guardada
+        const saved = localStorage.getItem(`train${state.trainNumber}ImportantStop`);
+        if (saved) {
+            state.importantStop = saved;
+            updateUI();
+        }
+    </script>
+</body>
+</html>

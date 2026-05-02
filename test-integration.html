@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Integración Fase 7</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/components/config-manager.css">
+    <style>
+        body {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .test-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .test-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .test-btn {
+            padding: 10px 20px;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .test-btn:hover {
+            background-color: #4338ca;
+        }
+        .test-btn.secondary {
+            background-color: #10b981;
+        }
+        .test-btn.secondary:hover {
+            background-color: #059669;
+        }
+        .test-result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 4px;
+        }
+        .test-result.success {
+            background-color: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        .test-result.error {
+            background-color: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .selector-preview {
+            margin-top: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 10px;
+            background-color: #fafafa;
+        }
+        .badge-example {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            background-color: #10b981;
+            color: white;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="margin-bottom: 30px;">🧪 Test de Integración - Fase 7</h1>
+
+    <div class="test-section" style="background-color: #fffbeb; border-left: 4px solid #f59e0b;">
+        <h3 style="margin-top: 0; color: #92400e;">ℹ️ Información Importante</h3>
+        <p style="margin-bottom: 0; color: #78350f;">
+            Este archivo de test puede abrirse directamente en el navegador (protocolo <code>file://</code>).
+            Los tests funcionarán correctamente para verificar las <strong>configuraciones personalizadas</strong> almacenadas en localStorage.
+            <br><br>
+            <strong>Nota:</strong> Para probar con configuraciones del sistema (trenes 470, 449, etc.),
+            debes ejecutar la aplicación desde un servidor HTTP debido a restricciones de seguridad CORS.
+            <br><br>
+            <strong>Servidor rápido:</strong> <code>python -m http.server 8000</code> o usar Live Server en VS Code.
+        </p>
+    </div>
+
+    <!-- Test 1: Verificar carga de configuraciones -->
+    <div class="test-section">
+        <div class="test-title">1. Verificar Carga de Configuraciones</div>
+        <div class="test-description">
+            Verifica que el DataLoader fusione correctamente las configuraciones del sistema y personalizadas.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" onclick="testLoadConfigurations()">Ejecutar Test</button>
+        </div>
+        <div id="result-1"></div>
+    </div>
+
+    <!-- Test 2: Crear configuración personalizada de prueba -->
+    <div class="test-section">
+        <div class="test-title">2. Crear Configuraciones de Prueba</div>
+        <div class="test-description">
+            Crea un modelo de tren y una ruta personalizados para testing.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" onclick="createTestTrain()">Crear Tren de Prueba</button>
+            <button class="test-btn secondary" onclick="createTestRoute()">Crear Ruta de Prueba</button>
+        </div>
+        <div id="result-2"></div>
+    </div>
+
+    <!-- Test 3: Verificar badges en selector -->
+    <div class="test-section">
+        <div class="test-title">3. Verificar Badges Visuales</div>
+        <div class="test-description">
+            Verifica que los badges se muestren correctamente en los selectores.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" onclick="testBadges()">Verificar Badges</button>
+        </div>
+        <div id="result-3"></div>
+        <div class="selector-preview">
+            <strong>Ejemplos de badges:</strong><br>
+            <span class="badge-example">PERSONALIZADO</span>
+            <span class="badge-example" style="font-size: 0.6rem;">RUTA CUSTOM</span>
+            <span class="badge-example">CUSTOM</span>
+        </div>
+    </div>
+
+    <!-- Test 4: Verificar botón de gestión -->
+    <div class="test-section">
+        <div class="test-title">4. Verificar Botón de Gestión</div>
+        <div class="test-description">
+            Verifica que el botón "Gestionar Configuraciones" esté presente y funcional.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" onclick="testConfigButton()">Probar Botón</button>
+        </div>
+        <div id="result-4"></div>
+    </div>
+
+    <!-- Test 5: Verificar separación sistema/custom -->
+    <div class="test-section">
+        <div class="test-title">5. Verificar Separación Sistema/Custom</div>
+        <div class="test-description">
+            Verifica que las configuraciones del sistema y personalizadas estén separadas correctamente.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" onclick="testSeparation()">Verificar Separación</button>
+        </div>
+        <div id="result-5"></div>
+    </div>
+
+    <!-- Test 6: Limpiar datos de prueba -->
+    <div class="test-section">
+        <div class="test-title">6. Limpiar Datos de Prueba</div>
+        <div class="test-description">
+            Elimina las configuraciones de prueba creadas.
+        </div>
+        <div class="test-actions">
+            <button class="test-btn" style="background-color: #ef4444;" onclick="cleanupTestData()">Limpiar Datos</button>
+        </div>
+        <div id="result-6"></div>
+    </div>
+
+    <!-- Load scripts -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+    <script src="src/utils/data-loader.js"></script>
+
+    <script>
+        // Test 1: Verificar carga de configuraciones desde localStorage
+        function testLoadConfigurations() {
+            const result = document.getElementById('result-1');
+            try {
+                // Cargar directamente desde ConfigurationManager (no requiere servidor)
+                const allTrains = window.ConfigurationManager.getAllTrainModels();
+                const allRoutes = window.ConfigurationManager.getAllRoutes();
+
+                const systemTrains = Object.values(allTrains).filter(t => !t.custom);
+                const customTrains = Object.values(allTrains).filter(t => t.custom);
+
+                const systemRoutes = Object.values(allRoutes).filter(r => !r.custom);
+                const customRoutes = Object.values(allRoutes).filter(r => r.custom);
+
+                result.innerHTML = `
+                    <div class="test-result success">
+                        ✅ ConfigurationManager funcionando correctamente<br>
+                        <strong>Trenes del sistema:</strong> ${systemTrains.length} (no disponibles sin servidor)<br>
+                        <strong>Trenes personalizados:</strong> ${customTrains.length}<br>
+                        <strong>Rutas del sistema:</strong> ${systemRoutes.length} (no disponibles sin servidor)<br>
+                        <strong>Rutas personalizadas:</strong> ${customRoutes.length}<br>
+                        <br>
+                        <em>ℹ️ Para ver trenes del sistema, ejecuta este test desde un servidor HTTP.</em>
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Test 2: Crear configuraciones de prueba
+        function createTestTrain() {
+            const result = document.getElementById('result-2');
+            try {
+                const testTrain = {
+                    name: "Tren Test Integración",
+                    custom: true,
+                    coaches: [
+                        {
+                            id: "C1",
+                            name: "Coche 1",
+                            layout: [
+                                { type: "seats", positions: [[1, 2, null, 3, 4]] }
+                            ]
+                        }
+                    ]
+                };
+
+                window.ConfigurationManager.saveCustomTrainModel(testTrain);
+
+                result.innerHTML = `
+                    <div class="test-result success">
+                        ✅ Tren de prueba creado: "${testTrain.name}"
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function createTestRoute() {
+            const result = document.getElementById('result-2');
+            try {
+                const testRoute = {
+                    trainNumber: "99999",
+                    custom: true,
+                    stops: ["Madrid", "Zaragoza", "Barcelona"],
+                    destination: "Barcelona"
+                };
+
+                window.ConfigurationManager.saveCustomRoute(testRoute);
+
+                const existingContent = result.innerHTML;
+                result.innerHTML = existingContent + `
+                    <div class="test-result success" style="margin-top: 10px;">
+                        ✅ Ruta de prueba creada: Tren ${testRoute.trainNumber}
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Test 3: Verificar badges
+        function testBadges() {
+            const result = document.getElementById('result-3');
+            const badges = document.querySelectorAll('.custom-badge');
+
+            result.innerHTML = `
+                <div class="test-result ${badges.length > 0 ? 'success' : 'error'}">
+                    ${badges.length > 0
+                        ? `✅ Se encontraron ${badges.length} badges en la página`
+                        : '⚠️ No se encontraron badges. Crea configuraciones personalizadas primero.'
+                    }
+                </div>
+            `;
+        }
+
+        // Test 4: Verificar botón de gestión
+        function testConfigButton() {
+            const result = document.getElementById('result-4');
+
+            if (window.ConfigurationManagerUI) {
+                result.innerHTML = `
+                    <div class="test-result success">
+                        ✅ ConfigurationManagerUI está disponible<br>
+                        <button class="test-btn" style="margin-top: 10px;" onclick="window.ConfigurationManagerUI.open()">
+                            Abrir Gestor de Configuraciones
+                        </button>
+                    </div>
+                `;
+            } else {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ ConfigurationManagerUI no está disponible
+                    </div>
+                `;
+            }
+        }
+
+        // Test 5: Verificar separación
+        function testSeparation() {
+            const result = document.getElementById('result-5');
+            try {
+                const allTrains = window.ConfigurationManager.getAllTrainModels();
+
+                const systemTrains = Object.entries(allTrains).filter(([id, t]) => !t.custom);
+                const customTrains = Object.entries(allTrains).filter(([id, t]) => t.custom);
+
+                let html = '<div class="test-result success">';
+
+                if (systemTrains.length > 0) {
+                    html += '<strong>Trenes del Sistema:</strong><ul>';
+                    systemTrains.forEach(([id, train]) => {
+                        html += `<li>${train.name} (ID: ${id})</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<strong>Trenes del Sistema:</strong> <em>No disponibles sin servidor HTTP</em><br>';
+                }
+
+                if (customTrains.length > 0) {
+                    html += '<strong>Trenes Personalizados:</strong><ul>';
+                    customTrains.forEach(([id, train]) => {
+                        html += `<li>${train.name} (ID: ${id}) <span class="badge-example">CUSTOM</span></li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<strong>Trenes Personalizados:</strong> <em>Ninguno (crea uno en el Test 2)</em>';
+                }
+
+                html += '</div>';
+
+                result.innerHTML = html;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Test 6: Limpiar datos
+        function cleanupTestData() {
+            const result = document.getElementById('result-6');
+            try {
+                const allTrains = window.ConfigurationManager.getAllTrainModels();
+                const allRoutes = window.ConfigurationManager.getAllRoutes();
+
+                let deleted = 0;
+
+                // Eliminar tren de prueba
+                Object.entries(allTrains).forEach(([id, train]) => {
+                    if (train.custom && train.name === "Tren Test Integración") {
+                        window.ConfigurationManager.deleteCustomTrainModel(id);
+                        deleted++;
+                    }
+                });
+
+                // Eliminar ruta de prueba
+                Object.entries(allRoutes).forEach(([number, route]) => {
+                    if (route.custom && number === "99999") {
+                        window.ConfigurationManager.deleteCustomRoute(number);
+                        deleted++;
+                    }
+                });
+
+                result.innerHTML = `
+                    <div class="test-result success">
+                        ✅ Se eliminaron ${deleted} configuraciones de prueba
+                    </div>
+                `;
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="test-result error">
+                        ❌ Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Ejecutar test inicial al cargar
+        window.addEventListener('load', () => {
+            testLoadConfigurations();
+        });
+    </script>
+</body>
+</html>

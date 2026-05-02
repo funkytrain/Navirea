@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Parada Importante</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid var(--color-gray-300);
+            border-radius: 8px;
+            background: white;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: var(--color-primary);
+        }
+        .test-button {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            opacity: 0.9;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .mock-seat {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--color-gray-400);
+            border-radius: 8px;
+            margin: 10px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            background: white;
+            user-select: none;
+        }
+        .mock-seat.occupied {
+            background: #22c55e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test - Sistema de Parada Importante</h1>
+
+    <div class="test-section">
+        <h2>Test 1: Configurar Parada Importante</h2>
+        <p>Prueba el selector de parada importante desde el menú de trenes</p>
+        <button class="test-button" onclick="testImportantStopSelector()">
+            ⭐ Abrir Selector de Parada Importante
+        </button>
+        <div id="status1" class="status info">
+            Estado: Parada importante = <strong id="currentImportantStop">No configurada</strong>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Menú Flotante (Long Press)</h2>
+        <p>Simula un long press en un asiento para ver el menú flotante con opciones</p>
+        <p>Mantén presionado el asiento durante ~500ms</p>
+        <div class="mock-seat" id="testSeat"
+             onmousedown="handleTestSeatPress(event)"
+             onmouseup="handleTestSeatRelease(event)"
+             ontouchstart="handleTestSeatPress(event)"
+             ontouchend="handleTestSeatRelease(event)">
+            42
+        </div>
+        <div id="status2" class="status info">
+            Estado: Esperando interacción...
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Asignación de Paradas</h2>
+        <p>Verifica que se asignan correctamente las paradas al hacer clic en el menú</p>
+        <button class="test-button" onclick="testDirectAssignment('final')">
+            🏁 Asignar Parada Final
+        </button>
+        <button class="test-button" onclick="testDirectAssignment('important')">
+            ⭐ Asignar Parada Importante
+        </button>
+        <div id="status3" class="status info">
+            Estado: Listo para pruebas
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Persistencia de Datos</h2>
+        <p>Verifica que la parada importante se guarda en localStorage</p>
+        <button class="test-button" onclick="checkPersistence()">
+            🔍 Verificar localStorage
+        </button>
+        <button class="test-button" onclick="clearPersistence()">
+            🗑️ Limpiar datos
+        </button>
+        <div id="status4" class="status info">
+            <pre id="persistenceData">Click en "Verificar" para ver datos guardados</pre>
+        </div>
+    </div>
+
+    <!-- Scripts necesarios -->
+    <script>
+        // MOCK COMPLETO - Definir antes de cargar script.js
+
+        // Estado de prueba
+        let testHoldTimer = null;
+        let testHoldTriggered = false;
+
+        // Variables globales necesarias para el menú flotante
+        window.touchStartX = 0;
+        window.touchStartY = 0;
+        window.isScrolling = false;
+
+        // Mock de datos básicos ANTES de cargar los scripts
+        window.trainModels = {
+            "463": {
+                name: "Tren 463",
+                coaches: [{ id: "C1", name: "Coche 1", layout: [] }]
+            }
+        };
+
+        window.trainRoutes = {
+            "18021": [
+                "Zaragoza Miraflores",
+                "Zaragoza Goya",
+                "Zaragoza Portillo",
+                "Zaragoza Delicias",
+                "Tudela",
+                "Castejón",
+                "Pamplona Iruña",
+                "Vitoria Gasteiz",
+                "Miranda"
+            ]
+        };
+
+        window.trainNumbers = {
+            "18021": "463"
+        };
+
+        window.stops = [
+            { full: "Zaragoza Miraflores", abbr: "ZMI" },
+            { full: "Zaragoza Goya", abbr: "ZGO" },
+            { full: "Zaragoza Portillo", abbr: "ZPO" },
+            { full: "Zaragoza Delicias", abbr: "ZDE" },
+            { full: "Tudela", abbr: "TUD" },
+            { full: "Castejón", abbr: "CAS" },
+            { full: "Pamplona Iruña", abbr: "PAM" },
+            { full: "Vitoria Gasteiz", abbr: "VIT" },
+            { full: "Miranda", abbr: "MIR" }
+        ];
+
+        window.stationScreens = {};
+
+        // Mock de funciones necesarias
+        window.isDataLoaded = () => true;
+
+        window.getCurrentRoute = function() {
+            const num = window.state?.trainNumber;
+            if (num && window.trainRoutes[num]) {
+                return window.trainRoutes[num];
+            }
+            return [];
+        };
+
+        window.getSeatKey = function(coach, num) {
+            return `${coach}-${num}`;
+        };
+
+        window.saveData = function() {
+            console.log('💾 saveData called');
+            if (window.state?.importantStop) {
+                const key = `train${window.state.selectedTrain}ImportantStop`;
+                localStorage.setItem(key, window.state.importantStop);
+            }
+        };
+
+        window.render = function() {
+            console.log('🎨 render called');
+            updateStatus();
+        };
+
+        window.showConfirmModal = function(message, onConfirm, onCancel) {
+            if (confirm(message)) {
+                if (onConfirm) onConfirm();
+            } else {
+                if (onCancel) onCancel();
+            }
+        };
+
+        window.closeConfirmModal = function() {
+            console.log('closeConfirmModal called');
+        };
+
+        // Modal helpers mock
+        window.lockBodyScroll = function() {
+            console.log('lockBodyScroll called');
+        };
+
+        window.unlockBodyScroll = function() {
+            console.log('unlockBodyScroll called');
+        };
+
+        window.saveModalScrollPosition = function() {
+            console.log('saveModalScrollPosition called');
+        };
+
+        window.restoreModalScrollPosition = function() {
+            console.log('restoreModalScrollPosition called');
+        };
+
+        window.handleModalOverlayInteraction = function() {
+            console.log('handleModalOverlayInteraction called');
+        };
+
+        window.modalSwipeStart = function() {};
+        window.modalSwipeMove = function() {};
+        window.modalSwipeEnd = function() {};
+
+        // Más funciones que script.js intenta exportar
+        window.toggleDirection = function() {};
+        window.toggleTrainSelector = function() {};
+        window.showTrainNumberPrompt = function() {};
+        window.setCurrentStop = function() {};
+        window.updateCurrentStopSearch = function() {};
+        window.toggleDarkMode = function() {};
+        window.toggleSeatRotation = function() {};
+        window.toggleHeaderCollapse = function() {};
+        window.show470VariantSelector = function() {};
+        window.select470Variant = function() {};
+        window.closeVariantSelector = function() {};
+        window.resetCoachDoubleTap = function() {};
+        window.openServiceNotes = function() {};
+        window.updateServiceNotes = function() {};
+        window.clearServiceNotes = function() {};
+        window.closeServiceNotes = function() {};
+        window.getDoorSideText = function() { return 'L'; };
+        window.openBackupsPanel = function() {};
+        window.closeBackupsPanel = function() {};
+        window.restoreBackup = function() {};
+        window.clearAllBackups = function() {};
+        window.exportTurn = function() {};
+        window.importTurn = function() {};
+        window.toggleMoreOptions = function() {};
+        window.openTechnicalManual = function() {};
+        window.closeTechnicalManual = function() {};
+        window.toggleShareSubmenu = function() {};
+        window.toggleImportSubmenu = function() {};
+        window.getTotalTrainOccupancy = function() { return { percentage: 0 }; };
+        window.getAllTrains = function() { return window.trainModels; };
+        window.getCabinaLabel = function() { return 'CABEZA'; };
+        window.getAisleArrow = function() { return '↑'; };
+        window.getCurrentCoachLayout = function() { return []; };
+        window.getTrainFinalStops = function() { return ['Miranda']; };
+
+        // Inicializar state básico ANTES de cargar script.js
+        window.state = {
+            selectedTrain: "463",
+            selectedCoach: "C1",
+            seatData: {},
+            selectedSeat: null,
+            searchQuery: "",
+            trainDirection: {},
+            darkMode: false,
+            trainNumber: "18021",
+            rotateSeats: false,
+            currentStop: null,
+            currentStopSearch: '',
+            headerCollapsed: false,
+            coachPositions: {},
+            copyMode: false,
+            serviceNotes: "",
+            incidents: {},
+            customTrains: {},
+            coach470Variants: {
+                "C1": "A",
+                "C2": "A",
+                "C3": "A"
+            },
+            importantStop: null
+        };
+
+        // DataLoader mock
+        window.DataLoader = {
+            loadAllData: async function() {
+                return {
+                    trainModels: window.trainModels,
+                    stops: window.stops,
+                    trainNumbers: window.trainNumbers,
+                    trainRoutes: window.trainRoutes,
+                    stationScreens: window.stationScreens
+                };
+            }
+        };
+    </script>
+
+    <script src="src/services/StorageService.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Forzar estado después de cargar script.js
+        if (window.state) {
+            window.state.selectedTrain = "463";
+            window.state.trainNumber = "18021";
+            window.state.importantStop = null;
+            window.state.seatData = {};
+        }
+
+        // Asegurar que lastCopiedSeatData existe
+        if (typeof window.lastCopiedSeatData === 'undefined') {
+            window.lastCopiedSeatData = null;
+        }
+
+        // IMPORTANTE: Sobrescribir getCurrentRoute DESPUÉS de cargar script.js
+        window.getCurrentRoute = function() {
+            console.log('[TEST getCurrentRoute] trainNumber:', window.state?.trainNumber);
+            console.log('[TEST getCurrentRoute] trainRoutes:', window.trainRoutes);
+            const num = window.state?.trainNumber;
+            if (num && window.trainRoutes && window.trainRoutes[num]) {
+                console.log('[TEST getCurrentRoute] Retornando ruta:', window.trainRoutes[num]);
+                return window.trainRoutes[num];
+            }
+            console.log('[TEST getCurrentRoute] No se encontró ruta, retornando []');
+            return [];
+        };
+
+        function updateStatus() {
+            const stopElement = document.getElementById('currentImportantStop');
+            if (stopElement && window.state) {
+                stopElement.textContent = window.state.importantStop || 'No configurada';
+            }
+        }
+
+        // Test 1: Selector de parada importante
+        function testImportantStopSelector() {
+            if (typeof openImportantStopSelector === 'function') {
+                openImportantStopSelector();
+                document.getElementById('status1').className = 'status success';
+                document.getElementById('status1').innerHTML =
+                    '✅ Selector abierto. Selecciona una parada y verifica que se guarda.';
+            } else {
+                document.getElementById('status1').className = 'status error';
+                document.getElementById('status1').textContent =
+                    '❌ Error: función openImportantStopSelector no encontrada';
+            }
+        }
+
+        // Test 2: Menú flotante con long press
+        function handleTestSeatPress(event) {
+            event.preventDefault();
+            testHoldTriggered = false;
+            clearTimeout(testHoldTimer);
+
+            // Guardar coordenadas del evento
+            if (event.type === 'touchstart') {
+                const touch = event.touches[0];
+                window.touchStartX = touch.clientX;
+                window.touchStartY = touch.clientY;
+            } else if (event.type === 'mousedown') {
+                window.touchStartX = event.clientX;
+                window.touchStartY = event.clientY;
+            }
+
+            testHoldTimer = setTimeout(() => {
+                testHoldTriggered = true;
+                if (navigator.vibrate) navigator.vibrate(40);
+
+                // Simular asiento vacío para que muestre el menú
+                if (typeof showQuickStopMenu === 'function') {
+                    showQuickStopMenu('C1', '42');
+                    document.getElementById('status2').className = 'status success';
+                    document.getElementById('status2').textContent =
+                        '✅ Menú flotante mostrado. Selecciona una opción.';
+                } else {
+                    document.getElementById('status2').className = 'status error';
+                    document.getElementById('status2').textContent =
+                        '❌ Error: función showQuickStopMenu no encontrada';
+                }
+            }, 500);
+        }
+
+        function handleTestSeatRelease(event) {
+            clearTimeout(testHoldTimer);
+            if (!testHoldTriggered) {
+                document.getElementById('status2').className = 'status info';
+                document.getElementById('status2').textContent =
+                    'ℹ️ Long press cancelado. Intenta mantener presionado más tiempo.';
+            }
+        }
+
+        // Test 3: Asignación directa
+        function testDirectAssignment(type) {
+            const stopName = type === 'final' ? 'Vitoria Gasteiz' :
+                            (window.state.importantStop || 'Pamplona Iruña');
+
+            if (typeof assignQuickStop === 'function') {
+                assignQuickStop('C1', '42', stopName, false);
+                document.getElementById('status3').className = 'status success';
+                document.getElementById('status3').textContent =
+                    `✅ Parada "${stopName}" asignada al asiento 42`;
+
+                // Marcar asiento visualmente
+                document.getElementById('testSeat').classList.add('occupied');
+            } else {
+                document.getElementById('status3').className = 'status error';
+                document.getElementById('status3').textContent =
+                    '❌ Error: función assignQuickStop no encontrada';
+            }
+        }
+
+        // Test 4: Persistencia
+        function checkPersistence() {
+            const trainKey = `train${window.state.selectedTrain}ImportantStop`;
+            const saved = localStorage.getItem(trainKey);
+
+            const data = {
+                'State.importantStop': window.state.importantStop,
+                'localStorage key': trainKey,
+                'localStorage value': saved
+            };
+
+            document.getElementById('persistenceData').textContent =
+                JSON.stringify(data, null, 2);
+            document.getElementById('status4').className = 'status success';
+        }
+
+        function clearPersistence() {
+            const trainKey = `train${window.state.selectedTrain}ImportantStop`;
+            localStorage.removeItem(trainKey);
+            window.state.importantStop = null;
+
+            document.getElementById('status4').className = 'status info';
+            document.getElementById('persistenceData').textContent =
+                '✅ Datos limpiados. Refresca la página para verificar.';
+            updateStatus();
+        }
+
+        // Inicializar
+        updateStatus();
+        console.log('🧪 Test suite initialized');
+        console.log('State:', window.state);
+    </script>
+</body>
+</html>

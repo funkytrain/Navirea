@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Editor de Asientos</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/components/seat-editor.css">
+
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .test-header h1 {
+            font-size: 2rem;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+        .test-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .test-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .test-actions button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .json-output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1f2937;
+            border-radius: 8px;
+            color: #f9fafb;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .json-output pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .validation-info {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .validation-info.valid {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+
+        .validation-info.invalid {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .validation-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .validation-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🎨 Editor Visual de Asientos - Testing</h1>
+            <p>Prueba el editor de layouts de asientos para configuraciones personalizadas</p>
+        </div>
+
+        <div class="test-actions">
+            <button class="btn-success" onclick="saveLayoutTest()">💾 Guardar Layout</button>
+            <button class="btn-primary" onclick="loadExampleLayout()">📋 Cargar Ejemplo</button>
+            <button class="btn-warning" onclick="showJSON()">📄 Ver JSON</button>
+            <button class="btn-danger" onclick="clearLayout()">🗑️ Limpiar</button>
+            <button class="btn-primary" onclick="validateLayout()">✅ Validar</button>
+        </div>
+
+        <div id="editor-container"></div>
+
+        <div id="validation-container"></div>
+
+        <div class="json-output" id="json-output" style="display: none;">
+            <pre id="json-content"></pre>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/utils/id-generator.js"></script>
+    <script src="src/utils/config-validator.js"></script>
+    <script src="src/services/ConfigurationManager.js"></script>
+
+    <script src="src/components/ElementPalette.js"></script>
+    <script src="src/components/SeatRowEditor.js"></script>
+    <script src="src/components/LayoutPreview.js"></script>
+    <script src="src/components/SeatLayoutEditor.js"></script>
+
+    <script>
+        let editorInstance = null;
+
+        // Inicializar editor al cargar
+        window.addEventListener('DOMContentLoaded', () => {
+            initEditor();
+        });
+
+        /**
+         * Inicializa el editor
+         */
+        function initEditor() {
+            const container = document.getElementById('editor-container');
+
+            // Layout por defecto
+            const defaultLayout = [
+                {
+                    type: 'seats',
+                    positions: [
+                        [1, 2, null, 3, 4],
+                        [5, 6, null, 7, 8]
+                    ]
+                },
+                {
+                    type: 'space',
+                    height: 80
+                },
+                {
+                    type: 'seats',
+                    positions: [
+                        [9, 10, null, 11, 12]
+                    ]
+                }
+            ];
+
+            // Crear editor
+            editorInstance = window.SeatLayoutEditor.init({
+                layout: defaultLayout,
+                coachName: 'Coche de Prueba',
+                autoNumber: true,
+                onChange: (layout) => {
+                    console.log('Layout actualizado:', layout);
+                }
+            });
+
+            container.appendChild(editorInstance);
+            console.log('✅ Editor inicializado correctamente');
+        }
+
+        /**
+         * Guarda el layout actual
+         */
+        function saveLayoutTest() {
+            const layout = window.SeatLayoutEditor.getLayout();
+
+            // Crear un modelo de tren de prueba
+            const trainModel = {
+                id: window.IdGenerator.generateUniqueId('train', []),
+                name: 'Modelo de Prueba - ' + new Date().toLocaleString(),
+                custom: true,
+                createdAt: new Date().toISOString(),
+                coaches: [
+                    {
+                        id: 'C1',
+                        name: 'Coche 1',
+                        layout: layout
+                    }
+                ]
+            };
+
+            // Guardar usando ConfigurationManager
+            const result = window.ConfigurationManager.saveCustomTrainModel(trainModel);
+
+            if (result.success) {
+                alert('✅ Layout guardado correctamente!\n\nID: ' + trainModel.id);
+                console.log('Modelo guardado:', trainModel);
+            } else {
+                alert('❌ Error al guardar: ' + result.error);
+            }
+        }
+
+        /**
+         * Carga un layout de ejemplo más complejo
+         */
+        function loadExampleLayout() {
+            const exampleLayout = [
+                // Cabecera
+                {
+                    type: 'space',
+                    height: 60
+                },
+                // Primera sección de asientos
+                {
+                    type: 'seats',
+                    positions: [
+                        [1, 2, null, 3, 4],
+                        [5, 6, null, 7, 8],
+                        [9, 10, null, 11, 12],
+                        [13, 14, null, 15, 16]
+                    ]
+                },
+                // Espacio
+                {
+                    type: 'space',
+                    height: 100
+                },
+                // Puerta
+                {
+                    type: 'door',
+                    height: 120
+                },
+                // Segunda sección con elementos especiales
+                {
+                    type: 'seats',
+                    positions: [
+                        ['WC', 'EQ', null, 17, 18],
+                        [19, 20, null, 21, 22],
+                        ['PMR', 'PMR', null, 23, 24],
+                        [25, 26, 'MESA', 27, 28]
+                    ]
+                },
+                // Espacio
+                {
+                    type: 'space',
+                    height: 80
+                },
+                // Tercera sección
+                {
+                    type: 'seats',
+                    positions: [
+                        [29, 30, null, 31, 32],
+                        [33, 34, null, 35, 36],
+                        ['MIN', null, null, 37, 38]
+                    ]
+                },
+                // Baño PMR
+                {
+                    type: 'pmr-bathroom',
+                    height: 100,
+                    label: 'BAÑO PMR'
+                },
+                // Final
+                {
+                    type: 'space',
+                    height: 60
+                }
+            ];
+
+            window.SeatLayoutEditor.setLayout(exampleLayout);
+            alert('✅ Layout de ejemplo cargado');
+        }
+
+        /**
+         * Muestra el JSON del layout actual
+         */
+        function showJSON() {
+            const layout = window.SeatLayoutEditor.getLayout();
+            const jsonOutput = document.getElementById('json-output');
+            const jsonContent = document.getElementById('json-content');
+
+            jsonContent.textContent = JSON.stringify(layout, null, 2);
+            jsonOutput.style.display = 'block';
+
+            // Scroll hacia el JSON
+            jsonOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        /**
+         * Limpia el layout
+         */
+        function clearLayout() {
+            if (confirm('¿Estás seguro de que quieres limpiar el layout?')) {
+                const emptyLayout = [
+                    {
+                        type: 'seats',
+                        positions: [
+                            [null, null, null, null]
+                        ]
+                    }
+                ];
+
+                window.SeatLayoutEditor.setLayout(emptyLayout);
+                document.getElementById('json-output').style.display = 'none';
+                document.getElementById('validation-container').innerHTML = '';
+            }
+        }
+
+        /**
+         * Valida el layout actual
+         */
+        function validateLayout() {
+            const layout = window.SeatLayoutEditor.getLayout();
+            const validation = window.LayoutPreview.validateLayout(layout);
+
+            const container = document.getElementById('validation-container');
+            container.innerHTML = '';
+
+            const validationDiv = document.createElement('div');
+            validationDiv.className = `validation-info ${validation.valid ? 'valid' : 'invalid'}`;
+
+            let html = `<h3>${validation.valid ? '✅ Layout Válido' : '❌ Layout Inválido'}</h3>`;
+
+            if (validation.errors.length > 0) {
+                html += '<p><strong>Errores:</strong></p><ul>';
+                validation.errors.forEach(error => {
+                    html += `<li>${error}</li>`;
+                });
+                html += '</ul>';
+            }
+
+            html += '<p><strong>Estadísticas:</strong></p>';
+            html += '<ul>';
+            html += `<li>Total de asientos: ${validation.stats.totalSeats}</li>`;
+            html += `<li>Elementos especiales: ${validation.stats.specialElements}</li>`;
+            html += `<li>Posiciones vacías: ${validation.stats.emptyPositions}</li>`;
+            html += `<li>Filas: ${validation.stats.rows}</li>`;
+            html += `<li>Espacios: ${validation.stats.spaces}</li>`;
+            html += `<li>Puertas: ${validation.stats.doors}</li>`;
+            html += '</ul>';
+
+            validationDiv.innerHTML = html;
+            container.appendChild(validationDiv);
+
+            // Scroll hacia validación
+            validationDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+
+</html>
