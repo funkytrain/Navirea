@@ -340,6 +340,11 @@ function toggleFlag(coachId, seatNum, flagName) {
         delete state.seatData[key].comentario;
     }
 
+// Si desmarca enlace, borrar los datos extra del enlace
+    if (flagName === "enlace" && !state.seatData[key][flagName]) {
+        delete state.seatData[key].enlaceData;
+    }
+
     saveData();
 
 // NO renderizar si estamos en medio de un long press
@@ -403,6 +408,29 @@ function deleteComment(coachId, seatNum) {
     saveModalScrollPosition();
     render();
     // Restaurar posición del scroll después de renderizar
+    restoreModalScrollPosition();
+}
+
+function updateEnlaceData(coachId, seatNum, field, value) {
+    const key = getSeatKey(coachId, seatNum);
+    if (!state.seatData[key]) state.seatData[key] = {};
+    if (!state.seatData[key].enlaceData) state.seatData[key].enlaceData = {};
+    if (value.trim() === '') {
+        delete state.seatData[key].enlaceData[field];
+    } else {
+        state.seatData[key].enlaceData[field] = value.trim();
+    }
+    saveData();
+}
+
+function clearEnlaceData(coachId, seatNum) {
+    const key = getSeatKey(coachId, seatNum);
+    if (state.seatData[key]) {
+        delete state.seatData[key].enlaceData;
+    }
+    saveData();
+    saveModalScrollPosition();
+    render();
     restoreModalScrollPosition();
 }
 
@@ -1974,6 +2002,16 @@ function renderModal() {
             ? `<div class="current-stop">Se baja en: ${escapeHtml(currentStop.full)}</div>`
             : ""
     }
+                ${(() => {
+        const ed = state.seatData[key]?.enlaceData;
+        if (!state.seatData[key]?.enlace || !ed) return "";
+        const parts = [];
+        if (ed.tren) parts.push(`<span>Tren ${escapeHtml(ed.tren)}</span>`);
+        if (ed.destino) parts.push(`<span>${escapeHtml(ed.destino)}</span>`);
+        if (ed.hora) parts.push(`<span>${escapeHtml(ed.hora)}</span>`);
+        if (!parts.length) return "";
+        return `<div class="enlace-info">Enlace: ${parts.join(' · ')}</div>`;
+    })()}
                 <div class="checkbox-group">
                     <div class="checkbox-item">
                         <input
@@ -1984,6 +2022,44 @@ function renderModal() {
                         />
                         <label for="enlace-check">Enlace</label>
                     </div>
+                    ${
+        state.seatData[key]?.enlace
+            ? (() => {
+                const ed = state.seatData[key]?.enlaceData || {};
+                const hasData = ed.tren || ed.destino || ed.hora;
+                return `
+                        <div class="enlace-box">
+                            <div class="enlace-fields">
+                                <div class="enlace-field">
+                                    <label>Nº tren enlace</label>
+                                    <input type="text" inputmode="numeric" class="enlace-input" placeholder="Ej: 18021"
+                                        value="${escapeHtml(ed.tren || '')}"
+                                        oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'tren', this.value)"
+                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                    />
+                                </div>
+                                <div class="enlace-field">
+                                    <label>Destino</label>
+                                    <input type="text" class="enlace-input" placeholder="Ej: Madrid Atocha"
+                                        value="${escapeHtml(ed.destino || '')}"
+                                        oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'destino', this.value)"
+                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                    />
+                                </div>
+                                <div class="enlace-field">
+                                    <label>Hora de salida</label>
+                                    <input type="text" inputmode="numeric" class="enlace-input" placeholder="Ej: 14:35"
+                                        value="${escapeHtml(ed.hora || '')}"
+                                        oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'hora', this.value)"
+                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                    />
+                                </div>
+                            </div>
+                            ${hasData ? `<button class="delete-comment-btn" onclick="clearEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}')">Borrar datos enlace</button>` : ''}
+                        </div>`;
+              })()
+            : ""
+    }
                     <div class="checkbox-item">
                         <input
                             type="checkbox"

@@ -128,6 +128,7 @@ Navirea es una **Progressive Web App (PWA)**, lo que significa que funciona dire
 - **Toca un asiento libre** → Introduce la parada de bajada → Guarda.
 - **Mantén pulsado un asiento libre** → Asigna la última parada automáticamente.
 - **Toca un asiento ocupado** → Modifica destino, añade enlace o comentario.
+- **Marca "Enlace"** → Introduce opcionalmente el número de tren del enlace, destino y hora de salida. La información se muestra en la cabecera del modal del asiento y en el filtro de enlaces.
 - **Activa el copiado rápido** → Marca el primer asiento → Los siguientes copiarán la misma información.
 
 ### 3️⃣ Establece la parada actual
@@ -203,6 +204,16 @@ Al crear un modelo de tren, puedes elegir entre:
 - **Exportar a JSON**: Descarga tus configuraciones para compartirlas o hacer backup.
 - **Compartir por QR**: Genera un código QR para transferir configuraciones a otro dispositivo.
 - **Importar**: Carga configuraciones desde archivo JSON o escaneando un QR.
+
+---
+
+## 🔗 Herramientas externas
+
+Accesibles desde el menú de **Más opciones** (⋮):
+
+- **SpainTrainRadar**: Visualización en tiempo real de la posición de los trenes.
+- **Estado Trenes Renfe**: Consulta el estado de circulación de los trenes Renfe.
+- **Visor LTV Adif**: Visor de Limitaciones Temporales de Velocidad de Adif.
 
 ---
 

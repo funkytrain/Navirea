@@ -595,7 +595,12 @@ function openLinksFilter() {
             const coachId = parts[0];
             const seatNum = parts.length === 3 ? parts[2] : parts[1];
 
-            items.push({ key, coach: coachId, seat: seatNum, extra: info.stop ? `Destino: ${info.stop.full}` : '' });
+            const enlaceParts = [];
+            if (info.enlaceData?.tren) enlaceParts.push(`Tren ${info.enlaceData.tren}`);
+            if (info.enlaceData?.destino) enlaceParts.push(info.enlaceData.destino);
+            if (info.enlaceData?.hora) enlaceParts.push(info.enlaceData.hora);
+            const enlaceExtra = enlaceParts.length ? enlaceParts.join(' · ') : (info.stop ? `Destino: ${info.stop.full}` : '');
+            items.push({ key, coach: coachId, seat: seatNum, extra: enlaceExtra });
         }
     });
 
