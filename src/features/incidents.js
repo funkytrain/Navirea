@@ -40,6 +40,8 @@ function getIncidentKey(coachId, elementId) {
  */
 function toggleIncident(coachId, elementId, elementType) {
     const key = getIncidentKey(coachId, elementId);
+    const typeLabel = elementType === 'door' ? 'Puerta' : 'WC';
+    if (window.pushUndo) window.pushUndo(`Toggle incidencia ${typeLabel} ${elementId}`);
 
     if (window.state.incidents[key]) {
         // Ya existe, borrar
@@ -63,18 +65,31 @@ function toggleIncident(coachId, elementId, elementType) {
  * @param {string} elementId - ID del elemento
  * @param {string} elementType - Tipo de elemento
  * @param {string} elementLabel - Etiqueta del elemento para mostrar
+ * @param {boolean} fromPanel - Si se abre desde el panel de incidencias
  */
-function openIncidentNote(coachId, elementId, elementType, elementLabel) {
+function openIncidentNote(coachId, elementId, elementType, elementLabel, fromPanel) {
     const key = getIncidentKey(coachId, elementId);
     const incident = window.state.incidents[key] || { type: elementType, broken: true, note: "" };
 
+    const onSave = fromPanel
+        ? `window.Incidents.saveIncidentNoteFromPanel('${coachId}', '${elementId}', '${elementType}', '${key}')`
+        : `window.Incidents.saveIncidentNote('${coachId}', '${elementId}', '${elementType}')`;
+
+    const onCancel = fromPanel
+        ? `window.Incidents.closeIncidentNoteFromPanel()`
+        : `window.Incidents.closeIncidentNote()`;
+
+    const onOverlay = fromPanel
+        ? `window.Incidents.closeIncidentNoteFromPanel(event)`
+        : `window.Incidents.closeIncidentNote(event)`;
+
     const modalHTML = `
-        <div class="modal-overlay" onclick="window.Incidents.closeIncidentNote(event)">
-            <div class="modal about-modal" onclick="event.stopPropagation()">
+        <div class="modal-overlay incident-note-overlay" onclick="${onOverlay}">
+            <div class="modal about-modal incident-note-modal" onclick="event.stopPropagation()">
                 <div class="modal-header">
                     <div class="modal-header-top">
-                        <h3 class="modal-title">Incidencia: ${elementLabel}</h3>
-                        <button class="close-btn" onclick="window.Incidents.closeIncidentNote()">
+                        <h3 class="modal-title">Nota: ${elementLabel}</h3>
+                        <button class="close-btn" onclick="${onCancel}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="18" y1="6" x2="6" y2="18"/>
                                 <line x1="6" y1="6" x2="18" y2="18"/>
@@ -92,20 +107,21 @@ function openIncidentNote(coachId, elementId, elementType, elementLabel) {
                 </div>
                 <div class="modal-footer">
                     <button class="clear-btn" style="background-color: #4f46e5;"
-                            onclick="window.Incidents.saveIncidentNote('${coachId}', '${elementId}', '${elementType}')">
+                            onclick="${onSave}">
                         Guardar
                     </button>
-                    <button class="clear-btn" onclick="window.Incidents.closeIncidentNote()">Cancelar</button>
+                    <button class="clear-btn" onclick="${onCancel}">Cancelar</button>
                 </div>
             </div>
         </div>
     `;
 
-    // Resetear estado de doble tap al abrir modal
-    window.resetCoachDoubleTap();
+    if (!fromPanel) {
+        window.resetCoachDoubleTap();
+        window.lockBodyScroll();
+    }
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    window.lockBodyScroll();
 
     setTimeout(() => {
         const textarea = document.getElementById('incident-note-textarea');
@@ -114,23 +130,17 @@ function openIncidentNote(coachId, elementId, elementType, elementLabel) {
 }
 
 /**
- * Guarda la nota de una incidencia
- * @param {string} coachId - ID del coche
- * @param {string} elementId - ID del elemento
- * @param {string} elementType - Tipo de elemento
+ * Guarda la nota de una incidencia (desde long press en plantilla)
  */
 function saveIncidentNote(coachId, elementId, elementType) {
     const textarea = document.getElementById('incident-note-textarea');
-    const note = textarea ? textarea.value : "";
+    const note = textarea ? textarea.value.trim() : "";
 
     const key = getIncidentKey(coachId, elementId);
+    if (window.pushUndo) window.pushUndo(`Nota incidencia ${elementId}`);
 
     if (!window.state.incidents[key]) {
-        window.state.incidents[key] = {
-            type: elementType,
-            broken: true,
-            note: note
-        };
+        window.state.incidents[key] = { type: elementType, broken: true, note: note };
     } else {
         window.state.incidents[key].note = note;
     }
@@ -138,6 +148,37 @@ function saveIncidentNote(coachId, elementId, elementType) {
     window.saveData();
     closeIncidentNote();
     window.render();
+}
+
+/**
+ * Guarda la nota desde el panel de incidencias y actualiza el panel sin cerrarlo
+ */
+function saveIncidentNoteFromPanel(coachId, elementId, elementType, key) {
+    const textarea = document.getElementById('incident-note-textarea');
+    const note = textarea ? textarea.value.trim() : "";
+
+    if (window.pushUndo) window.pushUndo(`Nota incidencia ${elementId}`);
+
+    if (!window.state.incidents[key]) {
+        window.state.incidents[key] = { type: elementType, broken: true, note: note };
+    } else {
+        window.state.incidents[key].note = note;
+    }
+
+    window.saveData();
+    closeIncidentNoteFromPanel();
+    refreshIncidentsPanel();
+    window.render();
+}
+
+/**
+ * Cierra el modal de nota abierto desde el panel (sin cerrar el panel)
+ */
+function closeIncidentNoteFromPanel(event) {
+    if (!event || event.target === event.currentTarget) {
+        const overlay = document.querySelector('.incident-note-overlay');
+        if (overlay) overlay.remove();
+    }
 }
 
 /**
@@ -149,7 +190,7 @@ function closeIncidentNote(event) {
         // Guardar scroll antes de cerrar
         const scrollToRestore = window.savedScrollPosition || 0;
 
-        const overlay = document.querySelector('.about-modal')?.closest('.modal-overlay');
+        const overlay = document.querySelector('.incident-note-overlay');
         if (overlay) overlay.remove();
 
         if (!document.querySelector('.modal-overlay')) {
@@ -160,6 +201,77 @@ function closeIncidentNote(event) {
             });
         }
     }
+}
+
+/**
+ * Genera el HTML de un item de incidencia para el panel
+ */
+function renderIncidentItemHTML(key, data) {
+    const parts = key.split('-');
+    const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
+    let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
+    label = formatIncidentLabel(label, key, data);
+
+    const typeLabel = data.type === 'door' ? '🚪' : '🚽';
+
+    // Reconstruir coachId y elementId para la nota
+    const coachId = parts[0];
+    const elementId = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
+
+    const noteBtn = `<button class="incident-note-btn" title="${data.note ? 'Editar nota' : 'Añadir nota'}"
+        onclick="window.Incidents.openIncidentNoteFromPanel('${coachId}', '${elementId}', '${data.type}', '${label.replace(/'/g, '\\\'')}')"
+        >${data.note ? '📝' : '✏️'}</button>`;
+
+    return `
+        <div class="incident-item" data-key="${key}">
+            <div class="incident-item-main">
+                <span>${typeLabel} ${label}</span>
+                ${data.note ? `<small class="incident-note-preview">${data.note}</small>` : ''}
+            </div>
+            <div class="incident-item-actions">
+                ${noteBtn}
+                <button class="incident-remove-btn" onclick="window.Incidents.removeIncident('${key}')">×</button>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Genera el HTML agrupado de todas las incidencias para el panel
+ */
+function buildIncidentsPanelHTML() {
+    const byCoach = {};
+    Object.keys(window.state.incidents).forEach(key => {
+        const parts = key.split('-');
+        let groupKey = parts[0];
+        if (window.state.selectedTrain === "470" && parts.length > 2) {
+            groupKey = `${parts[0]} (Variante ${parts[1]})`;
+        }
+        if (!byCoach[groupKey]) byCoach[groupKey] = [];
+        byCoach[groupKey].push({ key, data: window.state.incidents[key] });
+    });
+
+    let html = '';
+    Object.keys(byCoach).sort().forEach(coachId => {
+        html += `<div class="incidents-group"><h4 style="margin: 0.5rem 0; font-weight: 600;">${coachId}</h4>`;
+        byCoach[coachId].forEach(({ key, data }) => {
+            html += renderIncidentItemHTML(key, data);
+        });
+        html += `</div>`;
+    });
+    return html;
+}
+
+/**
+ * Refresca el contenido del panel de incidencias sin cerrarlo
+ */
+function refreshIncidentsPanel() {
+    const contentDiv = document.querySelector('.about-content');
+    if (contentDiv) contentDiv.innerHTML = buildIncidentsPanelHTML();
+
+    const titleElement = document.querySelector('.modal-title');
+    const incidentCount = Object.keys(window.state.incidents).length;
+    if (titleElement) titleElement.textContent = `Incidencias registradas (${incidentCount})`;
 }
 
 /**
@@ -206,46 +318,7 @@ function openIncidentsPanel() {
         return;
     }
 
-    // Agrupar por coche (y variante para 470)
-    const byCoach = {};
-    Object.keys(window.state.incidents).forEach(key => {
-        const parts = key.split('-');
-        let groupKey = parts[0]; // coachId
-
-        // Para 470: agrupar por coche-variante
-        if (window.state.selectedTrain === "470" && parts.length > 2) {
-            groupKey = `${parts[0]} (Variante ${parts[1]})`;
-        }
-
-        if (!byCoach[groupKey]) byCoach[groupKey] = [];
-        byCoach[groupKey].push({ key, data: window.state.incidents[key] });
-    });
-
-    let incidentsHTML = '';
-    Object.keys(byCoach).sort().forEach(coachId => {
-        incidentsHTML += `
-            <div class="incidents-group">
-                <h4 style="margin: 0.5rem 0; font-weight: 600;">${coachId}</h4>
-        `;
-        byCoach[coachId].forEach(({ key, data }) => {
-            const parts = key.split('-');
-            // Para 470: saltar la variante (parts[1])
-            const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
-            let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
-
-            label = formatIncidentLabel(label, key, data);
-
-            const typeLabel = data.type === 'door' ? '🚪' : '🚽';
-            incidentsHTML += `
-                <div class="incident-item">
-                    <span>${typeLabel} ${label}</span>
-                    ${data.note ? `<small style="color: #6b7280;">${data.note}</small>` : ''}
-                    <button class="incident-remove-btn" onclick="window.Incidents.removeIncident('${key}')">×</button>
-                </div>
-            `;
-        });
-        incidentsHTML += `</div>`;
-    });
+    const incidentsHTML = buildIncidentsPanelHTML();
 
     const modalHTML = `
         <div class="modal-overlay" onclick="window.Incidents.closeIncidentsPanel(event)">
@@ -311,68 +384,13 @@ function removeIncident(key) {
     delete window.state.incidents[key];
     window.saveData();
 
-    const incidentCount = Object.keys(window.state.incidents).length;
-
-    if (incidentCount === 0) {
-        // Si no quedan incidencias, cerrar el panel
+    if (Object.keys(window.state.incidents).length === 0) {
         closeIncidentsPanel();
         window.render();
         return;
     }
 
-    // Reagrupar por coche
-    const byCoach = {};
-    Object.keys(window.state.incidents).forEach(k => {
-        const parts = k.split('-');
-        let groupKey = parts[0];
-
-        if (window.state.selectedTrain === "470" && parts.length > 2) {
-            groupKey = `${parts[0]} (Variante ${parts[1]})`;
-        }
-
-        if (!byCoach[groupKey]) byCoach[groupKey] = [];
-        byCoach[groupKey].push({ key: k, data: window.state.incidents[k] });
-    });
-
-    // Actualizar solo el contenido del panel
-    let incidentsHTML = '';
-    Object.keys(byCoach).sort().forEach(coachId => {
-        incidentsHTML += `
-            <div class="incidents-group">
-                <h4 style="margin: 0.5rem 0; font-weight: 600;">${coachId}</h4>
-        `;
-        byCoach[coachId].forEach(({ key: k, data }) => {
-            const parts = k.split('-');
-            const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
-            let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
-
-            label = formatIncidentLabel(label, k, data);
-
-            const typeLabel = data.type === 'door' ? '🚪' : '🚽';
-            incidentsHTML += `
-                <div class="incident-item">
-                    <span>${typeLabel} ${label}</span>
-                    ${data.note ? `<small style="color: #6b7280;">${data.note}</small>` : ''}
-                    <button class="incident-remove-btn" onclick="window.Incidents.removeIncident('${k}')">×</button>
-                </div>
-            `;
-        });
-        incidentsHTML += `</div>`;
-    });
-
-    // Actualizar el contenido del modal
-    const contentDiv = document.querySelector('.about-content');
-    if (contentDiv) {
-        contentDiv.innerHTML = incidentsHTML;
-    }
-
-    // Actualizar el título con el nuevo contador
-    const titleElement = document.querySelector('.modal-title');
-    if (titleElement) {
-        titleElement.textContent = `Incidencias registradas (${incidentCount})`;
-    }
-
-    // Re-renderizar la plantilla para actualizar visual
+    refreshIncidentsPanel();
     window.render();
 }
 
@@ -605,9 +623,11 @@ function handleDoorRelease(event) {
 
                 if (existingGroupKey) {
                     // Ya existe una incidencia para este bloque, eliminarla
+                    if (window.pushUndo) window.pushUndo(`Toggle incidencia WC bloque`);
                     delete window.state.incidents[existingGroupKey];
                 } else {
                     // No existe, crear una nueva incidencia de grupo
+                    if (window.pushUndo) window.pushUndo(`Toggle incidencia WC bloque`);
                     // Usar el primer WC del bloque como ID representativo
                     const groupId = wcBlock.length > 1 ? `WC-BLOCK-${wcBlock[0]}` : wcBlock[0];
 
@@ -663,8 +683,12 @@ window.Incidents = {
     getIncidentKey,
     toggleIncident,
     openIncidentNote,
+    openIncidentNoteFromPanel: (coachId, elementId, elementType, elementLabel) =>
+        openIncidentNote(coachId, elementId, elementType, elementLabel, true),
     saveIncidentNote,
+    saveIncidentNoteFromPanel,
     closeIncidentNote,
+    closeIncidentNoteFromPanel,
     openIncidentsPanel,
     closeIncidentsPanel,
     removeIncident,

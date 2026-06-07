@@ -1,15 +1,50 @@
 // ============================================
-// SISTEMA DE COMPARTIR POR QR (LOCAL - SIN SERVIDOR)
+// SISTEMA DE COMPARTIR POR QR
 // ============================================
-// Los datos del turno se comprimen con LZ-String y se codifican
-// directamente en el QR, sin necesidad de servidor externo.
+// Si config.local.js define window.JSONBIN_API_KEY, los datos se suben a
+// JSONBin y el QR lleva solo el ID corto (24 chars) — soporta turnos grandes.
+// Si no hay key, se usa compresión LZ-String directa en el QR (límite ~2900 bytes).
 
 // Variable de estado del escáner QR
 let html5QrCode = null;
 
 /**
+ * Sube un turno a JSONBin y devuelve el ID del bin.
+ */
+async function uploadTurnToServer(turnData) {
+    const apiKey = window.JSONBIN_API_KEY;
+    const response = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': apiKey,
+            'X-Bin-Private': 'false',
+            'X-Bin-Name': `Navirea-${turnData.trainName}-${Date.now()}`
+        },
+        body: JSON.stringify(turnData)
+    });
+    if (!response.ok) throw new Error(`JSONBin error ${response.status}`);
+    const data = await response.json();
+    return data.metadata.id;
+}
+
+/**
+ * Descarga un turno desde JSONBin usando su ID.
+ */
+async function downloadTurnFromServer(binId) {
+    const apiKey = window.JSONBIN_API_KEY;
+    const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+        headers: { 'X-Master-Key': apiKey }
+    });
+    if (!response.ok) throw new Error(`JSONBin error ${response.status}`);
+    const data = await response.json();
+    return data.record;
+}
+
+/**
  * Genera un código QR para compartir el turno actual.
- * Los datos se comprimen con LZ-String para caber en el QR.
+ * Con JSONBIN_API_KEY: sube los datos y el QR lleva solo el ID corto.
+ * Sin key: comprime con LZ-String directamente en el QR.
  */
 export async function generateQRCode() {
     const state = window.state;
@@ -62,39 +97,45 @@ export async function generateQRCode() {
     window.lockBodyScroll();
 
     try {
-        if (typeof LZString === 'undefined') {
-            throw new Error('Librería de compresión no disponible');
-        }
+        const hasJsonbin = typeof window.JSONBIN_API_KEY === 'string' && window.JSONBIN_API_KEY.length > 10;
 
-        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(turnData));
+        if (hasJsonbin) {
+            // Modo JSONBin: sube los datos y el QR lleva solo el ID corto
+            const message = document.querySelector('.qr-content > p');
+            if (message) message.textContent = '⏳ Subiendo datos...';
 
-        // Los QR tienen un límite práctico de ~2900 bytes en modo alfanumérico
-        if (compressed.length > 2900) {
-            const container = document.getElementById('qrcode-container');
-            if (container) {
-                container.innerHTML = `
-                    <p style="color: #f59e0b; text-align: center; padding: 1rem;">
-                        ⚠️ El turno tiene demasiados datos para un QR.<br><br>
-                        <small style="color: #6b7280;">Usa "Exportar por archivo JSON" para compartir este turno.</small>
-                    </p>
+            const binId = await uploadTurnToServer(turnData);
+            renderQRInContainer(binId, QRCode.CorrectLevel.H);
+
+            if (message) {
+                message.innerHTML = `
+                    ✅ Código QR generado correctamente<br>
+                    <small style="color: #6b7280;">Escanéalo con otro dispositivo Navirea · Válido 30 días</small>
                 `;
             }
-            const message = document.querySelector('.qr-content > p');
-            if (message) message.remove();
-            return;
-        }
+            appendTurnInfo(turnData, binId);
+        } else {
+            // Modo local: comprime con LZ-String directamente en el QR
+            if (typeof LZString === 'undefined') throw new Error('Librería de compresión no disponible');
 
-        const container = document.getElementById('qrcode-container');
-        if (container && typeof QRCode !== 'undefined') {
-            container.innerHTML = '';
-            new QRCode(container, {
-                text: compressed,
-                width: 320,
-                height: 320,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.L
-            });
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(turnData));
+
+            if (compressed.length > 2900) {
+                const container = document.getElementById('qrcode-container');
+                if (container) {
+                    container.innerHTML = `
+                        <p style="color: #f59e0b; text-align: center; padding: 1rem;">
+                            ⚠️ El turno tiene demasiados datos para un QR.<br><br>
+                            <small style="color: #6b7280;">Usa "Exportar por archivo JSON" para compartir este turno.</small>
+                        </p>
+                    `;
+                }
+                const message = document.querySelector('.qr-content > p');
+                if (message) message.remove();
+                return;
+            }
+
+            renderQRInContainer(compressed, QRCode.CorrectLevel.L);
 
             const message = document.querySelector('.qr-content > p');
             if (message) {
@@ -103,18 +144,7 @@ export async function generateQRCode() {
                     <small style="color: #6b7280;">Escanéalo con otro dispositivo Navirea</small>
                 `;
             }
-
-            container.insertAdjacentHTML('afterend', `
-                <div style="text-align: center; margin-top: 1rem;">
-                    <p style="font-size: 0.9rem; color: #4b5563;">
-                        <strong>${window.escapeHtml(turnData.trainName)}</strong>
-                        ${turnData.trainNumber ? ` - Nº ${window.escapeHtml(String(turnData.trainNumber))}` : ''}
-                    </p>
-                    <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem;">
-                        ${Object.keys(turnData.seatData).length} asientos registrados
-                    </p>
-                </div>
-            `);
+            appendTurnInfo(turnData);
         }
     } catch (error) {
         const container = document.getElementById('qrcode-container');
@@ -128,6 +158,40 @@ export async function generateQRCode() {
             `;
         }
     }
+}
+
+function renderQRInContainer(text, correctLevel) {
+    const container = document.getElementById('qrcode-container');
+    if (!container || typeof QRCode === 'undefined') return;
+    container.innerHTML = '';
+    new QRCode(container, {
+        text,
+        width: 320,
+        height: 320,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel
+    });
+}
+
+function appendTurnInfo(turnData, binId) {
+    const container = document.getElementById('qrcode-container');
+    if (!container) return;
+    const codeHtml = binId
+        ? `<p style="font-size:0.75rem;color:#9ca3af;margin-top:0.5rem;">Código: <code style="background:#f3f4f6;padding:0.2rem 0.4rem;border-radius:4px;">${window.escapeHtml(binId)}</code></p>`
+        : '';
+    container.insertAdjacentHTML('afterend', `
+        <div style="text-align:center;margin-top:1rem;">
+            <p style="font-size:0.9rem;color:#4b5563;">
+                <strong>${window.escapeHtml(turnData.trainName)}</strong>
+                ${turnData.trainNumber ? ` - Nº ${window.escapeHtml(String(turnData.trainNumber))}` : ''}
+            </p>
+            <p style="font-size:0.85rem;color:#6b7280;margin-top:0.25rem;">
+                ${Object.keys(turnData.seatData).length} asientos registrados
+            </p>
+            ${codeHtml}
+        </div>
+    `);
 }
 
 /**
@@ -278,26 +342,33 @@ async function startQRScanning() {
 }
 
 /**
- * Procesa los datos leídos desde un código QR (comprimidos con LZ-String)
- * @param {string} dataStr - Datos comprimidos del QR
+ * Procesa los datos leídos desde un código QR.
+ * Si es un ID de JSONBin (24 chars hex) lo descarga del servidor.
+ * Si no, intenta descomprimir con LZ-String.
  */
-function processQRData(dataStr) {
+async function processQRData(dataStr) {
     const state = window.state;
     const getAllTrains = window.getAllTrains;
     const saveData = window.saveData;
     const render = window.render;
 
     try {
-        if (typeof LZString === 'undefined') {
-            throw new Error('Librería de descompresión no disponible');
-        }
+        let turnData;
+        const isJsonbinId = /^[a-f0-9]{24}$/i.test(dataStr.trim());
 
-        const decompressed = LZString.decompressFromEncodedURIComponent(dataStr.trim());
-        if (!decompressed) {
-            throw new Error('No se pudo descomprimir el código QR');
+        if (isJsonbinId && typeof window.JSONBIN_API_KEY === 'string' && window.JSONBIN_API_KEY.length > 10) {
+            const statusEl = document.getElementById('scan-status');
+            if (statusEl) {
+                statusEl.textContent = '📥 Descargando datos del servidor...';
+                statusEl.style.color = '#4f46e5';
+            }
+            turnData = await downloadTurnFromServer(dataStr.trim());
+        } else {
+            if (typeof LZString === 'undefined') throw new Error('Librería de descompresión no disponible');
+            const decompressed = LZString.decompressFromEncodedURIComponent(dataStr.trim());
+            if (!decompressed) throw new Error('No se pudo descomprimir el código QR');
+            turnData = JSON.parse(decompressed);
         }
-
-        const turnData = JSON.parse(decompressed);
         const allTrains = getAllTrains();
 
         if (!turnData.trainModel || !allTrains[turnData.trainModel]) {

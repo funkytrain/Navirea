@@ -16,3 +16,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Configuración local con credenciales (NUNCA commitear)
+config.local.js

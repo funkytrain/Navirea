@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self'; manifest-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.jsonbin.io; worker-src 'self'; manifest-src 'self';">
     <title>Control de Billetes</title>
     <!-- CSS Variables (debe cargarse primero) -->
     <link rel="stylesheet" href="css/variables.css">
@@ -52,6 +52,14 @@
 
     <div id="app"></div>
 
+    <!-- Botón flotante Deshacer -->
+    <button id="undo-fab" class="undo-fab undo-fab--empty" onclick="window.undo()" title="Sin acciones para deshacer" aria-label="Deshacer última acción">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 14 4 9 9 4"/>
+            <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+        </svg>
+    </button>
+
     <script src="js/splash.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
             integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU"
@@ -62,6 +70,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"
             integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7"
             crossorigin="anonymous"></script>
+
+    <!-- Configuración local con credenciales (no incluida en el repo) -->
+    <!-- Si el archivo no existe, la app funciona en modo sin servidor -->
+    <script src="config.local.js" onerror="console.info('config.local.js no encontrado — modo sin JSONBin')"></script>
 
     <!-- Load configuration and data utilities -->
     <script type="module" src="src/config/constants.js"></script>
@@ -106,6 +118,9 @@
 
     <!-- Configuration Manager UI -->
     <script src="src/components/ConfigurationManagerUI.js"></script>
+
+    <!-- Undo system (debe cargarse antes que script.js) -->
+    <script src="src/features/undo.js"></script>
 
     <!-- Main application script -->
     <script src="script.js"></script>

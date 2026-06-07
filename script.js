@@ -1,3 +1,8 @@
+// Shim de seguridad: si undo.js no cargó, las llamadas a pushUndo no rompen la app
+if (typeof pushUndo === 'undefined') { window.pushUndo = () => {}; }
+if (typeof clearUndoStack === 'undefined') { window.clearUndoStack = () => {}; }
+if (typeof undo === 'undefined') { window.undo = () => {}; }
+
 // ============================================
 // CARGA DE DATOS DESDE JSON
 // ============================================
@@ -220,6 +225,7 @@ function getCurrentCoachLayout(coach) {
 
 function updateSeat(coachId, seatNum, stop) {
     const key = getSeatKey(coachId, String(seatNum));
+    pushUndo(`Asignar parada ${stop.abbr || stop.full} → ${key}`);
 
     if (!state.seatData[key]) {
         state.seatData[key] = {};
@@ -282,6 +288,7 @@ function updateSeatFromList(abbr) {
 // Borrar asiento
 function clearSeat(coachId, seatNum) {
     const key = getSeatKey(coachId, String(seatNum));
+    pushUndo(`Limpiar asiento ${key}`);
     const seatInfo = state.seatData[key];
 
     if (seatInfo) {
@@ -330,6 +337,8 @@ function clearSeat(coachId, seatNum) {
 
 function toggleFlag(coachId, seatNum, flagName) {
     const key = getSeatKey(coachId, seatNum);
+    const flagLabels = { enlace: 'Enlace', seguir: 'Seguir', comentarioFlag: 'Comentario' };
+    pushUndo(`Toggle ${flagLabels[flagName] || flagName} en ${key}`);
     if (!state.seatData[key]) {
         state.seatData[key] = {};
     }
@@ -382,6 +391,7 @@ function toggleFlag(coachId, seatNum, flagName) {
 
 function updateComment(coachId, seatNum, comment) {
     const key = getSeatKey(coachId, seatNum);
+    pushUndo(`Comentario en ${key}`);
     if (!state.seatData[key]) {
         state.seatData[key] = {};
     }
@@ -398,6 +408,7 @@ function updateComment(coachId, seatNum, comment) {
 
 function deleteComment(coachId, seatNum) {
     const key = getSeatKey(coachId, seatNum);
+    pushUndo(`Borrar comentario en ${key}`);
     if (state.seatData[key]) {
         delete state.seatData[key].comentario;
         state.seatData[key].comentarioFlag = false;
@@ -409,6 +420,14 @@ function deleteComment(coachId, seatNum) {
     render();
     // Restaurar posición del scroll después de renderizar
     restoreModalScrollPosition();
+}
+
+function focusEnlaceField(coachId, seatNum) {
+    const key = getSeatKey(coachId, seatNum);
+    if (!window._enlacePushDone) {
+        pushUndo(`Datos enlace en ${key}`);
+        window._enlacePushDone = true;
+    }
 }
 
 function updateEnlaceData(coachId, seatNum, field, value) {
@@ -549,6 +568,7 @@ function selectTrain(trainId) {
         render();
     }
     // Reiniciar backup automático para el nuevo tren
+    if (window.clearUndoStack) clearUndoStack();
     startAutoBackup();
     // Cerrar el menú después de cambiar de tren
     setTimeout(() => {
@@ -878,6 +898,8 @@ function changeTrainNumber(trainNumber) {
         if (!confirm(confirmMessage)) return;
     }
 
+    pushUndo(`Cambiar número de tren → ${trainNumber}`);
+
     // --- BORRAR TODOS LOS DATOS ---
     state.seatData = {};
     state.trainDirection = {};
@@ -905,6 +927,7 @@ function getTrainFinalStops() {
 }
 
 function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
+    pushUndo(`Parada actual → ${stopName}`);
     // Guardar parada actual
     state.currentStop = stopName;
     saveCurrentStop();
@@ -945,11 +968,13 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
                         seatInfo.historial.push(seatInfo.stop.full);
                     }
 
-                    // Borrar parada y flags (mantener comentarios por ahora)
+                    // Borrar parada, flags y comentario
                     delete seatInfo.stop;
                     delete seatInfo.enlace;
                     delete seatInfo.seguir;
-                    // Mantener: comentario, comentarioFlag, historial
+                    delete seatInfo.comentario;
+                    delete seatInfo.comentarioFlag;
+                    // Mantener: historial
 
                     deletedCount++;
                 }
@@ -1120,20 +1145,33 @@ function filterCurrentStops() {
     const isCustom = routeData && routeData.custom === true;
     const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
 
-    // Crear lista de nombres resueltos para filtrar
-    const resolvedStops = route.map(stopIdentifier => {
+    // Índice de la parada actual para excluir las ya superadas
+    let currentIdx = -1;
+    if (state.currentStop) {
         if (isCustom) {
-            // Resolver código ADIF a nombre
-            if (adifMetadata[stopIdentifier]) {
-                return adifMetadata[stopIdentifier].name;
-            } else if (window.adifStations && window.adifStations[stopIdentifier]) {
-                return window.adifStations[stopIdentifier].name;
-            }
+            currentIdx = route.findIndex(stopId => {
+                const name = adifMetadata[stopId]?.name
+                    || window.adifStations?.[stopId]?.name
+                    || stopId;
+                return name === state.currentStop;
+            });
+        } else {
+            currentIdx = route.indexOf(state.currentStop);
         }
-        return stopIdentifier;
-    });
+    }
 
-    return resolvedStops.filter(stop => normalizeText(stop).includes(query));
+    return route
+        .map((stopId, idx) => {
+            const name = isCustom
+                ? (adifMetadata[stopId]?.name || window.adifStations?.[stopId]?.name || stopId)
+                : stopId;
+            return { name, idx };
+        })
+        .filter(({ name, idx }) =>
+            normalizeText(name).includes(query) &&
+            (currentIdx === -1 || idx > currentIdx)
+        )
+        .map(({ name }) => name);
 }
 
 function updateCurrentStopSearch(value) {
@@ -1340,6 +1378,7 @@ function closeAbout(event) {
 }
 
 function openServiceNotes() {
+    pushUndo('Editar notas del servicio');
     // Resetear estado de doble tap al abrir modal
     resetCoachDoubleTap();
 
@@ -1378,6 +1417,7 @@ function updateServiceNotes(value) {
 
 function clearServiceNotes() {
     if (confirm('¿Seguro que quieres borrar todas las notas del servicio?')) {
+        pushUndo('Borrar notas del servicio');
         state.serviceNotes = "";
         saveData();
         closeServiceNotes();
@@ -1536,6 +1576,7 @@ function importTurn() {
 
                     // Guardar todo en localStorage usando función centralizada
                     saveImportedData(turnData);
+                    if (window.clearUndoStack) clearUndoStack();
 
                     // Recargar vista
                     render();
@@ -1748,7 +1789,19 @@ function getFilteredStops() {
     const isCustom = routeData && routeData.custom === true;
     const adifMetadata = isCustom ? (routeData.adifStopsMetadata || {}) : {};
 
-    filtered.sort((a, b) => {
+    // Si hay búsqueda activa, excluir paradas ya superadas del resultado
+    const currentRouteIndex = state.currentStop ? route.indexOf(state.currentStop) : -1;
+    const toSort = (query && currentRouteIndex !== -1)
+        ? filtered.filter(stop => {
+            const idx = isCustom
+                ? route.findIndex(stopId =>
+                    (adifMetadata[stopId]?.name || window.adifStations?.[stopId]?.name || stopId) === stop.full)
+                : route.indexOf(stop.full);
+            return idx === -1 || idx > currentRouteIndex;
+        })
+        : filtered;
+
+    toSort.sort((a, b) => {
         // Para rutas custom con ADIF, necesitamos buscar por nombre o código
         let indexA, indexB;
 
@@ -1779,8 +1832,8 @@ function getFilteredStops() {
         return indexA - indexB;
     });
 
-    console.log('[getFilteredStops] filtered:', filtered.length);
-    return filtered;
+    console.log('[getFilteredStops] filtered:', toSort.length);
+    return toSort;
 
 }
 
@@ -2035,7 +2088,7 @@ function renderModal() {
                                     <input type="text" inputmode="numeric" class="enlace-input" placeholder="Ej: 18021"
                                         value="${escapeHtml(ed.tren || '')}"
                                         oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'tren', this.value)"
-                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                        readonly onfocus="this.removeAttribute('readonly'); focusEnlaceField('${state.selectedSeat.coach}', '${state.selectedSeat.num}'); saveModalScrollPosition();"
                                     />
                                 </div>
                                 <div class="enlace-field">
@@ -2043,7 +2096,7 @@ function renderModal() {
                                     <input type="text" class="enlace-input" placeholder="Ej: Madrid Atocha"
                                         value="${escapeHtml(ed.destino || '')}"
                                         oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'destino', this.value)"
-                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                        readonly onfocus="this.removeAttribute('readonly'); focusEnlaceField('${state.selectedSeat.coach}', '${state.selectedSeat.num}'); saveModalScrollPosition();"
                                     />
                                 </div>
                                 <div class="enlace-field">
@@ -2051,7 +2104,7 @@ function renderModal() {
                                     <input type="text" inputmode="numeric" class="enlace-input" placeholder="Ej: 14:35"
                                         value="${escapeHtml(ed.hora || '')}"
                                         oninput="updateEnlaceData('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'hora', this.value)"
-                                        readonly onfocus="this.removeAttribute('readonly'); saveModalScrollPosition();"
+                                        readonly onfocus="this.removeAttribute('readonly'); focusEnlaceField('${state.selectedSeat.coach}', '${state.selectedSeat.num}'); saveModalScrollPosition();"
                                     />
                                 </div>
                             </div>
@@ -2123,6 +2176,7 @@ function renderModal() {
                 <button
                     class="stop-item ${isPassed ? 'passed' : ''} ${isCurrent ? 'current' : ''}"
                     ${isCurrent ? 'id="current-stop-item"' : ''}
+                    ${isPassed ? 'disabled' : ''}
                     data-abbr="${escapeHtml(stop.abbr)}"
                     onclick="updateSeatFromList(this.dataset.abbr)"
                 >
@@ -2293,6 +2347,7 @@ function selectCoach(coachId) {
 function selectSeat(coach, num) {
     // Guardar scroll actual antes de abrir modal
     savedScrollPosition = window.scrollY || document.documentElement.scrollTop;
+    window._enlacePushDone = false;
 
     // 🔴 NUEVO: Copiar TODA la información del asiento
     if (state.copyMode && lastCopiedSeatData) {
@@ -3831,7 +3886,7 @@ Object.assign(window, {
 
     // Gestión de asientos
     clearSeat, clearAllData, updateSeat, updateSeatFromList,
-    toggleFlag, updateComment, deleteComment,
+    toggleFlag, updateComment, deleteComment, focusEnlaceField,
     handleSeatPress, handleSeatRelease, handleSeatCancel, handleSeatMove,
 
     // Modales principales
@@ -3878,6 +3933,9 @@ Object.assign(window, {
 
     // Utilidades
     getTotalTrainOccupancy,
+
+    // Undo (definidas en src/features/undo.js, cargado antes)
+    ...(typeof undo !== 'undefined' ? { undo, pushUndo, clearUndoStack } : {}),
 
     // Funciones auxiliares (necesarias para módulos externos)
     getAllTrains, saveData, render
