@@ -356,6 +356,13 @@ function selectRouteToStop(fromStop, toStop) {
 }
 
 function showRouteFilterResults(fromStop, toStop, seats) {
+    const sortSeats = arr => arr.sort((a, b) => {
+        const numA = parseInt(String(a).replace(/\D/g, ''));
+        const numB = parseInt(String(b).replace(/\D/g, ''));
+        return numA - numB;
+    });
+
+    // Desglose por coche
     const byCoach = {};
     seats.forEach(s => {
         if (!byCoach[s.coach]) byCoach[s.coach] = [];
@@ -364,11 +371,32 @@ function showRouteFilterResults(fromStop, toStop, seats) {
 
     let details = '';
     Object.keys(byCoach).sort().forEach(coach => {
-        details += `\n${coach}: ${byCoach[coach].sort((a, b) => {
-            const numA = parseInt(String(a).replace(/\D/g, ''));
-            const numB = parseInt(String(b).replace(/\D/g, ''));
-            return numA - numB;
-        }).join(', ')}`;
+        details += `\n${coach}: ${sortSeats(byCoach[coach]).join(', ')}`;
+    });
+
+    // Desglose por parada (ordenado según la ruta)
+    const byStop = {};
+    seats.forEach(s => {
+        const stopName = s.info?.stop?.full || '?';
+        if (!byStop[stopName]) byStop[stopName] = { byCoach: {} };
+        if (!byStop[stopName].byCoach[s.coach]) byStop[stopName].byCoach[s.coach] = [];
+        byStop[stopName].byCoach[s.coach].push(s.seat);
+    });
+
+    const route = window.trainRoutes[window.state.trainNumber];
+    const stopOrder = Array.isArray(route) ? route : Object.values(route);
+    const sortedStops = Object.keys(byStop).sort((a, b) => {
+        const ia = stopOrder.indexOf(a);
+        const ib = stopOrder.indexOf(b);
+        return (ia === -1 ? 9999 : ia) - (ib === -1 ? 9999 : ib);
+    });
+
+    details += '\n\n── Por parada ──';
+    sortedStops.forEach(stop => {
+        const coachLines = Object.keys(byStop[stop].byCoach).sort().map(coach =>
+            `${coach}: ${sortSeats(byStop[stop].byCoach[coach]).join(', ')}`
+        ).join('  ');
+        details += `\n${stop}\n  ${coachLines}`;
     });
 
     const modal = window.createFilterResultsModal({

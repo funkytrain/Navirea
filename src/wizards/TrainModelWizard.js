@@ -731,7 +731,8 @@ const TrainModelWizard = {
                 description: data.modelDescription,
                 custom: true,
                 createdAt: data.createdAt,
-                coaches: data.coaches
+                coaches: data.coaches,
+                _isEdit: !!options.editModel
             };
 
             // Guardar en ConfigurationManager
@@ -744,7 +745,7 @@ const TrainModelWizard = {
                     options.onComplete(trainModel);
                 }
             } else {
-                alert(`❌ Error al guardar: ${result.message}`);
+                alert(`❌ Error al guardar: ${result.error}`);
             }
         } catch (error) {
             console.error('Error al completar wizard:', error);

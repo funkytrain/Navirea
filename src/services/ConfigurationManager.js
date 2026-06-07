@@ -178,9 +178,10 @@ const ConfigurationManager = {
                 };
             }
 
-            // Agregar metadata
+            // Agregar metadata (excluir flag interno _isEdit)
+            const { _isEdit, ...modelData } = trainModel;
             const modelToSave = {
-                ...trainModel,
+                ...modelData,
                 custom: true,
                 createdAt: trainModel.createdAt || new Date().toISOString(),
                 updatedAt: new Date().toISOString()

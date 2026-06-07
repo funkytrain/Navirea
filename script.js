@@ -990,7 +990,45 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
         window.scrollTo(0, scrollPosition);
     });
 
-    alert(`Parada actual: ${stopName}\n${deletedCount} asiento(s) liberado(s)`);
+    if (deletedCount > 0) {
+        const undoMsg = `Parada actual: <strong>${escapeHtml(stopName)}</strong><br>${deletedCount} asiento(s) liberado(s).<br><br>¿Deshacer este cambio y restaurar los asientos?`;
+        window._stopChangeUndoCallback = {
+            onConfirm: () => {
+                undo();
+                requestAnimationFrame(() => { window.scrollTo(0, scrollPosition); });
+            },
+            onCancel: null
+        };
+        const modalHTML = `
+            <div class="modal-overlay" onclick="closeStopResultModal(false, event)">
+                <div class="modal confirm-modal" onclick="event.stopPropagation()">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Parada cambiada</h3>
+                    </div>
+                    <div class="confirm-content">
+                        <p>${undoMsg}</p>
+                    </div>
+                    <div class="modal-footer" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button class="clear-btn" style="width: 100%;" onclick="closeStopResultModal(true)">Deshacer (restaurar ${deletedCount} asiento(s))</button>
+                        <button class="clear-btn" style="width: 100%; background-color: #4f46e5;" onclick="closeStopResultModal(false)">Aceptar</button>
+                    </div>
+                </div>
+            </div>`;
+        showModal(modalHTML);
+    } else {
+        alert(`Parada actual: ${stopName}\n0 asientos liberados`);
+    }
+}
+
+function closeStopResultModal(doUndo, event) {
+    if (event && event.target !== event.currentTarget) return;
+    const modal = document.querySelector('.confirm-modal')?.closest('.modal-overlay');
+    if (modal) modal.remove();
+    if (!document.querySelector('.modal-overlay')) window.unlockBodyScroll();
+    if (doUndo && window._stopChangeUndoCallback?.onConfirm) {
+        window._stopChangeUndoCallback.onConfirm();
+    }
+    delete window._stopChangeUndoCallback;
 }
 
 function setCurrentStop(stopName) {
@@ -1167,10 +1205,7 @@ function filterCurrentStops() {
                 : stopId;
             return { name, idx };
         })
-        .filter(({ name, idx }) =>
-            normalizeText(name).includes(query) &&
-            (currentIdx === -1 || idx > currentIdx)
-        )
+        .filter(({ name }) => normalizeText(name).includes(query))
         .map(({ name }) => name);
 }
 
@@ -3459,12 +3494,23 @@ function train470LongPressEnd(e, wasPointerUp) {
     _470longPressActivated = false;
 }
 
+const DEFAULT_470_UNITS = {
+    '470085': { C1: 'A', C2: 'A', C3: 'A' },
+    '470094': { C1: 'A', C2: 'A', C3: 'D' },
+    '470110': { C1: 'A', C2: 'A', C3: 'D' },
+    '470124': { C1: 'A', C2: 'A', C3: 'D' },
+    '470140': { C1: 'B', C2: 'A', C3: 'D' },
+    '470177': { C1: 'E', C2: 'E', C3: 'E' },
+    '470203': { C1: 'E', C2: 'E', C3: 'E' },
+    '470238': { C1: 'E', C2: 'B', C3: 'A' },
+};
+
 function load470Units() {
     try {
         const raw = localStorage.getItem(TRAIN_470_UNITS_KEY);
-        return raw ? JSON.parse(raw) : {};
+        return raw ? JSON.parse(raw) : { ...DEFAULT_470_UNITS };
     } catch (e) {
-        return {};
+        return { ...DEFAULT_470_UNITS };
     }
 }
 
@@ -3521,6 +3567,11 @@ function open470UnitsModal() {
                 />
             </div>
             <div id="units470-list" class="units470-list"></div>
+            <div class="units470-io-row">
+                <button class="units470-io-btn" onclick="export470Units()" title="Exportar todas las unidades a un fichero JSON">⬆ Exportar</button>
+                <button class="units470-io-btn" onclick="document.getElementById('units470-import-input').click()" title="Importar unidades desde un fichero JSON">⬇ Importar</button>
+                <input type="file" id="units470-import-input" accept=".json" style="display:none" onchange="import470Units(this)">
+            </div>
             <button class="units470-save-btn" onclick="save470CurrentUnit()">
                 Guardar configuración actual
             </button>
@@ -3605,6 +3656,69 @@ function save470CurrentUnit() {
     save470Units(units);
     render470UnitsList();
     showToast(`Unidad ${rawName} guardada`);
+}
+
+function export470Units() {
+    const units = load470Units();
+    if (Object.keys(units).length === 0) {
+        showToast('No hay unidades guardadas para exportar');
+        return;
+    }
+    const json = JSON.stringify(units, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'unidades-470.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(`${Object.keys(units).length} unidad(es) exportada(s)`);
+}
+
+function import470Units(input) {
+    const file = input.files[0];
+    if (!file) return;
+    input.value = '';
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        let imported;
+        try {
+            imported = JSON.parse(e.target.result);
+        } catch {
+            showToast('Error: el fichero no es un JSON válido');
+            return;
+        }
+
+        if (typeof imported !== 'object' || Array.isArray(imported) || imported === null) {
+            showToast('Error: formato de fichero incorrecto');
+            return;
+        }
+
+        // Validar que cada entrada tiene la forma { C1: string, C2: string, ... }
+        const invalid = Object.entries(imported).find(([, v]) =>
+            typeof v !== 'object' || Array.isArray(v) ||
+            Object.values(v).some(x => typeof x !== 'string')
+        );
+        if (invalid) {
+            showToast('Error: alguna entrada no tiene el formato correcto');
+            return;
+        }
+
+        const existing = load470Units();
+        const newKeys = Object.keys(imported);
+        const overwritten = newKeys.filter(k => existing[k]);
+
+        if (overwritten.length > 0) {
+            if (!confirm(`Las siguientes unidades ya existen y serán sobreescritas:\n${overwritten.join(', ')}\n\n¿Continuar?`)) return;
+        }
+
+        const merged = { ...existing, ...imported };
+        save470Units(merged);
+        render470UnitsList();
+        showToast(`${newKeys.length} unidad(es) importada(s)`);
+    };
+    reader.readAsText(file);
 }
 
 function showToast(msg) {
@@ -3915,7 +4029,7 @@ Object.assign(window, {
 
     // Unidades 470
     open470UnitsModal, close470UnitsModal, apply470Unit, delete470Unit, confirm470UnitDelete,
-    save470CurrentUnit, render470UnitsList, train470LongPressStart, train470LongPressEnd,
+    save470CurrentUnit, export470Units, import470Units, render470UnitsList, train470LongPressStart, train470LongPressEnd,
 
     // Notas e incidencias
     openServiceNotes, updateServiceNotes, clearServiceNotes, closeServiceNotes,
