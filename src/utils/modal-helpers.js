@@ -100,11 +100,11 @@ function setupModalOverlayScrollBlock() {
     // Remover listeners previos
     removeModalOverlayScrollBlock();
 
-    const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
+    const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown', '.crew-modal-body', '.units470-list'];
 
     // Prevenir scroll en el modal excepto en áreas específicas
     overlayTouchMoveHandler = (e) => {
-        const overlay = e.target.closest('.modal-overlay');
+        const overlay = e.target.closest('.modal-overlay, .crew-modal-overlay');
         if (!overlay) return;
 
         const isInScrollable = scrollableSelectors.some(selector =>
@@ -118,7 +118,7 @@ function setupModalOverlayScrollBlock() {
     };
 
     overlayWheelHandler = (e) => {
-        const overlay = e.target.closest('.modal-overlay');
+        const overlay = e.target.closest('.modal-overlay, .crew-modal-overlay');
         if (!overlay) return;
 
         const isInScrollable = scrollableSelectors.some(selector =>
@@ -164,7 +164,7 @@ function setupModalScrollBehavior() {
             const overlay = e.target.closest('.modal-overlay');
             if (!overlay) return;
 
-            const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown'];
+            const scrollableSelectors = ['.modal-list', '.comment-input', '.current-stop-dropdown', '.crew-modal-body', '.units470-list'];
             const isInScrollable = scrollableSelectors.some(sel => e.target.closest(sel));
 
             if (!isInScrollable) {

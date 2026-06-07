@@ -912,6 +912,9 @@ function changeTrainNumber(trainNumber) {
     // Eliminar de localStorage
     clearCurrentTrainData();
 
+    // Limpiar tripulación del turno anterior
+    if (typeof clearCrewContacts === 'function') clearCrewContacts();
+
     // Actualizar número de tren
     state.trainNumber = trainNumber;
     saveTrainNumber();
@@ -1646,6 +1649,9 @@ function clearAllData() {
 
         // eliminar entradas específicas
         clearSeatsData();
+
+        // limpiar tripulación del turno
+        if (typeof clearCrewContacts === 'function') clearCrewContacts();
 
         // refrescar UI
         render();
@@ -2951,7 +2957,7 @@ function modalSwipeStart(event) {
     if (!event.touches || event.touches.length === 0) return;
 
     // Solo activamos el swipe si el gesto empieza en el header del modal
-    const header = event.target.closest('.modal-header');
+    const header = event.target.closest('.modal-header, .units470-header');
     if (!header) {
         modalSwipeActive = false;
         return;
@@ -3012,12 +3018,14 @@ function modalSwipeEnd(event) {
         setTimeout(() => {
             modal.style.transition = '';
             modal.style.transform = '';
-            // Cerrar el overlay padre
-            const overlay = modal.closest('.modal-overlay');
+            // Cerrar el overlay padre (soporta todos los tipos de overlay)
+            const overlay = modal.closest('.modal-overlay, .crew-modal-overlay, .units470-overlay');
             if (overlay) overlay.remove();
 
-            // Desbloquear scroll si era necesario
-            if (!document.querySelector('.modal-overlay')) {
+            // Desbloquear scroll si ya no queda ningún modal abierto
+            if (!document.querySelector('.modal-overlay') &&
+                !document.querySelector('.crew-modal-overlay') &&
+                !document.querySelector('.units470-overlay')) {
                 unlockBodyScroll();
                 // Restaurar scroll a la posición guardada
                 requestAnimationFrame(() => {
@@ -3046,9 +3054,9 @@ function modalSwipeEnd(event) {
 }
 
 // ===== DELEGACIÓN GLOBAL PARA MODAL SWIPE =====
-// Detectar si el touch empieza en un modal
+// Detectar si el touch empieza en un modal (.modal, .crew-modal, .units470-modal)
 document.addEventListener('touchstart', function(e) {
-    const modal = e.target.closest('.modal');
+    const modal = e.target.closest('.modal, .crew-modal, .units470-modal');
     if (modal) {
         modalSwipeStart(e);
         e.stopPropagation();
@@ -3549,7 +3557,7 @@ function open470UnitsModal() {
     modal.id = 'modal-470-units';
     modal.className = 'units470-overlay';
     modal.innerHTML = `
-        <div class="units470-modal">
+        <div class="units470-modal modal">
             <div class="units470-header">
                 <h3>Unidades 470</h3>
                 <button class="units470-close-btn" onclick="close470UnitsModal()">✕</button>
@@ -3959,6 +3967,18 @@ document.addEventListener('click', function(e) {
     if (menu && !menu.contains(e.target) && !btn) {
         menu.classList.add('hidden');
     }
+});
+
+// Bloquear touchmove y wheel sobre el desplegable de tres puntos para que
+// el scroll de la página no se active al deslizar el dedo sobre él
+;['touchmove', 'wheel'].forEach(type => {
+    document.addEventListener(type, function(e) {
+        const menu = document.getElementById('more-options-menu');
+        if (menu && !menu.classList.contains('hidden') && e.target.closest('#more-options-menu')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, { passive: false, capture: true });
 });
 
 function toggleShareSubmenu() {

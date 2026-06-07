@@ -347,6 +347,14 @@ async function tryContactPicker(role) {
     }
 }
 
+function clearCrewContacts() {
+    try {
+        localStorage.removeItem(CREW_STORAGE_KEY);
+    } catch (e) {
+        console.warn('Error al limpiar tripulación', e);
+    }
+}
+
 // Exponer al scope global
 Object.assign(window, {
     openCrewModal,
@@ -359,5 +367,6 @@ Object.assign(window, {
     confirmDeleteCrewContact,
     tryContactPicker,
     exportCrewContacts,
-    importCrewContacts
+    importCrewContacts,
+    clearCrewContacts
 });

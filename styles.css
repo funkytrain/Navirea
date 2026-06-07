@@ -3203,6 +3203,7 @@ body.dark-mode .backup-info small {
     min-width: 220px;
     z-index: 50;
     overflow: hidden;
+    touch-action: none;
 }
 
 body.dark-mode .more-options-dropdown {
