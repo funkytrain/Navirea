@@ -3921,3 +3921,349 @@ body.dark-mode #qr-video {
 .dark-mode .stop-badge-btn {
     background: var(--color-gray-700);
 }
+
+/* ============================================
+   CREW MODULE - Agenda de tripulación
+   ============================================ */
+
+.crew-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+}
+
+.crew-modal {
+    width: 100%;
+    max-width: 480px;
+    max-height: 88vh;
+    border-radius: 1rem 1rem 0 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white, #fff);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+}
+
+.crew-modal-body {
+    overflow-y: auto;
+    padding: 0.75rem 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Grupos por rol */
+.crew-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.crew-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.crew-group-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gray-500, #6b7280);
+}
+
+.crew-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primary, #7B42B4);
+    background: none;
+    border: 1.5px solid var(--color-primary, #7B42B4);
+    border-radius: 1rem;
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.crew-add-btn:active {
+    background: var(--color-primary, #7B42B4);
+    color: #fff;
+}
+
+/* Lista de contactos */
+.crew-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.crew-empty {
+    font-size: 0.82rem;
+    color: var(--color-gray-400, #9ca3af);
+    margin: 0.25rem 0;
+}
+
+.crew-contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-gray-50, #f9fafb);
+    border: 1px solid var(--color-gray-200, #e5e7eb);
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
+}
+
+.crew-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.crew-contact-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gray-900, #111827);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.crew-contact-phone {
+    font-size: 0.78rem;
+    color: var(--color-gray-500, #6b7280);
+}
+
+.crew-contact-actions {
+    display: flex;
+    gap: 0.3rem;
+    flex-shrink: 0;
+}
+
+/* Botones de acción sobre contacto */
+.crew-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    background: transparent;
+}
+
+.crew-btn-call {
+    background: #16a34a;
+    color: #fff;
+}
+
+.crew-btn-call:active { background: #15803d; }
+
+.crew-btn-edit {
+    background: var(--color-gray-200, #e5e7eb);
+    color: var(--color-gray-700, #374151);
+}
+
+.crew-btn-edit:active { background: var(--color-gray-300, #d1d5db); }
+
+.crew-btn-delete {
+    background: var(--color-gray-200, #e5e7eb);
+    color: #dc2626;
+}
+
+.crew-btn-delete:active { background: #fee2e2; }
+
+/* Formulario inline */
+.crew-form-container {
+    margin-top: 0.25rem;
+}
+
+.crew-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--color-gray-50, #f9fafb);
+    border: 1.5px solid var(--color-primary, #7B42B4);
+    border-radius: 0.7rem;
+    padding: 0.75rem;
+}
+
+.crew-form input {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--color-gray-300, #d1d5db);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--color-gray-900, #111827);
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.crew-form input:focus {
+    border-color: var(--color-primary, #7B42B4);
+}
+
+.crew-form-phone-row {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.crew-form-phone-row input {
+    flex: 1;
+}
+
+.crew-btn-picker {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-gray-300, #d1d5db);
+    background: #fff;
+    color: var(--color-gray-600, #4b5563);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.crew-btn-picker:active {
+    background: var(--color-gray-100, #f3f4f6);
+}
+
+.crew-form-btns {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.crew-form-cancel,
+.crew-form-save {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.crew-form-cancel {
+    background: var(--color-gray-200, #e5e7eb);
+    color: var(--color-gray-700, #374151);
+}
+
+.crew-form-cancel:active { background: var(--color-gray-300); }
+
+.crew-form-save {
+    background: var(--color-primary, #7B42B4);
+    color: #fff;
+}
+
+.crew-form-save:active { background: #5e2f8a; }
+
+/* Dark mode */
+.dark-mode .crew-modal {
+    background: var(--color-gray-900, #111827);
+}
+
+.dark-mode .crew-contact-item {
+    background: var(--color-gray-800, #1f2937);
+    border-color: var(--color-gray-700, #374151);
+}
+
+.dark-mode .crew-contact-name {
+    color: var(--color-gray-100, #f3f4f6);
+}
+
+.dark-mode .crew-contact-phone {
+    color: var(--color-gray-400, #9ca3af);
+}
+
+.dark-mode .crew-btn-edit {
+    background: var(--color-gray-700, #374151);
+    color: var(--color-gray-200, #e5e7eb);
+}
+
+.dark-mode .crew-btn-delete {
+    background: var(--color-gray-700, #374151);
+}
+
+.dark-mode .crew-form {
+    background: var(--color-gray-800, #1f2937);
+    border-color: var(--color-primary, #7B42B4);
+}
+
+.dark-mode .crew-form input {
+    background: var(--color-gray-900, #111827);
+    border-color: var(--color-gray-600, #4b5563);
+    color: var(--color-gray-100, #f3f4f6);
+}
+
+.dark-mode .crew-btn-picker {
+    background: var(--color-gray-800, #1f2937);
+    border-color: var(--color-gray-600, #4b5563);
+    color: var(--color-gray-300, #d1d5db);
+}
+
+.dark-mode .crew-form-cancel {
+    background: var(--color-gray-700, #374151);
+    color: var(--color-gray-200, #e5e7eb);
+}
+
+.crew-modal-footer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    padding: 0.6rem 1rem 0.75rem;
+    border-top: 1px solid var(--color-gray-200, #e5e7eb);
+    flex-shrink: 0;
+}
+
+.crew-footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-gray-600, #4b5563);
+    background: var(--color-gray-100, #f3f4f6);
+    border: 1px solid var(--color-gray-300, #d1d5db);
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.crew-footer-btn:active {
+    background: var(--color-gray-200, #e5e7eb);
+}
+
+.dark-mode .crew-modal-footer {
+    border-top-color: var(--color-gray-700, #374151);
+}
+
+.dark-mode .crew-footer-btn {
+    background: var(--color-gray-800, #1f2937);
+    border-color: var(--color-gray-600, #4b5563);
+    color: var(--color-gray-300, #d1d5db);
+}
+
+.dark-mode .crew-footer-btn:active {
+    background: var(--color-gray-700, #374151);
+}

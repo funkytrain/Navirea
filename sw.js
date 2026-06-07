@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.1';
+const CACHE_NAME = 'plantillatren-v8.2';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -33,7 +33,9 @@ const urlsToCache = [
     '/src/utils/dom.js',
     '/src/utils/modal-helpers.js',
     // ---- services ----
-    '/src/services/StorageService.js'
+    '/src/services/StorageService.js',
+    // ---- features ----
+    '/src/features/crew.js'
 ];
 
 // Instalación del Service Worker
