@@ -1012,8 +1012,8 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
                         <p>${undoMsg}</p>
                     </div>
                     <div class="modal-footer" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <button class="clear-btn" style="width: 100%;" onclick="closeStopResultModal(true)">Deshacer (restaurar ${deletedCount} asiento(s))</button>
                         <button class="clear-btn" style="width: 100%; background-color: #4f46e5;" onclick="closeStopResultModal(false)">Aceptar</button>
+                        <button class="clear-btn" style="width: 100%;" onclick="closeStopResultModal(true)">Deshacer (restaurar ${deletedCount} asiento(s))</button>
                     </div>
                 </div>
             </div>`;
@@ -1313,24 +1313,33 @@ function toggleHeaderCollapse() {
         state.headerCollapsed = true;
     } else {
         // Si está colapsado, expandir con animación
-        headerMain.style.transition = 'height 0.4s ease, opacity 0.3s ease, padding 0.3s ease';
+        // Limpiar transition:none del render para que el reflow siguiente lo registre
+        headerMain.style.transition = 'none';
         headerMain.style.overflow = 'hidden';
 
-        // Remover restricciones temporalmente para medir
-        headerMain.style.height = 'auto';
-        headerMain.style.opacity = '1';
-        headerMain.style.paddingTop = '';
-        headerMain.style.paddingBottom = '';
-
-        const targetHeight = headerMain.scrollHeight;
-
-        // Volver a altura 0 para animar
+        // Asegurar estado inicial 0 (por si el render ya lo dejó así)
         headerMain.style.height = '0px';
         headerMain.style.opacity = '0';
         headerMain.style.paddingTop = '0';
         headerMain.style.paddingBottom = '0';
 
-        // Forzar reflow
+        // Forzar reflow para que el navegador registre el estado inicial
+        headerMain.offsetHeight;
+
+        // Medir altura objetivo (sin restricciones)
+        headerMain.style.height = 'auto';
+        headerMain.style.paddingTop = '0.75rem';
+        headerMain.style.paddingBottom = '0.75rem';
+        const targetHeight = headerMain.scrollHeight;
+
+        // Volver a 0 antes de arrancar la transición
+        headerMain.style.height = '0px';
+        headerMain.style.opacity = '0';
+        headerMain.style.paddingTop = '0';
+        headerMain.style.paddingBottom = '0';
+
+        // Activar transición y forzar reflow para que el navegador la registre
+        headerMain.style.transition = 'height 0.4s ease, opacity 0.3s ease, padding 0.3s ease';
         headerMain.offsetHeight;
 
         // Animar a altura completa
@@ -2310,6 +2319,19 @@ function render() {
     } else {
         // Si cerramos el modal, resetear la posición guardada
         modalScrollPosition = 0;
+    }
+
+    // Aplicar estado de colapso sin animación tras cada render
+    if (state.headerCollapsed) {
+        const headerMain = document.querySelector('.header-main');
+        if (headerMain) {
+            headerMain.style.transition = 'none';
+            headerMain.style.height = '0px';
+            headerMain.style.opacity = '0';
+            headerMain.style.paddingTop = '0';
+            headerMain.style.paddingBottom = '0';
+            headerMain.style.overflow = 'hidden';
+        }
     }
 }
 
