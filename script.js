@@ -988,10 +988,10 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
     state.currentStopSearch = '';
     render();
 
-    // Restaurar posición del scroll DESPUÉS del render
-    requestAnimationFrame(() => {
-        window.scrollTo(0, scrollPosition);
-    });
+    // Restaurar scroll de forma sincrónica antes de mostrar cualquier modal/alert
+    // (el RAF llegaría tarde si hay un alert() síncrono o lockBodyScroll() de por medio)
+    window.scrollTo(0, scrollPosition);
+    savedScrollPosition = scrollPosition;
 
     if (deletedCount > 0) {
         const undoMsg = `Parada actual: <strong>${escapeHtml(stopName)}</strong><br>${deletedCount} asiento(s) liberado(s).<br><br>¿Deshacer este cambio y restaurar los asientos?`;
@@ -1027,7 +1027,11 @@ function closeStopResultModal(doUndo, event) {
     if (event && event.target !== event.currentTarget) return;
     const modal = document.querySelector('.confirm-modal')?.closest('.modal-overlay');
     if (modal) modal.remove();
-    if (!document.querySelector('.modal-overlay')) window.unlockBodyScroll();
+    if (!document.querySelector('.modal-overlay')) {
+        window.unlockBodyScroll();
+        // Restaurar scroll tras quitar position:fixed del body
+        window.scrollTo(0, savedScrollPosition);
+    }
     if (doUndo && window._stopChangeUndoCallback?.onConfirm) {
         window._stopChangeUndoCallback.onConfirm();
     }
@@ -3563,6 +3567,9 @@ function apply470Unit(unitName) {
     const units = load470Units();
     const variants = units[unitName];
     if (!variants) return;
+    if (state.selectedTrain !== "470") {
+        selectTrain("470");
+    }
     state.coach470Variants = { ...variants };
     save470Variants();
     saveData();
