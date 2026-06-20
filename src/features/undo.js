@@ -15,21 +15,9 @@ let undoStack = [];
  * @param {string} label - Descripción de la acción (para mostrar en el botón)
  */
 function pushUndo(label) {
-    const s = window.state;
-    const snapshot = {
-        seatData: JSON.parse(JSON.stringify(s.seatData)),
-        incidents: JSON.parse(JSON.stringify(s.incidents)),
-        trainNumber: s.trainNumber,
-        currentStop: s.currentStop,
-        serviceNotes: s.serviceNotes,
-        importantStop: s.importantStop,
-        importantStop2: s.importantStop2,
-        label: label || 'Acción'
-    };
+    const snapshot = { ...window.AppState.snapshot(), label: label || 'Acción' };
     undoStack.push(snapshot);
-    if (undoStack.length > MAX_UNDO_STEPS) {
-        undoStack.shift();
-    }
+    if (undoStack.length > MAX_UNDO_STEPS) undoStack.shift();
     updateUndoButton();
 }
 
@@ -40,23 +28,13 @@ function undo() {
     if (undoStack.length === 0) return;
 
     const snapshot = undoStack.pop();
-    const s = window.state;
-
-    s.seatData = snapshot.seatData;
-    s.incidents = snapshot.incidents;
-    s.trainNumber = snapshot.trainNumber;
-    s.currentStop = snapshot.currentStop;
-    s.serviceNotes = snapshot.serviceNotes;
-    s.importantStop = snapshot.importantStop;
-    s.importantStop2 = snapshot.importantStop2;
+    window.AppState.restore(snapshot);
 
     // Persistir el estado restaurado
     window.saveData();
-    if (window.saveTrainNumber) window.saveTrainNumber();
-    if (window.saveCurrentStop) window.saveCurrentStop();
 
     // Re-renderizar
-    window.render();
+    window.AppState.notify();
 
     updateUndoButton();
     showUndoToast(snapshot.label);

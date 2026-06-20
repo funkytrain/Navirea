@@ -350,7 +350,7 @@ async function processQRData(dataStr) {
     const state = window.state;
     const getAllTrains = window.getAllTrains;
     const saveData = window.saveData;
-    const render = window.render;
+    const render = () => window.AppState.notify();
 
     try {
         let turnData;

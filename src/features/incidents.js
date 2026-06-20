@@ -56,7 +56,7 @@ function toggleIncident(coachId, elementId, elementType) {
     }
 
     window.saveData();
-    window.render();
+    window.AppState.notify();
 }
 
 /**
@@ -147,7 +147,7 @@ function saveIncidentNote(coachId, elementId, elementType) {
 
     window.saveData();
     closeIncidentNote();
-    window.render();
+    window.AppState.notify();
 }
 
 /**
@@ -168,7 +168,7 @@ function saveIncidentNoteFromPanel(coachId, elementId, elementType, key) {
     window.saveData();
     closeIncidentNoteFromPanel();
     refreshIncidentsPanel();
-    window.render();
+    window.AppState.notify();
 }
 
 /**
@@ -386,12 +386,12 @@ function removeIncident(key) {
 
     if (Object.keys(window.state.incidents).length === 0) {
         closeIncidentsPanel();
-        window.render();
+        window.AppState.notify();
         return;
     }
 
     refreshIncidentsPanel();
-    window.render();
+    window.AppState.notify();
 }
 
 /**
@@ -402,7 +402,7 @@ function clearAllIncidents() {
         window.state.incidents = {};
         window.saveData();
         closeIncidentsPanel();
-        window.render();
+        window.AppState.notify();
     }
 }
 
@@ -651,7 +651,7 @@ function handleDoorRelease(event) {
             const scrollPosition = window.scrollY || document.documentElement.scrollTop;
             window.saveData();
             window.isLongPressActive = false;
-            window.render();
+            window.AppState.notify();
             requestAnimationFrame(() => {
                 window.scrollTo(0, scrollPosition);
             });
@@ -678,9 +678,51 @@ function handleDoorCancel(event) {
     }
 }
 
+/**
+ * Devuelve true si hay una incidencia activa para el elemento dado.
+ * El formato de la key es un detalle interno del módulo.
+ * @param {string} coachId
+ * @param {string} elementId
+ * @returns {boolean}
+ */
+function hasIncident(coachId, elementId) {
+    const key = getIncidentKey(coachId, elementId);
+    return !!window.state.incidents[key];
+}
+
+/**
+ * Devuelve true si el wcId dado pertenece a algún bloque de incidencia de WC.
+ * Evita que el renderer lea window.state.incidents directamente.
+ * @param {string} wcId
+ * @returns {boolean}
+ */
+function isWCInIncidentBlock(wcId) {
+    return Object.values(window.state.incidents).some(
+        inc => inc.type === 'wc' && inc.wcIds && inc.wcIds.includes(wcId)
+    );
+}
+
 // Exportar funciones al scope global
 window.Incidents = {
-    getIncidentKey,
+    // Interfaz de dominio (profunda — key format oculta)
+    hasIncident,
+    isWCInIncidentBlock,
+    toggle: toggleIncident,
+    setNote: (coachId, elementId, elementType, note) => {
+        const key = getIncidentKey(coachId, elementId);
+        if (window.pushUndo) window.pushUndo(`Nota incidencia ${elementId}`);
+        if (!window.state.incidents[key]) {
+            window.state.incidents[key] = { type: elementType, broken: true, note };
+        } else {
+            window.state.incidents[key].note = note;
+        }
+        window.saveData();
+        window.AppState.notify();
+    },
+    getAll: () => ({ ...window.state.incidents }),
+    getWCGroup: (coachId, wcId) => getContiguousWCBlock(coachId, wcId),
+
+    // Interfaz UI (necesaria para handlers inline en el DOM generado)
     toggleIncident,
     openIncidentNote,
     openIncidentNoteFromPanel: (coachId, elementId, elementType, elementLabel) =>
@@ -699,8 +741,7 @@ window.Incidents = {
     handleDoorCancel
 };
 
-// Aliases para compatibilidad con código existente
-window.getIncidentKey = getIncidentKey;
+// Aliases para compatibilidad con código existente (handlers inline en HTML generado)
 window.toggleIncident = toggleIncident;
 window.openIncidentNote = openIncidentNote;
 window.saveIncidentNote = saveIncidentNote;

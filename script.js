@@ -2351,6 +2351,11 @@ function renderModal() {
 
 // Renderizar todo
 function render() {
+    // Registrar como renderer en AppState la primera vez que se ejecuta
+    if (window.AppState && window.AppState._renderer !== render) {
+        window.AppState.setRenderer(render);
+    }
+
     // --- evitar flash en modo oscuro durante el render inicial ---
     const body = document.body;
     body.style.transition = "none";

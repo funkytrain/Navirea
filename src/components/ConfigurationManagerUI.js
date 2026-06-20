@@ -756,10 +756,7 @@ class ConfigurationManagerUI {
                             // Cambiar al primer modelo disponible
                             window.state.selectedTrain = availableModels[0];
                             console.log(`⚠️ Modelo en uso ocultado, cambiando a: ${availableModels[0]}`);
-                            // Re-renderizar la interfaz
-                            if (window.render) {
-                                window.render();
-                            }
+                            window.AppState.notify();
                         }
 
                         this.renderModelsView();
@@ -787,10 +784,7 @@ class ConfigurationManagerUI {
                             if (availableRoutes.length > 0) {
                                 window.state.trainNumber = availableRoutes[0];
                                 console.log(`⚠️ Ruta en uso ocultada, cambiando a: ${availableRoutes[0]}`);
-                                // Re-renderizar la interfaz
-                                if (window.render) {
-                                    window.render();
-                                }
+                                window.AppState.notify();
                             } else {
                                 // Si no hay rutas, poner valor por defecto
                                 window.state.trainNumber = '0000';
@@ -879,10 +873,7 @@ class ConfigurationManagerUI {
                 this.renderRoutesView();
                 this.renderRestoreView();
 
-                // Si hay un render global, ejecutarlo para actualizar la UI principal
-                if (window.render) {
-                    window.render();
-                }
+                window.AppState.notify();
 
                 this.showSuccessMessage('Todos los elementos restaurados correctamente');
             });

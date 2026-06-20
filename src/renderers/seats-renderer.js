@@ -17,8 +17,7 @@ function renderCabinaLabel(coachId, isFirst) {
 function renderPMRBathroom(section, coachId) {
     const label = section.label || "BAÑO PMR";
     const pmrId = "PMR-WC";
-    const pmrKey = window.getIncidentKey(coachId, pmrId);
-    const pmrActive = window.state.incidents[pmrKey] ? 'incident-active' : '';
+    const pmrActive = window.Incidents.hasIncident(coachId, pmrId) ? 'incident-active' : '';
 
     return `
         <button class="pmr-bathroom ${pmrActive}"
@@ -43,10 +42,8 @@ function renderPMRBathroom(section, coachId) {
 function renderDoor(section, coachId, doorNumber) {
     const leftId = `D${doorNumber}-L`;
     const rightId = `D${doorNumber}-R`;
-    const leftKey = window.getIncidentKey(coachId, leftId);
-    const rightKey = window.getIncidentKey(coachId, rightId);
-    const leftActive = window.state.incidents[leftKey] ? 'incident-active' : '';
-    const rightActive = window.state.incidents[rightKey] ? 'incident-active' : '';
+    const leftActive = window.Incidents.hasIncident(coachId, leftId) ? 'incident-active' : '';
+    const rightActive = window.Incidents.hasIncident(coachId, rightId) ? 'incident-active' : '';
 
     // Calcular labels según rotación
     const leftLabel = `Puerta ${doorNumber} - ${window.getDoorSideText('L')}`;
@@ -101,18 +98,8 @@ function renderWC(seatNum, coachId, wcCounter) {
     // Verificar si este WC pertenece a alguna incidencia de grupo
     let wcActive = '';
 
-    // Primero verificar si tiene incidencia individual
-    const wcKey = window.getIncidentKey(coachId, wcId);
-    if (window.state.incidents[wcKey]) {
+    if (window.Incidents.hasIncident(coachId, wcId) || window.Incidents.isWCInIncidentBlock(wcId)) {
         wcActive = 'incident-active';
-    } else {
-        // Verificar si pertenece a algún bloque de WC con incidencia
-        Object.keys(window.state.incidents).forEach(key => {
-            const incident = window.state.incidents[key];
-            if (incident.type === 'wc' && incident.wcIds && incident.wcIds.includes(wcId)) {
-                wcActive = 'incident-active';
-            }
-        });
     }
 
     // Label para mostrar

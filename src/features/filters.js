@@ -17,98 +17,44 @@
 // ============================================
 
 /**
- * Obtiene las paradas disponibles para filtrar según la parada actual
+ * Obtiene las paradas disponibles para filtrar según la parada actual.
+ * Delega la query pura a SeatQuery.
  */
 function getAvailableStopsForFilter() {
     if (!window.state.trainNumber || !window.trainRoutes[window.state.trainNumber]) return [];
-
-    const route = window.trainRoutes[window.state.trainNumber];
-
-    if (!window.state.currentStop) {
-        return route; // Todas disponibles si no hay parada actual
-    }
-
-    const currentIndex = route.indexOf(window.state.currentStop);
-    if (currentIndex === -1) return route;
-
-    // Solo paradas desde la actual hasta el final
-    return route.slice(currentIndex);
+    return window.SeatQuery.availableStops(
+        window.trainRoutes[window.state.trainNumber],
+        window.state.currentStop
+    );
 }
 
 /**
- * Obtiene los asientos que se bajan en una parada específica
+ * Obtiene los asientos que se bajan en una parada específica.
  */
 function getSeatsForStop(stopName) {
-    const seats = [];
-    Object.keys(window.state.seatData).forEach(key => {
-        const seatInfo = window.state.seatData[key];
-        if (seatInfo && seatInfo.stop && seatInfo.stop.full === stopName) {
-            const parts = key.split('-');
-            const coachId = parts[0];
-            const seatNum = parts.length === 3 ? parts[2] : parts[1];
-            seats.push({ coach: coachId, seat: seatNum, info: seatInfo });
-        }
-    });
-    return seats;
+    return window.SeatQuery.seatsForStop(window.state.seatData, stopName);
 }
 
 /**
- * Obtiene los asientos en un tramo específico (desde-hasta)
+ * Obtiene los asientos en un tramo específico (desde-hasta).
  */
 function getSeatsInRoute(fromStop, toStop) {
     if (!window.state.trainNumber || !window.trainRoutes[window.state.trainNumber]) return [];
-
-    const route = window.trainRoutes[window.state.trainNumber];
-    const fromIndex = route.indexOf(fromStop);
-    const toIndex = route.indexOf(toStop);
-
-    // validación: ambos en ruta y from antes que to
-    if (fromIndex === -1 || toIndex === -1 || fromIndex >= toIndex) return [];
-
-    const seats = [];
-
-    Object.keys(window.state.seatData).forEach(key => {
-        const seatInfo = window.state.seatData[key];
-        if (seatInfo && seatInfo.stop) {
-            const stopIndex = route.indexOf(seatInfo.stop.full);
-            // Incluir asientos cuya parada está dentro del tramo
-            if (stopIndex >= fromIndex && stopIndex <= toIndex) {
-                const parts = key.split('-');
-                const coachId = parts[0];
-                const seatNum = parts.length === 3 ? parts[2] : parts[1];
-                seats.push({ coach: coachId, seat: seatNum, info: seatInfo });
-            }
-        }
-    });
-
-    return seats;
+    return window.SeatQuery.seatsInRoute(
+        window.state.seatData,
+        window.trainRoutes[window.state.trainNumber],
+        fromStop,
+        toStop
+    );
 }
 
 /**
- * Obtiene información de un asiento por su número
+ * Obtiene información de un asiento por su número.
  */
 function getSeatInfo(seatNumber) {
-    // Buscar en todos los coches
-    const keys = Object.keys(window.state.seatData);
-    const foundKey = keys.find(key => {
-        const parts = key.split('-');
-        // Para 470: C1-A-12 → partes[2] es el número
-        // Para otros: C1-12 → partes[1] es el número
-        const num = parts.length === 3 ? parts[2] : parts[1];
-        return num === String(seatNumber);
-    });
-
-    if (!foundKey) return null;
-
-    const parts = foundKey.split('-');
-    const coachId = parts[0];
-    const seatNum = parts.length === 3 ? parts[2] : parts[1];
-
-    return {
-        coach: coachId,
-        seat: seatNum,
-        data: window.state.seatData[foundKey]
-    };
+    const result = window.SeatQuery.seatByNumber(window.state.seatData, seatNumber);
+    if (!result) return null;
+    return { coach: result.coach, seat: result.seat, data: result.data };
 }
 
 // ============================================
@@ -121,7 +67,7 @@ function getSeatInfo(seatNumber) {
 function applyFilterHighlight(seatKeys) {
     window.filterState.active = true;
     window.filterState.data = seatKeys;
-    window.render();
+    window.AppState.notify();
 }
 
 /**
@@ -131,7 +77,7 @@ function clearFilterHighlight() {
     window.filterState.active = false;
     window.filterState.type = null;
     window.filterState.data = null;
-    window.render();
+    window.AppState.notify();
 }
 
 // ============================================
@@ -509,7 +455,7 @@ function scrollSeatIntoViewAndFlash(seatKey) {
 
     // Cambiar al coche (si procede) y renderizar
     window.state.selectedCoach = coach;
-    window.render();
+    window.AppState.notify();
 
     // Esperar a que el DOM se actualice y buscar el asiento
     setTimeout(() => {
@@ -566,7 +512,7 @@ function navigateToFilterIndex(index) {
     window.filterState.data = _currentFilterList.slice();
     window.filterState.type = window.filterState.type || 'custom';
     window.filterState.highlightIndex = _currentFilterIndex; // opcional para uso visual
-    window.render(); // para que aplique clases 'filtered-seat'
+    window.AppState.notify(); // para que aplique clases 'filtered-seat'
     scrollSeatIntoViewAndFlash(key);
 
     // Actualizar contador dentro del modal (si existe)
@@ -614,28 +560,20 @@ function showFilterListModal(type, items) {
  */
 function openLinksFilter() {
     window.toggleFiltersMenu();
-    const items = [];
 
-    Object.keys(window.state.seatData).forEach(key => {
-        const info = window.state.seatData[key];
-        if (info && info.enlace) {
-            const parts = key.split('-');
-            const coachId = parts[0];
-            const seatNum = parts.length === 3 ? parts[2] : parts[1];
-
-            const enlaceParts = [];
-            if (info.enlaceData?.tren) enlaceParts.push(`Tren ${info.enlaceData.tren}`);
-            if (info.enlaceData?.destino) enlaceParts.push(info.enlaceData.destino);
-            if (info.enlaceData?.hora) enlaceParts.push(info.enlaceData.hora);
-            const enlaceExtra = enlaceParts.length ? enlaceParts.join(' · ') : (info.stop ? `Destino: ${info.stop.full}` : '');
-            items.push({ key, coach: coachId, seat: seatNum, extra: enlaceExtra });
-        }
-    });
-
-    if (items.length === 0) {
+    const raw = window.SeatQuery.seatsWithLink(window.state.seatData);
+    if (raw.length === 0) {
         alert('No hay asientos marcados como enlace');
         return;
     }
+
+    const items = raw.map(({ coach, seat, info }) => {
+        const parts = [info.enlaceData?.tren && `Tren ${info.enlaceData.tren}`,
+                       info.enlaceData?.destino, info.enlaceData?.hora].filter(Boolean);
+        const extra = parts.length ? parts.join(' · ') : (info.stop ? `Destino: ${info.stop.full}` : '');
+        const key = coach + '-' + seat;
+        return { key, coach, seat, extra };
+    });
 
     showFilterListModal('links', items);
 }
@@ -645,22 +583,19 @@ function openLinksFilter() {
  */
 function openCommentsFilter() {
     window.toggleFiltersMenu();
-    const items = [];
 
-    Object.keys(window.state.seatData).forEach(key => {
-        const info = window.state.seatData[key];
-        if (info && (info.comentarioFlag || info.comentario)) {
-            const parts = key.split('-');
-            const coachId = parts[0];
-            const seatNum = parts.length === 3 ? parts[2] : parts[1];
-            items.push({ key, coach: coachId, seat: seatNum, extra: info.comentario || '' });
-        }
-    });
-
-    if (items.length === 0) {
+    const raw = window.SeatQuery.seatsWithComment(window.state.seatData);
+    if (raw.length === 0) {
         alert('No hay asientos con comentario');
         return;
     }
+
+    const items = raw.map(({ coach, seat, info }) => ({
+        key: coach + '-' + seat,
+        coach,
+        seat,
+        extra: info.comentario || ''
+    }));
 
     showFilterListModal('comments', items);
 }
@@ -680,7 +615,7 @@ function navigateToSeat(coachId, seatNum) {
     window.state.selectedCoach = coachId;
 
     // Re-renderizar para mostrar el coche
-    window.render();
+    window.AppState.notify();
 
     // Esperar a que se renderice el DOM
     setTimeout(() => {

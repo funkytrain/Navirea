@@ -957,6 +957,280 @@ const ConfigurationManager = {
                 error: e.message
             };
         }
+    },
+
+    // ========================================================================
+    // PERSISTENCIA DE ESTADO DE SESIÓN (absorbido de StorageService)
+    // ========================================================================
+
+    _backupTimer: null,
+    _MAX_BACKUPS: 20,
+    _BACKUP_INTERVAL: 5 * 60 * 1000,
+
+    /**
+     * Carga el estado de sesión guardado en localStorage y lo aplica sobre window.state
+     */
+    loadData() {
+        const savedTrain = localStorage.getItem('selectedTrain');
+        if (savedTrain && window.trainModels && window.trainModels[savedTrain]) {
+            window.state.selectedTrain = savedTrain;
+        }
+
+        const saved = localStorage.getItem(`train${window.state.selectedTrain}Data`);
+        if (saved) {
+            try { window.state.seatData = JSON.parse(saved); } catch (e) { console.error('Error loading data'); }
+        }
+
+        const savedDirection = localStorage.getItem(`train${window.state.selectedTrain}Direction`);
+        if (savedDirection) {
+            try { window.state.trainDirection = JSON.parse(savedDirection); } catch (e) { console.error('Error loading direction'); }
+        }
+
+        const currentTrain = window.trainModels && window.trainModels[window.state.selectedTrain];
+        if (currentTrain && currentTrain.coaches) {
+            currentTrain.coaches.forEach(coach => {
+                if (!window.state.trainDirection[coach.id]) {
+                    window.state.trainDirection[coach.id] = 'up';
+                }
+            });
+        }
+
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode) window.state.darkMode = savedDarkMode === 'true';
+
+        const savedTrainNumber = localStorage.getItem(`train${window.state.selectedTrain}Number`);
+        if (savedTrainNumber) window.state.trainNumber = savedTrainNumber;
+
+        const savedCurrentStop = localStorage.getItem(`train${window.state.selectedTrain}CurrentStop`);
+        if (savedCurrentStop) window.state.currentStop = savedCurrentStop;
+
+        const savedImportantStop = localStorage.getItem(`train${window.state.selectedTrain}ImportantStop`);
+        if (savedImportantStop) window.state.importantStop = savedImportantStop;
+
+        const savedImportantStop2 = localStorage.getItem(`train${window.state.selectedTrain}ImportantStop2`);
+        if (savedImportantStop2) window.state.importantStop2 = savedImportantStop2;
+
+        const savedServiceNotes = localStorage.getItem(`train${window.state.selectedTrain}ServiceNotes`);
+        if (savedServiceNotes) window.state.serviceNotes = savedServiceNotes;
+
+        const savedIncidents = localStorage.getItem(`train${window.state.selectedTrain}Incidents`);
+        if (savedIncidents) {
+            try { window.state.incidents = JSON.parse(savedIncidents); } catch (e) { console.error('Error loading incidents'); }
+        }
+
+        if (window.state.selectedTrain === '470') {
+            const savedVariants = localStorage.getItem('train470Variants');
+            if (savedVariants) {
+                try { window.state.coach470Variants = JSON.parse(savedVariants); } catch (e) { console.error('Error loading 470 variants'); }
+            }
+        }
+
+        const savedCoachNotes = localStorage.getItem(`train${window.state.selectedTrain}CoachNotes`);
+        if (savedCoachNotes) {
+            try { window.state.coachNotes = JSON.parse(savedCoachNotes); } catch (e) { console.error('Error loading coach notes'); }
+        }
+    },
+
+    /**
+     * Persiste el estado de sesión actual en localStorage
+     */
+    saveData() {
+        const t = window.state.selectedTrain;
+        localStorage.setItem('selectedTrain', t);
+        localStorage.setItem(`train${t}Data`, JSON.stringify(window.state.seatData));
+        localStorage.setItem(`train${t}Direction`, JSON.stringify(window.state.trainDirection));
+        localStorage.setItem('darkMode', window.state.darkMode);
+
+        if (window.state.trainNumber) {
+            localStorage.setItem(`train${t}Number`, window.state.trainNumber);
+        }
+        if (window.state.currentStop) {
+            localStorage.setItem(`train${t}CurrentStop`, window.state.currentStop);
+        }
+
+        if (window.state.importantStop) {
+            localStorage.setItem(`train${t}ImportantStop`, window.state.importantStop);
+        } else {
+            localStorage.removeItem(`train${t}ImportantStop`);
+        }
+
+        if (window.state.importantStop2) {
+            localStorage.setItem(`train${t}ImportantStop2`, window.state.importantStop2);
+        } else {
+            localStorage.removeItem(`train${t}ImportantStop2`);
+        }
+
+        if (window.state.serviceNotes !== undefined) {
+            localStorage.setItem(`train${t}ServiceNotes`, window.state.serviceNotes);
+        }
+
+        if (window.state.incidents) {
+            localStorage.setItem(`train${t}Incidents`, JSON.stringify(window.state.incidents));
+        }
+
+        if (t === '470') {
+            localStorage.setItem('train470Variants', JSON.stringify(window.state.coach470Variants));
+        }
+
+        localStorage.setItem(`train${t}CoachNotes`, JSON.stringify(window.state.coachNotes || {}));
+    },
+
+    saveAutoBackup() {
+        const t = window.state.selectedTrain;
+        const backupData = {
+            trainModel: t,
+            seatData: window.state.seatData,
+            trainDirection: window.state.trainDirection,
+            serviceNotes: window.state.serviceNotes || '',
+            incidents: window.state.incidents || {},
+            trainNumber: window.state.trainNumber || null,
+            currentStop: window.state.currentStop || null,
+            timestamp: new Date().toISOString(),
+            ...(t === '470' && { coach470Variants: window.state.coach470Variants })
+        };
+
+        const key = `autoBackups_${t}`;
+        let backups = [];
+        try {
+            const saved = localStorage.getItem(key);
+            if (saved) backups = JSON.parse(saved);
+        } catch (e) { console.error('Error loading backups'); }
+
+        backups.push(backupData);
+        if (backups.length > this._MAX_BACKUPS) backups = backups.slice(-this._MAX_BACKUPS);
+
+        try {
+            localStorage.setItem(key, JSON.stringify(backups));
+        } catch (e) { console.error('Error saving backup:', e); }
+    },
+
+    startAutoBackup() {
+        if (this._backupTimer) clearInterval(this._backupTimer);
+        this.saveAutoBackup();
+        this._backupTimer = setInterval(() => this.saveAutoBackup(), this._BACKUP_INTERVAL);
+    },
+
+    getAutoBackups() {
+        const key = `autoBackups_${window.state.selectedTrain}`;
+        try {
+            const saved = localStorage.getItem(key);
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error('Error al cargar backups', e);
+            return [];
+        }
+    },
+
+    restoreFromBackup(backup) {
+        window.state.seatData = backup.seatData || {};
+        window.state.trainDirection = backup.trainDirection || {};
+        window.state.serviceNotes = backup.serviceNotes || '';
+        window.state.incidents = backup.incidents || {};
+
+        if (backup.trainNumber) {
+            window.state.trainNumber = backup.trainNumber;
+            localStorage.setItem('trainNumber', backup.trainNumber);
+        }
+        if (backup.currentStop) {
+            window.state.currentStop = backup.currentStop;
+            localStorage.setItem('currentStop', backup.currentStop);
+        }
+        if (window.state.selectedTrain === '470' && backup.coach470Variants) {
+            window.state.coach470Variants = backup.coach470Variants;
+            localStorage.setItem('coach470Variants', JSON.stringify(backup.coach470Variants));
+        }
+
+        this.saveData();
+    },
+
+    clearAllAutoBackups() {
+        try {
+            localStorage.removeItem(`autoBackups_${window.state.selectedTrain}`);
+        } catch (e) { console.warn('Error al borrar backups', e); }
+    },
+
+    saveTrainDirection() {
+        try {
+            localStorage.setItem(`train${window.state.selectedTrain}Direction`, JSON.stringify(window.state.trainDirection));
+        } catch (e) { console.warn('Error al guardar dirección', e); }
+    },
+
+    saveDarkMode() {
+        try { localStorage.setItem('darkMode', window.state.darkMode); } catch (e) { console.warn('Error al guardar darkMode', e); }
+    },
+
+    saveSeatRotation() {
+        try { localStorage.setItem('rotateSeats', window.state.rotateSeats); } catch (e) { console.warn('Error al guardar rotación', e); }
+    },
+
+    saveTrainNumber() {
+        try {
+            if (window.state.trainNumber) localStorage.setItem('trainNumber', window.state.trainNumber);
+        } catch (e) { console.warn('Error al guardar número de tren', e); }
+    },
+
+    saveCurrentStop() {
+        try {
+            if (window.state.currentStop) localStorage.setItem('currentStop', window.state.currentStop);
+        } catch (e) { console.warn('Error al guardar parada actual', e); }
+    },
+
+    save470Variants() {
+        try {
+            localStorage.setItem('coach470Variants', JSON.stringify(window.state.coach470Variants));
+        } catch (e) { console.warn('Error al guardar variantes 470', e); }
+    },
+
+    saveHeaderCollapsed() {
+        try { localStorage.setItem('headerCollapsed', window.state.headerCollapsed); } catch (e) { console.warn('Error al guardar header', e); }
+    },
+
+    clearCurrentTrainData() {
+        const t = window.state.selectedTrain;
+        try {
+            localStorage.removeItem(`train${t}Data`);
+            localStorage.removeItem(`train${t}Direction`);
+            localStorage.removeItem(`train${t}Notes`);
+            localStorage.removeItem(`train${t}Incidents`);
+            localStorage.removeItem(`train${t}CopiedData`);
+            localStorage.removeItem(`train${t}CoachNotes`);
+            localStorage.removeItem('currentStop');
+            localStorage.removeItem(`autoBackups_${t}`);
+        } catch (e) { console.warn('Error al eliminar datos', e); }
+    },
+
+    clearSeatsData() {
+        const t = window.state.selectedTrain;
+        try {
+            localStorage.removeItem('currentStop');
+            localStorage.removeItem(`train${t}Notes`);
+            localStorage.removeItem(`train${t}Incidents`);
+            localStorage.removeItem(`train${t}CopiedData`);
+            localStorage.removeItem(`autoBackups_${t}`);
+        } catch (e) { console.warn('Error al limpiar datos de asientos', e); }
+    },
+
+    saveImportedData(turnData) {
+        try {
+            if (turnData.trainModel) localStorage.setItem('selectedTrain', turnData.trainModel);
+            if (turnData.trainNumber) localStorage.setItem('trainNumber', turnData.trainNumber);
+            if (turnData.currentStop) localStorage.setItem('currentStop', turnData.currentStop);
+            if (turnData.trainModel === '470' && turnData.coach470Variants) {
+                localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+            }
+            if (turnData.seatData) {
+                localStorage.setItem(`train${turnData.trainModel}Data`, JSON.stringify(turnData.seatData));
+            }
+            if (turnData.trainDirection) {
+                localStorage.setItem(`train${turnData.trainModel}Direction`, JSON.stringify(turnData.trainDirection));
+            }
+            if (turnData.serviceNotes !== undefined) {
+                localStorage.setItem(`train${turnData.trainModel}Notes`, turnData.serviceNotes);
+            }
+            if (turnData.incidents) {
+                localStorage.setItem(`train${turnData.trainModel}Incidents`, JSON.stringify(turnData.incidents));
+            }
+        } catch (e) { console.warn('Error al guardar datos importados', e); }
     }
 };
 
@@ -965,3 +1239,31 @@ ConfigurationManager.init();
 
 // Exportar a window
 window.ConfigurationManager = ConfigurationManager;
+
+// Aliases globales para compatibilidad con script.js, undo.js, incidents.js, etc.
+// Se eliminan cuando AppState absorba la gestión de estado (Candidato 1).
+window.saveData         = () => ConfigurationManager.saveData();
+window.loadData         = () => ConfigurationManager.loadData();
+window.startAutoBackup  = () => ConfigurationManager.startAutoBackup();
+window.saveAutoBackup   = () => ConfigurationManager.saveAutoBackup();
+window.saveTrainDirection  = () => ConfigurationManager.saveTrainDirection();
+window.saveDarkMode        = () => ConfigurationManager.saveDarkMode();
+window.saveSeatRotation    = () => ConfigurationManager.saveSeatRotation();
+window.saveTrainNumber     = () => ConfigurationManager.saveTrainNumber();
+window.saveCurrentStop     = () => ConfigurationManager.saveCurrentStop();
+window.save470Variants     = () => ConfigurationManager.save470Variants();
+window.saveHeaderCollapsed = () => ConfigurationManager.saveHeaderCollapsed();
+window.clearCurrentTrainData = () => ConfigurationManager.clearCurrentTrainData();
+window.clearSeatsData        = () => ConfigurationManager.clearSeatsData();
+window.saveImportedData      = (d) => ConfigurationManager.saveImportedData(d);
+window.getAutoBackups        = () => ConfigurationManager.getAutoBackups();
+window.restoreFromBackup     = (b) => ConfigurationManager.restoreFromBackup(b);
+window.clearAllAutoBackups   = () => ConfigurationManager.clearAllAutoBackups();
+window.saveCustomTrainModel  = (m) => ConfigurationManager.saveCustomTrainModel(m);
+window.deleteCustomTrainModel = (id) => ConfigurationManager.deleteCustomTrainModel(id);
+window.saveCustomRoute       = (r) => ConfigurationManager.saveCustomRoute(r);
+window.deleteCustomRoute     = (n) => ConfigurationManager.deleteCustomRoute(n);
+window.saveCustomStop        = (s) => ConfigurationManager.saveCustomStop(s);
+window.deleteCustomStop      = (a) => ConfigurationManager.deleteCustomStop(a);
+window.exportCustomConfigurations = () => ConfigurationManager.exportConfiguration();
+window.importCustomConfigurations = (c, merge) => ConfigurationManager.importConfiguration(c, merge);
