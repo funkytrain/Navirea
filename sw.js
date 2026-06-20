@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.10';
+const CACHE_NAME = 'plantillatren-v8.7';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -16,8 +16,6 @@ const urlsToCache = [
     '/splash.png',
     '/css/splash.css',
     '/js/splash.js',
-    '/js/lottie.min.js',
-    '/animations/splash-navirea.json',
     // ---- new data files ----
     '/data/stops.json',
     '/data/train-numbers.json',

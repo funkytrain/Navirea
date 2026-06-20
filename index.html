@@ -44,15 +44,10 @@
 
 <body>
     <!-- SPLASH (inserta antes de #app) -->
-    <div id="splash" class="splash splash--lottie">
-        <!-- Fallback CSS siempre visible por defecto -->
-        <div class="splash-fallback">
-            <img src="icons/navirea-maskable.png" alt="Navirea" class="splash-logo" />
-            <h1 class="splash-title">NAVIREA</h1>
-            <p class="splash-tag">Visualiza. Gestiona. Avanza.</p>
-        </div>
-        <!-- Canvas Lottie: se superpone cuando carga correctamente -->
-        <div id="splash-lottie" class="splash-lottie-canvas" aria-hidden="true"></div>
+    <div id="splash" class="splash">
+        <img src="icons/navirea-maskable.png" alt="Navirea" class="splash-logo" />
+        <h1 class="splash-title">NAVIREA</h1>
+        <p class="splash-tag">Visualiza. Gestiona. Avanza.</p>
     </div>
 
     <div id="app"></div>
@@ -65,7 +60,6 @@
         </svg>
     </button>
 
-    <script src="js/lottie.min.js"></script>
     <script src="js/splash.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
             integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU"
