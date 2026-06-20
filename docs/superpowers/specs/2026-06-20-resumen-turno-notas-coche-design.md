@@ -9,116 +9,139 @@
 
 Navirea es una PWA para interventores de Cercanías y Media Distancia. Este spec cubre dos features complementarias:
 
-1. **Resumen de Turno** — registro temporal del turno y resumen de cierre accesible desde el menú de 3 puntos.
+1. **Resumen de Turno** — historial acumulado de trenes trabajados en la jornada, con resumen de cierre accesible desde el menú de 3 puntos.
 2. **Notas por Coche** — extensión del modal "Notas del servicio" con pestañas por coche.
 
 ---
 
 ## Feature 1: Resumen de Turno
 
-### Comportamiento del reloj de turno
+### Modelo de jornada acumulada
 
-**Inicio del turno:**  
-Se registra `state.shiftStartTime` (timestamp ISO) la primera vez que `state.trainNumber` pasa de `null` (o vacío) a un valor real durante una sesión. También se resetea cuando el usuario cambia el número de tren mediante `changeTrainNumber()`. Se persiste en `localStorage` con clave `train${selectedTrain}ShiftStartTime` para sobrevivir recargas de página sin cambio de número.
+Un turno real de interventor incluye varios trenes distintos en la misma jornada (normalmente 2-3). El diseño acumula un **historial de trenes trabajados** durante la jornada en lugar de resetear al cambiar de número de tren.
 
-**Fin del turno:**  
-Se registra en el momento en que el usuario pulsa "Finalizar turno" en el menú de 3 puntos. No se persiste — solo existe durante la visualización del resumen.
+**Estructura del historial (`shiftHistory`):**
+```js
+// Guardado en localStorage con clave "navereaShiftHistory"
+[
+  {
+    trainModel: "463",
+    trainName: "Cercanías 463",
+    trainNumber: "18021",
+    startTime: "2026-06-20T07:14:00.000Z",
+    endTime: "2026-06-20T09:30:00.000Z",   // null si es el tren activo
+    totalSeats: 240,
+    occupiedSeats: 187,
+    topStops: [
+      { name: "Zaragoza-Delicias", count: 34 },
+      { name: "Utebo", count: 20 },
+      { name: "Casetas", count: 11 }
+    ],
+    incidents: ["Puerta D1-L · C2", "WC1 · C3"],
+    serviceNotes: "Retraso 5 min en Utebo",
+    coachNotes: { "C1": "Olor a quemado", "C3": "" }
+  },
+  // ... trenes siguientes
+]
+```
 
-**Reset automático:**  
-Al llamar a `changeTrainNumber()`, se borra `shiftStartTime` de `localStorage` y se asigna el timestamp actual como nuevo inicio. Así, si el interventor abre la app al día siguiente con otro número de tren, el turno anterior queda descartado automáticamente.
+El último elemento del array es siempre el tren activo (con `endTime: null`). Los anteriores tienen `endTime` registrado.
 
-**Recarga sin cambio de número:**  
-Si el usuario recarga la app con el mismo número de tren activo, `shiftStartTime` se recupera de `localStorage` — el turno continúa desde su inicio original.
+### Ciclo de vida del historial
 
-### Entrada en el menú de 3 puntos
+**Al introducir el primer número de tren de la jornada:**
+- Si `shiftHistory` está vacío (o no existe en localStorage), crear el primer elemento con `startTime = now`, `endTime = null`.
 
-Se añade una nueva entrada en el menú `more-options-dropdown`, antes del primer separador:
+**Al cambiar de número de tren (`changeTrainNumber()`):**
+- Registrar `endTime = now` y una snapshot de ocupación/incidencias/notas en el elemento actual del historial.
+- Añadir un nuevo elemento al historial con el nuevo número de tren y `startTime = now`, `endTime = null`.
+- Los datos de asientos/incidencias del tren anterior se borran del state como ya ocurre hoy.
+
+**Al cambiar modelo de tren (`selectTrain()`):**
+- Mismo comportamiento que `changeTrainNumber()`: cierra el elemento actual y abre uno nuevo.
+
+**Al recargar la app:**
+- `shiftHistory` se recupera de localStorage tal cual. El tren activo (último elemento, `endTime: null`) continúa desde su `startTime` original.
+
+**Nueva jornada (`startNewShift()`):**
+- Limpia `shiftHistory` de localStorage y del state.
+- Añade entrada en el menú de 3 puntos: **"Nueva jornada"** (con confirmación).
+- Solo visible cuando existe historial.
+
+### Entradas en el menú de 3 puntos
+
+Antes del primer separador, se añaden dos nuevas entradas:
 
 ```
-⏹ Finalizar turno
+⏹  Finalizar turno       (visible siempre que exista shiftHistory con algún elemento)
+🔄  Nueva jornada         (visible solo cuando existe shiftHistory con algún elemento)
 ```
-
-Solo visible cuando `state.trainNumber` tiene valor (no tiene sentido sin un servicio activo). Si no hay número de tren, la opción está oculta o deshabilitada.
 
 ### Modal de resumen
 
-Al pulsar "Finalizar turno" se abre un modal (usando el sistema de modales existente) con el siguiente contenido:
+Al pulsar "Finalizar turno":
+1. Se registra `endTime = now` en el último elemento del historial (snapshot final).
+2. Se abre el modal de resumen. Los datos del tren en `state` **no se borran**.
 
-**Cabecera:**
-- Título: "Resumen de turno"
-- Botón de cierre (X)
-
-**Cuerpo:**
+El modal muestra una sección por cada tren trabajado en la jornada, en orden cronológico:
 
 ```
-Tren:        [nombre del modelo] · [número de tren]
-Inicio:      [HH:MM del shiftStartTime]
-Fin:         [HH:MM del momento actual]
-Duración:    [X h XX min]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESUMEN DE JORNADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-─── Ocupación ───
-Asientos ocupados al cierre: XX / YY (ZZ%)
-Paradas con más bajadas:
-  1. [Parada A] — XX viajeros
-  2. [Parada B] — XX viajeros
-  3. [Parada C] — XX viajeros
+── Tren 1 ──────────────────────
+Modelo:    Cercanías 463
+Servicio:  18021
+Inicio:    07:14   Fin: 09:30   (2 h 16 min)
 
-─── Incidencias activas ───
-[Si no hay]: Sin incidencias registradas
-[Si hay]:
-  · Puerta D1-L · C2
-  · WC1 · C3
-  · ...
+Ocupación al cierre: 187 / 240 (78%)
+Top bajadas:
+  1. Zaragoza-Delicias — 34
+  2. Utebo — 20
+  3. Casetas — 11
 
-─── Notas del servicio ───
-[Si no hay]: Sin notas
-[Si hay]: texto completo de state.serviceNotes
+Incidencias: Puerta D1-L · C2 · WC1 · C3
+Notas servicio: Retraso 5 min en Utebo
+Notas C1: Olor a quemado
 
-─── Notas por coche ───
-[Solo coches con nota, formato "C1: texto"]
-[Si no hay ninguna]: Sin notas por coche
+── Tren 2 ──────────────────────
+...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL JORNADA
+Duración total: 8 h 12 min
+Trenes trabajados: 3
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **Pie del modal:**
-- Botón "Compartir como texto" — genera un texto plano con el mismo contenido y llama a `navigator.share()` si está disponible, o copia al portapapeles con `navigator.clipboard.writeText()` como fallback.
-- Botón "Exportar JSON" — llama al `exportTurn()` existente.
-- Botón "Cerrar" — cierra el modal. Los datos del tren **no se borran**.
+- Botón "Compartir como texto" — genera texto plano con el contenido completo y llama a `navigator.share()` si está disponible, o copia al portapapeles con `navigator.clipboard.writeText()` como fallback.
+- Botón "Cerrar" — cierra el modal. El historial y los datos del tren activo **no se borran**.
 
-### Cambios en state y storage
+### Storage
 
-**Añadir a `state`:**
-```js
-shiftStartTime: null  // ISO string o null
-```
+- Clave `navereaShiftHistory` en localStorage — array JSON del historial completo de la jornada.
+- Independiente de la clave por tren (`train${selectedTrain}...`), ya que persiste a través de cambios de tren.
 
-**Añadir a `loadData()`** en `StorageService.js`:
-```js
-const savedShiftStart = localStorage.getItem(`train${state.selectedTrain}ShiftStartTime`);
-if (savedShiftStart) state.shiftStartTime = savedShiftStart;
-```
+### Snapshot al cambiar de tren
 
-**Añadir a `saveData()`** en `StorageService.js`:
-```js
-if (state.shiftStartTime) {
-    localStorage.setItem(`train${state.selectedTrain}ShiftStartTime`, state.shiftStartTime);
-} else {
-    localStorage.removeItem(`train${state.selectedTrain}ShiftStartTime`);
-}
-```
-
-**En `script.js`**, detectar primera asignación de número de tren (función `setTrainNumber` / zona donde se asigna `state.trainNumber`):
-- Si `state.shiftStartTime` es null → asignar `new Date().toISOString()`
-
-**En `changeTrainNumber()`**:
-- Resetear `state.shiftStartTime = new Date().toISOString()` (nuevo turno, nuevo inicio)
-- Limpiar la clave anterior de localStorage
+Cuando se cierra un elemento del historial (al cambiar número o modelo de tren), se captura el estado actual:
+- `occupiedSeats` / `totalSeats` — calculados desde `state.seatData` y el layout del tren
+- `topStops` — top 3 paradas por número de asientos con esa bajada
+- `incidents` — array de strings descriptivos generados desde `state.incidents`
+- `serviceNotes` — copia de `state.serviceNotes`
+- `coachNotes` — copia de `state.coachNotes`
 
 ### Nuevo módulo
 
 Crear `src/features/shift-summary.js` con:
-- `initShiftStart()` — asigna `shiftStartTime` si es null
-- `openShiftSummary()` — genera y muestra el modal de resumen
+- `initShiftEntry(trainModel, trainName, trainNumber)` — crea o continúa el elemento activo del historial
+- `closeCurrentShiftEntry()` — registra `endTime` y snapshot en el elemento activo
+- `openShiftSummary()` — cierra el elemento activo, genera y muestra el modal de resumen
+- `startNewShift()` — limpia el historial (con confirmación)
 - `generateSummaryText()` — genera el texto plano para compartir
+- `loadShiftHistory()` / `saveShiftHistory()` — persistencia en localStorage
 - Exportar todas al scope global vía `Object.assign(window, {...})`
 
 ---
@@ -132,7 +155,7 @@ Crear `src/features/shift-summary.js` con:
 coachNotes: {}  // { "C1": "texto...", "C2": "..." }
 ```
 
-**Añadir a `loadData()`**:
+**Añadir a `loadData()`** en `StorageService.js`:
 ```js
 const savedCoachNotes = localStorage.getItem(`train${state.selectedTrain}CoachNotes`);
 if (savedCoachNotes) {
@@ -140,12 +163,12 @@ if (savedCoachNotes) {
 }
 ```
 
-**Añadir a `saveData()`**:
+**Añadir a `saveData()`** en `StorageService.js`:
 ```js
 localStorage.setItem(`train${state.selectedTrain}CoachNotes`, JSON.stringify(state.coachNotes || {}));
 ```
 
-**Reset en `changeTrainNumber()`**: limpiar `state.coachNotes = {}`.
+**Reset en `changeTrainNumber()` y `selectTrain()`**: limpiar `state.coachNotes = {}` y eliminar la clave de localStorage.
 
 ### Modificación del modal "Notas del servicio"
 
@@ -170,7 +193,6 @@ Donde `coaches` es el array de coches del tren activo (`trainModels[state.select
 
 ### Actualización de `openServiceNotes()` en `script.js`
 
-Pasar los nuevos parámetros al template:
 ```js
 window.Templates.generateServiceNotesModal(
     state.serviceNotes,
@@ -181,7 +203,6 @@ window.Templates.generateServiceNotesModal(
 
 ### Nueva función `updateCoachNote(coachId, value)`
 
-En `script.js`:
 ```js
 function updateCoachNote(coachId, value) {
     if (!state.coachNotes) state.coachNotes = {};
@@ -192,28 +213,24 @@ function updateCoachNote(coachId, value) {
 
 Exportar a `window` junto al resto.
 
-### Cambio en `changeTrainNumber()` y `selectTrain()`
-
-En ambas funciones, limpiar `state.coachNotes = {}` y eliminar la clave de localStorage.
-
 ---
 
 ## Archivos afectados
 
 | Archivo | Cambio |
 |---|---|
-| `src/features/shift-summary.js` | Nuevo módulo |
-| `src/services/StorageService.js` | `loadData` / `saveData` para `shiftStartTime` y `coachNotes` |
+| `src/features/shift-summary.js` | Nuevo módulo (historial de jornada) |
+| `src/services/StorageService.js` | `loadData` / `saveData` para `coachNotes`; el historial tiene su propia persistencia en el módulo |
 | `src/utils/templates.js` | `generateServiceNotesModal` con pestañas; nueva función `generateShiftSummaryModal` |
-| `script.js` | `state` con nuevos campos; `changeTrainNumber`; `openServiceNotes`; nueva función `updateCoachNote`; lógica `initShiftStart` al asignar número de tren |
+| `script.js` | `state` con `coachNotes`; hooks en `changeTrainNumber` y `selectTrain`; `openServiceNotes`; nueva función `updateCoachNote`; llamada a `initShiftEntry` al asignar número de tren |
 | `index.html` | Incluir `src/features/shift-summary.js` |
-| `styles.css` | Estilos para pestañas del modal de notas y para el modal de resumen |
+| `styles.css` | Estilos para pestañas del modal de notas y para el modal de resumen de jornada |
 
 ---
 
 ## Lo que NO cambia
 
-- Los datos del tren (asientos, incidencias) no se borran al ver el resumen.
+- Los datos del tren activo (asientos, incidencias) no se borran al ver el resumen.
 - El flujo de "Compartir turno" / "Exportar JSON" existente no se modifica.
 - El badge de notas en el botón del header sigue funcionando como hoy (basado solo en `serviceNotes`).
 - No se añade ningún indicador visual nuevo en los botones de coche del header.
