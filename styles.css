@@ -4268,3 +4268,76 @@ body.dark-mode #qr-video {
 .dark-mode .crew-footer-btn:active {
     background: var(--color-gray-700, #374151);
 }
+/* ============================================
+   PESTAÑAS MODAL DE NOTAS
+   ============================================ */
+.notes-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    overflow-x: auto;
+    flex-shrink: 0;
+    scrollbar-width: none;
+}
+.notes-tabs::-webkit-scrollbar { display: none; }
+
+.notes-tab {
+    padding: 0.65rem 1rem;
+    border: none;
+    background: transparent;
+    font-size: 0.88rem;
+    color: var(--color-gray-500, #6b7280);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s;
+    flex-shrink: 0;
+}
+.notes-tab:hover { color: var(--text-color, #111827); }
+.notes-tab.active {
+    color: var(--color-primary, #4f46e5);
+    border-bottom-color: var(--color-primary, #4f46e5);
+}
+.notes-tab-content { width: 100%; }
+.notes-tab-content.hidden { display: none; }
+
+/* ============================================
+   MODAL RESUMEN DE JORNADA
+   ============================================ */
+.shift-summary-content {
+    padding: 1rem 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+.shift-summary-section {
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    padding: 1rem 0;
+}
+.shift-summary-section:last-child { border-bottom: none; }
+.shift-summary-section h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary, #4f46e5);
+    margin: 0 0 0.6rem 0;
+}
+.shift-summary-row {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-color, #111827);
+}
+.shift-summary-label {
+    color: var(--color-gray-500, #6b7280);
+    flex-shrink: 0;
+    min-width: 6rem;
+}
+.shift-summary-totals {
+    padding-top: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-color, #111827);
+}
+.dark-mode .shift-summary-section h4 { color: var(--color-primary, #818cf8); }

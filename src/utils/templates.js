@@ -146,7 +146,7 @@ ${trainNumber ? `
             <line x1="12" y1="18" x2="12" y2="12"/>
             <line x1="9" y1="15" x2="15" y2="15"/>
         </svg>
-        ${serviceNotes && serviceNotes.trim() ? '<span class="notes-badge"></span>' : ''}
+        ${(serviceNotes && serviceNotes.trim()) || config.hasCoachNotes ? '<span class="notes-badge"></span>' : ''}
     </button>
 
     <button class="action-btn ${incidentsCount > 0 ? 'has-incidents' : ''}"
@@ -203,7 +203,7 @@ ${trainNumber ? `
         </svg>
     </button>
 
-${generateMoreOptionsMenu()}
+${generateMoreOptionsMenu(config.hasShiftHistory)}
 </div>
             </div>
 
@@ -225,9 +225,26 @@ ${generateMoreOptionsMenu()}
  * Genera el menú de más opciones
  * @returns {string} HTML del menú
  */
-function generateMoreOptionsMenu() {
+function generateMoreOptionsMenu(hasShiftHistory) {
     return `
 <div id="more-options-menu" class="more-options-dropdown hidden">
+    ${hasShiftHistory ? `
+    <button class="more-option" onclick="openShiftSummary(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <polyline points="9 12 11 14 15 10"/>
+        </svg>
+        Finalizar turno
+    </button>
+    <button class="more-option" onclick="startNewShift(); toggleMoreOptions();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-4.34"/>
+        </svg>
+        Nueva jornada
+    </button>
+    <div class="more-options-separator"></div>
+    ` : ''}
     <button class="more-option" onclick="openCrewModal(); toggleMoreOptions();">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -443,7 +460,24 @@ function generateManualTecnicoModal() {
  * @param {string} notes - Contenido de las notas
  * @returns {string} HTML del modal
  */
-function generateServiceNotesModal(notes) {
+function generateServiceNotesModal(notes, coachNotes, coaches) {
+    coachNotes = coachNotes || {};
+    coaches = coaches || [];
+
+    const coachTabs = coaches.map(c =>
+        `<button class="notes-tab" onclick="switchNotesTab('${c.id}', this)">${c.id}</button>`
+    ).join('');
+
+    const coachPanels = coaches.map(c => `
+        <div class="notes-tab-content hidden" id="notes-tab-${c.id}">
+            <textarea
+                class="service-notes-textarea"
+                placeholder="Notas del coche ${c.id}..."
+                oninput="updateCoachNote('${c.id}', this.value)"
+            >${coachNotes[c.id] || ''}</textarea>
+        </div>
+    `).join('');
+
     return `
         <div class="modal-overlay" onclick="closeServiceNotes(event)">
             <div class="modal about-modal" onclick="event.stopPropagation()">
@@ -458,24 +492,29 @@ function generateServiceNotesModal(notes) {
                         </button>
                     </div>
                 </div>
+                <div class="notes-tabs">
+                    <button class="notes-tab active" onclick="switchNotesTab('service', this)">Servicio</button>
+                    ${coachTabs}
+                </div>
                 <div class="about-content">
-                    <textarea
-                        id="service-notes-textarea"
-                        class="service-notes-textarea"
-                        placeholder="Escribe aquí tus notas sobre el servicio..."
-                        oninput="updateServiceNotes(this.value)"
-                    >${notes || ""}</textarea>
+                    <div class="notes-tab-content" id="notes-tab-service">
+                        <textarea
+                            id="service-notes-textarea"
+                            class="service-notes-textarea"
+                            placeholder="Escribe aquí tus notas sobre el servicio..."
+                            oninput="updateServiceNotes(this.value)"
+                        >${notes || ""}</textarea>
+                    </div>
+                    ${coachPanels}
                 </div>
                 <div class="modal-footer">
-                    ${notes ? `
-                        <button class="clear-btn delete-btn" onclick="clearServiceNotes()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 4px;">
-                                <polyline points="3 6 5 6 21 6"/>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            </svg>
-                            Borrar notas
-                        </button>
-                    ` : ''}
+                    <button class="clear-btn delete-btn" id="btn-clear-note" onclick="clearActiveNote()" style="display:none">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; margin-right: 4px;">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                        Borrar notas
+                    </button>
                     <button class="clear-btn" onclick="closeServiceNotes()">Cerrar</button>
                 </div>
             </div>

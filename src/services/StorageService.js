@@ -187,6 +187,16 @@ function loadData() {
             }
         }
     }
+
+    // Cargar notas por coche
+    const savedCoachNotes = localStorage.getItem(`train${state.selectedTrain}CoachNotes`);
+    if (savedCoachNotes) {
+        try {
+            state.coachNotes = JSON.parse(savedCoachNotes);
+        } catch (e) {
+            console.error("Error loading coach notes");
+        }
+    }
 }
 
 /**
@@ -271,6 +281,12 @@ function saveData() {
             JSON.stringify(state.coach470Variants)
         );
     }
+
+    // Guardar notas por coche
+    localStorage.setItem(
+        `train${state.selectedTrain}CoachNotes`,
+        JSON.stringify(state.coachNotes || {})
+    );
 }
 
 // ============================================
@@ -371,6 +387,7 @@ function clearCurrentTrainData() {
         localStorage.removeItem(`train${state.selectedTrain}Notes`);
         localStorage.removeItem(`train${state.selectedTrain}Incidents`);
         localStorage.removeItem(`train${state.selectedTrain}CopiedData`);
+        localStorage.removeItem(`train${state.selectedTrain}CoachNotes`);
         localStorage.removeItem('currentStop');
         localStorage.removeItem(`autoBackups_${state.selectedTrain}`);
     } catch (e) {

@@ -166,7 +166,8 @@ let state = {
         "C3": "A"
     },
     importantStop: null, // Parada importante para marcado rápido
-    importantStop2: null // Segunda parada importante para marcado rápido
+    importantStop2: null, // Segunda parada importante para marcado rápido
+    coachNotes: {} // Notas libres por coche { "C1": "...", "C2": "..." }
 };
 
 let isModalOpen = false;
@@ -481,6 +482,11 @@ function getDoorSideText(side) {
 
 function selectTrain(trainId) {
     if (trainModels[trainId]) {
+        // Cerrar el tren actual en el historial de jornada antes de cambiar
+        if (state.trainNumber && typeof closeCurrentShiftEntry === 'function') {
+            closeCurrentShiftEntry();
+        }
+
         state.selectedTrain = trainId;
 
         // 🔴 NUEVO: Manejar correctamente el primer coche
@@ -493,6 +499,7 @@ function selectTrain(trainId) {
         state.searchQuery = "";
         state.coachPositions = {};
         state.incidents = {};
+        state.coachNotes = {};
         state.importantStop = localStorage.getItem(`train${trainId}ImportantStop`) || null;
         state.importantStop2 = localStorage.getItem(`train${trainId}ImportantStop2`) || null;
 
@@ -567,6 +574,9 @@ function selectTrain(trainId) {
 
         render();
     }
+    // Registrar inicio del nuevo modelo en el historial de jornada
+    if (state.trainNumber && typeof initShiftEntry === 'function') initShiftEntry();
+
     // Reiniciar backup automático para el nuevo tren
     if (window.clearUndoStack) clearUndoStack();
     startAutoBackup();
@@ -851,11 +861,15 @@ function showTrainNumberPrompt() {
 
         if (!confirm(confirmMessage)) return;
 
+        // Cerrar el tren actual en el historial de jornada antes de borrar el state
+        if (typeof closeCurrentShiftEntry === 'function') closeCurrentShiftEntry();
+
         // --- BORRAR TODOS LOS DATOS ---
         state.seatData = {};
         state.trainDirection = {};
         state.serviceNotes = "";
         state.incidents = {};
+        state.coachNotes = {};
         state.currentStop = null; // 👈 BORRAR PARADA ACTUAL
         lastCopiedSeatData = null;
         state.lastCopiedSeatData = null;
@@ -870,6 +884,9 @@ function showTrainNumberPrompt() {
     // Actualizar número de tren
     state.trainNumber = trimmed;
     saveTrainNumber();
+
+    // Registrar inicio del tren en el historial de jornada
+    if (typeof initShiftEntry === 'function') initShiftEntry();
 
     // Re-renderizar
     render();
@@ -900,11 +917,15 @@ function changeTrainNumber(trainNumber) {
 
     pushUndo(`Cambiar número de tren → ${trainNumber}`);
 
+    // Cerrar el tren actual en el historial de jornada antes de borrar el state
+    if (typeof closeCurrentShiftEntry === 'function') closeCurrentShiftEntry();
+
     // --- BORRAR TODOS LOS DATOS ---
     state.seatData = {};
     state.trainDirection = {};
     state.serviceNotes = "";
     state.incidents = {};
+    state.coachNotes = {};
     state.currentStop = null;
     lastCopiedSeatData = null;
     state.lastCopiedSeatData = null;
@@ -919,6 +940,9 @@ function changeTrainNumber(trainNumber) {
     state.trainNumber = trainNumber;
     saveTrainNumber();
     saveData();
+
+    // Registrar inicio del nuevo tren en el historial de jornada
+    if (typeof initShiftEntry === 'function') initShiftEntry();
 
     // Re-renderizar
     render();
@@ -943,6 +967,7 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
 
     // Recorrer todos los asientos y borrar los que tengan paradas anteriores
     let deletedCount = 0;
+    const releasedByStop = {}; // { "Parada X": 3, ... } para el historial de jornada
     Object.keys(state.seatData)
         .forEach(key => {
             const seatInfo = state.seatData[key];
@@ -971,6 +996,9 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
                         seatInfo.historial.push(seatInfo.stop.full);
                     }
 
+                    // Acumular bajadas por parada para el historial de jornada
+                    releasedByStop[seatStopName] = (releasedByStop[seatStopName] || 0) + 1;
+
                     // Borrar parada, flags y comentario
                     delete seatInfo.stop;
                     delete seatInfo.enlace;
@@ -983,6 +1011,11 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
                 }
             }
         });
+
+    // Registrar bajadas en el historial de jornada
+    if (typeof recordStopReleases === 'function') {
+        Object.entries(releasedByStop).forEach(([stop, count]) => recordStopReleases(stop, count));
+    }
 
     saveData();
     state.currentStopSearch = '';
@@ -1430,40 +1463,91 @@ function closeAbout(event) {
 
 function openServiceNotes() {
     pushUndo('Editar notas del servicio');
-    // Resetear estado de doble tap al abrir modal
     resetCoachDoubleTap();
 
-    document.body.insertAdjacentHTML('beforeend', window.Templates.generateServiceNotesModal(state.serviceNotes));
+    const coaches = trainModels[state.selectedTrain] ? trainModels[state.selectedTrain].coaches : [];
+    document.body.insertAdjacentHTML('beforeend',
+        window.Templates.generateServiceNotesModal(state.serviceNotes, state.coachNotes || {}, coaches)
+    );
     lockBodyScroll();
 
-    // Enfocar el textarea
     setTimeout(() => {
         const textarea = document.getElementById('service-notes-textarea');
         if (textarea) textarea.focus();
+        _updateClearNoteBtn('service');
     }, 100);
+}
+
+function updateCoachNote(coachId, value) {
+    if (!state.coachNotes) state.coachNotes = {};
+    state.coachNotes[coachId] = value;
+    saveData();
+    updateNotesBadge();
+}
+
+function switchNotesTab(tabId, btn) {
+    document.querySelectorAll('.notes-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.notes-tab').forEach(el => el.classList.remove('active'));
+    const content = document.getElementById(`notes-tab-${tabId}`);
+    if (content) content.classList.remove('hidden');
+    if (btn) btn.classList.add('active');
+    _updateClearNoteBtn(tabId);
+}
+
+function _updateClearNoteBtn(tabId) {
+    const clearBtn = document.getElementById('btn-clear-note');
+    if (!clearBtn) return;
+    const hasContent = tabId === 'service'
+        ? !!(state.serviceNotes && state.serviceNotes.trim())
+        : !!(state.coachNotes && state.coachNotes[tabId] && state.coachNotes[tabId].trim());
+    clearBtn.style.display = hasContent ? '' : 'none';
+}
+
+function clearActiveNote() {
+    const activeTab = document.querySelector('.notes-tab.active');
+    if (!activeTab) return;
+    const tabId = activeTab.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if (!tabId) return;
+
+    if (tabId === 'service') {
+        if (!confirm('¿Borrar las notas del servicio?')) return;
+        pushUndo('Borrar notas del servicio');
+        state.serviceNotes = '';
+        const ta = document.getElementById('service-notes-textarea');
+        if (ta) ta.value = '';
+    } else {
+        if (!confirm(`¿Borrar las notas del coche ${tabId}?`)) return;
+        pushUndo(`Borrar notas del coche ${tabId}`);
+        if (state.coachNotes) state.coachNotes[tabId] = '';
+        const panel = document.getElementById(`notes-tab-${tabId}`);
+        if (panel) { const ta = panel.querySelector('textarea'); if (ta) ta.value = ''; }
+    }
+    saveData();
+    updateNotesBadge();
+    _updateClearNoteBtn(tabId);
+}
+
+function updateNotesBadge() {
+    const hasNotes = (state.serviceNotes && state.serviceNotes.trim()) ||
+        Object.values(state.coachNotes || {}).some(n => n && n.trim());
+    const headerElement = document.querySelector('.header');
+    if (!headerElement) return;
+    const notesBtn = headerElement.querySelector('[onclick="openServiceNotes()"]');
+    if (!notesBtn) return;
+    if (hasNotes) {
+        if (!notesBtn.querySelector('.notes-badge')) {
+            notesBtn.insertAdjacentHTML('beforeend', '<span class="notes-badge"></span>');
+        }
+    } else {
+        const badge = notesBtn.querySelector('.notes-badge');
+        if (badge) badge.remove();
+    }
 }
 
 function updateServiceNotes(value) {
     state.serviceNotes = value;
     saveData();
-
-    // Actualizar header para mostrar/ocultar badge
-    const headerElement = document.querySelector('.header');
-    if (headerElement) {
-        const notesBtn = headerElement.querySelector('[onclick="openServiceNotes()"]');
-        if (notesBtn) {
-            if (value && value.trim()) {
-                notesBtn.classList.add('has-notes');
-                if (!notesBtn.querySelector('.notes-badge')) {
-                    notesBtn.insertAdjacentHTML('beforeend', '<span class="notes-badge"></span>');
-                }
-            } else {
-                notesBtn.classList.remove('has-notes');
-                const badge = notesBtn.querySelector('.notes-badge');
-                if (badge) badge.remove();
-            }
-        }
-    }
+    updateNotesBadge();
 }
 
 function clearServiceNotes() {
@@ -2025,6 +2109,7 @@ function renderHeader() {
         copyMode: state.copyMode,
         filterActive: filterState.active,
         serviceNotes: state.serviceNotes,
+        hasCoachNotes: Object.values(state.coachNotes || {}).some(n => n && n.trim()),
         incidentsCount: Object.keys(state.incidents).length,
         darkMode: state.darkMode,
         rotateSeats: state.rotateSeats,
@@ -2037,7 +2122,8 @@ function renderHeader() {
         collapseTitle: state.headerCollapsed ? 'Expandir' : 'Colapsar',
         collapseIcon: state.headerCollapsed ?
             '<polyline points="6 9 12 15 18 9"/>' :
-            '<polyline points="18 15 12 9 6 15"/>'
+            '<polyline points="18 15 12 9 6 15"/>',
+        hasShiftHistory: typeof loadShiftHistory === 'function' && loadShiftHistory().length > 0
     });
 }
 
@@ -4082,6 +4168,7 @@ Object.assign(window, {
 
     // Notas e incidencias
     openServiceNotes, updateServiceNotes, clearServiceNotes, closeServiceNotes,
+    updateCoachNote, switchNotesTab, clearActiveNote,
     // Las funciones de incidencias están en src/features/incidents.js
     getDoorSideText,
 

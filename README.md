@@ -22,6 +22,8 @@
 - 🔄 **Backup automático**: Guarda automáticamente el último estado.
 - 📊 **Pantallas de estaciones**: Consulta horarios y conexiones en tiempo real.
 - 📘 **Manual técnico integrado**: Acceso al Manual Técnico Ferroviario para resolver incidencias.
+- 📋 **Resumen de jornada**: Registra automáticamente cada tren trabajado durante el día. Al finalizar, muestra un resumen completo con ocupación, incidencias y notas de todos los servicios, compartible como texto.
+- 📝 **Notas por coche**: Las notas del servicio ahora incluyen pestañas por coche (C1, C2…) para anotar observaciones específicas de cada vagón.
 
 ---
 
@@ -158,7 +160,24 @@ El tren 470 tiene múltiples variantes de distribución de asientos por coche (A
   - Si es nueva, configura las variantes manualmente y pulsa **"Guardar configuración actual"** para guardarla con ese nombre.
   - Elimina unidades guardadas con el botón ✕.
 
-### 7️⃣ Comparte el turno
+### 7️⃣ Toma notas por coche
+
+- Toca el botón de **Notas del servicio** (icono de página) en la barra superior.
+- La pestaña **"Servicio"** contiene las notas generales del tren.
+- Las pestañas **C1, C2…** permiten anotar observaciones específicas de cada coche (ej. "Olor a quemado", "Calefacción no funciona").
+- Las notas se guardan automáticamente y aparecen en el resumen de jornada.
+
+### 8️⃣ Resumen de jornada
+
+Navirea registra automáticamente cada tren que trabajas durante la jornada:
+
+- Al **introducir el número de tren**, se inicia el cronómetro del servicio.
+- Al **cambiar de número de tren o modelo**, el servicio anterior se cierra y se abre uno nuevo — el historial se acumula.
+- Cuando termines, abre el menú **⋮ → Finalizar turno** para ver el resumen completo de la jornada: hora de inicio y fin de cada tren, ocupación, paradas con más bajadas, incidencias y notas.
+- **"Compartir como texto"** permite enviar el resumen por cualquier app de mensajería.
+- **"Nueva jornada"** (también en el menú ⋮) limpia el historial para empezar de cero al día siguiente.
+
+### 9️⃣ Comparte el turno
 
 - **Exportar a JSON**: Guarda el estado completo del tren.
 - **Compartir por QR**: Genera un código QR para transferir el estado a otro interventor.
@@ -207,13 +226,42 @@ Al crear un modelo de tren, puedes elegir entre:
 
 ---
 
-## 🔗 Herramientas externas
+## ⋮ Menú de más opciones
 
-Accesibles desde el menú de **Más opciones** (⋮):
+El botón **⋮** de la barra superior despliega todas las acciones avanzadas de la app:
 
-- **SpainTrainRadar**: Visualización en tiempo real de la posición de los trenes.
-- **Estado Trenes Renfe**: Consulta el estado de circulación de los trenes Renfe.
-- **Visor LTV Adif**: Visor de Limitaciones Temporales de Velocidad de Adif.
+### Jornada
+| Opción | Descripción |
+|---|---|
+| **Finalizar turno** | Muestra el resumen completo de la jornada con todos los trenes trabajados. Aparece en cuanto hay al menos un tren registrado. |
+| **Nueva jornada** | Limpia el historial de jornada para empezar de cero al día siguiente (pide confirmación). |
+
+### Tripulación y turno
+| Opción | Descripción |
+|---|---|
+| **Tripulación** | Agenda de contactos del turno (maquinista, interventor auxiliar…) con llamada directa. Importar/exportar en JSON. |
+| **Compartir turno** | Exporta el estado del tren por **código QR** o **archivo JSON** para traspasarlo a otro interventor. |
+| **Importar turno** | Carga el estado de un turno previo escaneando un **QR** o desde un **archivo JSON**. |
+
+### Configuración
+| Opción | Descripción |
+|---|---|
+| **Configuraciones Personalizadas** | Crea y gestiona modelos de tren y trayectos propios. |
+| **Backups automáticos** | Accede a los últimos estados guardados automáticamente y restáuralos si es necesario. |
+| **Manual Técnico de Trenes** | Abre el Manual Técnico Ferroviario integrado para consultar procedimientos ante incidencias. |
+
+### Herramientas externas
+| Opción | Descripción |
+|---|---|
+| **SpainTrainRadar** | Visualización en tiempo real de la posición de los trenes. |
+| **Estado Trenes Renfe** | Consulta el estado de circulación de los trenes Renfe. |
+| **Visor LTV Adif** | Visor de Limitaciones Temporales de Velocidad de Adif. |
+
+### Información
+| Opción | Descripción |
+|---|---|
+| **Acerca de** | Versión de la aplicación e información del proyecto. |
+| **Guía de uso** | Abre la guía de usuario completa dentro de la propia app. |
 
 ---
 
