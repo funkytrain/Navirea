@@ -1126,6 +1126,9 @@ const ConfigurationManager = {
     },
 
     restoreFromBackup(backup) {
+        // Cerrar el tren actual en el historial de jornada antes de reemplazar el state
+        if (typeof closeCurrentShiftEntry === 'function') closeCurrentShiftEntry();
+
         window.state.seatData = backup.seatData || {};
         window.state.trainDirection = backup.trainDirection || {};
         window.state.serviceNotes = backup.serviceNotes || '';
@@ -1145,6 +1148,9 @@ const ConfigurationManager = {
         }
 
         this.saveData();
+
+        // Registrar inicio del tren restaurado en el historial de jornada
+        if (typeof initShiftEntry === 'function') initShiftEntry();
     },
 
     clearAllAutoBackups() {

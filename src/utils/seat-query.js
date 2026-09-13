@@ -109,7 +109,7 @@ const SeatQuery = {
      */
     seatsWithComment(seatData) {
         return Object.entries(seatData)
-            .filter(([, info]) => info && info.comentarioFlag)
+            .filter(([, info]) => info && (info.comentarioFlag || info.comentario))
             .map(([key, info]) => {
                 const parts = key.split('-');
                 return { coach: parts[0], seat: parts.length === 3 ? parts[2] : parts[1], info };

@@ -388,6 +388,9 @@ async function processQRData(dataStr) {
             `Asientos: ${Object.keys(turnData.seatData || {}).length}\n\n` +
             `Esto reemplazará los datos actuales.`
         )) {
+            // Cerrar el tren actual en el historial de jornada antes de reemplazar el state
+            if (typeof closeCurrentShiftEntry === 'function') closeCurrentShiftEntry();
+
             if (state.selectedTrain !== turnData.trainModel) {
                 state.selectedTrain = turnData.trainModel;
                 state.selectedCoach = allTrains[turnData.trainModel].coaches[0].id;
@@ -415,6 +418,10 @@ async function processQRData(dataStr) {
             }
 
             saveData();
+
+            // Registrar inicio del tren importado en el historial de jornada
+            if (typeof initShiftEntry === 'function') initShiftEntry();
+
             render();
             alert('✅ Turno importado correctamente desde QR');
         }

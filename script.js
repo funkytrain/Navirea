@@ -1744,6 +1744,9 @@ function importTurn() {
                         `\n\nEsto reemplazará los datos actuales de este tren.`
                     )
                 ) {
+                    // Cerrar el tren actual en el historial de jornada antes de reemplazar el state
+                    if (typeof closeCurrentShiftEntry === 'function') closeCurrentShiftEntry();
+
                     // Cambiar al tren correcto si es necesario
                     if (state.selectedTrain !== turnData.trainModel) {
                         state.selectedTrain = turnData.trainModel;
@@ -1785,6 +1788,9 @@ function importTurn() {
                     // Guardar todo en localStorage usando función centralizada
                     saveImportedData(turnData);
                     if (window.clearUndoStack) clearUndoStack();
+
+                    // Registrar inicio del tren importado en el historial de jornada
+                    if (typeof initShiftEntry === 'function') initShiftEntry();
 
                     // Recargar vista
                     render();
