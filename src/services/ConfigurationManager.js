@@ -1004,10 +1004,14 @@ const ConfigurationManager = {
         const savedCurrentStop = localStorage.getItem(`train${window.state.selectedTrain}CurrentStop`);
         if (savedCurrentStop) window.state.currentStop = savedCurrentStop;
 
-        const savedImportantStop = localStorage.getItem(`train${window.state.selectedTrain}ImportantStop`);
+        // Paradas importantes: son una propiedad de la parada en si, no del tren ni
+        // del servicio, asi que viven en una clave global y sobreviven a los borrados.
+        this.migrateImportantStops();
+
+        const savedImportantStop = localStorage.getItem('importantStop');
         if (savedImportantStop) window.state.importantStop = savedImportantStop;
 
-        const savedImportantStop2 = localStorage.getItem(`train${window.state.selectedTrain}ImportantStop2`);
+        const savedImportantStop2 = localStorage.getItem('importantStop2');
         if (savedImportantStop2) window.state.importantStop2 = savedImportantStop2;
 
         const savedServiceNotes = localStorage.getItem(`train${window.state.selectedTrain}ServiceNotes`);
@@ -1049,15 +1053,15 @@ const ConfigurationManager = {
         }
 
         if (window.state.importantStop) {
-            localStorage.setItem(`train${t}ImportantStop`, window.state.importantStop);
+            localStorage.setItem('importantStop', window.state.importantStop);
         } else {
-            localStorage.removeItem(`train${t}ImportantStop`);
+            localStorage.removeItem('importantStop');
         }
 
         if (window.state.importantStop2) {
-            localStorage.setItem(`train${t}ImportantStop2`, window.state.importantStop2);
+            localStorage.setItem('importantStop2', window.state.importantStop2);
         } else {
-            localStorage.removeItem(`train${t}ImportantStop2`);
+            localStorage.removeItem('importantStop2');
         }
 
         if (window.state.serviceNotes !== undefined) {
@@ -1185,8 +1189,35 @@ const ConfigurationManager = {
         try { localStorage.setItem('headerCollapsed', window.state.headerCollapsed); } catch (e) { console.warn('Error al guardar header', e); }
     },
 
-    clearCurrentTrainData() {
-        const t = window.state.selectedTrain;
+    /**
+     * Migra las paradas importantes del formato antiguo (una por modelo de tren)
+     * al global. La importancia de una parada no depende del tren que la recorra,
+     * así que no debe perderse al cambiar de plantilla ni al empezar un servicio.
+     */
+    migrateImportantStops() {
+        try {
+            if (localStorage.getItem('importantStop') || localStorage.getItem('importantStop2')) return;
+
+            const claves = Object.keys(localStorage)
+                .filter(k => /^train.+ImportantStop2?$/.test(k));
+            if (!claves.length) return;
+
+            const uno = claves.find(k => k.endsWith('ImportantStop'));
+            const dos = claves.find(k => k.endsWith('ImportantStop2'));
+            if (uno) localStorage.setItem('importantStop', localStorage.getItem(uno));
+            if (dos) localStorage.setItem('importantStop2', localStorage.getItem(dos));
+
+            claves.forEach(k => localStorage.removeItem(k));
+        } catch (e) { console.warn('Error al migrar paradas importantes', e); }
+    },
+
+    /**
+     * Borra todos los datos de sesión asociados a UN modelo de tren.
+     * Las paradas importantes NO se tocan: viven en una clave global.
+     * @param {string} t - Id del modelo (463, 470…)
+     */
+    clearTrainData(t) {
+        if (!t) return;
         try {
             localStorage.removeItem(`train${t}Data`);
             localStorage.removeItem(`train${t}Direction`);
@@ -1194,9 +1225,45 @@ const ConfigurationManager = {
             localStorage.removeItem(`train${t}Incidents`);
             localStorage.removeItem(`train${t}CopiedData`);
             localStorage.removeItem(`train${t}CoachNotes`);
-            localStorage.removeItem('currentStop');
+            localStorage.removeItem(`train${t}ServiceNotes`);
+            localStorage.removeItem(`train${t}Number`);
+            localStorage.removeItem(`train${t}CurrentStop`);
             localStorage.removeItem(`autoBackups_${t}`);
-        } catch (e) { console.warn('Error al eliminar datos', e); }
+        } catch (e) { console.warn('Error al eliminar datos del tren ' + t, e); }
+    },
+
+    clearCurrentTrainData() {
+        this.clearTrainData(window.state.selectedTrain);
+        try {
+            localStorage.removeItem('currentStop');
+        } catch (e) { console.warn('Error al eliminar parada actual', e); }
+    },
+
+    /**
+     * Borra los datos de sesión de TODOS los modelos de tren.
+     * Un número de tren nuevo es un servicio nuevo: no debe quedar rastro de
+     * plantillas trabajadas antes, ni siquiera en modelos que no están activos.
+     * El historial de jornada (navereaShiftHistory) NO se toca: se conserva
+     * para el resumen y su exportación a PDF.
+     */
+    clearAllTrainsData() {
+        const models = new Set(Object.keys(window.trainModels || {}));
+
+        // Incluir modelos que ya no estén cargados pero conserven datos en localStorage
+        try {
+            Object.keys(localStorage).forEach(k => {
+                const m = k.match(/^train(.+?)(?:Data|Direction|Notes|Incidents|CopiedData|CoachNotes|ServiceNotes|Number|CurrentStop)$/)
+                    || k.match(/^autoBackups_(.+)$/);
+                if (m && m[1]) models.add(m[1]);
+            });
+        } catch (e) { console.warn('Error al enumerar datos guardados', e); }
+
+        models.forEach(t => this.clearTrainData(t));
+
+        try {
+            localStorage.removeItem('currentStop');
+            localStorage.removeItem('trainNumber');
+        } catch (e) { console.warn('Error al eliminar datos globales', e); }
     },
 
     clearSeatsData() {
@@ -1253,6 +1320,8 @@ window.saveTrainNumber     = () => ConfigurationManager.saveTrainNumber();
 window.saveCurrentStop     = () => ConfigurationManager.saveCurrentStop();
 window.save470Variants     = () => ConfigurationManager.save470Variants();
 window.saveHeaderCollapsed = () => ConfigurationManager.saveHeaderCollapsed();
+window.clearTrainData        = (t) => ConfigurationManager.clearTrainData(t);
+window.clearAllTrainsData    = () => ConfigurationManager.clearAllTrainsData();
 window.clearCurrentTrainData = () => ConfigurationManager.clearCurrentTrainData();
 window.clearSeatsData        = () => ConfigurationManager.clearSeatsData();
 window.saveImportedData      = (d) => ConfigurationManager.saveImportedData(d);

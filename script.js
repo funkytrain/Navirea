@@ -121,6 +121,7 @@ function toggleCopyMode() {
         if (lastCopiedSeatData.enlace) flags.push("Enlace");
         if (lastCopiedSeatData.seguir) flags.push("Seguir");
         if (lastCopiedSeatData.comentarioFlag) flags.push("Comentario");
+        if (lastCopiedSeatData.pmrFlag) flags.push(lastCopiedSeatData.pmrTipo ? `PMR ${lastCopiedSeatData.pmrTipo}` : "PMR");
 
         const flagsText = flags.length > 0 ? ` (${flags.join(", ")})` : "";
         bannerText = `Copiado: ${stopName}${flagsText}`;
@@ -241,7 +242,9 @@ function updateSeat(coachId, seatNum, stop) {
         enlace: state.seatData[key].enlace || false,
         seguir: state.seatData[key].seguir || false,
         comentarioFlag: state.seatData[key].comentarioFlag || false,
-        comentario: state.seatData[key].comentario || ""
+        comentario: state.seatData[key].comentario || "",
+        pmrFlag: state.seatData[key].pmrFlag || false,
+        pmrTipo: state.seatData[key].pmrTipo || ""
     };
     state.lastCopiedSeatData = { ...lastCopiedSeatData };
 
@@ -310,6 +313,8 @@ function clearSeat(coachId, seatNum) {
         delete seatInfo.seguir;
         delete seatInfo.comentarioFlag;
         delete seatInfo.comentario;
+        delete seatInfo.pmrFlag;
+        delete seatInfo.pmrTipo;
 
         // Si no queda historial, eliminar la key completamente
         if (!seatInfo.historial || seatInfo.historial.length === 0) {
@@ -338,7 +343,7 @@ function clearSeat(coachId, seatNum) {
 
 function toggleFlag(coachId, seatNum, flagName) {
     const key = getSeatKey(coachId, seatNum);
-    const flagLabels = { enlace: 'Enlace', seguir: 'Seguir', comentarioFlag: 'Comentario' };
+    const flagLabels = { enlace: 'Enlace', seguir: 'Seguir', comentarioFlag: 'Comentario', pmrFlag: 'PMR' };
     pushUndo(`Toggle ${flagLabels[flagName] || flagName} en ${key}`);
     if (!state.seatData[key]) {
         state.seatData[key] = {};
@@ -353,6 +358,11 @@ function toggleFlag(coachId, seatNum, flagName) {
 // Si desmarca enlace, borrar los datos extra del enlace
     if (flagName === "enlace" && !state.seatData[key][flagName]) {
         delete state.seatData[key].enlaceData;
+    }
+
+// Si desmarca PMR, borrar el tipo de viajero
+    if (flagName === "pmrFlag" && !state.seatData[key][flagName]) {
+        delete state.seatData[key].pmrTipo;
     }
 
     saveData();
@@ -401,6 +411,27 @@ function updateComment(coachId, seatNum, comment) {
     // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
     if (state.copyMode && lastCopiedSeatData) {
         lastCopiedSeatData.comentario = comment;
+        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+    }
+
+    saveData();
+}
+
+function updatePMRType(coachId, seatNum, tipo) {
+    const key = getSeatKey(coachId, seatNum);
+    pushUndo(`Tipo PMR en ${key}`);
+    if (!state.seatData[key]) {
+        state.seatData[key] = {};
+    }
+    if (tipo) {
+        state.seatData[key].pmrTipo = tipo;
+    } else {
+        delete state.seatData[key].pmrTipo;
+    }
+
+    // Si estamos en modo copia, actualizar la información copiada
+    if (state.copyMode && lastCopiedSeatData) {
+        lastCopiedSeatData.pmrTipo = state.seatData[key].pmrTipo || "";
         state.lastCopiedSeatData = { ...lastCopiedSeatData };
     }
 
@@ -482,10 +513,45 @@ function getDoorSideText(side) {
 
 function selectTrain(trainId) {
     if (trainModels[trainId]) {
+        const modeloAnterior = state.selectedTrain;
+
+        // Si no cambia el modelo, no hay nada que borrar ni que confirmar
+        if (modeloAnterior === trainId) {
+            toggleTrainSelector();
+            return;
+        }
+
+        // Cambiar de modelo borra la plantilla que se deja: confirmar si hay trabajo hecho
+        const asientosMarcados = Object.keys(state.seatData || {}).length;
+        const hayTrabajo = asientosMarcados > 0 ||
+            (state.serviceNotes && state.serviceNotes.trim() !== '') ||
+            Object.keys(state.incidents || {}).length > 0;
+
+        if (hayTrabajo) {
+            const nombreAnterior = trainModels[modeloAnterior]
+                ? trainModels[modeloAnterior].name
+                : modeloAnterior;
+            const nombreNuevo = trainModels[trainId].name || trainId;
+
+            let msg = `¿Cambiar al ${nombreNuevo}?\n\n`;
+            msg += `⚠️ SE BORRARÁ lo registrado en el ${nombreAnterior}:\n`;
+            if (asientosMarcados > 0) msg += `• ${asientosMarcados} asiento(s) registrados\n`;
+            if (Object.keys(state.incidents || {}).length > 0) msg += '• Incidencias\n';
+            if (state.serviceNotes && state.serviceNotes.trim() !== '') msg += '• Notas del servicio\n';
+            msg += '• Backups automáticos\n\n';
+            msg += 'ℹ️ El resumen de la jornada se conserva.\n\n';
+            msg += '¿Continuar?';
+
+            if (!confirm(msg)) return;
+        }
+
         // Cerrar el tren actual en el historial de jornada antes de cambiar
         if (state.trainNumber && typeof closeCurrentShiftEntry === 'function') {
             closeCurrentShiftEntry();
         }
+
+        // Borrar la plantilla que se deja: no debe reaparecer al volver a este modelo
+        if (window.clearTrainData) clearTrainData(modeloAnterior);
 
         state.selectedTrain = trainId;
 
@@ -500,8 +566,9 @@ function selectTrain(trainId) {
         state.coachPositions = {};
         state.incidents = {};
         state.coachNotes = {};
-        state.importantStop = localStorage.getItem(`train${trainId}ImportantStop`) || null;
-        state.importantStop2 = localStorage.getItem(`train${trainId}ImportantStop2`) || null;
+        // Las paradas importantes son globales: no dependen del tren ni del servicio
+        state.importantStop = localStorage.getItem('importantStop') || null;
+        state.importantStop2 = localStorage.getItem('importantStop2') || null;
 
         localStorage.setItem("selectedTrain", trainId);
 
@@ -850,7 +917,9 @@ function showTrainNumberPrompt() {
         confirmMessage += '• Incidencias\n';
         confirmMessage += '• Parada actual\n';
         confirmMessage += '• Direcciones del tren\n';
-        confirmMessage += '• Backups automáticos\n\n';
+        confirmMessage += '• Backups automáticos\n';
+        confirmMessage += '• Los asientos de TODAS las plantillas\n\n';
+        confirmMessage += 'ℹ️ El resumen de la jornada se conserva.\n\n';
 
         if (!isKnown) {
             confirmMessage += '⚠️ Este número no está en la lista.\n';
@@ -874,8 +943,8 @@ function showTrainNumberPrompt() {
         lastCopiedSeatData = null;
         state.lastCopiedSeatData = null;
 
-        // Eliminar de localStorage
-        clearCurrentTrainData();
+        // Eliminar de localStorage (todos los modelos: es un servicio nuevo)
+        clearAllTrainsData();
 
         // Guardar estado limpio
         saveData();
@@ -909,7 +978,9 @@ function changeTrainNumber(trainNumber) {
         confirmMessage += '• Incidencias\n';
         confirmMessage += '• Parada actual\n';
         confirmMessage += '• Direcciones del tren\n';
-        confirmMessage += '• Backups automáticos\n\n';
+        confirmMessage += '• Backups automáticos\n';
+        confirmMessage += '• Los asientos de TODAS las plantillas\n\n';
+        confirmMessage += 'ℹ️ El resumen de la jornada se conserva.\n\n';
         confirmMessage += '¿Continuar?';
 
         if (!confirm(confirmMessage)) return;
@@ -930,8 +1001,8 @@ function changeTrainNumber(trainNumber) {
     lastCopiedSeatData = null;
     state.lastCopiedSeatData = null;
 
-    // Eliminar de localStorage
-    clearCurrentTrainData();
+    // Eliminar de localStorage (todos los modelos: es un servicio nuevo)
+    clearAllTrainsData();
 
     // Limpiar tripulación del turno anterior
     if (typeof clearCrewContacts === 'function') clearCrewContacts();
@@ -1005,6 +1076,8 @@ function applyCurrentStopChange(stopName, route, stopIndex, scrollPosition) {
                     delete seatInfo.seguir;
                     delete seatInfo.comentario;
                     delete seatInfo.comentarioFlag;
+                    delete seatInfo.pmrFlag;
+                    delete seatInfo.pmrTipo;
                     // Mantener: historial
 
                     deletedCount++;
@@ -2289,6 +2362,31 @@ function renderModal() {
                         />
                         <label for="seguir-check">Seguir por aquí</label>
                     </div>
+                    <div class="checkbox-item">
+                        <input
+                            type="checkbox"
+                            id="pmr-check"
+                            ${state.seatData[key]?.pmrFlag ? "checked" : ""}
+                            onchange="toggleFlag('${state.selectedSeat.coach}', '${state.selectedSeat.num}', 'pmrFlag'); render();"
+                        />
+                        <label for="pmr-check">PMR</label>
+                        ${
+        state.seatData[key]?.pmrFlag
+            ? `
+                        <select
+                            class="pmr-select"
+                            aria-label="Tipo de viajero PMR"
+                            onchange="updatePMRType('${state.selectedSeat.coach}', '${state.selectedSeat.num}', this.value); render();"
+                        >
+                            <option value="" ${!state.seatData[key]?.pmrTipo ? "selected" : ""}>Selecciona tipo.</option>
+                            ${(window.PMR_TYPES || [])
+                    .map((t) => `<option value="${escapeHtml(t.code)}" ${state.seatData[key]?.pmrTipo === t.code ? "selected" : ""}>${escapeHtml(t.code)}. ${escapeHtml(t.label)}</option>`)
+                    .join("")}
+                        </select>
+                        `
+            : ""
+    }
+                    </div>
                 </div>
                 <div class="modal-search">
                     <input
@@ -2392,6 +2490,10 @@ function render() {
         <div class="legend-item">
             <div class="legend-box yellow"></div>
             <span>Continuar</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box pmr-traveler"></div>
+            <span>PMR</span>
         </div>
 <div class="legend-item">
             <div class="legend-box checked final-stop-legend"></div>
@@ -2525,6 +2627,8 @@ function selectSeat(coach, num) {
             state.seatData[key].seguir = lastCopiedSeatData.seguir;
             state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
             state.seatData[key].comentario = lastCopiedSeatData.comentario;
+            state.seatData[key].pmrFlag = lastCopiedSeatData.pmrFlag;
+            state.seatData[key].pmrTipo = lastCopiedSeatData.pmrTipo;
 
             saveData();
             render();
@@ -2591,6 +2695,8 @@ function handleSeatPress(coach, num, event) {
                     seguir: seatInfo.seguir || false,
                     comentarioFlag: seatInfo.comentarioFlag || false,
                     comentario: seatInfo.comentario || "",
+                    pmrFlag: seatInfo.pmrFlag || false,
+                    pmrTipo: seatInfo.pmrTipo || "",
                     historial: seatInfo.historial ? [...seatInfo.historial] : []
                 };
 
@@ -2648,6 +2754,8 @@ function handleSeatPress(coach, num, event) {
                 delete seatInfo.seguir;
                 delete seatInfo.comentarioFlag;
                 delete seatInfo.comentario;
+                delete seatInfo.pmrFlag;
+                delete seatInfo.pmrTipo;
                 // Mantener SOLO: historial
 
                 // 🔴 NUEVO: Si después de borrar no queda nada útil, eliminar la key
@@ -2691,6 +2799,8 @@ function handleSeatPress(coach, num, event) {
                             seguir: undo.data.seguir,
                             comentarioFlag: undo.data.comentarioFlag,
                             comentario: undo.data.comentario,
+                            pmrFlag: undo.data.pmrFlag,
+                            pmrTipo: undo.data.pmrTipo,
                             historial: [...undo.data.historial]
                         };
 
@@ -2709,7 +2819,8 @@ function handleSeatPress(coach, num, event) {
                     seatInfo.enlace ||
                     seatInfo.seguir ||
                     seatInfo.comentarioFlag ||
-                    seatInfo.comentario
+                    seatInfo.comentario ||
+                    seatInfo.pmrFlag
                 );
 
                 if (hasOnlyMetadata) {
@@ -2719,6 +2830,8 @@ function handleSeatPress(coach, num, event) {
                         seguir: seatInfo.seguir || false,
                         comentarioFlag: seatInfo.comentarioFlag || false,
                         comentario: seatInfo.comentario || "",
+                        pmrFlag: seatInfo.pmrFlag || false,
+                        pmrTipo: seatInfo.pmrTipo || "",
                         historial: seatInfo.historial ? [...seatInfo.historial] : []
                     };
 
@@ -2726,6 +2839,8 @@ function handleSeatPress(coach, num, event) {
                     delete seatInfo.seguir;
                     delete seatInfo.comentarioFlag;
                     delete seatInfo.comentario;
+                    delete seatInfo.pmrFlag;
+                    delete seatInfo.pmrTipo;
 
                     // Si no queda historial, eliminar key completa
                     if (!seatInfo.historial || seatInfo.historial.length === 0) {
@@ -2753,6 +2868,10 @@ function handleSeatPress(coach, num, event) {
                             state.seatData[key].seguir = previousData.seguir;
                             state.seatData[key].comentarioFlag = previousData.comentarioFlag;
                             state.seatData[key].comentario = previousData.comentario;
+                            state.seatData[key].pmrFlag = previousData.pmrFlag;
+                            if (previousData.pmrTipo) {
+                                state.seatData[key].pmrTipo = previousData.pmrTipo;
+                            }
                             if (previousData.historial && previousData.historial.length > 0) {
                                 state.seatData[key].historial = previousData.historial;
                             }
@@ -2786,6 +2905,8 @@ function handleSeatPress(coach, num, event) {
                     state.seatData[key].seguir = lastCopiedSeatData.seguir;
                     state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
                     state.seatData[key].comentario = lastCopiedSeatData.comentario;
+                    state.seatData[key].pmrFlag = lastCopiedSeatData.pmrFlag;
+                    state.seatData[key].pmrTipo = lastCopiedSeatData.pmrTipo;
 
                     saveData();
                     render();
@@ -2945,7 +3066,9 @@ function assignQuickStop(coach, num, stopName, isCustomRoute) {
             enlace: state.seatData[key].enlace || false,
             seguir: state.seatData[key].seguir || false,
             comentarioFlag: state.seatData[key].comentarioFlag || false,
-            comentario: state.seatData[key].comentario || ""
+            comentario: state.seatData[key].comentario || "",
+            pmrFlag: state.seatData[key].pmrFlag || false,
+            pmrTipo: state.seatData[key].pmrTipo || ""
         };
         state.lastCopiedSeatData = { ...lastCopiedSeatData };
 
@@ -3553,6 +3676,30 @@ function show470VariantSelector(coachId, buttonElement) {
 
 // Seleccionar variante del 470
 function select470Variant(coachId, variant) {
+    const variantePrevia = state.coach470Variants[coachId] || "A";
+
+    if (variantePrevia !== variant) {
+        // Los asientos del coche llevan la variante en su key: al cambiarla
+        // dejarian de verse pero seguirian ocupando seatData y reaparecerian
+        // al volver a esta variante. Es otro tren fisico: se borran.
+        const marcados = count470SeatsForVariants({ [coachId]: variantePrevia });
+        if (marcados > 0) {
+            let msg = `¿Cambiar el ${coachId} a la variante ${variant}?\n\n`;
+            msg += `⚠️ SE BORRARÁN los ${marcados} asiento(s) registrados en la variante ${variantePrevia}.\n\n`;
+            msg += '¿Continuar?';
+            if (!confirm(msg)) {
+                const overlayCancel = document.querySelector('.variant-modal-overlay');
+                if (overlayCancel) overlayCancel.remove();
+                unlockBodyScroll();
+                closeVariantSelector();
+                resetCoachDoubleTap();
+                return;
+            }
+        }
+        pushUndo(`Variante ${coachId} → ${variant}`);
+        clear470SeatsForVariants({ [coachId]: variantePrevia });
+    }
+
     state.coach470Variants[coachId] = variant;
     save470Variants();
 
@@ -3654,6 +3801,36 @@ function delete470Unit(unitName) {
     render470UnitsList();
 }
 
+/**
+ * Cuenta los asientos registrados bajo una combinación de variantes del 470.
+ * Las keys del 470 llevan la variante dentro (C1-A-12), así que los datos de una
+ * unidad siguen en seatData aunque dejen de pintarse al cambiar de unidad.
+ * @param {Object} variants - { C1: 'A', C2: 'B', ... }
+ * @returns {number}
+ */
+function count470SeatsForVariants(variants) {
+    return Object.keys(state.seatData || {}).filter(key => {
+        const parts = key.split('-');
+        if (parts.length !== 3) return false;
+        return variants[parts[0]] === parts[1];
+    }).length;
+}
+
+/**
+ * Borra de seatData los asientos que pertenecen a la combinación de variantes dada.
+ * Se usa al cambiar de unidad: cada unidad es un tren físico distinto y no debe
+ * conservar el estado de la anterior.
+ * @param {Object} variants - { C1: 'A', C2: 'B', ... }
+ */
+function clear470SeatsForVariants(variants) {
+    Object.keys(state.seatData || {}).forEach(key => {
+        const parts = key.split('-');
+        if (parts.length === 3 && variants[parts[0]] === parts[1]) {
+            delete state.seatData[key];
+        }
+    });
+}
+
 function apply470Unit(unitName) {
     const units = load470Units();
     const variants = units[unitName];
@@ -3661,6 +3838,24 @@ function apply470Unit(unitName) {
     if (state.selectedTrain !== "470") {
         selectTrain("470");
     }
+
+    const variantesAnteriores = { ...state.coach470Variants };
+    const mismaUnidad = Object.keys(variants)
+        .every(c => variantesAnteriores[c] === variants[c]);
+
+    if (!mismaUnidad) {
+        const marcados = count470SeatsForVariants(variantesAnteriores);
+        if (marcados > 0) {
+            let msg = `¿Cargar la unidad ${unitName}?\n\n`;
+            msg += `⚠️ SE BORRARÁN los ${marcados} asiento(s) registrados en la unidad anterior.\n\n`;
+            msg += 'ℹ️ El resumen de la jornada se conserva.\n\n';
+            msg += '¿Continuar?';
+            if (!confirm(msg)) return;
+        }
+        pushUndo(`Cargar unidad 470 ${unitName}`);
+        clear470SeatsForVariants(variantesAnteriores);
+    }
+
     state.coach470Variants = { ...variants };
     save470Variants();
     saveData();

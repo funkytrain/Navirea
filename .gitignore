@@ -1,5 +1,7 @@
-# Claude Code Plans
+# Claude Code (planes, skills y agentes locales)
 .claude/
+.agents/
+skills-lock.json
 
 # Logs
 *.log
@@ -19,3 +21,6 @@ Thumbs.db
 
 # Configuración local con credenciales (NUNCA commitear)
 config.local.js
+
+# Dependencias (reproducibles desde package.json)
+node_modules/

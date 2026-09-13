@@ -1,0 +1,25 @@
+{
+  "name": "navirea",
+  "version": "1.0.0",
+  "description": "PWA para interventores de Cercanías y Media Distancia: gestión de ocupación, seguimiento del recorrido e incidencias del servicio.",
+  "private": true,
+  "scripts": {
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "pwa",
+    "renfe",
+    "cercanias",
+    "media-distancia",
+    "interventor"
+  ],
+  "author": "funkytrain",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funkytrain/Navirea.git"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.61.0"
+  }
+}

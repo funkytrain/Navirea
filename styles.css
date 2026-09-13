@@ -565,6 +565,11 @@ body.dark-mode .stop-option:hover {
     border-color: #ca8a04;
 }
 
+.legend-box.pmr-traveler {
+    background-color: #d946ef;
+    border-color: #c026d3;
+}
+
 /* Asegurar que el modal ocupe toda la pantalla */
 .modal-overlay {
     position: fixed;
@@ -784,6 +789,13 @@ svg {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+.seat.pmr-traveler {
+    background-color: #d946ef;
+    border-color: #c026d3;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
 .checkbox-group {
     padding: 1rem;
     border-bottom: 1px solid var(--color-gray-200);
@@ -811,6 +823,26 @@ svg {
     font-weight: 500;
     cursor: pointer;
     font-size: 0.9rem;
+}
+
+.pmr-select {
+    flex: 1;
+    min-width: 0;
+    margin-left: auto;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    font-family: inherit;
+    color: inherit;
+    background-color: white;
+    border: 2px solid var(--color-gray-300);
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+body.dark-mode .pmr-select {
+    background-color: var(--color-dark-surface);
+    border-color: #4a4a5e;
+    color: #e0e0e0;
 }
 
 .comment-box {
@@ -1445,7 +1477,7 @@ body.dark-mode .seat-history {
 body,
 .header,
 .modal,
-.seat:not(.occupied):not(.blue):not(.orange):not(.yellow),
+.seat:not(.occupied):not(.blue):not(.orange):not(.yellow):not(.pmr-traveler),
 .coach-btn,
 .legend,
 .modal-header,
@@ -1488,6 +1520,7 @@ body.dark-mode .aisle-arrow {
 .seat.blue:active,
 .seat.orange:active,
 .seat.yellow:active,
+.seat.pmr-traveler:active,
 .seat.multi-color:active {
     filter: brightness(0.9);
 }

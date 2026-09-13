@@ -14,6 +14,7 @@
 - ⚙️ **Configuraciones personalizadas**: Crea y gestiona tus propios modelos de trenes y trayectos.
 - 🎯 **Gestión táctil de asientos**: Marca ocupación, destinos, enlaces y comentarios con gestos intuitivos.
 - ⚡ **Copiado rápido**: Asigna la misma información a múltiples asientos con un solo toque.
+- ♿ **Viajeros PMR**: Marca el asiento y selecciona el tipo de movilidad reducida (11 tipos oficiales) para preparar la asistencia en destino.
 - 🔎 **Filtros avanzados**: Por parada, tramo, asiento, enlaces o comentarios.
 - 📍 **Parada actual inteligente**: Libera automáticamente a los viajeros al llegar a su destino.
 - ⚠️ **Gestión de incidencias**: Registra fallos de WC, puertas, megafonía, PMR y equipos.
@@ -131,6 +132,7 @@ Navirea es una **Progressive Web App (PWA)**, lo que significa que funciona dire
 - **Mantén pulsado un asiento libre** → Asigna la última parada automáticamente.
 - **Toca un asiento ocupado** → Modifica destino, añade enlace o comentario.
 - **Marca "Enlace"** → Introduce opcionalmente el número de tren del enlace, destino y hora de salida. La información se muestra en la cabecera del modal del asiento y en el filtro de enlaces.
+- **Marca "PMR"** → Selecciona el tipo de viajero con movilidad reducida en el desplegable. El asiento se colorea en magenta y el tipo queda visible al consultarlo desde los filtros.
 - **Activa el copiado rápido** → Marca el primer asiento → Los siguientes copiarán la misma información.
 
 ### 3️⃣ Establece la parada actual
@@ -290,8 +292,8 @@ Navirea/
 │   ├── splash.css
 │   └── components/             # Estilos de componentes
 ├── src/
-│   ├── config/                 # Configuraciones
-│   ├── services/               # Servicios (ConfigurationManager, StorageService)
+│   ├── config/                 # Constantes y catálogos (tipos PMR)
+│   ├── services/               # Servicios (ConfigurationManager, AppState)
 │   ├── utils/                  # Utilidades (data-loader, templates, validadores)
 │   ├── features/               # Funcionalidades (filtros, QR, pantallas, incidencias)
 │   ├── components/             # Componentes UI (wizards, editores)

@@ -409,6 +409,10 @@ function showSeatFilterResults(seatInfo) {
 
     if (data.enlace) info += `✓ Enlace\n`;
     if (data.seguir) info += `✓ Seguir por aquí\n`;
+    if (data.pmrFlag) {
+        const tipo = data.pmrTipo ? `${data.pmrTipo}. ${window.getPMRTypeLabel(data.pmrTipo)}` : 'sin especificar';
+        info += `✓ PMR: ${tipo}\n`;
+    }
     if (data.comentario) info += `\nComentario:\n${data.comentario}\n`;
     if (data.historial && data.historial.length > 0) {
         info += `\nHistorial: ${data.historial.join(' → ')}`;

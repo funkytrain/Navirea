@@ -153,6 +153,7 @@ function calculateSeatStyles(key, seatInfo) {
         // aceptar tanto comentarioFlag como comentario (texto)
         if (seatInfo.comentarioFlag || seatInfo.comentario) colors.push('#f97316');
         if (seatInfo.seguir) colors.push('#eab308');
+        if (seatInfo.pmrFlag) colors.push('#d946ef');
 
         // Verificar si es parada final según el número de tren
         const finalStopsForTrain = window.getTrainFinalStops();
@@ -186,6 +187,8 @@ function calculateSeatStyles(key, seatInfo) {
                 seatClass = 'blue';
             } else if (seatInfo.seguir) {
                 seatClass = 'yellow';
+            } else if (seatInfo.pmrFlag) {
+                seatClass = 'pmr-traveler';
             } else if (seatInfo.stop) {
                 seatClass = 'occupied';
             }
