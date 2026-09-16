@@ -34,6 +34,10 @@ const RealtimeService = {
     // Pasado este tiempo sin datos frescos, el dato se marca como "stale".
     STALE_AFTER: 90000,
 
+    // El feed de rutas pesa ~370 KB y los horarios de un trayecto no cambian
+    // cada 30 s: basta refrescarlo cada 3 min para no gastar datos móviles.
+    ROUTES_INTERVAL: 180000,
+
     // Umbrales de retraso en minutos (alineados con la escala de ocupación).
     ON_TIME_MAX: 3,
     LATE_MAX: 10,
@@ -45,7 +49,9 @@ const RealtimeService = {
     // --- Estado interno ---------------------------------------------------
 
     _timer: null,
-    _trenes: [],            // último feed recibido
+    _trenes: [],            // último feed de flota recibido
+    _rutas: {},             // {numTren: [{p, h, hs}]} del feed de rutas
+    _rutasFetchOk: null,    // timestamp del último fetch de rutas
     _lastFetchOk: null,     // timestamp del último fetch correcto
     _status: 'idle',        // idle | ok | stale | offline | disabled
     _prevPositions: {},     // {numTren: {lat, lon, t}} para derivar velocidad
@@ -128,6 +134,94 @@ const RealtimeService = {
         }
 
         this._refreshIndicator();
+        this._maybeFetchRoutes();
+    },
+
+    /**
+     * Descarga el feed de rutas (paradas con hora teórica y estimada).
+     *
+     * Va aparte del de flota porque pesa unas seis veces más (~370 KB) y los
+     * horarios de todo un trayecto no cambian cada 30 s. Con datos móviles
+     * durante una jornada la diferencia es notable.
+     */
+    async _maybeFetchRoutes() {
+        const fresh = this._rutasFetchOk &&
+                      (Date.now() - this._rutasFetchOk) < this.ROUTES_INTERVAL;
+        if (fresh) return;
+
+        try {
+            const url = `${this.proxyUrl}/?feed=rutas&v=${Date.now()}`;
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json();
+            if (!data || !Array.isArray(data.trenes)) {
+                throw new Error('Formato inesperado');
+            }
+
+            const mapa = {};
+            for (const t of data.trenes) {
+                if (t && t.idTren) mapa[t.idTren] = t.estaciones || [];
+            }
+            this._rutas = mapa;
+            this._rutasFetchOk = Date.now();
+        } catch (err) {
+            // Sin rutas la app sigue: solo faltan los horarios por parada
+            console.info('[Realtime] Sin horarios de ruta:', err.message);
+        }
+    },
+
+    /**
+     * Horarios por parada del tren indicado, casados con la ruta de la app.
+     *
+     * Devuelve una entrada por parada de la ruta, en su mismo orden, para que
+     * la vista pueda pintarlas todas aunque el feed no tenga horario de
+     * alguna (paradas que ese día no se hacen, o aún no publicadas).
+     *
+     * @param {string} trainNumber
+     * @param {string[]} route Paradas de la ruta, en orden
+     * @returns {Array<{name, scheduled, estimated, deviation}>|null}
+     */
+    getRouteTimes(trainNumber, route) {
+        if (!trainNumber || !Array.isArray(route) || !route.length) return null;
+
+        const estaciones = this._rutas[String(trainNumber)];
+        if (!estaciones || !estaciones.length) return null;
+
+        const porCodigo = {};
+        for (const e of estaciones) {
+            if (e && e.p) porCodigo[String(e.p)] = e;
+        }
+
+        return route.map(name => {
+            const e = porCodigo[this._codeForStopName(name)];
+            return {
+                name,
+                scheduled: e ? (e.h || null) : null,
+                estimated: e ? (e.hs || null) : null,
+                deviation: e ? this._minutesBetween(e.h, e.hs) : null
+            };
+        });
+    },
+
+    /**
+     * Diferencia en minutos entre dos horas "HH:MM" del mismo trayecto.
+     * Si cruzan medianoche el salto sería de ~1440 min, así que se ajusta.
+     */
+    _minutesBetween(from, to) {
+        if (!from || !to) return null;
+        const parse = s => {
+            const m = String(s).match(/^(\d{1,2}):(\d{2})/);
+            return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : null;
+        };
+        const a = parse(from);
+        const b = parse(to);
+        if (a === null || b === null) return null;
+
+        let diff = b - a;
+        if (diff > 720) diff -= 1440;
+        if (diff < -720) diff += 1440;
+        return diff;
     },
 
     // --- Consulta ---------------------------------------------------------

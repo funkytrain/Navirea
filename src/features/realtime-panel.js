@@ -73,6 +73,10 @@ function openRealtimePanel() {
                     ${row('Material', rt.material || '—')}
                     ${rt.accessible ? row('Accesible', 'Sí') : ''}
 
+                    <button class="rt-route-btn" onclick="closeRealtimePanel(); openRouteView();">
+                        Ver recorrido completo
+                    </button>
+
                     ${suggestionBlock}
                     ${staleWarning}
 
@@ -107,6 +111,110 @@ function applyRealtimeSeries(seriesId) {
         window.selectTrain(seriesId);
     }
 }
+
+// ============================================================================
+// VISTA DE RECORRIDO
+// ============================================================================
+// Todas las paradas del trayecto con la hora estimada de llegada y los
+// minutos de desviación. Su valor está en ver la TENDENCIA: si el retraso
+// baja hacia el final, el enlace del viajero probablemente se salva.
+// ============================================================================
+
+/**
+ * Abre la vista de recorrido del tren actual.
+ */
+function openRouteView() {
+    const trainNumber = window.state?.trainNumber;
+    if (!trainNumber) return;
+
+    const route = typeof window.getCurrentRoute === 'function'
+        ? window.getCurrentRoute()
+        : [];
+    if (!route.length) return;
+
+    const times = window.RealtimeService?.getRouteTimes(trainNumber, route) || null;
+    const currentStop = window.state?.currentStop || null;
+    const currentIndex = currentStop ? route.indexOf(currentStop) : -1;
+
+    document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
+
+    const filas = route.map((name, i) => {
+        const t = times ? times[i] : null;
+        const pasada = currentIndex !== -1 && i < currentIndex;
+        const actual = i === currentIndex;
+
+        // Solo se marca la desviación a partir de 3 min: por debajo es ruido
+        // y llenaría la columna de números sin significado.
+        const dev = t && t.deviation !== null && Math.abs(t.deviation) >= 3
+            ? t.deviation
+            : null;
+
+        let devClass = '';
+        if (dev !== null) devClass = dev > 0 ? 'rv-late' : 'rv-early';
+
+        const marca = pasada ? '✓' : (actual ? '▶' : '○');
+
+        return `
+            <div class="rv-row ${pasada ? 'rv-passed' : ''} ${actual ? 'rv-current' : ''}">
+                <span class="rv-mark">${marca}</span>
+                <span class="rv-name">${window.escapeHtml(name)}</span>
+                <span class="rv-time">${t && t.estimated ? t.estimated : '—'}</span>
+                <span class="rv-dev ${devClass}">${
+                    dev !== null ? (dev > 0 ? `+${dev}` : `−${Math.abs(dev)}`) : ''
+                }</span>
+            </div>
+        `;
+    }).join('');
+
+    const sinDatos = !times
+        ? '<p class="rt-stale-note">Sin horarios en tiempo real para este tren.</p>'
+        : '';
+
+    const modal = `
+        <div class="modal-overlay" onclick="closeRouteView(event)">
+            <div class="modal rv-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-header-top">
+                        <h3 class="modal-title">Recorrido · ${window.escapeHtml(String(trainNumber))}</h3>
+                        <button class="close-btn" onclick="closeRouteView()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="rv-body">
+                    ${sinDatos}
+                    <div class="rv-head">
+                        <span class="rv-mark"></span>
+                        <span class="rv-name">Parada</span>
+                        <span class="rv-time">Est.</span>
+                        <span class="rv-dev">Desv.</span>
+                    </div>
+                    ${filas}
+                    <p class="rt-source">Horarios estimados de Renfe · orientativos</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modal);
+    window.lockBodyScroll?.();
+
+    // Dejar a la vista la parada actual, no el principio del trayecto
+    const actual = document.querySelector('.rv-current');
+    if (actual) actual.scrollIntoView({ block: 'center' });
+}
+
+function closeRouteView(event) {
+    if (event && event.target !== event.currentTarget) return;
+    document.querySelectorAll('.modal-overlay').forEach(m => m.remove());
+    window.unlockBodyScroll?.();
+}
+
+window.openRouteView = openRouteView;
+window.closeRouteView = closeRouteView;
 
 // ============================================================================
 // AVISO DE PARADA DESFASADA

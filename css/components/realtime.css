@@ -196,6 +196,140 @@ body.dark-mode .rt-suggestion {
     background: var(--color-primary-dark);
 }
 
+/* ---------- Botón de acceso al recorrido ---------- */
+
+.rt-route-btn {
+    width: 100%;
+    margin-top: 0.85rem;
+    padding: 0.7rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+body.dark-mode .rt-route-btn {
+    border-color: var(--color-dark-border);
+    color: var(--color-dark-text);
+}
+
+.rt-route-btn:active {
+    background: var(--color-gray-100);
+}
+
+body.dark-mode .rt-route-btn:active {
+    background: var(--color-dark-surface);
+}
+
+/* ---------- Vista de recorrido ----------
+   Cuatro columnas de ancho fijo salvo el nombre: así las horas y las
+   desviaciones quedan alineadas y se leen en vertical de un vistazo,
+   que es lo que permite ver si el retraso se recupera. */
+
+.rv-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+.rv-head,
+.rv-row {
+    display: grid;
+    grid-template-columns: 1.4rem 1fr 3.2rem 2.4rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+.rv-head {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+body.dark-mode .rv-head {
+    color: var(--color-gray-400);
+    border-bottom-color: var(--color-dark-border);
+}
+
+.rv-row {
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+body.dark-mode .rv-row {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.rv-mark {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.rv-name {
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rv-time {
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.rv-dev {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.rv-dev.rv-late {
+    color: var(--color-danger-dark);
+}
+
+body.dark-mode .rv-dev.rv-late {
+    color: #f87171;
+}
+
+.rv-dev.rv-early {
+    color: #059669;
+}
+
+body.dark-mode .rv-dev.rv-early {
+    color: #34d399;
+}
+
+/* Paradas ya superadas: atenuadas, pero legibles por si se consultan */
+.rv-passed {
+    opacity: 0.45;
+}
+
+/* Parada actual: destacada sin depender solo del color */
+.rv-current {
+    background: rgba(79, 70, 229, 0.08);
+    border-radius: 0.4rem;
+    font-weight: 700;
+}
+
+body.dark-mode .rv-current {
+    background: rgba(99, 102, 241, 0.16);
+}
+
+.rv-current .rv-mark {
+    color: var(--color-primary);
+}
+
+body.dark-mode .rv-current .rv-mark {
+    color: #a5b4fc;
+}
+
 /* ---------- Aviso de parada desfasada ----------
    Va abajo para no tapar el mapa de asientos, y NO caduca solo: aparece
    precisamente cuando el interventor está ocupado. Los botones son
