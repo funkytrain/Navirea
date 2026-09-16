@@ -267,8 +267,9 @@ const RealtimeService = {
             delayClass: this._delayClass(delay),
             delayLabel: this._delayLabel(delay),
             speedKmh: this._deriveSpeed(t),
-            nextStation: this._stationName(t.codEstSig),
-            nextArrival: this._formatTime(t.horaLlegadaSigEst),
+            currentStation: this._currentStationName(t),
+            nextStation: this._nextStationName(t),
+            nextArrival: this._nextArrivalTime(t),
             material: t.mat || null,
             seriesId: this._seriesFromMaterial(t.mat),
             accessible: t.accesible === true,
@@ -278,6 +279,65 @@ const RealtimeService = {
     },
 
     // --- Cálculos ---------------------------------------------------------
+
+    /**
+     * ¿Está el tren detenido en una estación?
+     *
+     * El feed marca esa situación poniendo codEstAnt === codEstSig. Medido
+     * sobre el feed real, ocurre en un 15% de los trenes, y en todos los
+     * casos observados la hora de llegada ya había pasado: el tren ha
+     * llegado a esa estación, no se dirige a ella.
+     */
+    _isAtStation(t) {
+        return Boolean(t.codEstAnt) && t.codEstAnt === t.codEstSig;
+    },
+
+    /** Estación en la que está el tren, o null si está en marcha. */
+    _currentStationName(t) {
+        return this._isAtStation(t) ? this._stationName(t.codEstAnt) : null;
+    },
+
+    /**
+     * Próxima parada de verdad.
+     *
+     * Si el tren está detenido en una estación, codEstSig apunta a esa misma
+     * estación, así que hay que deducir la siguiente con el orden del feed
+     * de rutas. Sin ese feed no se puede saber y se devuelve null antes que
+     * dar por próxima la parada en la que ya está.
+     */
+    _nextStationName(t) {
+        if (!this._isAtStation(t)) return this._stationName(t.codEstSig);
+
+        const code = this._nextCodeFromRoute(t);
+        return code ? this._stationName(code) : null;
+    },
+
+    /** Hora de llegada a la próxima parada, coherente con _nextStationName. */
+    _nextArrivalTime(t) {
+        if (!this._isAtStation(t)) return this._formatTime(t.horaLlegadaSigEst);
+
+        const code = this._nextCodeFromRoute(t);
+        if (!code) return null;
+
+        const estaciones = this._rutas[String(t.codComercial)] || [];
+        const e = estaciones.find(x => String(x.p) === String(code));
+        return e ? (e.hs || e.h || null) : null;
+    },
+
+    /**
+     * Código de la parada siguiente a aquella en la que el tren está parado,
+     * según el orden del feed de rutas. null si es final de trayecto o no
+     * hay datos de ruta.
+     */
+    _nextCodeFromRoute(t) {
+        const estaciones = this._rutas[String(t.codComercial)];
+        if (!estaciones || !estaciones.length) return null;
+
+        const i = estaciones.findIndex(e => String(e.p) === String(t.codEstAnt));
+        if (i === -1 || i + 1 >= estaciones.length) return null;
+
+        return estaciones[i + 1].p;
+    },
 
     /**
      * Momento en que el tren reportó su posición por última vez, en ms.

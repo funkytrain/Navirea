@@ -59,6 +59,9 @@ function openRealtimePanel() {
                 <div class="rt-body">
                     ${row('Retraso', `<span class="rt-pill ${rt.delayClass}">${rt.delayLabel}</span>`)}
                     ${row('Velocidad', speed)}
+                    ${rt.currentStation
+                        ? row('Detenido en', window.escapeHtml(rt.currentStation))
+                        : ''}
                     ${row('Próxima', rt.nextStation || '—')}
                     ${row('Llegada est.', nextArrival)}
                     ${row('Material', rt.material || '—')}
