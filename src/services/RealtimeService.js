@@ -31,8 +31,12 @@ const RealtimeService = {
     // El origen cachea 30s: pedir más a menudo gasta batería sin datos nuevos.
     POLL_INTERVAL: 30000,
 
-    // Pasado este tiempo sin datos frescos, el dato se marca como "stale".
-    STALE_AFTER: 90000,
+    // Antigüedad de la posición del tren a partir de la cual el dato se marca
+    // como no fiable. Medido sobre el feed real: la mediana de antigüedad es
+    // de medio minuto, así que 5 min deja pasar la variación normal y solo
+    // señala a los trenes que de verdad han dejado de reportar (en el
+    // muestreo, un 9% superaba los 5 min y un 3% los 15).
+    STALE_AFTER: 300000,
 
     // El feed de rutas pesa ~370 KB y los horarios de un trayecto no cambian
     // cada 30 s: basta refrescarlo cada 3 min para no gastar datos móviles.
@@ -244,13 +248,17 @@ const RealtimeService = {
         const t = this._trenes.find(x => x.codComercial === String(trainNumber));
         if (!t) return null;
 
-        const age = this._lastFetchOk
-            ? Math.round((Date.now() - this._lastFetchOk) / 1000)
-            : null;
+        // La antigüedad que importa es la del DATO DEL TREN (umov: última vez
+        // que reportó posición), no la del fetch. Un tren en zona sin
+        // cobertura deja de reportar y el feed sigue sirviendo su última
+        // posición conocida: sin esto la app diría "actualizado hace 7 s"
+        // mientras muestra una parada de hace veinte minutos.
+        const posTs = this._positionTimestamp(t);
+        const age = posTs
+            ? Math.round((Date.now() - posTs) / 1000)
+            : (this._lastFetchOk ? Math.round((Date.now() - this._lastFetchOk) / 1000) : null);
 
-        const stale = this._lastFetchOk
-            ? (Date.now() - this._lastFetchOk) > this.STALE_AFTER
-            : true;
+        const stale = age === null || (age * 1000) > this.STALE_AFTER;
 
         const delay = this._parseDelay(t.ultRetraso);
 
@@ -270,6 +278,16 @@ const RealtimeService = {
     },
 
     // --- Cálculos ---------------------------------------------------------
+
+    /**
+     * Momento en que el tren reportó su posición por última vez, en ms.
+     * `umov` es ese instante; `time` solo dice cuándo se generó el feed, que
+     * se refresca aunque el tren lleve rato sin dar señal.
+     */
+    _positionTimestamp(t) {
+        const ts = t.umov || t.time;
+        return ts ? ts * 1000 : null;
+    },
 
     _parseDelay(raw) {
         const n = parseInt(raw, 10);
@@ -513,11 +531,16 @@ const RealtimeService = {
             el.hidden = true;
         } else {
             el.hidden = false;
-            el.className = `rt-pill ${rt.delayClass} ${rt.status === 'stale' ? 'rt-stale' : ''}`;
-            el.textContent = rt.delayLabel;
-            el.title = rt.nextStation
-                ? `Próxima: ${rt.nextStation}${rt.nextArrival ? ' · ' + rt.nextArrival : ''}`
-                : 'Información en tiempo real';
+            const viejo = rt.status === 'stale';
+            el.className = `rt-pill ${rt.delayClass} ${viejo ? 'rt-stale' : ''}`;
+            // El reloj avisa de un vistazo de que el dato no es de ahora, sin
+            // tener que abrir el panel para enterarse.
+            el.textContent = viejo ? `⏱ ${rt.delayLabel}` : rt.delayLabel;
+            el.title = viejo
+                ? `Sin posición desde hace ${Math.round(rt.ageSeconds / 60)} min`
+                : (rt.nextStation
+                    ? `Próxima: ${rt.nextStation}${rt.nextArrival ? ' · ' + rt.nextArrival : ''}`
+                    : 'Información en tiempo real');
         }
 
         // Siempre, también sin datos: si el tren sale del feed (llega a

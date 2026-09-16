@@ -120,8 +120,10 @@ ${trainNumber ? `
             class="rt-pill ${realtime ? realtime.delayClass : ''} ${realtime && realtime.status === 'stale' ? 'rt-stale' : ''}"
             ${realtime ? '' : 'hidden'}
             onclick="event.stopPropagation(); openRealtimePanel();"
-            title="${realtime && realtime.nextStation ? `Próxima: ${realtime.nextStation}` : 'Información en tiempo real'}"
-        >${realtime ? realtime.delayLabel : ''}</button>
+            title="${realtime && realtime.status === 'stale'
+                ? `Sin posición desde hace ${Math.round(realtime.ageSeconds / 60)} min`
+                : (realtime && realtime.nextStation ? `Próxima: ${realtime.nextStation}` : 'Información en tiempo real')}"
+        >${realtime ? (realtime.status === 'stale' ? '⏱ ' : '') + realtime.delayLabel : ''}</button>
         <button class="important-stop-config-btn" onclick="event.stopPropagation(); openImportantStopSelector();" title="Configurar parada importante">
             ⚙️
         </button>

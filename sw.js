@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.15';
+const CACHE_NAME = 'plantillatren-v8.16';
 const urlsToCache = [
     '/',
     '/index.html',

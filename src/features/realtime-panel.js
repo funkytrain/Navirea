@@ -32,8 +32,13 @@ function openRealtimePanel() {
 
     const suggestionBlock = buildMaterialBlock(rt);
 
+    // Cuando el tren lleva rato sin reportar posición hay que decirlo con
+    // los minutos reales: si no, el panel muestra una parada de hace veinte
+    // minutos con el mismo aplomo que un dato recién llegado.
     const staleWarning = rt.status === 'stale'
-        ? '<p class="rt-stale-note">Sin datos frescos: puede estar desactualizado.</p>'
+        ? `<p class="rt-stale-note">El tren no reporta posición desde hace
+           ${_formatAge(rt.ageSeconds)}. Los datos pueden no reflejar
+           dónde está ahora.</p>`
         : '';
 
     const modal = `
@@ -68,7 +73,7 @@ function openRealtimePanel() {
 
                     <p class="rt-age">
                         ${rt.ageSeconds !== null
-                            ? `Actualizado hace ${rt.ageSeconds} s`
+                            ? `Posición recibida hace ${_formatAge(rt.ageSeconds)}`
                             : 'Sin actualizar'}
                     </p>
                     <p class="rt-source">Datos públicos de Renfe · orientativos</p>
@@ -168,6 +173,17 @@ function buildMaterialBlock(rt) {
 
     // CASO 4 (sin unidades): la serie coincide
     return `<p class="rt-match">S-${rt.seriesId} · coincide</p>`;
+}
+
+/** Antigüedad legible: "12 s", "4 min", "1 h 20 min". */
+function _formatAge(seconds) {
+    if (seconds === null || seconds === undefined) return '—';
+    if (seconds < 60) return `${seconds} s`;
+    const mins = Math.round(seconds / 60);
+    if (mins < 60) return `${mins} min`;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return m ? `${h} h ${m} min` : `${h} h`;
 }
 
 /** Primer número de unidad de "mat" ("470094,470103" → "470094"). */

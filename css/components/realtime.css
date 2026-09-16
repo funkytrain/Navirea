@@ -115,6 +115,11 @@ body.dark-mode .rt-modal .rt-pill.rt-early {
 /* ---------- Panel de detalle ---------- */
 
 .rt-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     padding: 0.5rem 1rem 1rem;
 }
 
@@ -229,7 +234,15 @@ body.dark-mode .rt-route-btn:active {
    desviaciones quedan alineadas y se leen en vertical de un vistazo,
    que es lo que permite ver si el retraso se recupera. */
 
+/* .modal tiene overflow:hidden y max-height:80vh, así que el cuerpo debe
+   aportar su propio scroll o el recorrido se corta y no se puede bajar
+   (mismo patrón que .modal-list). */
 .rv-body {
+    flex: 1;
+    min-height: 0;                     /* sin esto flex no deja encoger */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     padding: 0.5rem 1rem 1rem;
 }
 
@@ -242,7 +255,12 @@ body.dark-mode .rt-route-btn:active {
     padding: 0.5rem 0;
 }
 
+/* La cabecera de columnas se queda fija al desplazar la lista */
 .rv-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--color-background);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
@@ -251,6 +269,7 @@ body.dark-mode .rt-route-btn:active {
 }
 
 body.dark-mode .rv-head {
+    background: var(--color-dark-bg);
     color: var(--color-gray-400);
     border-bottom-color: var(--color-dark-border);
 }
