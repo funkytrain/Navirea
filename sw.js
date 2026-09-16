@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.11';
+const CACHE_NAME = 'plantillatren-v8.12';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -38,6 +38,7 @@ const urlsToCache = [
     // ---- tiempo real ----
     '/src/services/RealtimeService.js',
     '/src/features/realtime-panel.js',
+    '/data/station-aliases.json',
     '/css/components/realtime.css'
 ];
 

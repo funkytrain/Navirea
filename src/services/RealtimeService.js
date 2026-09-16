@@ -142,7 +142,10 @@ const RealtimeService = {
      */
     getForTrain(trainNumber) {
         if (!trainNumber || !this.isEnabled) return null;
-        if (this._status === 'offline') return null;
+        // Si nunca hubo un fetch correcto no hay nada que mostrar. Un fallo
+        // puntual posterior no invalida los datos en caché: eso lo decide la
+        // antigüedad (status 'stale'), no el resultado del último intento.
+        if (!this._lastFetchOk) return null;
 
         const t = this._trenes.find(x => x.codComercial === String(trainNumber));
         if (!t) return null;
@@ -275,6 +278,114 @@ const RealtimeService = {
         }).join(' ');
     },
 
+    // --- Detección de parada desfasada ---------------------------------
+
+    /**
+     * Compara la parada que el interventor tiene puesta con la posición real
+     * del tren y avisa si se ha quedado atrás.
+     *
+     * NUNCA cambia la parada por su cuenta: applyCurrentStopChange() libera
+     * los asientos de las paradas anteriores, así que un falso positivo
+     * destruiría trabajo. Solo devuelve la sugerencia; decide el interventor.
+     *
+     * @param {string} trainNumber
+     * @param {string} currentStop Parada seleccionada en la app
+     * @param {string[]} route Ruta del tren (nombres, en orden)
+     * @returns {Object|null} {suggested, fromIndex, toIndex, skipped} o null
+     */
+    getStopSuggestion(trainNumber, currentStop, route) {
+        if (!trainNumber || !currentStop || !Array.isArray(route) || !route.length) {
+            return null;
+        }
+
+        const rt = this.getForTrain(trainNumber);
+        // Con datos viejos no se sugiere nada: el tren puede haber avanzado
+        if (!rt || rt.status === 'stale') return null;
+
+        // Estación real donde está o hacia donde va el tren
+        const liveCode = this._liveStationCode(trainNumber);
+        if (!liveCode) return null;
+
+        const liveIndex = this._indexOfCode(route, liveCode);
+        if (liveIndex === -1) return null;
+
+        const currentIndex = route.indexOf(currentStop);
+        if (currentIndex === -1) return null;
+
+        // Solo avisamos si el tren va POR DELANTE de lo apuntado
+        if (liveIndex <= currentIndex) return null;
+
+        return {
+            suggested: route[liveIndex],
+            fromIndex: currentIndex,
+            toIndex: liveIndex,
+            skipped: liveIndex - currentIndex
+        };
+    },
+
+    /**
+     * Código de la estación que el tren acaba de dejar atrás.
+     * Cuando estAnt === estSig el tren está detenido en esa estación.
+     */
+    _liveStationCode(trainNumber) {
+        const t = this._trenes.find(x => x.codComercial === String(trainNumber));
+        return t ? (t.codEstAnt || null) : null;
+    },
+
+    /**
+     * Posición en la ruta de un código ADIF, resolviendo los nombres
+     * abreviados mediante data/station-aliases.json.
+     */
+    _indexOfCode(route, code) {
+        for (let i = 0; i < route.length; i++) {
+            if (this._codeForStopName(route[i]) === String(code)) return i;
+        }
+        return -1;
+    },
+
+    /**
+     * Traduce el nombre de una parada de la ruta a su código ADIF.
+     * Primero por alias explícito, luego por nombre normalizado. No se hace
+     * coincidencia por prefijo: es ambigua ("Cortes" existe en Navarra y en
+     * Málaga) y equivocarse movería la parada a otra provincia.
+     */
+    _codeForStopName(name) {
+        if (!name) return null;
+
+        if (!this._codeCache) this._codeCache = {};
+        if (name in this._codeCache) return this._codeCache[name];
+
+        const aliases = window.stationAliases || {};
+        const stations = window.adifStations || {};
+        let code = null;
+
+        // 1. Alias explícito
+        if (aliases[name]) {
+            code = String(aliases[name]);
+        } else {
+            // 2. Nombre normalizado
+            const target = this._normalizeName(name);
+            for (const [c, v] of Object.entries(stations)) {
+                if (v && v.name && this._normalizeName(v.name) === target) {
+                    code = c;
+                    break;
+                }
+            }
+        }
+
+        this._codeCache[name] = code;
+        return code;
+    },
+
+    /** Quita acentos, signos y mayúsculas para comparar nombres. */
+    _normalizeName(s) {
+        return String(s)
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
+    },
+
     _formatTime(iso) {
         if (!iso) return null;
         const m = String(iso).match(/T(\d{2}:\d{2})/);
@@ -314,6 +425,11 @@ const RealtimeService = {
         el.title = rt.nextStation
             ? `Próxima: ${rt.nextStation}${rt.nextArrival ? ' · ' + rt.nextArrival : ''}`
             : 'Información en tiempo real';
+
+        // Avisar si la parada apuntada se ha quedado atrás
+        if (typeof window.checkStopSuggestion === 'function') {
+            window.checkStopSuggestion();
+        }
     }
 };
 

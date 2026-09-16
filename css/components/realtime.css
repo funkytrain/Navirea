@@ -196,6 +196,83 @@ body.dark-mode .rt-suggestion {
     background: var(--color-primary-dark);
 }
 
+/* ---------- Aviso de parada desfasada ----------
+   Va abajo para no tapar el mapa de asientos, y NO caduca solo: aparece
+   precisamente cuando el interventor está ocupado. Los botones son
+   generosos porque esto se pulsa de pie y en marcha. */
+
+.rt-stop-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translate(-50%, 130%);
+    width: calc(100% - 2rem);
+    max-width: 26rem;
+    z-index: 9998;               /* bajo los modales (9999) */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.8rem;
+    background: #1e293b;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.28s ease;
+}
+
+.rt-stop-banner-visible {
+    transform: translate(-50%, 0);
+}
+
+.rt-stop-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    line-height: 1.35;
+}
+
+.rt-stop-banner-text strong {
+    font-size: 0.95rem;
+}
+
+.rt-stop-banner-text span {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.rt-stop-banner-actions {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.rt-stop-banner-actions button {
+    flex: 1;
+    padding: 0.7rem 0.5rem;      /* alto cómodo para el pulgar */
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rt-stop-apply {
+    background: var(--color-primary-light);
+    color: #fff;
+}
+
+.rt-stop-apply:active {
+    background: var(--color-primary);
+}
+
+.rt-stop-dismiss {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+}
+
+.rt-stop-dismiss:active {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 /* ---------- Notas al pie ---------- */
 
 .rt-age,

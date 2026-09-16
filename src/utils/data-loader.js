@@ -35,6 +35,15 @@ async function loadAllData() {
             loadAllTrains()
         ]);
 
+        // Alias de estaciones para el tiempo real. Opcional: si falta, la
+        // detección de parada desfasada resuelve menos nombres pero la app
+        // arranca igual.
+        try {
+            window.stationAliases = await loadJSON('data/station-aliases.json');
+        } catch (e) {
+            window.stationAliases = {};
+        }
+
         // Fusionar datos del sistema con configuraciones personalizadas
         const allStops = window.ConfigurationManager
             ? window.ConfigurationManager.getAllStops(stops)

@@ -1,0 +1,12 @@
+{
+    "_comentario": "Puente entre los nombres abreviados de train-routes.json y los códigos ADIF que usa el feed de Renfe. Solo hacen falta los que no casan por nombre: la coincidencia automática por prefijo es ambigua y peligrosa (p. ej. 'Cortes' existe en Navarra y en Málaga, 'Marcilla' en Navarra y en Palencia), y equivocarse movería la parada del interventor a otra provincia.",
+
+    "Agurain Salvatierra": "11212",
+    "Castejón": "81200",
+    "Cortes": "81205",
+    "La Puebla Arganzón": "11204",
+    "Marcilla": "80114",
+    "Miranda": "11200",
+    "Tudela": "81202",
+    "Villafranca": "80115"
+}

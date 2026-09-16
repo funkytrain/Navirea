@@ -108,6 +108,92 @@ function applyRealtimeSeries(seriesId) {
     }
 }
 
+// ============================================================================
+// AVISO DE PARADA DESFASADA
+// ============================================================================
+// Si el tren ya ha dejado atrás la parada apuntada en la app, se muestra un
+// aviso persistente para poder actualizarla de un toque.
+//
+// El aviso NO caduca solo: su razón de ser es que el interventor esté
+// ocupado, así que desaparecer a los pocos segundos lo haría inútil.
+// Tampoco cambia la parada por su cuenta: aplicar el cambio libera los
+// asientos de las paradas anteriores y un falso positivo destruiría trabajo.
+// ============================================================================
+
+// Parada ya rechazada por el interventor: no se vuelve a ofrecer
+let _stopSuggestionDismissed = null;
+
+/**
+ * Comprueba si la parada actual se ha quedado atrás y muestra el aviso.
+ * Llamado por RealtimeService tras cada actualización.
+ */
+function checkStopSuggestion() {
+    const banner = document.getElementById('rt-stop-banner');
+
+    const route = typeof window.getCurrentRoute === 'function'
+        ? window.getCurrentRoute()
+        : null;
+
+    const s = window.RealtimeService?.getStopSuggestion(
+        window.state?.trainNumber,
+        window.state?.currentStop,
+        route
+    );
+
+    // Sin sugerencia, o ya rechazada para esa misma parada
+    if (!s || _stopSuggestionDismissed === s.suggested) {
+        if (banner) banner.remove();
+        return;
+    }
+
+    // Ya se está mostrando esta misma sugerencia
+    if (banner && banner.dataset.stop === s.suggested) return;
+    if (banner) banner.remove();
+
+    const saltadas = s.skipped > 1
+        ? ` (${s.skipped} paradas por delante)`
+        : '';
+
+    const el = document.createElement('div');
+    el.id = 'rt-stop-banner';
+    el.className = 'rt-stop-banner';
+    el.dataset.stop = s.suggested;
+    el.innerHTML = `
+        <div class="rt-stop-banner-text">
+            <strong>El tren ya está en ${window.escapeHtml(s.suggested)}</strong>
+            <span>Tu parada actual sigue en ${window.escapeHtml(window.state.currentStop)}${saltadas}</span>
+        </div>
+        <div class="rt-stop-banner-actions">
+            <button class="rt-stop-dismiss">Ahora no</button>
+            <button class="rt-stop-apply">Actualizar</button>
+        </div>
+    `;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('rt-stop-banner-visible'));
+
+    el.querySelector('.rt-stop-apply').addEventListener('click', () => {
+        el.remove();
+        _stopSuggestionDismissed = null;
+        // Pasa por el flujo normal: registra undo y libera asientos anteriores
+        if (typeof window.setCurrentStop === 'function') {
+            window.setCurrentStop(s.suggested);
+        }
+    });
+
+    el.querySelector('.rt-stop-dismiss').addEventListener('click', () => {
+        _stopSuggestionDismissed = s.suggested;
+        el.remove();
+    });
+}
+
+/** Reinicia el rechazo al cambiar de tren. */
+function resetStopSuggestion() {
+    _stopSuggestionDismissed = null;
+    document.getElementById('rt-stop-banner')?.remove();
+}
+
+window.checkStopSuggestion = checkStopSuggestion;
+window.resetStopSuggestion = resetStopSuggestion;
 window.openRealtimePanel = openRealtimePanel;
 window.closeRealtimePanel = closeRealtimePanel;
 window.applyRealtimeSeries = applyRealtimeSeries;

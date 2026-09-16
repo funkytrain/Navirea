@@ -1020,6 +1020,9 @@ function changeTrainNumber(trainNumber) {
     // Registrar inicio del nuevo tren en el historial de jornada
     if (typeof initShiftEntry === 'function') initShiftEntry();
 
+    // Descartar el aviso de parada del tren anterior
+    if (typeof resetStopSuggestion === 'function') resetStopSuggestion();
+
     // Re-renderizar
     render();
 }
