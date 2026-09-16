@@ -1326,6 +1326,11 @@ function filterCurrentStops() {
                 : stopId;
             return { name, idx };
         })
+        // Ocultar las paradas ya superadas: retroceder no tiene sentido en
+        // un trayecto y liberaría asientos que siguen ocupados. Si la parada
+        // actual no se localiza en la ruta (currentIdx === -1) no se filtra
+        // nada, para no dejar el selector vacío.
+        .filter(({ idx }) => currentIdx === -1 || idx > currentIdx)
         .filter(({ name }) => normalizeText(name).includes(query))
         .map(({ name }) => name);
 }
@@ -1345,6 +1350,26 @@ function updateCurrentStopSearch(value) {
 
     // Si hay texto y resultados, crear nuevo dropdown
     const filtered = filterCurrentStops();
+
+    // Sin resultados pero con texto: si lo escrito es una parada ya superada,
+    // explicarlo. Antes un desplegable vacío solo podía ser una errata; ahora
+    // también puede ser una parada oculta a propósito.
+    if (value && filtered.length === 0) {
+        const route = getCurrentRoute();
+        const query = normalizeText(value);
+        const esPasada = route.some(stop =>
+            normalizeText(stop).includes(query) && isStopPassed(stop)
+        );
+        if (esPasada) {
+            container.insertAdjacentHTML('beforeend', `
+                <div class="current-stop-dropdown">
+                    <div class="stop-option-note">Parada ya superada</div>
+                </div>
+            `);
+        }
+        return;
+    }
+
     if (value && filtered.length > 0) {
         const dropdownHTML = `
             <div class="current-stop-dropdown">

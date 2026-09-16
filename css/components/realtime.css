@@ -449,6 +449,23 @@ body.dark-mode .rt-match {
     color: #34d399;
 }
 
+/* Aviso en el selector de parada: lo escrito existe en la ruta pero ya se
+   ha superado, así que se oculta a propósito. Sin esto, el desplegable
+   vacío se confundiría con una errata al escribir. */
+.stop-option-note {
+    padding: 0.55rem 0.5rem;
+    background: #fff;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-style: italic;
+    text-align: center;
+}
+
+body.dark-mode .stop-option-note {
+    background: var(--color-dark-surface);
+    color: var(--color-gray-400);
+}
+
 /* ---------- Notas al pie ---------- */
 
 .rt-age,
