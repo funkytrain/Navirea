@@ -407,6 +407,48 @@ body.dark-mode .rv-current .rv-mark {
     background: rgba(255, 255, 255, 0.25);
 }
 
+/* Variante informativa: no hay acción que ofrecer, solo se informa */
+.rt-suggestion-info {
+    background: var(--color-gray-100);
+    border-color: var(--color-gray-200);
+}
+
+body.dark-mode .rt-suggestion-info {
+    background: var(--color-dark-surface);
+    border-color: var(--color-dark-border);
+}
+
+.rt-suggestion-info p {
+    margin: 0;
+}
+
+/* Configuración de coches de la unidad (C1:A · C2:A · C3:D) */
+.rt-unit-detail {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    opacity: 0.75;
+}
+
+/* Confirmación de que el material cuadra. Se muestra siempre que coincide:
+   el silencio es ambiguo y hace dudar de si la función está rota. */
+.rt-match {
+    margin: 0.75rem 0 0;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+body.dark-mode .rt-match {
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+}
+
 /* ---------- Notas al pie ---------- */
 
 .rt-age,

@@ -30,21 +30,7 @@ function openRealtimePanel() {
         ? `${rt.nextArrival}${rt.delay > 0 ? ` <span class="rt-delta">+${rt.delay}</span>` : ''}`
         : '—';
 
-    // Sugerencia de material: nunca cambia la plantilla por su cuenta, porque
-    // eso podría descartar el trabajo de asientos ya hecho.
-    const currentTrain = window.state?.selectedTrain;
-    const suggest = rt.seriesId &&
-                    rt.seriesId !== String(currentTrain) &&
-                    window.trainModels?.[rt.seriesId];
-
-    const suggestionBlock = suggest ? `
-        <div class="rt-suggestion">
-            <p>Material detectado: <strong>S-${rt.seriesId}</strong>, distinto de la plantilla abierta.</p>
-            <button class="rt-suggestion-btn" onclick="applyRealtimeSeries('${rt.seriesId}')">
-                Cambiar a S-${rt.seriesId}
-            </button>
-        </div>
-    ` : '';
+    const suggestionBlock = buildMaterialBlock(rt);
 
     const staleWarning = rt.status === 'stale'
         ? '<p class="rt-stale-note">Sin datos frescos: puede estar desactualizado.</p>'
@@ -93,6 +79,113 @@ function openRealtimePanel() {
 
     document.body.insertAdjacentHTML('beforeend', modal);
     window.lockBodyScroll?.();
+}
+
+/**
+ * Bloque de material del panel. Muestra SIEMPRE el estado, porque el
+ * silencio es ambiguo: no saber si el sistema calla porque todo cuadra o
+ * porque está roto obliga a desconfiar de él.
+ *
+ * Cuatro casos:
+ *   1. Serie distinta de la plantilla abierta  → ofrecer cambiar de serie
+ *   2. Serie correcta y unidad guardada        → ofrecer cargar la unidad
+ *   3. Serie correcta y unidad desconocida     → avisar para guardarla
+ *   4. Todo coincide                           → confirmar en una línea
+ *
+ * Nunca aplica nada por su cuenta: cambiar de serie o de unidad borra
+ * asientos ya registrados.
+ */
+function buildMaterialBlock(rt) {
+    if (!rt || !rt.seriesId) return '';
+
+    const currentTrain = String(window.state?.selectedTrain || '');
+    const knownSeries = !!window.trainModels?.[rt.seriesId];
+
+    // CASO 1: la plantilla abierta no es de esta serie
+    if (rt.seriesId !== currentTrain) {
+        if (!knownSeries) {
+            return `
+                <div class="rt-suggestion rt-suggestion-info">
+                    <p>Material detectado: <strong>S-${rt.seriesId}</strong>.
+                    No hay plantilla para esta serie.</p>
+                </div>
+            `;
+        }
+        return `
+            <div class="rt-suggestion">
+                <p>Material detectado: <strong>S-${rt.seriesId}</strong>, distinto de la plantilla abierta.</p>
+                <button class="rt-suggestion-btn" onclick="applyRealtimeSeries('${rt.seriesId}')">
+                    Cambiar a S-${rt.seriesId}
+                </button>
+            </div>
+        `;
+    }
+
+    // A partir de aquí la serie ya coincide. Si esa serie maneja unidades
+    // concretas (hoy solo el 470), comprobamos también la unidad.
+    const unit = _firstUnit(rt.material);
+    if (rt.seriesId === '470' && unit) {
+        const units = typeof window.load470Units === 'function'
+            ? window.load470Units()
+            : {};
+        const variants = units[unit];
+
+        if (!variants) {
+            // CASO 3: unidad que el interventor aún no tiene guardada
+            return `
+                <div class="rt-suggestion rt-suggestion-info">
+                    <p>Unidad <strong>${window.escapeHtml(unit)}</strong> no guardada.
+                    Puedes añadirla manteniendo pulsado "Tren 470" en la cabecera.</p>
+                </div>
+            `;
+        }
+
+        const actual = window.state?.coach470Variants || {};
+        const yaCargada = Object.keys(variants)
+            .every(c => actual[c] === variants[c]);
+
+        if (!yaCargada) {
+            // CASO 2: unidad guardada pero no cargada
+            const detalle = Object.keys(variants)
+                .map(c => `${c}:${variants[c]}`)
+                .join(' · ');
+            return `
+                <div class="rt-suggestion">
+                    <p>Unidad detectada: <strong>${window.escapeHtml(unit)}</strong>
+                    <span class="rt-unit-detail">${window.escapeHtml(detalle)}</span></p>
+                    <button class="rt-suggestion-btn" onclick="applyRealtimeUnit('${window.escapeHtml(unit)}')">
+                        Cargar unidad ${window.escapeHtml(unit)}
+                    </button>
+                </div>
+            `;
+        }
+
+        // CASO 4 (con unidad): todo correcto
+        return `
+            <p class="rt-match">Unidad ${window.escapeHtml(unit)} · coincide</p>
+        `;
+    }
+
+    // CASO 4 (sin unidades): la serie coincide
+    return `<p class="rt-match">S-${rt.seriesId} · coincide</p>`;
+}
+
+/** Primer número de unidad de "mat" ("470094,470103" → "470094"). */
+function _firstUnit(mat) {
+    if (!mat) return null;
+    const first = String(mat).split(',')[0].trim();
+    return /^\d{6}$/.test(first) ? first : null;
+}
+
+/**
+ * Carga la unidad detectada. Pasa por apply470Unit(), que confirma y avisa
+ * de los asientos que se borrarán.
+ */
+function applyRealtimeUnit(unitName) {
+    closeRealtimePanel();
+    if (typeof window.apply470Unit === 'function') {
+        window.apply470Unit(unitName);
+    }
 }
 
 function closeRealtimePanel(event) {
@@ -305,3 +398,4 @@ window.resetStopSuggestion = resetStopSuggestion;
 window.openRealtimePanel = openRealtimePanel;
 window.closeRealtimePanel = closeRealtimePanel;
 window.applyRealtimeSeries = applyRealtimeSeries;
+window.applyRealtimeUnit = applyRealtimeUnit;
