@@ -508,19 +508,21 @@ const RealtimeService = {
         if (!el) return;
 
         const rt = this.getForTrain(window.state?.trainNumber);
+
         if (!rt) {
             el.hidden = true;
-            return;
+        } else {
+            el.hidden = false;
+            el.className = `rt-pill ${rt.delayClass} ${rt.status === 'stale' ? 'rt-stale' : ''}`;
+            el.textContent = rt.delayLabel;
+            el.title = rt.nextStation
+                ? `Próxima: ${rt.nextStation}${rt.nextArrival ? ' · ' + rt.nextArrival : ''}`
+                : 'Información en tiempo real';
         }
 
-        el.hidden = false;
-        el.className = `rt-pill ${rt.delayClass} ${rt.status === 'stale' ? 'rt-stale' : ''}`;
-        el.textContent = rt.delayLabel;
-        el.title = rt.nextStation
-            ? `Próxima: ${rt.nextStation}${rt.nextArrival ? ' · ' + rt.nextArrival : ''}`
-            : 'Información en tiempo real';
-
-        // Avisar si la parada apuntada se ha quedado atrás
+        // Siempre, también sin datos: si el tren sale del feed (llega a
+        // destino, o se cae el feed) hay que retirar un aviso ya visible en
+        // lugar de dejarlo colgado con información obsoleta.
         if (typeof window.checkStopSuggestion === 'function') {
             window.checkStopSuggestion();
         }
