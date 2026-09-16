@@ -30,7 +30,8 @@ function generateHeaderTemplate(config) {
         isCustomRoute,
         coachButtons,
         collapseTitle,
-        collapseIcon
+        collapseIcon,
+        realtime
     } = config;
 
     return `
@@ -111,6 +112,16 @@ ${trainNumber ? `
         <button class="train-number-display" onclick="showTrainNumberPrompt()">
             Nº ${trainNumber}
         </button>
+        <!-- Retraso en tiempo real. Oculto si no hay datos: un hueco en
+             silencio es mejor que un aviso que el interventor no puede usar.
+             RealtimeService lo repinta sin re-renderizar la cabecera. -->
+        <button
+            id="rt-pill"
+            class="rt-pill ${realtime ? realtime.delayClass : ''} ${realtime && realtime.status === 'stale' ? 'rt-stale' : ''}"
+            ${realtime ? '' : 'hidden'}
+            onclick="event.stopPropagation(); openRealtimePanel();"
+            title="${realtime && realtime.nextStation ? `Próxima: ${realtime.nextStation}` : 'Información en tiempo real'}"
+        >${realtime ? realtime.delayLabel : ''}</button>
         <button class="important-stop-config-btn" onclick="event.stopPropagation(); openImportantStopSelector();" title="Configurar parada importante">
             ⚙️
         </button>

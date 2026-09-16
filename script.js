@@ -27,11 +27,16 @@ async function loadJSONData() {
         const data = await window.DataLoader.loadAllData();
 
         trainModels = data.trainModels;
+        window.trainModels = trainModels;
         stops = data.stops;
         trainNumbers = data.trainNumbers;
         trainRoutes = data.trainRoutes;
         stationScreens = data.stationScreens;
         adifStations = data.adifStations;
+        // Exponer en window: varios módulos (y las comprobaciones de parada
+        // más abajo en este mismo fichero) acceden vía window.adifStations,
+        // que con `let` no queda definido automáticamente.
+        window.adifStations = adifStations;
 
         console.log('✅ Datos cargados correctamente desde JSON');
         console.log('📊 Trenes disponibles:', Object.keys(trainModels));
@@ -2202,7 +2207,8 @@ function renderHeader() {
         collapseIcon: state.headerCollapsed ?
             '<polyline points="6 9 12 15 18 9"/>' :
             '<polyline points="18 15 12 9 6 15"/>',
-        hasShiftHistory: typeof loadShiftHistory === 'function' && loadShiftHistory().length > 0
+        hasShiftHistory: typeof loadShiftHistory === 'function' && loadShiftHistory().length > 0,
+        realtime: window.RealtimeService?.getForTrain(state.trainNumber) || null
     });
 }
 
@@ -4470,6 +4476,11 @@ async function initializeApp() {
 
         // 5. Tras el primer render, engancha swipe
         enableSeatmapSwipe();
+
+        // 6. Tiempo real (opcional): si no hay proxy configurado, no hace nada
+        if (window.RealtimeService) {
+            window.RealtimeService.start();
+        }
 
         console.log('✅ Aplicación inicializada correctamente');
     } catch (error) {

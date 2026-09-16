@@ -1,0 +1,226 @@
+/* ============================================================
+   REALTIME.CSS - Indicador y panel de circulación en tiempo real
+   ============================================================
+   El indicador reutiliza la escala de color de ocupación
+   (occ-low / occ-mid / occ-high) para que la app hable un solo
+   lenguaje visual. El color nunca es el único canal: el signo y
+   la palabra ("En hora", "+12 min") distinguen los estados por
+   sí solos, algo necesario con reflejos y luz cambiante a bordo.
+   ============================================================ */
+
+/* ---------- Indicador en la cabecera ----------
+   La cabecera tiene fondo oscuro incluso en modo claro, así que aquí
+   se usan colores SÓLIDOS con texto claro: los fondos translúcidos
+   claros resultan ilegibles sobre el morado de la cabecera. */
+
+.rt-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.22rem 0.55rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+    cursor: pointer;
+    background: var(--color-gray-500);
+    color: #fff;
+    transition: opacity 0.15s ease;
+}
+
+.rt-pill[hidden] {
+    display: none;
+}
+
+.rt-pill:active {
+    opacity: 0.7;
+}
+
+/* En hora */
+.rt-pill.occ-low {
+    background: #059669;
+    color: #fff;
+}
+
+/* Retraso moderado */
+.rt-pill.occ-mid {
+    background: #d97706;
+    color: #fff;
+}
+
+/* Retraso alto */
+.rt-pill.occ-high {
+    background: var(--color-danger-dark);
+    color: #fff;
+}
+
+/* Adelantado: neutro, no es ni bueno ni malo para el interventor */
+.rt-pill.rt-early {
+    background: #4338ca;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+/* Dentro del panel (fondo claro) el pill vuelve a la escala translúcida
+   de las insignias de ocupación, que ahí sí contrasta bien. */
+.rt-modal .rt-pill.occ-low {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+}
+
+body.dark-mode .rt-modal .rt-pill.occ-low {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.rt-modal .rt-pill.occ-mid {
+    background: rgba(245, 158, 11, 0.15);
+    color: #d97706;
+}
+
+body.dark-mode .rt-modal .rt-pill.occ-mid {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+.rt-modal .rt-pill.occ-high {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--color-danger-dark);
+}
+
+body.dark-mode .rt-modal .rt-pill.occ-high {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.rt-modal .rt-pill.rt-early {
+    background: rgba(79, 70, 229, 0.12);
+    color: var(--color-primary-dark);
+    box-shadow: none;
+}
+
+body.dark-mode .rt-modal .rt-pill.rt-early {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+}
+
+/* Datos sin refrescar: se atenúa en lugar de desaparecer, para que
+   se note que hay algo pero no se confíe en el número */
+.rt-pill.rt-stale {
+    opacity: 0.55;
+}
+
+/* ---------- Panel de detalle ---------- */
+
+.rt-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+.rt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+body.dark-mode .rt-row {
+    border-bottom-color: var(--color-dark-border);
+}
+
+.rt-row:last-of-type {
+    border-bottom: none;
+}
+
+.rt-row-label {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode .rt-row-label {
+    color: var(--color-gray-400);
+}
+
+.rt-row-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+.rt-delta {
+    color: var(--color-danger-dark);
+    font-weight: 700;
+}
+
+body.dark-mode .rt-delta {
+    color: #f87171;
+}
+
+/* ---------- Sugerencia de material ---------- */
+
+.rt-suggestion {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(79, 70, 229, 0.08);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+body.dark-mode .rt-suggestion {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.rt-suggestion p {
+    margin: 0 0 0.6rem;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.rt-suggestion-btn {
+    width: 100%;
+    padding: 0.55rem;
+    border: none;
+    border-radius: 0.4rem;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rt-suggestion-btn:active {
+    background: var(--color-primary-dark);
+}
+
+/* ---------- Notas al pie ---------- */
+
+.rt-age,
+.rt-source,
+.rt-stale-note {
+    margin: 0.5rem 0 0;
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+body.dark-mode .rt-age,
+body.dark-mode .rt-source,
+body.dark-mode .rt-stale-note {
+    color: var(--color-gray-400);
+}
+
+.rt-source {
+    opacity: 0.75;
+}
+
+.rt-stale-note {
+    color: #d97706;
+}
+
+body.dark-mode .rt-stale-note {
+    color: #fbbf24;
+}

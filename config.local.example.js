@@ -6,3 +6,14 @@
 //   2. Dashboard → API Keys → copia tu X-Master-Key
 //
 window.JSONBIN_API_KEY = 'TU_X_MASTER_KEY_AQUI';
+
+// ---------------------------------------------------------------------------
+// Tiempo real (opcional)
+// ---------------------------------------------------------------------------
+// URL del Worker de Cloudflare que hace de proxy con el feed de Renfe.
+// Ver worker/README.md para desplegarlo.
+//
+// Si no defines esto, Navirea funciona con normalidad: la información de
+// tiempo real simplemente no aparece.
+//
+// window.RENFE_PROXY_URL = 'https://navirea-renfe.TU-CUENTA.workers.dev';
