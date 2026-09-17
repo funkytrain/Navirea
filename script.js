@@ -3980,12 +3980,16 @@ function render470UnitsList() {
                 .map(([c, v]) => `${c}:${v}`)
                 .join(' · ');
             const safeId = encodeURIComponent(name);
+            const tieneNota = typeof getMaterialNote === 'function' && getMaterialNote(name);
             return `
             <div class="units470-item">
                 <button class="units470-item-load" onclick="apply470Unit(decodeURIComponent('${safeId}'))">
-                    <span class="units470-item-name">${escapeHtml(name)}</span>
+                    <span class="units470-item-name">${escapeHtml(name)}${tieneNota ? ' <span class="units470-note-dot" title="Tiene notas">●</span>' : ''}</span>
                     <span class="units470-item-variants">${escapeHtml(variantsSummary)}</span>
                 </button>
+                <button class="units470-item-note ${tieneNota ? 'has-note' : ''}"
+                        onclick="openMaterialNoteEditor(decodeURIComponent('${safeId}'), render470UnitsList)"
+                        title="${tieneNota ? 'Editar notas' : 'Añadir notas'}">✎</button>
                 <button class="units470-item-delete" onclick="confirm470UnitDelete(decodeURIComponent('${safeId}'))" title="Eliminar">✕</button>
             </div>`;
         })

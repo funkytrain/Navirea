@@ -67,6 +67,17 @@ function openRealtimePanel() {
                     ${row('Material', rt.material || '—')}
                     ${rt.accessible ? row('Accesible', 'Sí') : ''}
 
+                    ${window.renderMaterialNotes?.(rt.material) || ''}
+
+                    ${_firstUnit(rt.material) ? `
+                        <button class="mn-edit-btn"
+                                onclick="openMaterialNoteEditor('${_firstUnit(rt.material)}', () => { closeRealtimePanel(); openRealtimePanel(); })">
+                            ${window.getMaterialNote?.(_firstUnit(rt.material))
+                                ? 'Editar notas del material'
+                                : 'Añadir notas a esta unidad'}
+                        </button>
+                    ` : ''}
+
                     <button class="rt-route-btn" onclick="closeRealtimePanel(); openRouteView();">
                         Ver recorrido completo
                     </button>

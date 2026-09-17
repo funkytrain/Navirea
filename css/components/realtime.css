@@ -485,6 +485,167 @@ body.dark-mode .stop-option-note {
     color: var(--color-gray-400);
 }
 
+/* ---------- Notas por unidad de material ----------
+   Particularidades del tren físico (enchufes, cerradura de cabina…) que el
+   interventor necesita ver de un vistazo al cargar el servicio. */
+
+.mn-block {
+    margin-top: 0.85rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+body.dark-mode .mn-block {
+    background: rgba(245, 158, 11, 0.14);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.mn-entry + .mn-entry {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.mn-entry-unit {
+    display: inline-block;
+    margin-bottom: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #b45309;
+}
+
+body.dark-mode .mn-entry-unit {
+    color: #fbbf24;
+}
+
+.mn-entry-text {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    white-space: pre-wrap;        /* respeta los saltos de línea escritos */
+}
+
+.mn-edit-btn {
+    width: 100%;
+    margin-top: 0.6rem;
+    padding: 0.6rem;
+    border: 1px dashed var(--color-gray-300);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+body.dark-mode .mn-edit-btn {
+    border-color: var(--color-dark-border);
+    color: var(--color-gray-400);
+}
+
+.mn-edit-btn:active {
+    background: var(--color-gray-100);
+}
+
+body.dark-mode .mn-edit-btn:active {
+    background: var(--color-dark-surface);
+}
+
+/* ---------- Editor de notas ---------- */
+
+.mn-body {
+    padding: 0.5rem 1rem 1rem;
+}
+
+.mn-hint {
+    margin: 0 0 0.6rem;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--color-text-secondary);
+}
+
+body.dark-mode .mn-hint {
+    color: var(--color-gray-400);
+}
+
+.mn-textarea {
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.5rem;
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    resize: vertical;
+}
+
+body.dark-mode .mn-textarea {
+    background: var(--color-dark-surface);
+    border-color: var(--color-dark-border);
+    color: var(--color-dark-text);
+}
+
+.mn-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+}
+
+.mn-actions button {
+    flex: 1;
+    padding: 0.7rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mn-save {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.mn-save:active {
+    background: var(--color-primary-dark);
+}
+
+.mn-cancel {
+    background: var(--color-gray-200);
+    color: var(--color-gray-800);
+}
+
+body.dark-mode .mn-cancel {
+    background: var(--color-dark-surface);
+    color: var(--color-dark-text);
+}
+
+/* ---------- Marcas en la lista de unidades 470 ---------- */
+
+.units470-note-dot {
+    color: var(--color-warning);
+    font-size: 0.6rem;
+    vertical-align: middle;
+}
+
+.units470-item-note {
+    padding: 0 0.7rem;
+    border: none;
+    background: transparent;
+    color: var(--color-gray-400);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.units470-item-note.has-note {
+    color: var(--color-warning);
+}
+
 /* ---------- Notas al pie ---------- */
 
 .rt-age,
