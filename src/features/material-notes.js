@@ -102,7 +102,10 @@ function openMaterialNoteEditor(unit, onSaved) {
 
     const modal = document.createElement('div');
     modal.id = 'material-note-modal';
-    modal.className = 'modal-overlay';
+    // Clase propia, no .modal-overlay: varias funciones de la app borran de
+    // golpe todos los .modal-overlay, y este editor se abre por encima de
+    // otros modales (el selector de unidades del 470) que deben sobrevivirle.
+    modal.className = 'mn-overlay';
     modal.innerHTML = `
         <div class="modal mn-modal">
             <div class="modal-header">
@@ -153,7 +156,14 @@ function openMaterialNoteEditor(unit, onSaved) {
 
 function closeMaterialNoteEditor() {
     document.getElementById('material-note-modal')?.remove();
-    window.unlockBodyScroll?.();
+
+    // Solo se desbloquea el scroll si no queda otro modal abierto detrás:
+    // este editor puede abrirse sobre el selector de unidades del 470, que
+    // sigue necesitando el bloqueo cuando el editor se cierra.
+    const quedanModales = document.querySelector(
+        '.modal-overlay, .units470-overlay, .crew-modal-overlay'
+    );
+    if (!quedanModales) window.unlockBodyScroll?.();
 }
 
 /**

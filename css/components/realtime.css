@@ -554,7 +554,26 @@ body.dark-mode .mn-edit-btn:active {
     background: var(--color-dark-surface);
 }
 
-/* ---------- Editor de notas ---------- */
+/* ---------- Editor de notas ----------
+   Se abre desde el panel de tiempo real (z-index 30) pero también desde el
+   selector de unidades del 470, que está a 1100: sin una capa propia por
+   encima quedaría debajo y sería inalcanzable. */
+
+.mn-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /* Por encima del selector de unidades del 470 (1100) */
+    z-index: 1200;
+}
+
+.mn-overlay .mn-modal {
+    width: 100%;
+    max-width: 32rem;
+}
 
 .mn-body {
     padding: 0.5rem 1rem 1rem;
