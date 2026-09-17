@@ -25,6 +25,11 @@
 - 📘 **Manual técnico integrado**: Acceso al Manual Técnico Ferroviario para resolver incidencias.
 - 📋 **Resumen de jornada**: Registra automáticamente cada tren trabajado durante el día. Al finalizar, muestra un resumen completo con ocupación, incidencias y notas de todos los servicios, compartible como texto.
 - 📝 **Notas por coche**: Las notas del servicio ahora incluyen pestañas por coche (C1, C2…) para anotar observaciones específicas de cada vagón.
+- 🛰️ **Circulación en tiempo real**: Muestra el retraso actual del tren, la próxima parada con su hora estimada y el material rodante asignado, a partir de los datos públicos de Renfe.
+- 🗺️ **Recorrido con horarios estimados**: Todas las paradas del trayecto con su hora prevista de llegada y la desviación, para ver si el retraso se acumula o se recupera.
+- 🔔 **Aviso de parada desfasada**: Si el tren ya ha dejado atrás la parada marcada en la app, avisa y permite actualizarla de un toque.
+- 🚉 **Detección de material**: Reconoce la unidad concreta en circulación y ofrece cargar su plantilla o su configuración de coches guardada.
+- 🗒️ **Notas por unidad de material**: Guarda las particularidades de cada unidad física (enchufes, máquina de billetes, cerradura de cabina, averías recurrentes) y las muestra al detectar ese material.
 
 ---
 
@@ -140,6 +145,43 @@ Navirea es una **Progressive Web App (PWA)**, lo que significa que funciona dire
 - Introduce la parada actual del tren.
 - Navirea liberará automáticamente los asientos de viajeros que bajan en esa parada.
 
+### 🛰️ Circulación en tiempo real (opcional)
+
+Si está configurada (ver más abajo), Navirea muestra junto al número de tren
+un indicador con el **retraso actual**:
+
+- **Verde** en hora · **Ámbar** hasta 10 min · **Rojo** más de 10 min · **⏱** el tren lleva rato sin reportar posición.
+- **Tócalo** para ver el detalle: retraso, velocidad estimada, dónde está, próxima parada con su hora prevista y el material rodante.
+- **"Ver recorrido completo"** muestra todas las paradas con su hora estimada y la desviación en minutos, para saber si el retraso se está recuperando.
+
+Además:
+
+- Si el tren ya ha pasado la parada que tienes marcada, aparece un **aviso**
+  para actualizarla de un toque.
+- Si el material detectado no coincide con la plantilla abierta, se ofrece
+  **cambiar a la serie correcta** o **cargar la unidad** si la tienes guardada.
+- Las paradas ya superadas dejan de ofrecerse en el selector de parada actual.
+
+Los datos proceden de fuentes públicas de Renfe y son orientativos. El tren
+debe estar circulando para aparecer: no se publica antes de su salida.
+
+**Para activarlo** hace falta un pequeño proxy propio (el origen no permite
+llamadas directas desde el navegador). Instrucciones en
+[`worker/README.md`](worker/README.md). Sin configurarlo, Navirea funciona
+con normalidad y esta sección simplemente no aparece.
+
+### 🗒️ Notas por unidad de material
+
+Cada unidad física tiene sus particularidades: número de enchufes, estado de
+la máquina de billetes, si la cabina abre con llave o con llavín, averías
+recurrentes…
+
+- Guárdalas desde el panel de tiempo real (**"Añadir notas a esta unidad"**)
+  o con el ✎ del gestor de Unidades 470.
+- Cuando vuelvas a llevar esa unidad, la nota aparece sola al abrir el panel.
+- Si el servicio lleva dos unidades acopladas, se muestran las notas de cada una.
+- Para borrar una nota, guárdala vacía.
+
 ### 4️⃣ Usa filtros
 
 - Filtra por **parada de bajada**, **tramo recorrido**, **asiento**, **enlaces** o **comentarios**.
@@ -160,6 +202,7 @@ El tren 470 tiene múltiples variantes de distribución de asientos por coche (A
   - Busca o escribe el número de unidad (ej. `470.157`) — se filtra en tiempo real.
   - Si la unidad ya está guardada, tócala para cargar sus variantes automáticamente.
   - Si es nueva, configura las variantes manualmente y pulsa **"Guardar configuración actual"** para guardarla con ese nombre.
+  - Toca el ✎ de una fila para anotar las particularidades de esa unidad. Las que tienen notas se marcan con un punto.
   - Elimina unidades guardadas con el botón ✕.
 
 ### 7️⃣ Toma notas por coche
@@ -293,14 +336,15 @@ Navirea/
 │   └── components/             # Estilos de componentes
 ├── src/
 │   ├── config/                 # Constantes y catálogos (tipos PMR)
-│   ├── services/               # Servicios (ConfigurationManager, AppState)
+│   ├── services/               # Servicios (ConfigurationManager, AppState, RealtimeService)
 │   ├── utils/                  # Utilidades (data-loader, templates, validadores)
-│   ├── features/               # Funcionalidades (filtros, QR, pantallas, incidencias)
+│   ├── features/               # Funcionalidades (filtros, QR, pantallas, incidencias, tiempo real)
 │   ├── components/             # Componentes UI (wizards, editores)
 │   ├── wizards/                # Asistentes de creación
 │   └── renderers/              # Renderizadores de asientos
-├── data/                       # Datos JSON de modelos de trenes
+├── data/                       # Datos JSON de modelos de trenes y estaciones
 ├── templates/                  # Templates HTML y contenido
+├── worker/                     # Proxy para los datos de circulación (opcional)
 └── icons/                      # Iconos de la aplicación
 ```
 
