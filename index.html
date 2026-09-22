@@ -74,6 +74,9 @@
 
     <!-- Configuración local con credenciales (no incluida en el repo) -->
     <!-- Si el archivo no existe, la app funciona en modo sin servidor -->
+    <!-- Configuración pública (se despliega). Va antes que config.local.js
+         para que este pueda sobrescribir cualquier valor en desarrollo. -->
+    <script src="config.js"></script>
     <script src="config.local.js" onerror="console.info('config.local.js no encontrado — modo sin JSONBin')"></script>
 
     <!-- Load configuration and data utilities -->

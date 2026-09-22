@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.19';
+const CACHE_NAME = 'plantillatren-v8.20';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -6,6 +6,7 @@ const urlsToCache = [
     '/css/variables.css',
     '/css/base.css',
     '/script.js',
+    '/config.js',
     '/manifest.json',
     '/icon-192.png',
     '/icon-512.png',

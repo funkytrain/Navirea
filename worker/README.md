@@ -35,11 +35,16 @@ eñes llegan rotos (`LOGROÑO` → `LOGRO?O`). El Worker lo convierte a UTF-8.
 
 ## Conectarlo con Navirea
 
-En `config.local.js` (el mismo fichero de la clave de JSONBin):
+En `config.js` (fichero público, que sí se despliega):
 
 ```js
 window.RENFE_PROXY_URL = 'https://navirea-renfe.TU-CUENTA.workers.dev';
 ```
+
+No va en `config.local.js` porque ese fichero está en `.gitignore` y nunca
+llega a producción: la función quedaría desactivada en el servidor aunque
+funcionase en local. La URL no es un secreto — solo sirve datos públicos y
+únicamente responde a los dominios de su lista blanca.
 
 Y añade el dominio del Worker a `connect-src` en la CSP de `index.html`.
 
