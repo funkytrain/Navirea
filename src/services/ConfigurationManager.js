@@ -1033,6 +1033,18 @@ const ConfigurationManager = {
         if (savedCoachNotes) {
             try { window.state.coachNotes = JSON.parse(savedCoachNotes); } catch (e) { console.error('Error loading coach notes'); }
         }
+
+        // Portapapeles del copiado rápido: sin esto se perdía en cada
+        // recarga, y al reactivar el pill el toque en un asiento abría el
+        // modal de paradas en lugar de copiar.
+        const savedCopied = localStorage.getItem(`train${window.state.selectedTrain}LastCopied`);
+        if (savedCopied) {
+            try {
+                window.state.lastCopiedSeatData = JSON.parse(savedCopied);
+            } catch (e) {
+                console.error('Error loading copied seat data');
+            }
+        }
     },
 
     /**
@@ -1077,6 +1089,18 @@ const ConfigurationManager = {
         }
 
         localStorage.setItem(`train${t}CoachNotes`, JSON.stringify(window.state.coachNotes || {}));
+
+        // Portapapeles del copiado rápido. Se guarda por tren porque se
+        // descarta al cambiar de servicio: copiar una parada del tren
+        // anterior sería un error difícil de detectar.
+        if (window.state.lastCopiedSeatData) {
+            localStorage.setItem(
+                `train${t}LastCopied`,
+                JSON.stringify(window.state.lastCopiedSeatData)
+            );
+        } else {
+            localStorage.removeItem(`train${t}LastCopied`);
+        }
     },
 
     saveAutoBackup() {

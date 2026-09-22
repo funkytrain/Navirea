@@ -4500,6 +4500,13 @@ async function initializeApp() {
         // 2. Cargar datos guardados en localStorage
         loadData();
 
+        // loadData() rellena state, pero el copiado rápido trabaja con la
+        // variable de módulo: hay que sincronizarla o seguiría vacía tras
+        // recargar y el pill no copiaría nada.
+        if (state.lastCopiedSeatData) {
+            lastCopiedSeatData = { ...state.lastCopiedSeatData };
+        }
+
         // 3. Iniciar backup automático
         startAutoBackup();
 
