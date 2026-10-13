@@ -121,15 +121,18 @@ function toggleCopyMode() {
 
     // Si está activando y hay datos copiados, mostrar resumen
     if (state.copyMode && lastCopiedSeatData) {
-        const stopName = lastCopiedSeatData.stop ? lastCopiedSeatData.stop.abbr : "?";
         const flags = [];
         if (lastCopiedSeatData.enlace) flags.push("Enlace");
         if (lastCopiedSeatData.seguir) flags.push("Seguir");
         if (lastCopiedSeatData.comentarioFlag) flags.push("Comentario");
         if (lastCopiedSeatData.pmrFlag) flags.push(lastCopiedSeatData.pmrTipo ? `PMR ${lastCopiedSeatData.pmrTipo}` : "PMR");
 
-        const flagsText = flags.length > 0 ? ` (${flags.join(", ")})` : "";
-        bannerText = `Copiado: ${stopName}${flagsText}`;
+        if (lastCopiedSeatData.stop) {
+            const flagsText = flags.length > 0 ? ` (${flags.join(", ")})` : "";
+            bannerText = `Copiado: ${lastCopiedSeatData.stop.abbr}${flagsText}`;
+        } else {
+            bannerText = `Copiado: ${flags.join(", ")} (sin parada)`;
+        }
     }
 
     showCopyBanner(bannerText);
@@ -166,11 +169,8 @@ let state = {
     serviceNotes: "",
     incidents: {},
     customTrains: {},
-    coach470Variants: {
-        "C1": "A",
-        "C2": "A",
-        "C3": "A"
-    },
+    // coach<serie>Variants (coach470Variants, coach464Variants…) se crean
+    // al vuelo con getCoachVariants()
     importantStop: null, // Parada importante para marcado rápido
     importantStop2: null, // Segunda parada importante para marcado rápido
     coachNotes: {} // Notas libres por coche { "C1": "...", "C2": "..." }
@@ -184,7 +184,7 @@ function getAllTrains() {
 }
 
 let _currentScreen = "arrivals";
-// Variables para doble tap en botones de coche 470
+// Variables para doble tap en botones de coche (series con variantes)
 let coachTapTimer = null;
 let coachLastTapTime = 0;
 let coachLastTappedId = null;
@@ -211,23 +211,115 @@ let isScrolling = false;
 // NOTA: También existe en src/utils/modal-helpers.js pero se necesita aquí
 let modalScrollPosition = 0;
 
+// ---- Variantes de coche (470, 464…) ----
+// Hay series cuyas unidades no son todas iguales por dentro. Su JSON lo
+// indica con "variants" en vez de "layout" en cada coche. En esas series la
+// key del asiento lleva la variante (C1-A-12) y cada una guarda la variante
+// elegida por coche en state.coach<serie>Variants.
+
+function trainHasVariants(trainId = state.selectedTrain) {
+    const train = getAllTrains()[trainId];
+    return !!(train && train.coaches && train.coaches.some(c => c.variants));
+}
+
+function getDefaultCoachVariants(trainId) {
+    const train = getAllTrains()[trainId];
+    const variants = {};
+    (train?.coaches || []).forEach(c => {
+        if (c.variants) variants[c.id] = Object.keys(c.variants)[0];
+    });
+    return variants;
+}
+
+function getCoachVariants(trainId = state.selectedTrain) {
+    const prop = `coach${trainId}Variants`;
+    if (!state[prop]) state[prop] = getDefaultCoachVariants(trainId);
+    return state[prop];
+}
+
+function setCoachVariants(trainId, variants) {
+    state[`coach${trainId}Variants`] = { ...getDefaultCoachVariants(trainId), ...variants };
+}
+
+/**
+ * Pasa las keys sin variante (C1-12) al formato con variante (C1-A-12).
+ * Datos guardados antes de que la serie tuviera variantes siguen visibles
+ * en la variante por defecto.
+ * @returns {boolean} true si ha cambiado algo
+ */
+function migrateSeatKeysToVariants(trainId = state.selectedTrain) {
+    if (!trainHasVariants(trainId)) return false;
+    const defaults = getDefaultCoachVariants(trainId);
+    let changed = false;
+    const newSeatData = {};
+    Object.keys(state.seatData || {}).forEach(key => {
+        const parts = key.split('-');
+        if (parts.length === 2 && defaults[parts[0]]) {
+            newSeatData[`${parts[0]}-${defaults[parts[0]]}-${parts[1]}`] = state.seatData[key];
+            changed = true;
+        } else {
+            newSeatData[key] = state.seatData[key];
+        }
+    });
+    if (changed) state.seatData = newSeatData;
+    return changed;
+}
+
 // Obtener clave del asiento
 function getSeatKey(coachId, seatNum) {
-    // 🔴 NUEVO: Para el 470, incluir la variante en la key
-    if (state.selectedTrain === "470") {
-        const variant = state.coach470Variants[coachId] || "A";
+    // En series con variantes, la variante va dentro de la key
+    if (trainHasVariants()) {
+        const variant = getCoachVariants()[coachId] || "A";
         return `${coachId}-${variant}-${String(seatNum)}`;
     }
     return `${coachId}-${String(seatNum)}`;
 }
 
-// Obtener layout del coche actual (con soporte para variantes del 470)
+// Obtener layout del coche actual (con soporte para variantes)
 function getCurrentCoachLayout(coach) {
-    if (state.selectedTrain === "470" && coach.variants) {
-        const variant = state.coach470Variants[coach.id] || "A";
-        return coach.variants[variant].layout;
+    if (coach.variants) {
+        const variant = getCoachVariants()[coach.id];
+        return (coach.variants[variant] || Object.values(coach.variants)[0]).layout;
     }
     return coach.layout;
+}
+
+// ---- Copiado rápido ----
+// Lo que se copia es el último asiento editado, tenga o no parada: enlace,
+// seguir, comentario o PMR sueltos también se pueden repartir.
+
+function rememberSeatForCopy(key) {
+    const seat = state.seatData[key] || {};
+    const snapshot = {
+        stop: seat.stop || null,
+        enlace: seat.enlace || false,
+        seguir: seat.seguir || false,
+        comentarioFlag: seat.comentarioFlag || false,
+        comentario: seat.comentario || "",
+        pmrFlag: seat.pmrFlag || false,
+        pmrTipo: seat.pmrTipo || ""
+    };
+    // Un asiento que se queda vacío no pisa lo que ya estaba copiado
+    const hayAlgo = snapshot.stop || snapshot.enlace || snapshot.seguir ||
+        snapshot.comentarioFlag || snapshot.comentario || snapshot.pmrFlag;
+    if (!hayAlgo) return;
+
+    lastCopiedSeatData = snapshot;
+    state.lastCopiedSeatData = { ...snapshot };
+}
+
+function pasteCopiedSeat(key) {
+    if (!state.seatData[key]) {
+        state.seatData[key] = {};
+    }
+    const seat = state.seatData[key];
+    if (lastCopiedSeatData.stop) seat.stop = lastCopiedSeatData.stop;
+    seat.enlace = lastCopiedSeatData.enlace;
+    seat.seguir = lastCopiedSeatData.seguir;
+    seat.comentarioFlag = lastCopiedSeatData.comentarioFlag;
+    seat.comentario = lastCopiedSeatData.comentario;
+    seat.pmrFlag = lastCopiedSeatData.pmrFlag;
+    seat.pmrTipo = lastCopiedSeatData.pmrTipo;
 }
 
 function updateSeat(coachId, seatNum, stop) {
@@ -241,17 +333,8 @@ function updateSeat(coachId, seatNum, stop) {
     // Guardar la parada en el asiento
     state.seatData[key].stop = stop;
 
-    // 🔴 NUEVO: Guardar TODA la información del asiento (no solo la parada)
-    lastCopiedSeatData = {
-        stop: stop,
-        enlace: state.seatData[key].enlace || false,
-        seguir: state.seatData[key].seguir || false,
-        comentarioFlag: state.seatData[key].comentarioFlag || false,
-        comentario: state.seatData[key].comentario || "",
-        pmrFlag: state.seatData[key].pmrFlag || false,
-        pmrTipo: state.seatData[key].pmrTipo || ""
-    };
-    state.lastCopiedSeatData = { ...lastCopiedSeatData };
+    // Guardar TODA la información del asiento (no solo la parada)
+    rememberSeatForCopy(key);
 
     saveData();
 
@@ -377,11 +460,8 @@ function toggleFlag(coachId, seatNum, flagName) {
         return;
     }
 
-    // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
-    if (state.copyMode && lastCopiedSeatData) {
-        lastCopiedSeatData[flagName] = state.seatData[key][flagName];
-        state.lastCopiedSeatData = { ...lastCopiedSeatData };
-    }
+    // El asiento editado pasa a ser lo que copia el copiado rápido
+    rememberSeatForCopy(key);
 
     saveData();
 // Si hay modal abierto, guardar su scroll
@@ -413,11 +493,8 @@ function updateComment(coachId, seatNum, comment) {
     }
     state.seatData[key].comentario = comment;
 
-    // 🔴 NUEVO: Si estamos en modo copia, actualizar la información copiada
-    if (state.copyMode && lastCopiedSeatData) {
-        lastCopiedSeatData.comentario = comment;
-        state.lastCopiedSeatData = { ...lastCopiedSeatData };
-    }
+    // El asiento editado pasa a ser lo que copia el copiado rápido
+    rememberSeatForCopy(key);
 
     saveData();
 }
@@ -434,11 +511,8 @@ function updatePMRType(coachId, seatNum, tipo) {
         delete state.seatData[key].pmrTipo;
     }
 
-    // Si estamos en modo copia, actualizar la información copiada
-    if (state.copyMode && lastCopiedSeatData) {
-        lastCopiedSeatData.pmrTipo = state.seatData[key].pmrTipo || "";
-        state.lastCopiedSeatData = { ...lastCopiedSeatData };
-    }
+    // El asiento editado pasa a ser lo que copia el copiado rápido
+    rememberSeatForCopy(key);
 
     saveData();
 }
@@ -596,52 +670,18 @@ function selectTrain(trainId) {
             }
         }
 
-// 🔴 NUEVO: Cargar variantes del 470 si es ese tren
-        if (trainId === "470") {
-            const saved470Variants = localStorage.getItem('coach470Variants');
-            if (saved470Variants) {
-                try {
-                    state.coach470Variants = JSON.parse(saved470Variants);
-                } catch (e) {
-                    console.error("Error loading 470 variants");
-                    // Valores por defecto si hay error
-                    state.coach470Variants = {
-                        "C1": "A",
-                        "C2": "A",
-                        "C3": "A"
-                    };
-                }
-            } else {
-                // Inicializar con valores por defecto
-                state.coach470Variants = {
-                    "C1": "A",
-                    "C2": "A",
-                    "C3": "A"
-                };
+        // Series con variantes: recuperar la variante de cada coche
+        if (trainHasVariants(trainId)) {
+            let savedVariants = null;
+            try {
+                savedVariants = JSON.parse(localStorage.getItem(`coach${trainId}Variants`));
+            } catch (e) {
+                console.error(`Error loading ${trainId} variants`);
             }
+            setCoachVariants(trainId, savedVariants || {});
 
-            // 🔴 NUEVO: Migrar datos antiguos sin variante a formato con variante
-            const newSeatData = {};
-            Object.keys(state.seatData).forEach(key => {
-                // Si la key no tiene variante (formato antiguo: C1-12)
-                if (key.match(/^C\d+-\d+/) || key.match(/^C\d+-[A-Z0-9]+$/)) {
-                    const parts = key.split('-');
-                    if (parts.length === 2) {
-                        const [coach, seat] = parts;
-                        // Migrar a variante A por defecto
-                        const newKey = `${coach}-A-${seat}`;
-                        newSeatData[newKey] = state.seatData[key];
-                    } else {
-                        // Ya tiene formato con variante
-                        newSeatData[key] = state.seatData[key];
-                    }
-                } else {
-                    // Mantener otras keys sin cambios
-                    newSeatData[key] = state.seatData[key];
-                }
-            });
-            state.seatData = newSeatData;
-            saveData(); // Guardar la migración
+            // Datos guardados antes de que la serie tuviera variantes
+            if (migrateSeatKeysToVariants(trainId)) saveData();
         }
 
         render();
@@ -1701,9 +1741,9 @@ function exportTurn() {
         currentStop: state.currentStop || null,  // 👈 AÑADIR (útil para contexto)
         exportDate: new Date().toISOString(),
         trainName: trainModels[state.selectedTrain].name,
-        // 🔴 NUEVO: Si es tren 470, incluir variantes
-        ...(state.selectedTrain === "470" && {
-            coach470Variants: state.coach470Variants
+        // Series con variantes: incluir la de cada coche (coach470Variants, coach464Variants…)
+        ...(trainHasVariants() && {
+            [`coach${state.selectedTrain}Variants`]: getCoachVariants()
         })
     };
 
@@ -1813,10 +1853,13 @@ function importTurn() {
                         state.currentStop = turnData.currentStop;
                     }
 
-                    // 🔴 NUEVO: Si es tren 470, importar variantes
-                    if (turnData.trainModel === "470" && turnData.coach470Variants) {
-                        state.coach470Variants = turnData.coach470Variants;
+                    // Series con variantes: importar la de cada coche
+                    const importedVariants = turnData[`coach${turnData.trainModel}Variants`];
+                    if (importedVariants) {
+                        setCoachVariants(turnData.trainModel, importedVariants);
                     }
+                    // Turnos exportados antes de que la serie tuviera variantes
+                    migrateSeatKeysToVariants(turnData.trainModel);
 
                     // Guardar todo en localStorage usando función centralizada
                     saveImportedData(turnData);
@@ -2656,19 +2699,8 @@ function selectSeat(coach, num) {
 
         // Solo aplicar si el asiento está vacío (sin parada activa)
         if (!seatInfo || !seatInfo.stop) {
-            // Crear o actualizar con toda la información copiada
-            if (!state.seatData[key]) {
-                state.seatData[key] = {};
-            }
-
             // Copiar toda la información
-            state.seatData[key].stop = lastCopiedSeatData.stop;
-            state.seatData[key].enlace = lastCopiedSeatData.enlace;
-            state.seatData[key].seguir = lastCopiedSeatData.seguir;
-            state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
-            state.seatData[key].comentario = lastCopiedSeatData.comentario;
-            state.seatData[key].pmrFlag = lastCopiedSeatData.pmrFlag;
-            state.seatData[key].pmrTipo = lastCopiedSeatData.pmrTipo;
+            pasteCopiedSeat(key);
 
             saveData();
             render();
@@ -2935,18 +2967,8 @@ function handleSeatPress(coach, num, event) {
                 if (state.copyMode && lastCopiedSeatData) {
                     const key = getSeatKey(coach, num);
 
-                    if (!state.seatData[key]) {
-                        state.seatData[key] = {};
-                    }
-
                     // Copiar toda la información
-                    state.seatData[key].stop = lastCopiedSeatData.stop;
-                    state.seatData[key].enlace = lastCopiedSeatData.enlace;
-                    state.seatData[key].seguir = lastCopiedSeatData.seguir;
-                    state.seatData[key].comentarioFlag = lastCopiedSeatData.comentarioFlag;
-                    state.seatData[key].comentario = lastCopiedSeatData.comentario;
-                    state.seatData[key].pmrFlag = lastCopiedSeatData.pmrFlag;
-                    state.seatData[key].pmrTipo = lastCopiedSeatData.pmrTipo;
+                    pasteCopiedSeat(key);
 
                     saveData();
                     render();
@@ -3101,16 +3123,7 @@ function assignQuickStop(coach, num, stopName, isCustomRoute) {
         state.seatData[key].stop = stopObj;
 
         // Guardar datos copiados
-        lastCopiedSeatData = {
-            stop: stopObj,
-            enlace: state.seatData[key].enlace || false,
-            seguir: state.seatData[key].seguir || false,
-            comentarioFlag: state.seatData[key].comentarioFlag || false,
-            comentario: state.seatData[key].comentario || "",
-            pmrFlag: state.seatData[key].pmrFlag || false,
-            pmrTipo: state.seatData[key].pmrTipo || ""
-        };
-        state.lastCopiedSeatData = { ...lastCopiedSeatData };
+        rememberSeatForCopy(key);
 
         saveData();
 
@@ -3594,13 +3607,22 @@ function showCoachStats(coachId) {
     setTimeout(() => popup.remove(), 2500);
 }
 
-// Mostrar selector de variantes del 470
-function show470VariantSelector(coachId, buttonElement) {
+// Mostrar selector de variantes del coche (series con variantes: 470, 464…)
+function showVariantSelector(coachId, buttonElement) {
     // Eliminar selector previo si existe
     const existingSelector = document.querySelector('.variant-selector-popup');
     if (existingSelector) existingSelector.remove();
 
-    const currentVariant = state.coach470Variants[coachId] || "A";
+    const coach = getAllTrains()[state.selectedTrain]?.coaches.find(c => c.id === coachId);
+    if (!coach || !coach.variants) return;
+    const currentVariant = getCoachVariants()[coachId] || "A";
+
+    // Las opciones salen del JSON de la serie: cada coche tiene las suyas
+    const variantButtons = Object.entries(coach.variants).map(([key, def]) => `
+                <button class="variant-option ${currentVariant === key ? 'active' : ''}"
+                        onclick="selectCoachVariant('${coachId}', '${key}')">
+                    ${escapeHtml(def.name || `Variante ${key}`)}
+                </button>`).join('');
 
     // Crear overlay modal obligatorio
     const modal = document.createElement("div");
@@ -3616,46 +3638,7 @@ function show470VariantSelector(coachId, buttonElement) {
                         </small>
                     </div>
                     <button onclick="closeVariantSelector()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0; color: #6b7280; flex-shrink: 0;" aria-label="Cerrar">✕</button>
-                </div>
-                <button class="variant-option ${currentVariant === 'A' ? 'active' : ''}" 
-                        onclick="select470Variant('${coachId}', 'A')">
-                    Variante A
-                </button>
-                <button class="variant-option ${currentVariant === 'B' ? 'active' : ''}" 
-                        onclick="select470Variant('${coachId}', 'B')">
-                    Variante B
-                </button>
-                <button class="variant-option ${currentVariant === 'C' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'C')">
-                    Variante C
-                </button>
-                ${coachId === 'C1' ? `
-                <button class="variant-option ${currentVariant === 'D' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'D')">
-                    Variante D
-                </button>
-                <button class="variant-option ${currentVariant === 'E' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'E')">
-                    Variante E
-                </button>
-                <button class="variant-option ${currentVariant === 'F' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'F')">
-                    Variante F
-                </button>` : ''}
-                ${['C2', 'C3'].includes(coachId) ? `
-                <button class="variant-option ${currentVariant === 'D' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'D')">
-                    Variante D
-                </button>
-                <button class="variant-option ${currentVariant === 'E' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'E')">
-                    Variante E
-                </button>` : ''}
-                ${coachId === 'C2' ? `
-                <button class="variant-option ${currentVariant === 'F' ? 'active' : ''}"
-                        onclick="select470Variant('${coachId}', 'F')">
-                    Variante F
-                </button>` : ''}
+                </div>${variantButtons}
             </div>
         </div>
     `;
@@ -3714,15 +3697,15 @@ function show470VariantSelector(coachId, buttonElement) {
 
 }
 
-// Seleccionar variante del 470
-function select470Variant(coachId, variant) {
-    const variantePrevia = state.coach470Variants[coachId] || "A";
+// Seleccionar variante de un coche
+function selectCoachVariant(coachId, variant) {
+    const variantePrevia = getCoachVariants()[coachId] || "A";
 
     if (variantePrevia !== variant) {
         // Los asientos del coche llevan la variante en su key: al cambiarla
         // dejarian de verse pero seguirian ocupando seatData y reaparecerian
         // al volver a esta variante. Es otro tren fisico: se borran.
-        const marcados = count470SeatsForVariants({ [coachId]: variantePrevia });
+        const marcados = countSeatsForVariants({ [coachId]: variantePrevia });
         if (marcados > 0) {
             let msg = `¿Cambiar el ${coachId} a la variante ${variant}?\n\n`;
             msg += `⚠️ SE BORRARÁN los ${marcados} asiento(s) registrados en la variante ${variantePrevia}.\n\n`;
@@ -3737,11 +3720,11 @@ function select470Variant(coachId, variant) {
             }
         }
         pushUndo(`Variante ${coachId} → ${variant}`);
-        clear470SeatsForVariants({ [coachId]: variantePrevia });
+        clearSeatsForVariants({ [coachId]: variantePrevia });
     }
 
-    state.coach470Variants[coachId] = variant;
-    save470Variants();
+    getCoachVariants()[coachId] = variant;
+    saveCoachVariants();
 
     saveData();
 
@@ -3842,13 +3825,13 @@ function delete470Unit(unitName) {
 }
 
 /**
- * Cuenta los asientos registrados bajo una combinación de variantes del 470.
- * Las keys del 470 llevan la variante dentro (C1-A-12), así que los datos de una
+ * Cuenta los asientos registrados bajo una combinación de variantes.
+ * Las keys de las series con variantes llevan la variante dentro (C1-A-12), así que los datos de una
  * unidad siguen en seatData aunque dejen de pintarse al cambiar de unidad.
  * @param {Object} variants - { C1: 'A', C2: 'B', ... }
  * @returns {number}
  */
-function count470SeatsForVariants(variants) {
+function countSeatsForVariants(variants) {
     return Object.keys(state.seatData || {}).filter(key => {
         const parts = key.split('-');
         if (parts.length !== 3) return false;
@@ -3862,7 +3845,7 @@ function count470SeatsForVariants(variants) {
  * conservar el estado de la anterior.
  * @param {Object} variants - { C1: 'A', C2: 'B', ... }
  */
-function clear470SeatsForVariants(variants) {
+function clearSeatsForVariants(variants) {
     Object.keys(state.seatData || {}).forEach(key => {
         const parts = key.split('-');
         if (parts.length === 3 && variants[parts[0]] === parts[1]) {
@@ -3879,12 +3862,12 @@ function apply470Unit(unitName) {
         selectTrain("470");
     }
 
-    const variantesAnteriores = { ...state.coach470Variants };
+    const variantesAnteriores = { ...getCoachVariants("470") };
     const mismaUnidad = Object.keys(variants)
         .every(c => variantesAnteriores[c] === variants[c]);
 
     if (!mismaUnidad) {
-        const marcados = count470SeatsForVariants(variantesAnteriores);
+        const marcados = countSeatsForVariants(variantesAnteriores);
         if (marcados > 0) {
             let msg = `¿Cargar la unidad ${unitName}?\n\n`;
             msg += `⚠️ SE BORRARÁN los ${marcados} asiento(s) registrados en la unidad anterior.\n\n`;
@@ -3893,11 +3876,11 @@ function apply470Unit(unitName) {
             if (!confirm(msg)) return;
         }
         pushUndo(`Cargar unidad 470 ${unitName}`);
-        clear470SeatsForVariants(variantesAnteriores);
+        clearSeatsForVariants(variantesAnteriores);
     }
 
-    state.coach470Variants = { ...variants };
-    save470Variants();
+    setCoachVariants("470", variants);
+    saveCoachVariants("470");
     saveData();
     render();
     close470UnitsModal();
@@ -4013,7 +3996,7 @@ function save470CurrentUnit() {
     }
 
     const units = load470Units();
-    const variantsCopy = { ...state.coach470Variants };
+    const variantsCopy = { ...getCoachVariants("470") };
 
     if (units[rawName]) {
         if (!confirm(`La unidad "${rawName}" ya existe. ¿Sobreescribir?`)) return;
@@ -4167,8 +4150,8 @@ document.addEventListener('click', function(e) {
     if (coachBtn && coachBtn.dataset.longpressLock !== "1") {
         const coachId = coachBtn.dataset.coachId || coachBtn.textContent.trim();
 
-        // Para tren 470: gestionar doble tap
-        if (state.selectedTrain === "470") {
+        // Series con variantes: doble tap abre el selector de variante
+        if (trainHasVariants()) {
             const now = Date.now();
             if (coachLastTappedId === coachId && (now - coachLastTapTime) < COACH_DOUBLE_TAP_DELAY) {
                 e.stopPropagation();
@@ -4177,7 +4160,7 @@ document.addEventListener('click', function(e) {
                 coachLastTappedId = null;
                 // Solo abrir selector si es el coche actualmente seleccionado
                 if (coachId === state.selectedCoach) {
-                    show470VariantSelector(coachId, coachBtn);
+                    showVariantSelector(coachId, coachBtn);
                 }
                 return;
             }
@@ -4403,8 +4386,9 @@ Object.assign(window, {
     setCurrentStop, updateCurrentStopSearch,
     toggleDarkMode, toggleSeatRotation, toggleHeaderCollapse,
 
-    // Variantes 470
-    show470VariantSelector, select470Variant, closeVariantSelector, resetCoachDoubleTap,
+    // Variantes de coche (470, 464…)
+    showVariantSelector, selectCoachVariant, closeVariantSelector, resetCoachDoubleTap,
+    trainHasVariants, getCoachVariants, setCoachVariants, migrateSeatKeysToVariants,
 
     // Unidades 470
     open470UnitsModal, close470UnitsModal, apply470Unit, delete470Unit, confirm470UnitDelete,

@@ -60,8 +60,8 @@ export async function generateQRCode() {
         currentStop: state.currentStop || null,
         exportDate: new Date().toISOString(),
         trainName: getAllTrains()[state.selectedTrain].name,
-        ...(state.selectedTrain === "470" && {
-            coach470Variants: state.coach470Variants
+        ...(window.trainHasVariants() && {
+            [`coach${state.selectedTrain}Variants`]: window.getCoachVariants()
         })
     };
 
@@ -412,10 +412,12 @@ async function processQRData(dataStr) {
                 localStorage.setItem('currentStop', turnData.currentStop);
             }
 
-            if (turnData.trainModel === "470" && turnData.coach470Variants) {
-                state.coach470Variants = turnData.coach470Variants;
-                localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+            const importedVariants = turnData[`coach${turnData.trainModel}Variants`];
+            if (importedVariants) {
+                window.setCoachVariants(turnData.trainModel, importedVariants);
+                window.saveCoachVariants(turnData.trainModel);
             }
+            window.migrateSeatKeysToVariants(turnData.trainModel);
 
             saveData();
 

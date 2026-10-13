@@ -68,7 +68,7 @@ function calcIncidentStrings() {
     return Object.keys(incidents).map(key => {
         const parts = key.split('-');
         if (parts.length === 3) {
-            // Formato: coachId-variant-elementId (tren 470)
+            // Formato: coachId-variant-elementId (series con variantes)
             return `${parts[2]} · ${parts[0]}`;
         }
         // Formato: coachId-elementId

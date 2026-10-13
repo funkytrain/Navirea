@@ -24,9 +24,9 @@ const DOOR_MOVE_THRESHOLD = 10;
  * @returns {string} Clave única
  */
 function getIncidentKey(coachId, elementId) {
-    // Para tren 470: incluir variante en la key
-    if (window.state.selectedTrain === "470") {
-        const variant = window.state.coach470Variants[coachId] || "A";
+    // Series con variantes (470, 464…): incluir variante en la key
+    if (window.trainHasVariants()) {
+        const variant = window.getCoachVariants()[coachId] || "A";
         return `${coachId}-${variant}-${elementId}`;
     }
     return `${coachId}-${elementId}`;
@@ -208,7 +208,7 @@ function closeIncidentNote(event) {
  */
 function renderIncidentItemHTML(key, data) {
     const parts = key.split('-');
-    const skipVariant = window.state.selectedTrain === "470" && parts.length > 2;
+    const skipVariant = window.trainHasVariants() && parts.length > 2;
     let label = skipVariant ? parts.slice(2).join('-') : parts.slice(1).join('-');
     label = formatIncidentLabel(label, key, data);
 
@@ -244,7 +244,7 @@ function buildIncidentsPanelHTML() {
     Object.keys(window.state.incidents).forEach(key => {
         const parts = key.split('-');
         let groupKey = parts[0];
-        if (window.state.selectedTrain === "470" && parts.length > 2) {
+        if (window.trainHasVariants() && parts.length > 2) {
             groupKey = `${parts[0]} (Variante ${parts[1]})`;
         }
         if (!byCoach[groupKey]) byCoach[groupKey] = [];
@@ -475,12 +475,14 @@ function getContiguousWCBlock(coachId, wcId) {
     if (!trainModel || !trainModel.coaches) return [wcId];
 
     const coach = trainModel.coaches.find(c => c.id === coachId);
-    if (!coach || !coach.layout) return [wcId];
+    // Series con variantes: el layout es el de la variante montada
+    const layout = coach && window.getCurrentCoachLayout(coach);
+    if (!layout) return [wcId];
 
     // Si el wcId tiene formato con guión (WC-A, WC-B), buscar TODAS las posiciones con ese mismo valor
     if (wcId.includes('-')) {
         const allMatchingWCs = [];
-        coach.layout.forEach((section) => {
+        layout.forEach((section) => {
             if (section.type === 'seats' && section.positions) {
                 section.positions.forEach((row) => {
                     row.forEach((seat) => {
@@ -504,7 +506,7 @@ function getContiguousWCBlock(coachId, wcId) {
     const wcPositions = [];
     let wcCounter = 0;
 
-    coach.layout.forEach((section, sectionIndex) => {
+    layout.forEach((section, sectionIndex) => {
         if (section.type === 'seats' && section.positions) {
             section.positions.forEach((row, rowIndex) => {
                 row.forEach((seat, colIndex) => {

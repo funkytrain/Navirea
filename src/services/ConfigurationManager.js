@@ -1022,10 +1022,17 @@ const ConfigurationManager = {
             try { window.state.incidents = JSON.parse(savedIncidents); } catch (e) { console.error('Error loading incidents'); }
         }
 
-        if (window.state.selectedTrain === '470') {
-            const savedVariants = localStorage.getItem('train470Variants');
+        // Series con variantes (470, 464…). Versiones anteriores las guardaban
+        // también como train<serie>Variants: se lee como respaldo.
+        const tv = window.state.selectedTrain;
+        if (window.trainHasVariants && window.trainHasVariants(tv)) {
+            const savedVariants = localStorage.getItem(`coach${tv}Variants`) || localStorage.getItem(`train${tv}Variants`);
             if (savedVariants) {
-                try { window.state.coach470Variants = JSON.parse(savedVariants); } catch (e) { console.error('Error loading 470 variants'); }
+                try { window.setCoachVariants(tv, JSON.parse(savedVariants)); } catch (e) { console.error(`Error loading ${tv} variants`); }
+            }
+            // Datos guardados antes de que la serie tuviera variantes
+            if (window.migrateSeatKeysToVariants(tv)) {
+                localStorage.setItem(`train${tv}Data`, JSON.stringify(window.state.seatData));
             }
         }
 
@@ -1084,8 +1091,8 @@ const ConfigurationManager = {
             localStorage.setItem(`train${t}Incidents`, JSON.stringify(window.state.incidents));
         }
 
-        if (t === '470') {
-            localStorage.setItem('train470Variants', JSON.stringify(window.state.coach470Variants));
+        if (window.trainHasVariants && window.trainHasVariants(t)) {
+            localStorage.setItem(`coach${t}Variants`, JSON.stringify(window.getCoachVariants(t)));
         }
 
         localStorage.setItem(`train${t}CoachNotes`, JSON.stringify(window.state.coachNotes || {}));
@@ -1114,7 +1121,9 @@ const ConfigurationManager = {
             trainNumber: window.state.trainNumber || null,
             currentStop: window.state.currentStop || null,
             timestamp: new Date().toISOString(),
-            ...(t === '470' && { coach470Variants: window.state.coach470Variants })
+            ...(window.trainHasVariants && window.trainHasVariants(t) && {
+                [`coach${t}Variants`]: window.getCoachVariants(t)
+            })
         };
 
         const key = `autoBackups_${t}`;
@@ -1166,9 +1175,9 @@ const ConfigurationManager = {
             window.state.currentStop = backup.currentStop;
             localStorage.setItem('currentStop', backup.currentStop);
         }
-        if (window.state.selectedTrain === '470' && backup.coach470Variants) {
-            window.state.coach470Variants = backup.coach470Variants;
-            localStorage.setItem('coach470Variants', JSON.stringify(backup.coach470Variants));
+        const backupVariants = backup[`coach${window.state.selectedTrain}Variants`];
+        if (backupVariants) {
+            window.setCoachVariants(window.state.selectedTrain, backupVariants);
         }
 
         this.saveData();
@@ -1209,10 +1218,10 @@ const ConfigurationManager = {
         } catch (e) { console.warn('Error al guardar parada actual', e); }
     },
 
-    save470Variants() {
+    saveCoachVariants(t = window.state.selectedTrain) {
         try {
-            localStorage.setItem('coach470Variants', JSON.stringify(window.state.coach470Variants));
-        } catch (e) { console.warn('Error al guardar variantes 470', e); }
+            localStorage.setItem(`coach${t}Variants`, JSON.stringify(window.getCoachVariants(t)));
+        } catch (e) { console.warn(`Error al guardar variantes ${t}`, e); }
     },
 
     saveHeaderCollapsed() {
@@ -1312,8 +1321,9 @@ const ConfigurationManager = {
             if (turnData.trainModel) localStorage.setItem('selectedTrain', turnData.trainModel);
             if (turnData.trainNumber) localStorage.setItem('trainNumber', turnData.trainNumber);
             if (turnData.currentStop) localStorage.setItem('currentStop', turnData.currentStop);
-            if (turnData.trainModel === '470' && turnData.coach470Variants) {
-                localStorage.setItem('coach470Variants', JSON.stringify(turnData.coach470Variants));
+            const importedVariants = turnData[`coach${turnData.trainModel}Variants`];
+            if (importedVariants) {
+                localStorage.setItem(`coach${turnData.trainModel}Variants`, JSON.stringify(importedVariants));
             }
             if (turnData.seatData) {
                 localStorage.setItem(`train${turnData.trainModel}Data`, JSON.stringify(turnData.seatData));
@@ -1348,7 +1358,7 @@ window.saveDarkMode        = () => ConfigurationManager.saveDarkMode();
 window.saveSeatRotation    = () => ConfigurationManager.saveSeatRotation();
 window.saveTrainNumber     = () => ConfigurationManager.saveTrainNumber();
 window.saveCurrentStop     = () => ConfigurationManager.saveCurrentStop();
-window.save470Variants     = () => ConfigurationManager.save470Variants();
+window.saveCoachVariants   = (t) => ConfigurationManager.saveCoachVariants(t);
 window.saveHeaderCollapsed = () => ConfigurationManager.saveHeaderCollapsed();
 window.clearTrainData        = (t) => ConfigurationManager.clearTrainData(t);
 window.clearAllTrainsData    = () => ConfigurationManager.clearAllTrainsData();

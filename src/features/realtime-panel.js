@@ -159,7 +159,7 @@ function buildMaterialBlock(rt) {
             `;
         }
 
-        const actual = window.state?.coach470Variants || {};
+        const actual = window.getCoachVariants ? window.getCoachVariants('470') : {};
         const yaCargada = Object.keys(variants)
             .every(c => actual[c] === variants[c]);
 
