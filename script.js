@@ -297,7 +297,8 @@ function rememberSeatForCopy(key) {
         comentarioFlag: seat.comentarioFlag || false,
         comentario: seat.comentario || "",
         pmrFlag: seat.pmrFlag || false,
-        pmrTipo: seat.pmrTipo || ""
+        pmrTipo: seat.pmrTipo || "",
+        enlaceData: seat.enlaceData ? { ...seat.enlaceData } : null
     };
     // Un asiento que se queda vacío no pisa lo que ya estaba copiado
     const hayAlgo = snapshot.stop || snapshot.enlace || snapshot.seguir ||
@@ -320,6 +321,11 @@ function pasteCopiedSeat(key) {
     seat.comentario = lastCopiedSeatData.comentario;
     seat.pmrFlag = lastCopiedSeatData.pmrFlag;
     seat.pmrTipo = lastCopiedSeatData.pmrTipo;
+    if (lastCopiedSeatData.enlaceData) {
+        seat.enlaceData = { ...lastCopiedSeatData.enlaceData };
+    } else {
+        delete seat.enlaceData;
+    }
 }
 
 function updateSeat(coachId, seatNum, stop) {
@@ -453,6 +459,10 @@ function toggleFlag(coachId, seatNum, flagName) {
         delete state.seatData[key].pmrTipo;
     }
 
+    // El asiento editado pasa a ser lo que copia el copiado rápido
+    // (antes del return: seatHoldTimer nunca vuelve a null tras la primera pulsación)
+    rememberSeatForCopy(key);
+
     saveData();
 
 // NO renderizar si estamos en medio de un long press
@@ -460,10 +470,6 @@ function toggleFlag(coachId, seatNum, flagName) {
         return;
     }
 
-    // El asiento editado pasa a ser lo que copia el copiado rápido
-    rememberSeatForCopy(key);
-
-    saveData();
 // Si hay modal abierto, guardar su scroll
     if (state.selectedSeat) {
         saveModalScrollPosition();
@@ -550,6 +556,7 @@ function updateEnlaceData(coachId, seatNum, field, value) {
     } else {
         state.seatData[key].enlaceData[field] = value.trim();
     }
+    rememberSeatForCopy(key);
     saveData();
 }
 
