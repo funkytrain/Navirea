@@ -60,7 +60,7 @@ export const DATA_PATHS = {
 };
 
 // Train IDs
-export const TRAIN_IDS = ['463', '464', '465', '449', '470'];
+export const TRAIN_IDS = ['463', '464', '465', '449', '470', '448'];
 
 // Color Classes
 export const SEAT_COLORS = {

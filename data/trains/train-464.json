@@ -990,6 +990,30 @@
                             "type": "seats",
                             "positions": [
                                 [
+                                    "A3",
+                                    null,
+                                    null,
+                                    null,
+                                    "A4"
+                                ]
+                            ]
+                        },
+                        {
+                            "type": "seats",
+                            "positions": [
+                                [
+                                    "A1",
+                                    null,
+                                    null,
+                                    null,
+                                    "A2"
+                                ]
+                            ]
+                        },
+                        {
+                            "type": "seats",
+                            "positions": [
+                                [
                                     138,
                                     137,
                                     null,

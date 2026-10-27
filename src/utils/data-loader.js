@@ -98,7 +98,7 @@ async function loadAllData() {
  * @returns {Promise<Object>} Objeto con todos los modelos de trenes
  */
 async function loadAllTrains() {
-    const trainIds = ['463', '464', '465', '449', '470'];
+    const trainIds = ['463', '464', '465', '449', '470', '448'];
     const trainPromises = trainIds.map(id => loadTrain(id));
     const trainData = await Promise.all(trainPromises);
 
