@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plantillatren-v8.23';
+const CACHE_NAME = 'plantillatren-v8.24';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -42,7 +42,10 @@ const urlsToCache = [
     '/src/features/realtime-panel.js',
     '/src/features/material-notes.js',
     '/data/station-aliases.json',
-    '/css/components/realtime.css'
+    '/css/components/realtime.css',
+    // ---- avisos de Adif ----
+    '/src/features/network-alerts.js',
+    '/css/components/network-alerts.css'
 ];
 
 // Instalación del Service Worker

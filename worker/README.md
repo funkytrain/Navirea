@@ -71,3 +71,19 @@ Este feed es una API **no documentada** de Renfe. Funciona hoy y es de
 acceso público, pero no es un servicio con soporte: puede cambiar de
 formato o dejar de estar disponible sin previo aviso. Navirea está
 diseñada para seguir funcionando con normalidad si eso ocurre.
+
+## Incidencias de Adif (`?feed=incidencias`)
+
+El mismo Worker sirve las incidencias de
+[Estado de la red](https://www.adif.es/viajeros/estado-de-la-red). Adif no
+publica un feed: el Worker descarga la página, extrae las incidencias del HTML
+y devuelve JSON (`{ok, actualizado, incidencias: [{id, rev, regiones, titulo, texto}]}`).
+
+- Caché de 3 min en el Worker; la app consulta como mucho cada 5 min.
+- Si Adif bloquea la petición o la página cambia de formato, responde `502` y
+  la app simplemente no muestra avisos.
+- Tras actualizar el código, vuelve a pegarlo en el Worker y **Deploy**.
+
+```bash
+curl "https://navirea-renfe.TU-CUENTA.workers.dev/?feed=incidencias"
+```

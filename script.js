@@ -4512,6 +4512,9 @@ async function initializeApp() {
             window.RealtimeService.start();
         }
 
+        // 7. Avisos de Estado de la red de Adif (opcional, mismo proxy)
+        window.NetworkAlerts?.start();
+
         console.log('✅ Aplicación inicializada correctamente');
     } catch (error) {
         console.error('❌ Error durante la inicialización:', error);

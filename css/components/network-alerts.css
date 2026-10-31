@@ -1,0 +1,112 @@
+/* ============================================================
+   NETWORK-ALERTS.CSS - Aviso de incidencias de Adif
+   ============================================================
+   Va arriba para no pisar el aviso de parada desfasada, que vive
+   abajo. Mismo lenguaje visual que aquel (fondo oscuro, botones
+   generosos para pulsarlos de pie y en marcha), con un filo ámbar
+   para que se distinga de un vistazo y no dependa solo del icono.
+   ============================================================ */
+
+.na-banner {
+    position: fixed;
+    left: 50%;
+    top: calc(0.75rem + env(safe-area-inset-top, 0px));
+    transform: translate(-50%, -150%);
+    width: calc(100% - 2rem);
+    max-width: 26rem;
+    z-index: 9998;               /* bajo los modales (9999) */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.8rem;
+    border-left: 0.3rem solid #f59e0b;
+    background: #1e293b;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform 0.28s ease;
+}
+
+.na-banner-visible {
+    transform: translate(-50%, 0);
+}
+
+.na-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    line-height: 1.35;
+}
+
+.na-banner-text strong {
+    font-size: 0.95rem;
+}
+
+.na-banner-text span {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.na-banner-actions {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.na-banner-actions button {
+    flex: 1;
+    padding: 0.7rem 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.na-view {
+    background: #f59e0b;
+    color: #1e293b;
+}
+
+.na-dismiss {
+    background: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
+}
+
+/* ---------- Detalle ---------- */
+
+.na-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-gray-200, #e5e7eb);
+}
+
+.na-item:last-of-type {
+    border-bottom: none;
+}
+
+.na-item-where {
+    margin: 0 0 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    opacity: 0.7;
+}
+
+.na-item-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.na-item-text {
+    margin: 0 0 0.4rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.na-source {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+}

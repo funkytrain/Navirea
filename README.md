@@ -9,11 +9,11 @@
 
 ## ✨ Características principales
 
-- 🚆 **Modelos de tren reales**: Representación precisa de series 463, 464, 465, 470, 449 con sus disposiciones de asientos, PMR, mesas y espacios.
+- 🚆 **Modelos de tren reales**: Representación precisa de series 448, 449, 463, 464, 465 y 470 con sus disposiciones de asientos, PMR, mesas y espacios.
 - 🔖 **Unidades 470 guardadas**: Guarda la combinación de variantes de cada unidad física (470.157, 470.235…) y cárgala en un toque para futuras sesiones.
 - ⚙️ **Configuraciones personalizadas**: Crea y gestiona tus propios modelos de trenes y trayectos.
 - 🎯 **Gestión táctil de asientos**: Marca ocupación, destinos, enlaces y comentarios con gestos intuitivos.
-- ⚡ **Copiado rápido**: Asigna la misma información a múltiples asientos con un solo toque.
+- ⚡ **Copiado rápido**: Asigna la misma información (parada, enlace, seguir, comentario y PMR) a múltiples asientos con un solo toque, incluso si el asiento aún no tiene parada.
 - ♿ **Viajeros PMR**: Marca el asiento y selecciona el tipo de movilidad reducida (11 tipos oficiales) para preparar la asistencia en destino.
 - 🔎 **Filtros avanzados**: Por parada, tramo, asiento, enlaces o comentarios.
 - 📍 **Parada actual inteligente**: Libera automáticamente a los viajeros al llegar a su destino.
@@ -21,7 +21,7 @@
 - 📲 **Compartir turno**: Exporta el estado completo por QR o JSON para el relevo.
 - 🌙 **Modo nocturno**: Reduce brillo y contraste para trabajar en condiciones de poca luz.
 - 🔄 **Backup automático**: Guarda automáticamente el último estado.
-- 📊 **Pantallas de estaciones**: Consulta horarios y conexiones en tiempo real.
+- 📊 **Pantallas de estaciones**: Consulta horarios y conexiones en tiempo real. *(Temporalmente sin funcionar: ver [Problemas conocidos](#️-problemas-conocidos).)*
 - 📘 **Manual técnico integrado**: Acceso al Manual Técnico Ferroviario para resolver incidencias.
 - 📋 **Resumen de jornada**: Registra automáticamente cada tren trabajado durante el día. Al finalizar, muestra un resumen completo con ocupación, incidencias y notas de todos los servicios, compartible como texto.
 - 📝 **Notas por coche**: Las notas del servicio ahora incluyen pestañas por coche (C1, C2…) para anotar observaciones específicas de cada vagón.
@@ -29,6 +29,7 @@
 - 🗺️ **Recorrido con horarios estimados**: Todas las paradas del trayecto con su hora prevista de llegada y la desviación, para ver si el retraso se acumula o se recupera.
 - 🔔 **Aviso de parada desfasada**: Si el tren ya ha dejado atrás la parada marcada en la app, avisa y permite actualizarla de un toque.
 - 🚉 **Detección de material**: Reconoce la unidad concreta en circulación y ofrece cargar su plantilla o su configuración de coches guardada.
+- 🚨 **Estado de la red de Adif**: Acceso directo, desde el menú ⋮, a las incidencias de Adif de la comunidad en la que está el tren (Aragón, Navarra, La Rioja o País Vasco).
 - 🗒️ **Notas por unidad de material**: Guarda las particularidades de cada unidad física (enchufes, máquina de billetes, cerradura de cabina, averías recurrentes) y las muestra al detectar ese material.
 
 ---
@@ -128,7 +129,7 @@ Navirea es una **Progressive Web App (PWA)**, lo que significa que funciona dire
 ### 1️⃣ Selecciona el modelo de tren
 
 - Toca el nombre del tren en la parte superior.
-- Selecciona el modelo correspondiente (463, 464, 465, 470, 449 o uno personalizado).
+- Selecciona el modelo correspondiente (448, 449, 463, 464, 465, 470 o uno personalizado).
 - Introduce el número de venta del tren.
 
 ### 2️⃣ Gestiona los asientos
@@ -138,7 +139,7 @@ Navirea es una **Progressive Web App (PWA)**, lo que significa que funciona dire
 - **Toca un asiento ocupado** → Modifica destino, añade enlace o comentario.
 - **Marca "Enlace"** → Introduce opcionalmente el número de tren del enlace, destino y hora de salida. La información se muestra en la cabecera del modal del asiento y en el filtro de enlaces.
 - **Marca "PMR"** → Selecciona el tipo de viajero con movilidad reducida en el desplegable. El asiento se colorea en magenta y el tipo queda visible al consultarlo desde los filtros.
-- **Activa el copiado rápido** → Marca el primer asiento → Los siguientes copiarán la misma información.
+- **Activa el copiado rápido** → Marca el primer asiento → Los siguientes copiarán la misma información (parada, enlace, seguir, comentario y PMR). Funciona aunque el asiento no tenga parada: copia el último asiento editado.
 
 ### 3️⃣ Establece la parada actual
 
@@ -162,7 +163,26 @@ Además:
   **cambiar a la serie correcta** o **cargar la unidad** si la tienes guardada.
 - Las paradas ya superadas dejan de ofrecerse en el selector de parada actual.
 
-Los datos proceden de fuentes públicas de Renfe y son orientativos. El tren
+### 🚨 Estado de la red de Adif
+
+En el menú **⋮ → Estado de la red (Aragón)** se abre la web de Adif directamente
+en la pestaña de la comunidad donde está el tren, según la **parada actual**
+que tengas marcada (o, si no hay, la estación que da el tiempo real). Por
+ejemplo, en Alagón abre Aragón y en Marcilla, Navarra.
+
+- Hay enlace directo para **Aragón, Navarra, La Rioja y País Vasco**. Para otras
+  comunidades abre la página general y avisa de qué pestaña pulsar.
+- Para añadir una comunidad: pulsa su pestaña en Adif, copia el número de la
+  URL (`…/categories/53897329?…`) y añádelo a `ADIF_CATEGORY_IDS` en
+  [`network-alerts.js`](src/features/network-alerts.js).
+
+**Aviso automático (en pausa).** La app incluye además un sondeo cada 5 min
+que avisaría de incidencias nuevas en las comunidades del tren, mediante el
+proxy (`?feed=incidencias`, ver [`worker/README.md`](worker/README.md)). Hoy no
+funciona: Adif bloquea las peticiones automáticas desde el proxy (`403`) y la
+app lo ignora sin mostrar nada. Si algún día lo permite, se activa solo.
+
+Los datos de circulación proceden de fuentes públicas de Renfe y son orientativos. El tren
 debe estar circulando para aparecer: no se publica antes de su salida.
 
 **Para activarlo** hace falta un pequeño proxy propio (el origen no permite
@@ -193,7 +213,9 @@ recurrentes…
 - Registra fallos de WC, puertas, megafonía, PMR o equipos.
 - Las incidencias se guardan y se pueden exportar.
 
-### 6️⃣ Gestiona las variantes del Tren 470
+### 6️⃣ Gestiona las variantes de coche (470 y 464)
+
+El **464** tiene dos variantes de coche (A y B; la B añade los asientos A1–A4 en el C4) y se cambian igual que las del 470. Los datos guardados antes de existir las variantes pasan solos a la A.
 
 El tren 470 tiene múltiples variantes de distribución de asientos por coche (A–F). Para configurarlas:
 
@@ -322,6 +344,18 @@ El botón **⋮** de la barra superior despliega todas las acciones avanzadas de
 
 ---
 
+## ⚠️ Problemas conocidos
+
+- **Pantallas de estaciones**: dejaron de cargar. Se muestran dentro de la app
+  mediante la web de un tercero (`pantallas-estaciones.vercel.app`), que
+  actualmente no permite ser incrustada en otras webs y, además, parece no
+  obtener datos de Adif (que bloquea el tráfico automático). Pendiente de
+  resolver.
+- **Aviso automático de incidencias de Adif**: inactivo por el mismo bloqueo
+  (ver [Estado de la red de Adif](#-estado-de-la-red-de-adif)).
+
+---
+
 ## 📂 Estructura del proyecto
 
 ```
@@ -338,7 +372,7 @@ Navirea/
 │   ├── config/                 # Constantes y catálogos (tipos PMR)
 │   ├── services/               # Servicios (ConfigurationManager, AppState, RealtimeService)
 │   ├── utils/                  # Utilidades (data-loader, templates, validadores)
-│   ├── features/               # Funcionalidades (filtros, QR, pantallas, incidencias, tiempo real)
+│   ├── features/               # Funcionalidades (filtros, QR, pantallas, incidencias, tiempo real, estado de la red)
 │   ├── components/             # Componentes UI (wizards, editores)
 │   ├── wizards/                # Asistentes de creación
 │   └── renderers/              # Renderizadores de asientos
